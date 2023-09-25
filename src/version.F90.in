@@ -1,0 +1,25 @@
+! Copyright (C) 2020 National Center for Atmospheric Research
+! SPDX-License-Identifier: Apache-2.0
+!
+module tuvx_version
+  implicit none
+
+  private
+  public :: get_tuvx_version
+
+contains
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_tuvx_version( ) result(version)
+    ! Returns the tuv-x version that is being built
+
+    character(:), allocatable :: version
+    
+    version = "@tuv-x_VERSION@"
+
+  end function get_tuvx_version
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+end module tuvx_version

@@ -1,0 +1,54 @@
+32 23           # first data record, number of data records
+Structure:	CF3CF2Cl(CFC-115)
+Name:	pentafluorochloroethane (CFC-115)
+Author(Year):	JPL-2002(2002),JPL-2006(2006),JPL-2010(2011)
+Temperature:	298K
+Wavelength range:	172-230nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14“, Report No. JPL Publication 02-25, 2002.
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+Comments:
+
+JPL-2002, JPL-2006, and JPL-2020 recommendations:
+
+172-204 nm, mean of the data of
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980),  and
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meurée, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meurée, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+
+205-230 nm, mean of the Hubrich and Stuhl (1980) and extrapolated Simon et al. (1988) data, log σ(λ) = -6.2191 - 0.0756 λ.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+172    5.50e-20
+174    4.13e-20
+176    3.08e-20
+178    2.25e-20
+180    1.58e-20
+182    1.13e-20
+184    7.90e-21
+186    5.63e-21
+188    4.03e-21
+190    2.87e-21
+192    2.03e-21
+194    1.43e-21
+196    9.85e-22
+198    6.85e-22
+200    4.74e-22
+202    3.25e-22
+204    2.18e-22
+205    1.87e-22
+210    7.00e-23
+215    2.73e-23
+220    1.07e-23
+225    4.6e-24
+230    1.8e-24

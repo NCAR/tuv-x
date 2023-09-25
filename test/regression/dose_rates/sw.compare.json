@@ -1,0 +1,114 @@
+{
+  "RB Meter, model 501" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Eppley UV Photometer" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "UV-A, 315-400 nm" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "UV-B, 280-315 nm" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "UV-B*, 280-320 nm" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "vis+, > 400 nm" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Gaussian, 305 nm, 10 nm FWHM" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Gaussian, 320 nm, 10 nm FWHM" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Gaussian, 340 nm, 10 nm FWHM" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Gaussian, 380 nm, 10 nm FWHM" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "SCUP-human (de Gruijl and van der Leun, 1994)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "PAR, 400-700 nm, umol m-2 s-1" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Exponential decay, 14 nm/10" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "SCUP-mice (de Gruijl et al., 1993)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Standard human erythema (Webb et al., 2011)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "UV index (WMO, 1994; Webb et al., 2011)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Phytoplankton (Boucher et al., 1994)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Plant damage (Caldwell, 1971)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Plant damage,Flint&Caldwell,2003,orig." : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Plant damage,Flint&Caldwell,2003,ext390" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Occupational TLV (ACGIH, 1992)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Phytoplankton, phaeo (Cullen et al., 1992)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Phytoplankton, proro (Cullen et al., 1992)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Cataract, pig (Oriowo et al., 2001)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Previtamin-D3 (CIE 2006)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NMSC (CIE 2006)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "DNA damage, in vitro (Setlow, 1974)" : {
+    "RMS difference" : 1.0e-4,
+    "maximum difference" : 1.0e-4
+  },
+  "Erythema, humans (Anders et al., 1995)" : {
+    "RMS difference" : 1.0e-4,
+    "maximum difference" : 1.0e-4
+  }
+}

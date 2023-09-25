@@ -1,0 +1,22 @@
+[
+   {
+      "name": "height",
+      "type": "equal interval",
+      "units": "km",
+      "begins at" : 0.0,
+      "ends at" : 5.0,
+      "cell delta" : 1.0
+   },
+   {
+      "name": "wavelength",
+      "type": "from csv file",
+      "units": "nm",
+      "file path": "test/data/grid.photo.la_sr.csv"
+   },
+   {
+      "name": "time",
+      "type": "from config file",
+      "units": "hours",
+      "values": [ 5.0, 10.0, 15.0 ]
+   }
+]

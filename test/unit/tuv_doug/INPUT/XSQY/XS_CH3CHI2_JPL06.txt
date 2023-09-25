@@ -1,0 +1,50 @@
+22 29           # first data record, number of data records
+Structure:	CH3CHI2
+Name:	        1,1-diiodoethane
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	220-360nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+220-360 nm, data of
+
+G. Schmitt and F.J. Comes, "Photolysis of CH2I2 and 1,1-C2H4I2 at 300 nm," J. Photochem. 14, 107-123 (1980).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+220    3.04e-18
+225    2.40e-18
+230    1.81e-18
+235    1.44e-18
+240    1.38e-18
+245    1.51e-18
+250    1.57e-18
+255    1.43e-18
+260    1.33e-18
+265    1.45e-18
+270    1.83e-18
+275    2.43e-18
+280    3.04e-18
+285    3.52e-18
+290    3.74e-18
+295    3.66e-18
+300    3.39e-18
+305    3.05e-18
+310    2.73e-18
+315    2.47e-18
+320    2.22e-18
+325    2.01e-18
+330    1.75e-18
+335    1.38e-18
+340    1.07e-18
+345    7.57e-19
+350    4.93e-19
+355    3.17e-19
+360    1.91e-19

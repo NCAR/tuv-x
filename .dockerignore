@@ -1,0 +1,15 @@
+# ignore all
+*
+
+# include things to copy
+!src/
+!etc/
+!data/
+!cmake/
+!docs/
+!examples/
+!libs/
+!packaging/
+!test/
+!tool/
+!CMakeLists.txt

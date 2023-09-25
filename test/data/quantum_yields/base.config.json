@@ -1,0 +1,49 @@
+{
+  "quantum yields" : [
+    {
+      "name": "no extrapolation",
+      "type": "base",
+      "netcdf files": [
+        "test/data/quantum_yields/base.nc"
+      ]
+    },
+    {
+      "name": "override bands",
+      "type": "base",
+      "netcdf files": [
+        "test/data/quantum_yields/base.nc"
+      ],
+      "override bands": [
+        {
+          "band": "schumann-runge",
+          "value": 0.122
+        },
+        {
+          "band": "lyman-alpha",
+          "value": 0.423
+        },
+        {
+          "band": "schumann-runge continuum",
+          "value": 0.932
+        }
+      ]
+    },
+    {
+      "name": "fix-zero",
+      "type": "base",
+      "netcdf files": [
+        "test/data/quantum_yields/base.nc"
+      ],
+      "lower extrapolation": { "type": "constant", "value" : 0.125 }
+    },
+    {
+      "name": "extend-fix",
+      "type": "base",
+      "netcdf files": [
+        "test/data/quantum_yields/base.nc"
+      ],
+      "lower extrapolation": { "type": "boundary" },
+      "upper extrapolation": { "type": "constant", "value": 0.323 }
+    }
+  ]
+}

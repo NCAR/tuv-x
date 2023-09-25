@@ -1,0 +1,17 @@
+{
+  "radField.01" : {
+    "RMS difference" : 1.0e-4
+  },
+  "radField.02" : {
+    "RMS difference" : 1.0e-4
+  },
+  "radField.03" : {
+    "RMS difference" : 1.0e-4
+  },
+  "radField.04" : {
+    "RMS difference" : 1.0e-4
+  },
+  "radField.05" : {
+    "RMS difference" : 1.0e-4
+  }
+}

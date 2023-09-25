@@ -1,0 +1,113 @@
+[
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_H_OH.nc" ]
+    },
+    "label": "H2O + hv -> H + OH"
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_H2_O1D.nc" ]
+    },
+    "label": "H2O + hv -> H2 + O(1D)"
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_2H_O3P.nc" ]
+    },
+    "label": "H2O + hv -> 2H + O(3P)"
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CH2BR2_1.nc",
+      "parameterization": {
+        "AA": [ -70.211776,  1.940326e-1, 2.726152e-3, -1.695472e-5, 2.500066e-8  ],
+        "BB": [   2.899280, -4.327724e-2, 2.391599e-4, -5.807506e-7, 5.244883e-10 ],
+        "lp": [        0.0,          1.0,          2.0,         3.0,          4.0 ],
+        "minimum wavelength": 210.0,
+        "maximum wavelength": 290.0,
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CH2Br2 + hv -> 2Br",
+    "tolerance": 1.0e-3
+  }
+]

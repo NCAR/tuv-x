@@ -1,0 +1,13 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - init: |
+      mkdir .vscode
+      echo '{"workbench.editorAssociations": {"01-Hello.md": "vscode.markdown.preview.editor"}}' > .vscode/settings.json
+      gp open tutorial/01-Hello.md
+
+github:
+  prebuilds:
+    master: true
+    branches: true

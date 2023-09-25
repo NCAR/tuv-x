@@ -1,0 +1,93 @@
+27 65           # first data record, number of data records
+Structure:	O3
+Name:	        ozone
+Author(Year):	JPL-2006(2006)
+Temperature:	218K
+Wavelength range 196-343nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+Averages over the UTA atmospherical intervals (500-cm-1 intervals in the region 185-300 nm, 1-nm intervals in the region 300 to 321 nm, 2-nm intervals in the region 321.5 to 326.5 nm, and 5-nm intervals above 330 nm) using data
+
+at 196-342.5 nm of the Reims-team
+
+D. Daumont, J. Brion, J. Charbonnier, and J. Malicet, "Ozone UV spectroscopy I: Absorption cross-section at room-temperature," J. Atmos. Chem. 15, 145-155 (1992).
+
+J. Brion, A. Chakir, D. Daumont, J. Malicet, and C. Parisse, "High-resolution laboratory absorption cross section of O3. Temperature effect," Chem. Phys. Lett. 213, 610-612 (1993).
+
+J. Malicet, D. Daumont, J. Charbonnier, C. Parisse, A. Chakir, and J. Brion, "Ozone UV spectroscopy. II. Absorption cross-sections and temperature dependence," J. Atmos. Chem. 21, 263-273 (1995).
+
+NOTE: 194-196 was taken from the 298K data to better represent addpoints.
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+194.175 196.078    3.85e-19
+196.078 198.020    3.44e-19
+198.020 200.000    3.20e-19
+200.000 202.020    3.12e-19
+202.020 204.082    3.24e-19
+204.082 206.186    3.62e-19
+206.186 208.333    4.32e-19
+208.333 210.526    5.42e-19
+210.526 212.766    6.96e-19
+212.766 215.054    9.06e-19
+215.054 217.391    1.19e-18
+217.391 219.780    1.55e-18
+219.780 222.222    2.01e-18
+222.222 224.719    2.56e-18
+224.719 227.273    3.23e-18
+227.273 229.885    4.03e-18
+229.885 232.558    4.92e-18
+232.558 235.294    5.89e-18
+235.294 238.095    6.92e-18
+238.095 240.964    7.99e-18
+240.964 243.902    9.05e-18
+243.902 246.914    9.95e-18
+246.914 250.000    1.074e-17
+250.000 253.165    1.116e-17
+253.165 256.410    1.136e-17
+256.410 259.740    1.105e-17
+259.740 263.158    1.047e-17
+263.158 266.667    9.52e-18
+266.667 270.270    8.23e-18
+270.270 273.973    6.81e-18
+273.973 277.778    5.31e-18
+277.778 281.690    3.91e-18
+281.690 285.714    2.71e-18
+285.714 289.855    1.75e-18
+289.855 294.118    1.05e-18
+294.118 298.507    5.94e-19
+298.507 299.5      4.07e-19
+  299.5 300.5      3.51e-19
+  300.5 301.5      3.05e-19
+  301.5 302.5      2.69e-19
+  302.5 303.5      2.29e-19
+  303.5 304.5      2.06e-19
+  304.5 305.5      1.73e-19
+  305.5 306.5      1.56e-19
+  306.5 307.5      1.33e-19
+  307.5 308.5      1.15e-19
+  308.5 309.5      1.04e-19
+  309.5 310.5      8.50e-20
+  310.5 311.5      7.76e-20
+  311.5 312.5      6.53e-20
+  312.5 313.5      5.62e-20
+  313.5 314.5      5.05e-20
+  314.5 315.5      4.08e-20
+  315.5 316.5      3.82e-20
+  316.5 317.5      3.11e-20
+  317.5 318.5      2.94e-20
+  318.5 319.5      2.11e-20
+  319.5 320.5      2.41e-20
+  320.5 321.5      1.43e-20
+  321.5 323.5      1.57e-20
+  323.5 325.5      1.02e-20
+  325.5 327.5      6.58e-21
+  327.5 332.5      4.83e-21
+  332.5 337.5      2.04e-21
+  337.5 342.5      7.97e-22

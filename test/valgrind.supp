@@ -1,0 +1,182 @@
+###############################################################
+#
+# OpenMP suppressions
+#
+###############################################################
+{
+   <openmp_thread_start>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   fun:pmix_ptl_base_send_handler
+   ...
+   fun:start_thread
+   fun:thread_start
+}
+{
+   <openmp_clone>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   fun:pmix_ptl_base_send_handler
+   ...
+   fun:start_thread
+   fun:clone
+}
+{
+   <openmp_parallel>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   fun:UnknownInlinedFun
+   fun:allocate_dtv
+   fun:_dl_allocate_tls
+   ...
+   fun:GOMP_parallel
+   ...
+   fun:MAIN__
+   fun:main
+}
+{
+   <thread_unknown_inline_function>
+   Memcheck:Param
+   writev(vector[...])
+   ...
+   fun:UnknownInlinedFun
+   ...
+   fun:start_thread
+   fun:thread_start
+}
+{
+   <from_parallel_test_run>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:start_thread
+   fun:clone
+}
+{
+   <opnemp_init>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   ...
+   fun:PMPI_Init
+   fun:MPI_INIT
+   ...
+   fun:MAIN__
+   fun:main
+}
+###############################################################
+#
+# MPI suppressions
+#
+###############################################################
+{
+   <mpi_unpack>
+   Memcheck:User
+   ...
+   fun:PMPI_Unpack
+   fun:MPI_UNPACK
+   ...
+   fun:MAIN__
+   fun:main
+}
+{
+   <mpi_init>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   fun:ompi_mpi_init
+   fun:PMPI_Init
+   fun:MPI_INIT
+   ...
+}
+{
+   <mpi_finalize>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:orte_finalize
+   fun:ompi_mpi_finalize
+}
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   fun:orte_daemon
+   ...
+}
+{
+   <unknown_inlined_function_user>
+   Memcheck:User
+   ...
+   fun:UnknownInlinedFun
+   ...
+}
+###############################################################
+#
+# Dynamic library linking ???
+#
+###############################################################
+{
+   <dl_worker>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   fun:strdup
+   ...
+   fun:call_init
+   fun:call_init
+   fun:_dl_init
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+}
+{
+   <dl_error_run>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   fun:_dl_open
+   fun:dlopen_doit
+   fun:_dl_catch_exception
+   fun:_dl_catch_error
+   fun:_dlerror_run
+   ...
+}
+{
+   <dl_catch_exceptions>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   fun:call_init
+   fun:call_init
+   fun:_dl_init
+   fun:_dl_catch_exception
+   fun:dl_open_worker
+   fun:_dl_catch_exception
+   ...
+}
+###############################################################
+#
+# String
+#
+###############################################################
+{
+   <string_formatted_read>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:malloc
+   ...
+   fun:__musica_string_MOD_read_string_formatted
+   ...
+}

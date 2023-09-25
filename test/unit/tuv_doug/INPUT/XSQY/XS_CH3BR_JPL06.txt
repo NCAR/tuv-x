@@ -1,0 +1,143 @@
+88 56         # first data record, number of data records
+Structure:	CH3Br
+Name:	bromomethane, methyl bromide
+Author(Year):	JPL-2002(2002)
+Temperature:	295-296K
+Wavelength range:	174-290nm(rec)
+Bibliography:
+
+ 
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14“, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+174-178 nm, data of
+
+D.E. Robbins, "Photodissociation of methyl chloride and methyl bromide in the atmosphere," Geophys. Res. Lett. 3, 213-216, 757 (Erratum) (1976).
+
+180-188 nm, mean of the data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Göttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons., Aeronomica Acta A 356, 1-173 (1990), and
+
+D.E. Robbins, "Photodissociation of methyl chloride and methyl bromide in the atmosphere," Geophys. Res. Lett. 3, 213-216, 757 (Erratum) (1976).
+
+190-198 nm, mean of the data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Göttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons., Aeronomica Acta A 356, 1-173 (1990),
+
+A.P. Uthman, P.J. Demlein, T.D. Allston, M.C. Withiam, M.J. McClements, and G.A. Takacs, "Photoabsorption spectra of gaseous methyl bromide, ethylene dibromide, nitrosyl bromide, thionyl chloride, and sulfuryl chloride," J. Phys. Chem. 82, 2252-2257 (1978), and
+
+D.E. Robbins, "Photodissociation of methyl chloride and methyl bromide in the atmosphere," Geophys. Res. Lett. 3, 213-216, 757 (Erratum) (1976),
+
+200-260 nm, mean of the data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Göttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons., Aeronomica Acta A 356, 1-173 (1990),
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+A.P. Uthman, P.J. Demlein, T.D. Allston, M.C. Withiam, M.J. McClements, and G.A. Takacs, "Photoabsorption spectra of gaseous methyl bromide, ethylene dibromide, nitrosyl bromide, thionyl chloride, and sulfuryl chloride," J. Phys. Chem. 82, 2252-2257 (1978), and
+
+D.E. Robbins, "Photodissociation of methyl chloride and methyl bromide in the atmosphere," Geophys. Res. Lett. 3, 213-216, 757 (Erratum) (1976),
+
+262-268 nm, mean of the data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Göttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons., Aeronomica Acta A 356, 1-173 (1990),
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982), and
+
+D.E. Robbins, "Photodissociation of methyl chloride and methyl bromide in the atmosphere," Geophys. Res. Lett. 3, 213-216, 757 (Erratum) (1976),
+
+270-280 nm, mean of the data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Göttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons., Aeronomica Acta A 356, 1-173 (1990), and
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+285-290 nm,
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982).
+
+
+Reference: JPL Publication 94-26
+           Chemical Kinetics and Photochemical Data for Use in Stratospheric
+           Modeling
+           Evaluation Number 11
+           December 15, 1994
+           page 163
+
+CH3Br + hv -> Products
+
+" Table 52 lists the recommended absorption cross sections at 298K, taken from
+Gillotay and Simon [567].  These authors measured the cross sections down to
+210 K;  for < 210 nm the temperature effect is negligible.  Molina et al. [1106]
+and Robbuns [1330] have also measured the absorption cross sections for this
+molecule at room temperature;  the agreement among the three studies is very
+good."
+
+Table 52.  Absorption Cross Sections of CH3Br.
+-----------------------------------------------------------------------
+lambda (nm)		1E20 sigma (cm^2)
+-----------------------------------------------------------------------
+174    5.33e-18
+176    1.010e-17
+178    1.280e-17
+180    4.46e-19
+182    1.98e-19
+184    2.10e-19
+186    2.78e-19
+188    3.52e-19
+190    4.42e-19
+192    5.38e-19
+194    6.26e-19
+196    6.97e-19
+198    7.61e-19
+200    7.90e-19
+202    7.92e-19
+204    7.80e-19
+206    7.52e-19
+208    7.04e-19
+210    6.55e-19
+212    5.99e-19
+214    5.42e-19
+216    4.79e-19
+218    4.23e-19
+220    3.66e-19
+222    3.11e-19
+224    2.66e-19
+226    2.22e-19
+228    1.81e-19
+230    1.47e-19
+232    1.19e-19
+234    9.41e-20
+236    7.38e-20
+238    5.73e-20
+240    4.32e-20
+242    3.27e-20
+244    2.37e-20
+246    1.81e-20
+248    1.31e-20
+250    9.21e-21
+252    6.83e-21
+254    4.84e-21
+256    3.40e-21
+258    2.40e-21
+260    1.62e-21
+262    1.15e-21
+264    7.95e-22
+266    5.51e-22
+268    3.56e-22
+270    2.46e-22
+272    1.72e-22
+274    1.14e-22
+276    8.08e-23
+278    5.53e-23
+280    3.82e-23
+285    1.10e-23
+290    3.00e-24
