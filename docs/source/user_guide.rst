@@ -721,6 +721,52 @@ the provided units that is present in the list of
 These profiles should describe the concentration of
 the constituent on the ``height`` grid.
 
+
+From NetCDF file
+~~~~~~~~~~~~~~~~
+This radiator type allows loading the optical properties of
+a radiator from a NetCDF file. The optical properties will
+remain constant throughout the calculations.
+
+.. code-block:: JSON
+
+    {
+      "name": "foo",
+      "type": "from netcdf file",
+      "file path": "path/to/file.nc"
+    }
+
+
+============================    ==============
+keys                            Required/Optional
+============================    ==============
+``name``                        required
+``type``                        required
+``file path``                   required 
+============================    ==============
+
+The ``file path`` should be a string containing the absolute
+or relative path to the NetCDF file containing the optical
+properties.
+
+The NetCDF file should be structured as follows::
+
+   dimensions:
+      heights = NUMBER_OF_VERTICAL_LAYERS ;
+      wavelengths = NUMBER_OF_WAVELENGTH_BINS ;
+   variables:
+      double optical_depth(wavelengths, heights) ;
+      double single_scattering_albedo(wavelengths, heights) ;
+      double asymmetry_factor(wavelengths, heights) ;
+
+
+The ``NUMBER_OF_VERTICAL_LAYERS`` and ``NUMBER_OF_WAVELENGTH_BINS``
+must correspond to the number of bins in the ``height`` and
+``wavelength`` grids specified in the TUV-x configuration file.
+(Note that these optical properties are per grid section and not at
+grid edges.) No interpolation is performed on this data set.
+
+
 Aerosols
 ~~~~~~~~
 A special radiator type exists for aerosols, which
@@ -762,7 +808,7 @@ keys                            Required/Optional
 ``enable diagnostics``          optional
 ============================    ==============
 
-The regressoin tests compare the new version of TUV-x to the old version. One
+The regression tests compare the new version of TUV-x to the old version. One
 way is by directly comparing output. The `enable diagnostics` allows for this
 ouptut to be disabled. If this is enabled, a folder named `output` will be 
 created in the same directory TUV-x is run from.
