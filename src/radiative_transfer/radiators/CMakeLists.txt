@@ -5,6 +5,7 @@ target_sources(tuvx_object
   PRIVATE
     aerosol.F90
     from_host.F90
+    from_netcdf_file.F90
 )
 
 ################################################################################
