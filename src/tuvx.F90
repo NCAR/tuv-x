@@ -56,6 +56,9 @@ program tuvx
     call fail_run( )
   endif
   call get_command_argument( 1, argument )
+  if( trim( adjustl( argument ) ) == "--version" ) then
+    call print_version( )
+  end if
 
   config_file_path = argument
 
@@ -261,6 +264,16 @@ contains
     stop 3
 
   end subroutine fail_run
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine print_version( )
+    ! Prints the TUV-x version to stdout and exits
+
+    write(*,*) "TUV-x("//get_tuvx_version( )//")"
+    stop 0
+
+  end subroutine print_version
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
