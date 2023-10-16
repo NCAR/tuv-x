@@ -37,7 +37,7 @@ cd $TUVX_HOME
 ```
 module load conda
 conda activate npl
-cd $TUVX_HOME/tuv-x-private/build
+cd $TUVX_HOME/tuv-x/build
 make test
 ```
 
