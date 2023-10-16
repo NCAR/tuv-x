@@ -44,7 +44,7 @@ make test
 - Run a configuration (this does not require any Python packages)
 
 ```
-cd $TUVX_HOME/tuv-x-private/build
+cd $TUVX_HOME/tuv-x/build
 ./tuv-x examples/full_config.json
 ```
 
