@@ -40,8 +40,8 @@ echo "Building TUV-x"
 # get & build the source code of TUV-x
 
 cd ${TUVX_HOME}
-git clone git@github.com:NCAR/tuv-x-private.git
-cd tuv-x-private
+git clone git@github.com:NCAR/tuv-x.git
+cd tuv-x
 mkdir build
 cd build
 export JSON_FORTRAN_HOME=$INSTALL_DIR/jsonfortran-intel-8.3.0
