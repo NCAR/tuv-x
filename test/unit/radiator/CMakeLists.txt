@@ -9,5 +9,6 @@ include(test_util)
 create_standard_test(NAME radiator SOURCES radiator_core.F90
                                            radiator_test.F90)
 create_standard_test(NAME radiator_from_host SOURCES from_host.F90)
+create_standard_test(NAME radiator_from_netcdf_file SOURCES from_netcdf_file.F90)
 
 ################################################################################
