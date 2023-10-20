@@ -3,9 +3,6 @@
 
 target_sources(tuvx_object
   PRIVATE
-    lapack.F90
-    linpack.F90
+    dgtsv.f
 )
-
-add_subdirectory(lapack_nopivot)
 ################################################################################

@@ -86,7 +86,14 @@ contains
 
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
+!!!!!!!!!!!!!!!!!!!!
+! LINPACK function !
+!!!!!!!!!!!!!!!!!!!!
     use tuvx_linear_algebra_linpack,   only : linear_algebra_linpack_t
+!!!!!!!!!!!!!!!!!!!
+! LAPACK function !
+!!!!!!!!!!!!!!!!!!!
+!    use tuvx_linear_algebra_lapack,    only : linear_algebra_lapack_t
     use tuvx_profile,                  only : profile_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_radiator,                 only : radiator_state_t
@@ -134,12 +141,14 @@ contains
 
     ! Linear algebra package, radiation field type
     type(linear_algebra_linpack_t) :: linpack
+!    type(linear_algebra_lapack_t) :: lapack
 
     ! Local variables
     real(dk), parameter                  :: largest = 1.e36_dk
     real(dk), parameter                  :: kfloor = rONE/largest
     real(dk), parameter                  :: precis = 1.e-7_dk
     real(dk), parameter                  :: eps    = 1.e-3_dk
+    real(dk)                             :: t_start, t_finish, t_accu
 
     integer                              :: nlambda, lambdaNdx
     type(radiator_state_t)               :: atmRadiatorState
@@ -170,6 +179,8 @@ contains
     mu = cos( solar_zenith_angle*d2r )
     associate( nid  => spherical_geometry%nid_,                               &
                dsdh => spherical_geometry%dsdh_ )
+
+    t_accu = 0._dk
 
     wavelength_loop: do lambdaNdx = 1, nlambda
       associate( rsfc => surfaceAlbedo%mid_val_( lambdaNdx ),                 &
@@ -338,9 +349,11 @@ contains
       e( mrows ) = ssfc - cuptn( n_layers ) + rsfc * cdntn( n_layers )
 
       ! solve tri-diagonal system:
-
+call cpu_time(t_start)
       y = linpack%tridiag( a, b, d, e )
-
+!      y = lapack%tridiag( a, b, d, e )
+call cpu_time(t_finish)
+      t_accu = t_accu + t_finish - t_start
       !*** unfold solution of matrix, compute output fluxes:
       ! the following equations are from pg 16,291  equations 31 & 32
 
@@ -390,6 +403,7 @@ contains
     deallocate( lambdaGrid )
     deallocate( surfaceAlbedo )
 
+    print '("Time = ",g12.6," seconds.")', t_accu
   end function update_radiation_field
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

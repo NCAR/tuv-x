@@ -211,7 +211,14 @@ module tuvx_linear_algebra_lapack
     !
 
     use musica_assert,                 only : assert_msg
+    !!!!!!!!!!!!!!!!!!!!!!!!
+    ! LAPACK with pivoting !
+    !!!!!!!!!!!!!!!!!!!!!!!!
     external :: dgtsv
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ! LAPACK without pivoting !
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    external :: dgtsv_nopivot
 
     class(linear_algebra_lapack_t), intent(in) :: this
     real(dk),            intent(in) :: a(:) ! lower diagonal
@@ -223,8 +230,17 @@ module tuvx_linear_algebra_lapack
     integer :: info
 
     u(:) = r(:)
+    !!!!!!!!!!!!!!!!!!!!!!!!
+    ! LAPACK with pivoting !
+    !!!!!!!!!!!!!!!!!!!!!!!!
     call dgtsv( size( b ), 1, a( 2 : size( a ) ), b, c( 1 : size( c ) - 1 ),  &
                 u, size( b ), info )
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!
+    ! LAPACK without pivoting !
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!
+!    call dgtsv_nopivot( size( b ), 1, a( 2 : size( a ) ), b, c( 1 : size( c ) - 1 ),  &
+!                u, size( b ), info )
+
     call assert_msg(236877362, info == 0, "Tridiagonal solver failure")
 
   end function tridiag
