@@ -171,8 +171,10 @@ file_loop: &
             this%parameters( fileNdx )%array( :, parmNdx ) =                  &
                 interpolator%interpolate( x_target = lambdaGrid%edge_,        &
                                           x_source = data_lambda,             &
-                                          y_source = data_parameter )
-          enddo
+                                          y_source = data_parameter,          &
+                                          requested_by =                      &
+                    "temperature interpolated quantum yield wavelength grid" )
+          enddo 
         else
           this%parameters( fileNdx )%array = netcdf_obj%parameters
         endif

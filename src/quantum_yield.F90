@@ -210,7 +210,9 @@ file_loop: &
             this%quantum_yield_parms( fileNdx )%array( :, parmNdx ) =         &
                 interpolator%interpolate( x_target = lambdaGrid%edge_,        &
                                           x_source = data_lambda,             &
-                                          y_source = data_parameter )
+                                          y_source = data_parameter,          &
+                                          requested_by =                      &
+                                          "quantum yield wavelength grid" )
           enddo
         else
           this%quantum_yield_parms( fileNdx )%array = netcdf_obj%parameters

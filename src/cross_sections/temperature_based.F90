@@ -266,7 +266,9 @@ contains
       cross_section( i_height, : ) =                                          &
           this%interpolator_%interpolate( x_target = wavelengths%edge_,       &
                                           x_source = this%raw_wavelengths_,   &
-                                          y_source = raw_data )
+                                          y_source = raw_data,                &
+                                          requested_by =                      &
+                           "temperature based cross section wavelength grid" )
     end do
     deallocate( temperatures )
     deallocate( wavelengths  )
