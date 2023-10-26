@@ -247,7 +247,7 @@ contains
 
     if( any( x_target( 1 : ng - 1 ) >= x_target( 2 : ng ) ) ) then
       call die_msg( 208631776,                                                &
-                    "Target grid must be monotonically increasing for'"//     &
+                    "Target grid must be monotonically increasing for '"//    &
                     requested_by//"' interpolation" )
     endif
 
