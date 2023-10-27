@@ -62,7 +62,8 @@ contains
     call config%get( 'units', this%units_, Iam )
 
     this%ncells_ = ( Upper_val - Lower_val ) / Delta_val
-    if( mod( ( Upper_val - Lower_val ), Delta_val ) /= 0._dk ) then
+    if( Upper_val - ( Lower_val + this%ncells_ * Delta_val )                  &
+        > spacing( Lower_val + this%ncells_ * Delta_val ) ) then
       this%ncells_ = this%ncells_ + 1
     endif
     allocate( this%mid_( this%ncells_ ) )
@@ -70,7 +71,7 @@ contains
     allocate( this%edge_( this%ncells_ + 1 ) )
     do n = 1, this%ncells_ + 1
       this%edge_( n ) =                                                       &
-        min( real( ( n - 1 ), kind = dk ) * Delta_val + Lower_val, Upper_val )
+        min( Lower_val + ( n - 1 ) * Delta_val, Upper_val )
     enddo
     this%mid_(:) = .5_dk * &
       ( this%edge_( 1 : this%ncells_ ) + this%edge_( 2 : this%ncells_ + 1 ) )
