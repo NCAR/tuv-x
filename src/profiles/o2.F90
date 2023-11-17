@@ -142,7 +142,8 @@ contains
     nData = size( zdata )
     zdata( nData ) = zdata( nData ) + .001_dk
     airlog = log( profile )
-    this%edge_val_ = theInterpolator%interpolate( zGrid%edge_, zdata, airlog )
+    this%edge_val_ = theInterpolator%interpolate( zGrid%edge_, zdata, airlog, &
+                                     this%handle_%val_//" profile height grid" )
     this%edge_val_ = exp( this%edge_val_ )
     this%edge_val_ = o2Vmr * this%edge_val_
 

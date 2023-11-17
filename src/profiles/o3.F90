@@ -158,7 +158,8 @@ contains
                                   // " not a valid selection" )
     end select
 
-    this%edge_val_ = theInterpolator%interpolate( zGrid%edge_, zdata, profile )
+    this%edge_val_ = theInterpolator%interpolate( zGrid%edge_, zdata, profile,&
+                                     this%handle_%val_//" profile height grid" )
 
     this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
                               this%edge_val_( 2 : this%ncells_ + 1 ) )

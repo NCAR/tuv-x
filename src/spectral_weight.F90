@@ -150,7 +150,9 @@ contains
             this%spectral_weight_parms( fileNdx )%array( :, parmNdx ) =       &
                 interpolator%interpolate( x_target = lambdaGrid%edge_,        &
                                           x_source = data_lambda,             &
-                                          y_source = data_parameter )
+                                          y_source = data_parameter,          &
+                                          requested_by =                      &
+                                           "spectral weight wavelength grid" )
           enddo
         else
           this%spectral_weight_parms( fileNdx )%array = netcdf_obj%parameters
