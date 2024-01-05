@@ -26,7 +26,7 @@ author = 'NCAR/UCAR'
 suffix = os.getenv("SWITCHER_SUFFIX", "")
 
 # The full version, including alpha/beta/rc tags
-release = f'v0.6{suffix}'
+release = f'v0.7{suffix}'
 
 
 # -- General configuration ---------------------------------------------------
