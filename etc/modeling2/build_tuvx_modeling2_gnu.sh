@@ -23,7 +23,6 @@ export LD_LIBRARY_PATH="/opt/local/lib64:/opt/local/lib:/usr/bin:/usr/lib:usr/li
 cd ${TUVX_HOME}
 curl -LO https://github.com/jacobwilliams/json-fortran/archive/8.2.1.tar.gz
 git clone https://github.com/NCAR/tuv-x.git
-git clone https://github.com/NCAR/musica-core.git
 
 # extract
 cd ${TUVX_HOME}
@@ -39,7 +38,7 @@ cd $JSON_FORTRAN_ROOT
 sed -i 's/\-C $<CONFIG>//' CMakeLists.txt
 mkdir -p build
 cd build
-cmake3 -D CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran \
+cmake -D CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran \
        -D SKIP_DOC_GEN:BOOL=TRUE \
        -D CMAKE_INSTALL_PREFIX=$INSTALL_ROOT \
        ..
@@ -47,27 +46,13 @@ make -j4 install
 mkdir -p $JSON_FORTRAN_HOME/lib/shared
 mv $JSON_FORTRAN_HOME/lib/*.so* $JSON_FORTRAN_HOME/lib/shared
 
-# musica-core
-MUSICA_CORE_ROOT=${TUVX_HOME}/musica-core
-export MUSICA_CORE_HOME=${INSTALL_ROOT}/musica-core-0.1.0
-export MUSICA_CORE_PACKAGE=${INSTALL_ROOT}/musicacore-0.1.0/cmake/musicacore-0.1.0
-cd ${MUSICA_CORE_ROOT}
-mkdir -p build
-cd build
-cmake3 -D CMAKE_Fortran_COMPILER=gfortran \
-      -D CMAKE_BUILD_TYPE=release \
-      -D CMAKE_INSTALL_PREFIX=${INSTALL_ROOT} \
-      ..
-make -j4 install
-
 # TUV-x
 TUVX_ROOT=$TUVX_HOME/tuv-x
 cd $TUVX_ROOT
 mkdir -p build
 cd build
-cmake3 -D CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran \
+cmake -D CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran \
        -D CMAKE_BUILD_TYPE=release \
-       -D musicacore_DIR=${MUSICA_CORE_PACKAGE} \
        -D ENABLE_COVERAGE=OFF \
        -D ENABLE_MEMCHECK=OFF \
        -D CMAKE_INSTALL_PREFIX=${TUVX_HOME} \

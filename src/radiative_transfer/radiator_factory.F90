@@ -8,6 +8,7 @@ module tuvx_radiator_factory
   use tuvx_radiator,                   only : radiator_t
   use tuvx_radiator_aerosol,           only : radiator_aerosol_t
   use tuvx_radiator_from_host,         only : radiator_from_host_t
+  use tuvx_radiator_from_netcdf_file,  only : radiator_from_netcdf_file_t
 
   implicit none
 
@@ -49,6 +50,9 @@ contains
       case( 'aerosol' )
         new_radiator => radiator_aerosol_t( config, grid_warehouse,           &
                                             profile_warehouse )
+      case( 'from netcdf file' )
+        new_radiator => radiator_from_netcdf_file_t( config, grid_warehouse,  &
+                                                     profile_warehouse )
       case default
         call die_msg( 460768245, "Invalid radiator type: '"//                 &
                                  radiator_type%to_char()//"'" )
@@ -73,6 +77,8 @@ contains
         name = "radiator_aerosol_t"
       type is( radiator_from_host_t )
         name = "radiator_from_host_t"
+      type is( radiator_from_netcdf_file_t )
+        name = "radiator_from_netcdf_file_t"
       class default
         call die( 365718517 )
     end select
@@ -99,6 +105,8 @@ contains
         allocate( radiator_aerosol_t :: radiator )
       case( 'radiator_from_host_t' )
         allocate( radiator_from_host_t :: radiator )
+      case( 'radiator_from_netcdf_file_t' )
+        allocate( radiator_from_netcdf_file_t :: radiator )
       case default
         call die_msg( 670539061, "Invalid radiator type: '"//                 &
                                  type_name//"'" )

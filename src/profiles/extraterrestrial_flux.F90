@@ -218,7 +218,8 @@ contains
 
       ! interpolate from source to model wavelength grid
       interpolatedEtfl = theInterpolator%interpolate( &
-        lambdaGrid%edge_, inputGrid, inputData )
+        lambdaGrid%edge_, inputGrid, inputData,                               &
+        this%handle_%val_//" profile height grid" )
       if( .not. allocated( this%mid_val_ ) ) then
         allocate( this%mid_val_,mold=interpolatedEtfl )
         this%mid_val_ = 0.0_dk

@@ -133,7 +133,9 @@ contains
           this%cross_section_parms( fileNdx )%array( :, parmNdx ) =         &
               interpolator%interpolate( x_target = lambdaGrid%edge_,        &
                                         x_source = data_lambda,             &
-                                        y_source = data_parameter )
+                                        y_source = data_parameter,          &
+                                        requested_by =                      &
+                               "HNO3 OH NO2 cross section wavelength grid" )
         enddo
       else
         this%cross_section_parms( fileNdx )%array = netcdf_obj%parameters

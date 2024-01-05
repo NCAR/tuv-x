@@ -282,7 +282,8 @@ contains
     ! x data are assumed to be at interfaces and y data at midpoints
     output = interpolator%interpolate( x_target = output_grid,                &
                                        x_source = input_grid,                 &
-                                       y_source = input )
+                                       y_source = input,                      &
+                                     requested_by = "base cross section test" )
     call assert( 992044813, almost_equal( results( 1, 1 ), output( 1 ) ) )
     call assert( 871103388, almost_equal( results( 1, 2 ), output( 2 ) ) )
     call assert( 418471235, almost_equal( results( 1, 3 ), output( 3 ) ) )

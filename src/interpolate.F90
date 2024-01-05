@@ -62,7 +62,8 @@ interface
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function interpolate( this, x_target, x_source, y_source ) result( y_target )
+  function interpolate( this, x_target, x_source, y_source, requested_by )    &
+      result( y_target )
     ! Interpolates data in y_source on the x_source axis, to y_target on the
     ! x_target axis
 
@@ -70,10 +71,11 @@ interface
 
     import interpolator_t
 
-    class(interpolator_t), intent(in) :: this        ! Interpolator
-    real(dk),              intent(in) :: x_target(:) ! Target axis
-    real(dk),              intent(in) :: x_source(:) ! Source axis
-    real(dk),              intent(in) :: y_source(:) ! Source data
+    class(interpolator_t), intent(in) :: this         ! Interpolator
+    real(dk),              intent(in) :: x_target(:)  ! Target axis
+    real(dk),              intent(in) :: x_source(:)  ! Source axis
+    real(dk),              intent(in) :: y_source(:)  ! Source data
+    character(len=*),      intent(in) :: requested_by ! Calling function
 
     real(dk), allocatable :: y_target(:) ! Target data
 
@@ -132,8 +134,8 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function interpolate_linear( this, x_target, x_source, y_source )           &
-      result( y_target )
+  function interpolate_linear( this, x_target, x_source, y_source,            &
+      requested_by ) result( y_target )
     !  Standard linear interpolation
     !
     !  Map input data given on single, discrete points, onto a discrete target
@@ -151,10 +153,11 @@ contains
     !  If the input data does not encompass the target grid, use ADDPNT to
     !  expand the input array.
 
-    class(interpolator_linear_t), intent(in) :: this        ! Interpolator
-    real(dk),                     intent(in) :: x_target(:) ! Target axis
-    real(dk),                     intent(in) :: x_source(:) ! Source axis
-    real(dk),                     intent(in) :: y_source(:) ! Source data
+    class(interpolator_linear_t), intent(in) :: this         ! Interpolator
+    real(dk),                     intent(in) :: x_target(:)  ! Target axis
+    real(dk),                     intent(in) :: x_source(:)  ! Source axis
+    real(dk),                     intent(in) :: y_source(:)  ! Source data
+    character(len=*),             intent(in) :: requested_by ! Calling function
 
     real(dk), allocatable :: y_target(:)
 
@@ -191,8 +194,8 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function interpolate_conserving( this, x_target, x_source, y_source )       &
-      result( y_target )
+  function interpolate_conserving( this, x_target, x_source, y_source,        &
+      requested_by ) result( y_target )
     !  Area-conserving linear interpolation
     !
     !  Map input data given on single, discrete points onto a set of target
@@ -216,10 +219,11 @@ contains
 
     use musica_assert, only : die_msg
 
-    class(interpolator_conserving_t), intent(in) :: this        ! Interpolator
-    real(dk),                         intent(in) :: x_target(:) ! Target axis
-    real(dk),                         intent(in) :: x_source(:) ! Source axis
-    real(dk),                         intent(in) :: y_source(:) ! Source data
+    class(interpolator_conserving_t), intent(in) :: this         ! Interpolator
+    real(dk),                         intent(in) :: x_target(:)  ! Target axis
+    real(dk),                         intent(in) :: x_source(:)  ! Source axis
+    real(dk),                         intent(in) :: y_source(:)  ! Source data
+    character(len=*),                 intent(in) :: requested_by ! Calling function
 
     real(dk), allocatable   :: y_target(:)
 
@@ -236,11 +240,15 @@ contains
 
     ! test for correct ordering of data, by increasing value of x
     if( any( x_source( 1 : n - 1 ) >= x_source( 2 : n ) ) ) then
-      call die_msg( 996313430,'src grid must be monotonically increasing' )
+      call die_msg( 996313430,                                                &
+                    "Source grid must be monotonically increasing for '"//    &
+                    requested_by//"' interpolation" )
     endif
 
     if( any( x_target( 1 : ng - 1 ) >= x_target( 2 : ng ) ) ) then
-      call die_msg( 208631776,'target grid must be monotonically increasing' )
+      call die_msg( 208631776,                                                &
+                    "Target grid must be monotonically increasing for '"//    &
+                    requested_by//"' interpolation" )
     endif
 
     ! check for xg-values outside the x-range
@@ -311,8 +319,8 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function interpolate_fractional_source( this, x_target, x_source, y_source )&
-      result( y_target )
+  function interpolate_fractional_source( this, x_target, x_source, y_source, &
+      requested_by ) result( y_target )
     !  Interpolation based on fractional overlap of grid sections relative
     !  to the source grid section width.
     !
@@ -340,10 +348,11 @@ contains
 
     use musica_assert, only : die_msg
 
-    class(interpolator_fractional_source_t), intent(in) :: this        ! Interpolator
-    real(dk),                                intent(in) :: x_target(:) ! Target axis
-    real(dk),                                intent(in) :: x_source(:) ! Source axis
-    real(dk),                                intent(in) :: y_source(:) ! Source data
+    class(interpolator_fractional_source_t), intent(in) :: this         ! Interpolator
+    real(dk),                                intent(in) :: x_target(:)  ! Target axis
+    real(dk),                                intent(in) :: x_source(:)  ! Source axis
+    real(dk),                                intent(in) :: y_source(:)  ! Source data
+    character(len=*),                        intent(in) :: requested_by ! Calling function
 
     real(dk), allocatable   :: y_target(:)
 
@@ -413,8 +422,8 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function interpolate_fractional_target( this, x_target, x_source, y_source )&
-      result( y_target )
+  function interpolate_fractional_target( this, x_target, x_source, y_source, &
+      requested_by ) result( y_target )
     !  Interpolation based on fractional overlap of grid sections relative
     !  to the target grid section width.
     !
@@ -445,6 +454,7 @@ contains
     real(dk),                                intent(in) :: x_target(:) ! Target axis
     real(dk),                                intent(in) :: x_source(:) ! Source axis
     real(dk),                                intent(in) :: y_source(:) ! Source data
+    character(len=*),                        intent(in) :: requested_by ! Calling function
 
     real(dk), allocatable :: y_target(:)
 

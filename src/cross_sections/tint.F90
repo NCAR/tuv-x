@@ -169,7 +169,9 @@ contains
           Xsection%array( :, parmNdx ) =                                    &
               interpolator%interpolate( x_target = lambdaGrid%edge_,        &
                                         x_source = data_lambda,             &
-                                        y_source = data_parameter )
+                                        y_source = data_parameter,          &
+                                        requested_by =                      &
+                    "temperature integrated cross section wavelength grid" )
         enddo
       else
         Xsection%array = netcdf_obj%parameters

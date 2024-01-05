@@ -291,7 +291,9 @@ contains
         work_parameter(:) =                                                   &
             interpolator%interpolate( x_target = wavelength_grid%edge_,       &
                                       x_source = data_lambda,                 &
-                                      y_source = data_parameter )
+                                      y_source = data_parameter,              &
+                                      requested_by =                          &
+                                      "cross section wavelength grid" )
         parameters%array( i_low:i_high, i_param ) =                           &
                                   parameters%array( i_low:i_high, i_param ) + &
                                   work_parameter( i_low:i_high )

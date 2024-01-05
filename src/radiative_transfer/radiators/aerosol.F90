@@ -114,7 +114,8 @@ contains
 
       input_zgrid = (/ (real( k, dk ), k = 0, nInputBins - 1 ) /)
       rad_OD =                                                                &
-          theInterpolator%interpolate( zGrid%edge_, input_zgrid, input_OD )
+          theInterpolator%interpolate( zGrid%edge_, input_zgrid, input_OD,    &
+                                       "aerosol radiator optical depth" )
       call diagout( 'cz.aer.new', rad_OD, enable )
       do binNdx = 1, lambdaGrid%ncells_
         this%state_%layer_OD_( :, binNdx ) = rad_OD
@@ -128,7 +129,8 @@ contains
     call config%get( "single scattering albedo", input_SSA, Iam )
     winput_SSA = input_OD( : nInputBins - 1 ) * input_SSA
     this%state_%layer_SSA_( :, 1 ) =                                          &
-        theInterpolator%interpolate( zGrid%edge_, input_zgrid,winput_SSA )
+        theInterpolator%interpolate( zGrid%edge_, input_zgrid,winput_SSA,     &
+                                 "aerosol radiator single scattering albedo" )
     call diagout( 'omz.aer.new', this%state_%layer_SSA_( :, 1 ),              &
       this%enable_diagnostics_ )
     do binNdx = 2, lambdaGrid%ncells_
@@ -139,7 +141,8 @@ contains
     call config%get( "asymmetry factor", input_G, Iam )
     winput_G = input_OD( : nInputBins - 1 ) * input_G
     this%state_%layer_G_( :, 1, 1 ) =                                         &
-        theInterpolator%interpolate( zGrid%edge_, input_zgrid, winput_G )
+        theInterpolator%interpolate( zGrid%edge_, input_zgrid, winput_G,      &
+                                     "aerosol radiator asymmetry parameter" )
     call diagout( 'gz.aer.new', this%state_%layer_G_( :, 1, 1 ),              &
                   this%enable_diagnostics_ )
     do binNdx = 2, lambdaGrid%ncells_

@@ -73,7 +73,7 @@ else()
 
   FetchContent_Declare(musicacore
     GIT_REPOSITORY https://github.com/NCAR/musica-core.git
-    GIT_TAG 25ef3ab
+    GIT_TAG v0.4.1
     FIND_PACKAGE_ARGS NAMES musicacore
   )
 
