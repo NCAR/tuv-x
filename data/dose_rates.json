@@ -1,4 +1,7 @@
-   "__description": "This file contains all the dose rates that can be calculated using data in this folder",
+   "__description": [
+     "This file contains all the dose rates that can be calculated using data in this folder",
+     "The original TUV 5.4 source code and data sets can be found here: https://www2.acom.ucar.edu/modeling/tuv-download"
+   ],
    "dose rates": {
       "enable diagnostics": true,
       "rates": [
