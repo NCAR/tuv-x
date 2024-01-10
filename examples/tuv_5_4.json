@@ -1,4 +1,8 @@
 {
+   "__description": [
+     "TUV-x configuration that reporoduces photolysis rate constants of the TUV 5.4 calculator",
+     "The original TUV 5.4 source code and data sets can be found here: https://www2.acom.ucar.edu/modeling/tuv-download"
+   ],
    "O2 absorption" : {
      "cross section parameters file": "data/cross_sections/O2_parameters.txt"
    },
@@ -169,7 +173,6 @@
          }
       ]
    },
-    "__description": "This file contains configurations for each of the photolysis rate constants that can be calculated using data from this folder",
    "photolysis": {
       "enable diagnostics" : true,
       "reactions": [

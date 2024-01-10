@@ -34,7 +34,9 @@ endif()
 ################################################################################
 # Run examples as tests
 
-add_test(NAME full_example COMMAND tuv-x examples/full_config.json
+add_test(NAME TUV_5_4 COMMAND tuv-x examples/tuv_5_4.json
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_test(NAME TS1_TSMLT COMMAND tuv-x examples/ts1_tsmlt.json
          WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
 ################################################################################
