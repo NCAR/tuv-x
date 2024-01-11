@@ -89,7 +89,7 @@ contains
                             default = 1.0e-6_dk )
       call config_pair%get( "mask", mask_points_config, Iam,           &
                             found = found )
-      if (found) then
+      if( found ) then
         mask_points_iter => mask_points_config%get_iterator( )
         allocate( mask_points( mask_points_config%number_of_children( ) ) )
         do i = 1, size( mask_points )
@@ -99,8 +99,9 @@ contains
           call mask_point_config%get( "index", mask_points( i ), Iam )
         end do
         call assert( 888375064, .not. mask_points_iter%next( ) )
+        deallocate( mask_points_iter )
       else
-        allocate(mask_points(0))
+        allocate( mask_points(0) )
       end if
 
       ! Load and test cross section
