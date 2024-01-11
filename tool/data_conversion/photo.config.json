@@ -1,0 +1,44 @@
+{
+  "photoreactions": [
+    {
+      "molecule": "BRO",
+      "cross-sections": [
+        {
+          "filespec": "XS_BRO_JPL06.txt",
+          "nPreSkip": 17,
+          "nRead": 198
+        }
+      ]
+    },
+    {
+      "molecule": "CL2O2",
+      "cross-sections": [
+        {
+          "filespec": "XS_CL2O2_JPL10_500nm.txt",
+          "nPreSkip": 32,
+          "nRead": 521
+        }
+      ]
+    },
+    {
+      "molecule": "CLO",
+      "cross-sections": [
+        {
+          "filespec": "XS_CLO_JPL06.txt",
+          "nPreSkip": 19,
+          "nRead": 36
+        }
+      ]
+    },
+    {
+      "molecule": "HNO3",
+      "cross-sections": [
+        {
+          "filespec": "XS_HNO3_JPL06.txt",
+          "nPreSkip": 26,
+          "nRead": 80
+        }
+      ]
+    }
+  ]
+}

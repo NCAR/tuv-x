@@ -141,6 +141,18 @@ contains
       case( "CH2Br2 + hv -> 2Br" )
         call XSQY_CH2BR2(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
         xsqy(:,:) = l_xsqy(1,:nz,:nw)
+      case( "BRO + hv -> Br + O" )
+        call XSQY_BRO(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
+        xsqy(:,:) = l_xsqy(1,:nz,:nw)
+      case( "Cl2O2 + hv -> Cl + ClOO" )
+        call XSQY_CL2O2(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
+        xsqy(:,:) = l_xsqy(1,:nz,:nw)
+      case( "ClO + hv -> Cl + O" )
+        call XSQY_CLO(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
+        xsqy(:,:) = l_xsqy(1,:nz,:nw)
+      case ("HNO3 + hv -> OH + NO2" )
+        call XSQY_HNO3(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
+        xsqy(:,:) = l_xsqy(1,:nz,:nw)
       case default
         call die( 946669022 )
     end select
