@@ -321,7 +321,7 @@
             "__reaction": "HNO3 + hv -> OH + NO2",
             "cross section": {
                "netcdf files": [
-                 { "file path": "data/cross_sections/HNO3_1.nc" }
+                 { "file path": "data/cross_sections/HNO3_JPL06.nc" }
                ],
                "type": "HNO3+hv->OH+NO2"
             },
@@ -555,11 +555,7 @@
             "cross section": {
                "netcdf files": [
                  {
-                   "file path": "data/cross_sections/BrO_1.nc",
-                   "interpolator": {
-                      "type": "fractional target",
-                      "fold in": true
-                   }
+                   "file path": "data/cross_sections/BRO_JPL06.nc"
                  }
                ],
                "type": "base"
@@ -818,7 +814,7 @@
             "__comments": "TODO - this doesn't exactly match the products in TS1",
             "cross section": {
                "netcdf files": [
-                  { "file path": "data/cross_sections/ClOOCl_1.nc" }
+                  { "file path": "data/cross_sections/CL2O2_JPL10.nc" }
                ],
                "type": "base"
             },
@@ -838,6 +834,20 @@
             },
             "quantum yield": {
                "type": "ClO+hv->Cl+O(1D)"
+            }
+         },
+         {
+            "name": "jclo_o3p",
+            "__reaction": "ClO + hv -> Cl + O",
+            "cross section": {
+               "netcdf files": [
+                  { "file path": "data/cross_sections/CLO_JPL06.nc" }
+               ],
+               "type": "base"
+            },
+            "quantum yield": {
+               "type": "base",
+               "constant value": 1.0
             }
          },
          {

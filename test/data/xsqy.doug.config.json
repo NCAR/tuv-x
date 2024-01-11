@@ -109,5 +109,126 @@
     },
     "label": "CH2Br2 + hv -> 2Br",
     "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/BRO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "BRO + hv -> Br + O",
+    "__note": "first test: excluding edges of interpolation because of double vs float algoritms",
+    "mask" : [ { "index": 62 }, { "index": 86 }]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/BRO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "BRO + hv -> Br + O",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CL2O2_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "Cl2O2 + hv -> Cl + ClOO",
+    "__note": "first test: excluding edges of interpolation because of double vs float algoritms",
+    "mask" : [ { "index": 34 }, { "index": 97 } ]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CL2O2_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "Cl2O2 + hv -> Cl + ClOO",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CLO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "ClO + hv -> Cl + O",
+    "__note": "first test: excluding edges of interpolation because of double vs float algoritms",
+    "mask": [ { "index": 51 }, { "index": 71 }]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CLO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "ClO + hv -> Cl + O",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "data/cross_sections/HNO3_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HNO3 + hv -> OH + NO2",
+    "__note": "first test: excluding edges of interpolation because of double vs float algoritms",
+    "mask": [ { "index": 30 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "data/cross_sections/HNO3_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HNO3 + hv -> OH + NO2",
+    "__note": "second test: including lower edge of interpolation with relaxed tolerance (upper edge is a very small value with large relative difference)",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
   }
 ]
