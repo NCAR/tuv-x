@@ -61,6 +61,17 @@ module tuvx_cross_section_temperature_based
     real(kind=dk), allocatable :: AA_(:)
     real(kind=dk), allocatable :: BB_(:)
     real(kind=dk), allocatable :: lp_(:)
+    !> Base temperature [K] to use in calculations
+    real(kind=dk) :: base_temperature_
+    !> Base wavelength [nm] to use in calcuations
+    real(kind=dk) :: base_wavelength_
+    !> Flag indicating whether cross section algorithm is base 10 (true)
+    !! or base e (false)
+    logical :: is_base_10_
+    !> Flad indicating whether to subtract base temperature from
+    !! actual temperature (false) or to subtract actual temperature
+    !! from base temperature (true)
+    logical :: is_temperature_inverted_
     !> Minimum wavelength [nm] to calculate values for
     real(kind=dk) :: min_wavelength_
     !> Maximum wavelength [nm] to calculate values for
@@ -126,10 +137,10 @@ contains
     use musica_string,                 only : string_t
     use tuvx_cross_section,            only : base_constructor
     use tuvx_grid,                     only : grid_t
+    use tuvx_grid_factory,             only : grid_builder
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_netcdf,                   only : netcdf_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_util,                     only : add_point
 
     class(cross_section_t),    pointer       :: this
     type(config_t),            intent(inout) :: config
@@ -139,10 +150,9 @@ contains
     ! local variables
     character(len=*), parameter :: my_name =                                  &
         'Temperature-based cross section constructor'
-    real(kind=dk), parameter :: deltax = 1.0e-5
-    type(string_t) :: required_keys(3), optional_keys(1)
+    type(string_t) :: required_keys(3), optional_keys(2)
     class(grid_t), pointer :: wavelengths
-    type(config_t) :: param_config, interpolator_config
+    type(config_t) :: param_config, interpolator_config, grid_config
     type(string_t) :: file_path
     type(netcdf_t) :: netcdf
     real(kind=dk), allocatable :: file_data(:), file_wl(:)
@@ -153,6 +163,7 @@ contains
     required_keys(2) = "parameterization"
     required_keys(3) = "netcdf file"
     optional_keys(1) = "name"
+    optional_keys(2) = "parameterization wavelength grid"
     call assert_msg( 483410000,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for temperature-based cross section" )
@@ -172,20 +183,23 @@ contains
                      "File: "//file_path//" should contain 1 parameter" )
     file_data = netcdf%parameters(:,1)
     file_wl   = netcdf%wavelength(:)
-    call add_point( x = file_wl, y = file_data,                               &
-                    xnew = ( 1.0_dk - deltax ) * file_wl(1), ynew = 0.0_dk )
-    call add_point( x = file_wl, y = file_data,                               &
-                    xnew = 0.0_dk, ynew = 0.0_dk )
-    call add_point( x = file_wl, y = file_data,                               &
-                    xnew = ( 1.0_dk + deltax ) * file_wl( size( file_wl ) ),  &
-                    ynew = 0.0_dk )
-    call add_point( x = file_wl, y = file_data,                               &
-                    xnew = 1.0e38_dk, ynew = 0.0_dk )
+
+    ! Check for custom wavelength grid for parameterization
+    call config%get( "parameterization wavelength grid", grid_config, my_name,&
+                     found = found)
+    if( found ) then
+      wavelengths => grid_builder( grid_config )
+      call assert_msg( 993335233, wavelengths%units( ) .eq. "nm",             &
+                       "Invalid units for custom wavelength grid in "//       &
+                       "temperature-based cross section. Expected 'nm' "//    &
+                       "but got '"//wavelengths%units( )//"'" )
+    else
+      wavelengths => grid_warehouse%get_grid( this%wavelength_grid_ )
+    end if
 
     ! Load parameters
     select type( this )
     type is( cross_section_temperature_based_t )
-      wavelengths => grid_warehouse%get_grid( this%wavelength_grid_ )
       call config%get( "parameterization", param_config, my_name )
       this%parameterization_ =                                                &
           temperature_parameterization_t( param_config, wavelengths )
@@ -205,9 +219,9 @@ contains
         this%raw_data_( i_wl ) = file_data( i_file )
         i_file = i_file + 1
       end do
-      call assert( 950874524, i_file == size( file_data ) + 1 )
-      deallocate( wavelengths )
+      call assert( 950874524, i_file <= size( file_data ) + 1 )
     end select
+    deallocate( wavelengths )
 
   end function constructor
 
@@ -222,6 +236,7 @@ contains
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_profile,                  only : profile_t
+    use tuvx_util,                     only : add_point
 
     real(kind=dk), allocatable                           :: cross_section(:,:)
     class(cross_section_temperature_based_t), intent(in) :: this
@@ -232,11 +247,12 @@ contains
     ! local variables
     character(len=*),  parameter :: Iam =                                      &
       'Temperature-based cross section calculate'
+    real(kind=dk),   parameter :: deltax = 1.0e-5
     class(grid_t),     pointer :: heights
     class(grid_t),     pointer :: wavelengths
     class(profile_t),  pointer :: temperatures
     real(kind=dk)              :: temperature
-    real(kind=dk), allocatable :: raw_data(:)
+    real(kind=dk), allocatable :: raw_data(:), raw_wl(:)
     logical                    :: l_at_mid_point
     integer                    :: i_wl, i_height
 
@@ -261,11 +277,20 @@ contains
         temperature = temperatures%edge_val_( i_height )
       end if
       raw_data = this%raw_data_
-      call this%parameterization_%calculate( temperature,                     &
-                                             this%raw_wavelengths_, raw_data )
+      raw_wl   = this%raw_wavelengths_
+      call this%parameterization_%calculate( temperature, raw_wl, raw_data )
+      call add_point( x = raw_wl, y = raw_data,                               &
+                      xnew = ( 1.0_dk - deltax ) * raw_wl(1), ynew = 0.0_dk )
+      call add_point( x = raw_wl, y = raw_data,                               &
+                      xnew = 0.0_dk, ynew = 0.0_dk )
+      call add_point( x = raw_wl, y = raw_data,                               &
+                      xnew = ( 1.0_dk + deltax ) * raw_wl( size( raw_wl ) ),  &
+                      ynew = 0.0_dk )
+      call add_point( x = raw_wl, y = raw_data,                               &
+                      xnew = 1.0e38_dk, ynew = 0.0_dk )
       cross_section( i_height, : ) =                                          &
           this%interpolator_%interpolate( x_target = wavelengths%edge_,       &
-                                          x_source = this%raw_wavelengths_,   &
+                                          x_source = raw_wl,                  &
                                           y_source = raw_data,                &
                                           requested_by =                      &
                            "temperature based cross section wavelength grid" )
@@ -462,7 +487,7 @@ contains
       result( this )
     ! Constructs temperature_parameterization_t objects
 
-    use musica_assert,                 only : assert_msg
+    use musica_assert,                 only : assert_msg, die_msg
     use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
@@ -474,7 +499,7 @@ contains
 
     character(len=*), parameter :: my_name =                                  &
         "temperature parameterization constructor"
-    type(string_t) :: required_keys(3), optional_keys(3)
+    type(string_t) :: required_keys(6), optional_keys(4), exp_base
     type(config_t) :: temp_ranges, temp_range
     class(iterator_t), pointer :: iter
     integer :: i_range
@@ -483,9 +508,13 @@ contains
     required_keys(1) = "AA"
     required_keys(2) = "BB"
     required_keys(3) = "lp"
+    required_keys(4) = "base temperature"
+    required_keys(5) = "base wavelength"
+    required_keys(6) = "logarithm"
     optional_keys(1) = "minimum wavelength"
     optional_keys(2) = "maximum wavelength"
     optional_keys(3) = "temperature ranges"
+    optional_keys(4) = "invert temperature offset"
     call assert_msg( 256315527,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for temperature parameterization." )
@@ -493,6 +522,19 @@ contains
     call config%get( "AA", this%AA_, my_name )
     call config%get( "BB", this%BB_, my_name )
     call config%get( "lp", this%lp_, my_name )
+    call config%get( "base temperature", this%base_temperature_, my_name )
+    call config%get( "base wavelength",  this%base_wavelength_,  my_name )
+    call config%get( "logarithm", exp_base, my_name )
+    call config%get( "invert temperature offset",                             &
+                     this%is_temperature_inverted_, my_name, default = .false.)
+    if( exp_base == "base 10" ) then
+      this%is_base_10_ = .true.
+    else if( exp_base == "natural" ) then
+      this%is_base_10_ = .false.
+    else
+      call die_msg( 104603249, "Invalid logarithm type in temperature-based"//&
+                               " cross section: '"//exp_base//"'" )
+    end if
     call assert_msg( 467090427, size( this%AA_ ) == size( this%BB_ ) .and.    &
                                 size( this%AA_ ) == size( this%lp_ ),         &
                      "Arrays AA, BB, and lp must be the same size for "//     &
@@ -615,7 +657,7 @@ contains
       end if
     end do
     call assert( 265861594, i_tuv_wl   == n_tuv_wl + 1 )
-    call assert( 537808229, i_input_wl == size( input_grid ) + 1 )
+    call assert( 537808229, i_input_wl <= size( input_grid ) + 1 )
     call assert( 422870529, i_wl       == n_wl + 1 )
     end associate
 
@@ -648,14 +690,25 @@ contains
       else
         temp = temperature
       end if
+      if ( this%is_temperature_inverted_ ) then
+        temp = this%base_temperature_ - temp
+      else
+        temp = temp - this%base_temperature_
+      end if
       temp_xs(:) = 0.0_dk
       do i_lp = 1, size( this%lp_ )
         temp_xs( w_min:w_max ) = temp_xs( w_min:w_max ) +                     &
-            ( this%AA_( i_lp ) + (temp - 273.0_dk) * this%BB_( i_lp ) ) *     &
-              wavelengths( w_min:w_max )**this%lp_( i_lp )
+            ( this%AA_( i_lp ) + temp * this%BB_( i_lp ) ) *                  &
+              ( wavelengths( w_min:w_max )                                    &
+                - this%base_wavelength_ )**this%lp_( i_lp )
       end do
-      cross_section( w_min:w_max ) = cross_section( w_min:w_max )             &
-                                     + 10**temp_xs( w_min:w_max )
+      if (this%is_base_10_) then
+        cross_section( w_min:w_max ) = cross_section( w_min:w_max )           &
+                                       + 10**temp_xs( w_min:w_max )
+      else
+        cross_section( w_min:w_max ) = cross_section( w_min:w_max )           &
+                                       + exp( temp_xs( w_min:w_max ) )
+      end if
     end associate
     end do
 
@@ -676,14 +729,18 @@ contains
 #ifdef MUSICA_USE_MPI
     integer :: i_range
 
-    pack_size = musica_mpi_pack_size( this%AA_,                   comm ) +    &
-                musica_mpi_pack_size( this%BB_,                   comm ) +    &
-                musica_mpi_pack_size( this%lp_,                   comm ) +    &
-                musica_mpi_pack_size( this%min_wavelength_,       comm ) +    &
-                musica_mpi_pack_size( this%max_wavelength_,       comm ) +    &
-                musica_mpi_pack_size( this%min_wavelength_index_, comm ) +    &
-                musica_mpi_pack_size( this%max_wavelength_index_, comm ) +    &
-                musica_mpi_pack_size( allocated( this%ranges_ ),  comm )
+    pack_size = musica_mpi_pack_size( this%AA_,                      comm ) + &
+                musica_mpi_pack_size( this%BB_,                      comm ) + &
+                musica_mpi_pack_size( this%lp_,                      comm ) + &
+                musica_mpi_pack_size( this%base_temperature_,        comm ) + &
+                musica_mpi_pack_size( this%base_wavelength_,         comm ) + &
+                musica_mpi_pack_size( this%is_base_10_,              comm ) + &
+                musica_mpi_pack_size( this%is_temperature_inverted_, comm ) + &
+                musica_mpi_pack_size( this%min_wavelength_,          comm ) + &
+                musica_mpi_pack_size( this%max_wavelength_,          comm ) + &
+                musica_mpi_pack_size( this%min_wavelength_index_,    comm ) + &
+                musica_mpi_pack_size( this%max_wavelength_index_,    comm ) + &
+                musica_mpi_pack_size( allocated( this%ranges_ ),     comm )
     if( allocated( this%ranges_ ) ) then
       pack_size = pack_size +                                                 &
                   musica_mpi_pack_size( size( this%ranges_ ), comm )
@@ -718,6 +775,11 @@ contains
     call musica_mpi_pack( buffer, position, this%AA_,                   comm )
     call musica_mpi_pack( buffer, position, this%BB_,                   comm )
     call musica_mpi_pack( buffer, position, this%lp_,                   comm )
+    call musica_mpi_pack( buffer, position, this%base_temperature_,     comm )
+    call musica_mpi_pack( buffer, position, this%base_wavelength_,      comm )
+    call musica_mpi_pack( buffer, position, this%is_base_10_,           comm )
+    call musica_mpi_pack( buffer, position, this%is_temperature_inverted_,    &
+                          comm )
     call musica_mpi_pack( buffer, position, this%min_wavelength_,       comm )
     call musica_mpi_pack( buffer, position, this%max_wavelength_,       comm )
     call musica_mpi_pack( buffer, position, this%min_wavelength_index_, comm )
@@ -756,6 +818,11 @@ contains
     call musica_mpi_unpack( buffer, position, this%AA_,                  comm )
     call musica_mpi_unpack( buffer, position, this%BB_,                  comm )
     call musica_mpi_unpack( buffer, position, this%lp_,                  comm )
+    call musica_mpi_unpack( buffer, position, this%base_temperature_,    comm )
+    call musica_mpi_unpack( buffer, position, this%base_wavelength_,     comm )
+    call musica_mpi_unpack( buffer, position, this%is_base_10_,          comm )
+    call musica_mpi_unpack( buffer, position, this%is_temperature_inverted_,  &
+                            comm )
     call musica_mpi_unpack( buffer, position, this%min_wavelength_,      comm )
     call musica_mpi_unpack( buffer, position, this%max_wavelength_,      comm )
     call musica_mpi_unpack( buffer, position, this%min_wavelength_index_,comm )
