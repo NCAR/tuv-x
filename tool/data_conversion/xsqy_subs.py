@@ -132,7 +132,7 @@ def xform_to_netCDF(nFile,phtDictionary,ncd_path):
 
 # loop over ascii input data files
     for xsect in xsects:
-      ncdFilespec = ncd_path + '/' + molecule + '_cross_section_' + str(nFile) + '.nc'
+      ncdFilespec = ncd_path + '/' + molecule + '.nc'
 # create the netcdf dataset
       print(f'\nCreating netCDF file {ncdFilespec}')
 
