@@ -34,9 +34,17 @@ endif()
 ################################################################################
 # Run examples as tests
 
-add_test(NAME TUV_5_4 COMMAND tuv-x examples/tuv_5_4.json
-         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-add_test(NAME TS1_TSMLT COMMAND tuv-x examples/ts1_tsmlt.json
-         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_custom_target(make-tuv54-example-dir ALL COMMAND ${CMAKE_COMMAND}
+                  -E make_directory ${CMAKE_BINARY_DIR}/example_tuv_5_4)
+add_custom_target(link-tuv54-example-data ALL COMMAND ${CMAKE_COMMAND}
+                  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_tuv_5_4/data)
+add_test(NAME TUV_5_4 COMMAND tuv-x ../examples/tuv_5_4.json
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_tuv_5_4)
+add_custom_target(make-ts1-tsmlt-example-dir ALL COMMAND ${CMAKE_COMMAND}
+                  -E make_directory ${CMAKE_BINARY_DIR}/example_ts1_tsmlt)
+add_custom_target(link-ts1-tsmlt-example-data ALL COMMAND ${CMAKE_COMMAND}
+                  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_ts1_tsmlt/data)
+add_test(NAME TS1_TSMLT COMMAND tuv-x ../examples/ts1_tsmlt.json
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_ts1_tsmlt)
 
 ################################################################################
