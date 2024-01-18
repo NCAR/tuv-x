@@ -31,6 +31,8 @@ module tuvx_temperature_parameterization
     real(kind=dk), allocatable :: AA_(:)
     real(kind=dk), allocatable :: BB_(:)
     real(kind=dk), allocatable :: lp_(:)
+    !> Wavelengths in parameterization range [nm]
+    real(kind=dk), allocatable :: wavelengths_(:)
     !> Base temperature [K] to use in calculations
     real(kind=dk) :: base_temperature_ = 0.0_dk
     !> Base wavelength [nm] to use in calcuations
@@ -157,6 +159,10 @@ contains
                <= this%max_wavelength_,                                       &
              "Maximum wavelength for temperature-based cross section is "//   &
              "outside the bounds of the wavelength grid." )
+    ! TODO This follows logic from original TUV, but perhaps should
+    !      be modified to assign TUV-x wavelength edges
+    this%wavelengths_ = wavelengths%mid_( this%min_wavelength_index_ :        &
+                                          this%max_wavelength_index_ )
     call config%get( "temperature ranges", temp_ranges, my_name,              &
                      found = found )
     if( .not. found ) then
@@ -177,29 +183,25 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function merge_wavelength_grids( this, input_grid, tuv_grid )               &
-      result( merged_grid )
+  function merge_wavelength_grids( this, input_grid ) result( merged_grid )
     ! Merges wavelength grid from NetCDF input data with parameterization
-    ! grid (same as the TUV-x grid).
+    ! grid.
     ! Where they overlap, the parameterization is used.
     ! Updates the parameterization wavelength indices for new grid.
     ! Returns merged wavelength grid.
-    !
-    ! NOTE: Uses mid-points on the TUV-x wavelength grid
 
     use musica_assert,                 only : assert
     use tuvx_grid,                     only : grid_t
 
     class(temperature_parameterization_t), intent(inout) :: this
     real(kind=dk),                         intent(in)    :: input_grid(:)
-    class(grid_t),                         intent(in)    :: tuv_grid
     real(kind=dk), allocatable                           :: merged_grid(:)
 
     logical :: found_min
-    integer :: i_wl, n_wl, i_input_wl, i_tuv_wl, n_tuv_wl
+    integer :: i_wl, n_wl, i_input_wl, i_param_wl
 
     if( size( input_grid ) == 0 ) then
-      merged_grid = tuv_grid%mid_
+      merged_grid = this%wavelengths_
       return
     end if
 
@@ -212,18 +214,17 @@ contains
       if( min_wl > input_grid( i_input_wl ) .or.                              &
           max_wl < input_grid( i_input_wl ) ) n_wl = n_wl + 1
     end do
-    i_tuv_wl   = wl_min_index
-    n_tuv_wl   = wl_max_index
-    n_wl       = n_wl + ( n_tuv_wl - i_tuv_wl + 1 )
+    n_wl = n_wl + size( this%wavelengths_ )
     allocate( merged_grid( n_wl ) )
     i_input_wl = 1
+    i_param_wl = 1
     i_wl = 1
     found_min = .false.
     do
       if( i_wl > n_wl ) then
         ! end of merged grid
         exit
-      else if( i_tuv_wl > n_tuv_wl .and.                                      &
+      else if( i_param_wl > size( this%wavelengths_ ) .and.                                      &
                input_grid( i_input_wl ) <= max_wl ) then
         ! skipping input data wavelengths in parameterization range
         i_input_wl = i_input_wl + 1
@@ -233,22 +234,19 @@ contains
         merged_grid( i_wl ) = input_grid( i_input_wl )
         i_input_wl = i_input_wl + 1
         i_wl = i_wl + 1
-      else if( i_tuv_wl <= n_tuv_wl ) then
+      else if( i_param_wl <= size( this%wavelengths_ ) ) then
         ! adding TUV-x wavelengths in parameterization range
-        !
-        ! TODO This follows logic from original TUV, but perhaps should
-        !      be modified to assign TUV-x wavelength edges
-        merged_grid( i_wl ) = tuv_grid%mid_( i_tuv_wl )
+        merged_grid( i_wl ) = this%wavelengths_( i_param_wl )
         if( .not. found_min ) then
           found_min = .true.
           wl_min_index = i_wl
         end if
         wl_max_index = i_wl
-        i_tuv_wl = i_tuv_wl + 1
+        i_param_wl = i_param_wl + 1
         i_wl = i_wl + 1
       end if
     end do
-    call assert( 265861594, i_tuv_wl   == n_tuv_wl + 1 )
+    call assert( 265861594, i_param_wl == size( this%wavelengths_ ) + 1 )
     call assert( 537808229, i_input_wl <= size( input_grid ) + 1 )
     call assert( 422870529, i_wl       == n_wl + 1 )
     end associate
@@ -322,6 +320,7 @@ contains
     pack_size = musica_mpi_pack_size( this%AA_,                      comm ) + &
                 musica_mpi_pack_size( this%BB_,                      comm ) + &
                 musica_mpi_pack_size( this%lp_,                      comm ) + &
+                musica_mpi_pack_size( this%wavelengths_,             comm ) + &
                 musica_mpi_pack_size( this%base_temperature_,        comm ) + &
                 musica_mpi_pack_size( this%base_wavelength_,         comm ) + &
                 musica_mpi_pack_size( this%is_base_10_,              comm ) + &
@@ -364,6 +363,7 @@ contains
     call musica_mpi_pack( buffer, position, this%AA_,                   comm )
     call musica_mpi_pack( buffer, position, this%BB_,                   comm )
     call musica_mpi_pack( buffer, position, this%lp_,                   comm )
+    call musica_mpi_pack( buffer, position, this%wavelengths_,          comm )
     call musica_mpi_pack( buffer, position, this%base_temperature_,     comm )
     call musica_mpi_pack( buffer, position, this%base_wavelength_,      comm )
     call musica_mpi_pack( buffer, position, this%is_base_10_,           comm )
@@ -406,6 +406,7 @@ contains
     call musica_mpi_unpack( buffer, position, this%AA_,                  comm )
     call musica_mpi_unpack( buffer, position, this%BB_,                  comm )
     call musica_mpi_unpack( buffer, position, this%lp_,                  comm )
+    call musica_mpi_unpack( buffer, position, this%wavelengths_,         comm )
     call musica_mpi_unpack( buffer, position, this%base_temperature_,    comm )
     call musica_mpi_unpack( buffer, position, this%base_wavelength_,     comm )
     call musica_mpi_unpack( buffer, position, this%is_base_10_,          comm )

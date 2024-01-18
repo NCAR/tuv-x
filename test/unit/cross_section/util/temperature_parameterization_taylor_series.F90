@@ -26,29 +26,18 @@ contains
     use musica_config,                 only : config_t
     use musica_mpi
     use musica_string,                 only : string_t
-    use tuvx_grid,                     only : grid_t
     use tuvx_test_utils,               only : check_values
 
     type(temperature_parameterization_taylor_series_t) :: taylor_param
     type(config_t) :: config
-    type(grid_t) :: wavelengths
     character, allocatable :: buffer(:)
     integer :: pack_size, pos
     integer, parameter :: comm = MPI_COMM_WORLD
 
-    wavelengths%handle_ = "wavelengths"
-    wavelengths%units_ = "nm"
-    wavelengths%ncells_ = 5
-    wavelengths%mid_   = (/ 250.0_dk, 350.0_dk, 450.0_dk, 550.0_dk, 650.0_dk /)
-    wavelengths%edge_  = (/ 200.0_dk, 300.0_dk, 400.0_dk, 500.0_dk, 600.0_dk, &
-                            700.0_dk /)
-    wavelengths%delta_ = (/ 100.0_dk, 100.0_dk, 100.0_dk, 100.0_dk, 100.0_dk /)
-
     call config%from_file( "test/data/cross_sections/util/taylor.config.json" )
 
     if( musica_mpi_rank( comm ) == 0 ) then
-      taylor_param =                                                          &
-          temperature_parameterization_taylor_series_t( config, wavelengths )
+      taylor_param = temperature_parameterization_taylor_series_t( config )
       pack_size = taylor_param%pack_size( comm )
       allocate( buffer( pack_size ) )
       pos = 0

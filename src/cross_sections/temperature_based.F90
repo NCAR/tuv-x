@@ -120,7 +120,7 @@ contains
       this%parameterization_ =                                                &
           temperature_parameterization_t( param_config, wavelengths )
       this%raw_wavelengths_ =                                                 &
-          this%parameterization_%merge_wavelength_grids( file_wl, wavelengths )
+          this%parameterization_%merge_wavelength_grids( file_wl )
       allocate( this%raw_data_( size( this%raw_wavelengths_ ) ) )
       i_file = 1
       do i_wl = 1, size( this%raw_wavelengths_ )

@@ -31,8 +31,6 @@ module tuvx_temperature_parameterization_taylor_series
   !! \f$T_{base}\f$, \f$A_1\f$ and \f$A_2\f$ are fitting parameters, and
   !! \f$T\f$ is temperature [K].
   type, extends(temperature_parameterization_t) :: temperature_parameterization_taylor_series_t
-    !> Wavelength grid for temperature parameterization [nm]
-    real(kind=dk), allocatable :: wavelengths_(:)
     !> Base cross section element
     real(kind=dk), allocatable :: sigma_(:)
     !> Taylor-series coefficients A_n (n,wavelength)
@@ -59,7 +57,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Constructs a Taylor-series temperature-based parameterization
-  function constructor( config, wavelengths ) result ( this )
+  function constructor( config ) result ( this )
 
     use musica_assert,                 only : assert_msg
     use musica_config,                 only : config_t
@@ -70,7 +68,6 @@ contains
 
     type(temperature_parameterization_taylor_series_t) :: this
     type(config_t), intent(inout)                      :: config
-    class(grid_t),  intent(in)                         :: wavelengths
 
     character(len=*), parameter :: my_name =                                  &
         "Taylor-series temperature parameterization constructor"
@@ -78,7 +75,7 @@ contains
     type(config_t) :: temp_ranges, temp_range, netcdf_file
     class(iterator_t), pointer :: iter
     type(netcdf_t) :: netcdf
-    integer :: i_range, i_param, n_param
+    integer :: i_range, i_param, n_param, i_min_wl, i_max_wl
     logical :: found
 
     required_keys(1) = "netcdf file"
@@ -100,40 +97,38 @@ contains
     call assert_msg( 164185428, n_param >= 1, "Taylor-series temperature "//  &
                      "parameterization must have at least one set of "//      &
                      "coefficients" )
-    allocate( this%A_( n_param, size( netcdf%wavelength ) ) )
-    this%wavelengths_ = netcdf%wavelength
-    this%sigma_ = netcdf%parameters(:,1)
-    do i_param = 1, n_param
-      this%A_( i_param, : ) = netcdf%parameters( : , i_param + 1 )
-    end do
 
+    ! Load parameters
     call config%get( "base temperature", this%base_temperature_, my_name )
     call config%get( "minimum wavelength", this%min_wavelength_, my_name,     &
                      default = 0.0_dk )
     call config%get( "maximum wavelength", this%max_wavelength_, my_name,     &
                      default = huge( 1.0_dk ) )
-    this%min_wavelength_index_ = 1
-    do while( wavelengths%mid_( this%min_wavelength_index_ )                  &
-                < this%max_wavelength_                                        &
-              .and. this%min_wavelength_index_ <= wavelengths%ncells_ )
-      this%min_wavelength_index_ = this%min_wavelength_index_ + 1
+    i_min_wl = 1
+    do while( netcdf%wavelength( i_min_wl ) < this%min_wavelength_            &
+              .and. i_min_wl <= size( netcdf%wavelength ) )
+      i_min_wl = i_min_wl + 1
     end do
     call assert_msg( 504874740,                                               &
-             wavelengths%mid_( this%min_wavelength_index_ )                   &
-               >= this%min_wavelength_,                                       &
+             netcdf%wavelength( i_min_wl ) >= this%min_wavelength_,           &
              "Minimum wavelength for Taylor-series temperature-based cross "//&
              "section is outside the bounds of the wavelength grid." )
-    this%max_wavelength_index_ = wavelengths%ncells_
-    do while( wavelengths%mid_( this%max_wavelength_index_ )                  &
-                > this%max_wavelength_                                        &
-              .and. this%max_wavelength_index_ >= 1 )
-      this%max_wavelength_index_ = this%max_wavelength_index_ - 1
+    i_max_wl = size( netcdf%wavelength )
+    do while( netcdf%wavelength( i_max_wl ) > this%max_wavelength_            &
+              .and. i_max_wl >= 1 )
+      i_max_wl = i_max_wl - 1
     end do
     call assert_msg( 587703546,                                               &
-             wavelengths%mid_( this%max_wavelength_index_ )                   &
-               <= this%max_wavelength_,                                       &
+             netcdf%wavelength( i_max_wl ) <= this%max_wavelength_,           &
              "Maximum wavelength for Taylor-series temperature-based cross "//&
              "section is outside the bounds of the wavelength grid." )
+    allocate( this%A_( n_param, i_max_wl - i_min_wl + 1 ) )
+    this%wavelengths_ = netcdf%wavelength( i_min_wl:i_max_wl )
+    this%sigma_ = netcdf%parameters( i_min_wl:i_max_wl, 1 )
+    do i_param = 1, n_param
+      this%A_( i_param, : ) =                                                 &
+          netcdf%parameters( i_min_wl:i_max_wl , i_param + 1 )
+    end do
     call config%get( "temperature ranges", temp_ranges, my_name,              &
                      found = found )
     if( .not. found ) then
@@ -168,6 +163,28 @@ contains
     real(kind=dk), intent(in)    :: wavelengths(:)
     real(kind=dk), intent(inout) :: cross_section(:)
 
+    real(kind=dk) :: temp, temp_xs( size( this%wavelengths_ ) )
+    integer :: i_A, i_range, w_min, w_max
+
+    w_min = this%min_wavelength_index_
+    w_max = this%max_wavelength_index_
+    do i_range = 1, size( this%ranges_ )
+    associate( temp_range => this%ranges_( i_range ) )
+      if( temperature < temp_range%min_temperature_ .or.                      &
+          temperature > temp_range%max_temperature_ ) cycle
+      if( temp_range%is_fixed_ ) then
+        temp = temp_range%fixed_temperature_ - this%base_temperature_
+      else
+        temp = temperature - this%base_temperature_
+      end if
+      temp_xs(:) = 1.0
+      do i_A = 1, size( this%A_, dim = 1 )
+        temp_xs(:) = temp_xs(:) + this%A_(i_A,:) * temp**i_A
+      end do
+      cross_section( w_min:w_max ) = temp_xs(:) * this%sigma_(:)
+    end associate
+    end do
+
   end subroutine calculate
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -184,8 +201,7 @@ contains
     integer,                                             intent(in) :: comm
 
 #ifdef MUSICA_USE_MPI
-    pack_size = this%temperature_parameterization_t%pack_size( comm ) +    &
-                musica_mpi_pack_size( this%wavelengths_, comm ) +             &
+    pack_size = this%temperature_parameterization_t%pack_size( comm ) +       &
                 musica_mpi_pack_size( this%sigma_,       comm ) +             &
                 musica_mpi_pack_size( this%A_,           comm )
 #else
@@ -216,7 +232,6 @@ contains
 
     prev_pos = position
     call this%temperature_parameterization_t%mpi_pack( buffer, position, comm )
-    call musica_mpi_pack( buffer, position, this%wavelengths_, comm )
     call musica_mpi_pack( buffer, position, this%sigma_,       comm )
     call musica_mpi_pack( buffer, position, this%A_,           comm )
     call assert( 342538714, position - prev_pos <= this%pack_size( comm ) )
@@ -246,7 +261,6 @@ contains
 
     prev_pos = position
     call this%temperature_parameterization_t%mpi_unpack( buffer, position, comm )
-    call musica_mpi_unpack( buffer, position, this%wavelengths_, comm )
     call musica_mpi_unpack( buffer, position, this%sigma_,       comm )
     call musica_mpi_unpack( buffer, position, this%A_,           comm )
 #endif
