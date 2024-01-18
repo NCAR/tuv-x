@@ -32,24 +32,24 @@ module tuvx_temperature_parameterization
     real(kind=dk), allocatable :: BB_(:)
     real(kind=dk), allocatable :: lp_(:)
     !> Base temperature [K] to use in calculations
-    real(kind=dk) :: base_temperature_
+    real(kind=dk) :: base_temperature_ = 0.0_dk
     !> Base wavelength [nm] to use in calcuations
-    real(kind=dk) :: base_wavelength_
+    real(kind=dk) :: base_wavelength_ = 0.0_dk
     !> Flag indicating whether cross section algorithm is base 10 (true)
     !! or base e (false)
-    logical :: is_base_10_
+    logical :: is_base_10_ = .true.
     !> Flad indicating whether to subtract base temperature from
     !! actual temperature (false) or to subtract actual temperature
     !! from base temperature (true)
-    logical :: is_temperature_inverted_
+    logical :: is_temperature_inverted_ = .false.
     !> Minimum wavelength [nm] to calculate values for
-    real(kind=dk) :: min_wavelength_
+    real(kind=dk) :: min_wavelength_ = 0.0_dk
     !> Maximum wavelength [nm] to calculate values for
-    real(kind=dk) :: max_wavelength_
+    real(kind=dk) :: max_wavelength_ = 0.0_dk
     !> Index of minimum wavelength [nm] to calculate values for
-    integer :: min_wavelength_index_
+    integer :: min_wavelength_index_ = 0
     !> Index of maximum wavelength to calculate values for
-    integer :: max_wavelength_index_
+    integer :: max_wavelength_index_ = 0
     !> Temperature ranges used in parameterization
     type(temperature_range_t), allocatable :: ranges_(:)
   contains

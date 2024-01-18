@@ -74,8 +74,8 @@ contains
 
     character(len=*), parameter :: my_name =                                  &
         "Taylor-series temperature parameterization constructor"
-    type(string_t) :: required_keys(2), optional_keys(3), file_path
-    type(config_t) :: temp_ranges, temp_range
+    type(string_t) :: required_keys(2), optional_keys(4), file_path
+    type(config_t) :: temp_ranges, temp_range, netcdf_file
     class(iterator_t), pointer :: iter
     type(netcdf_t) :: netcdf
     integer :: i_range, i_param, n_param
@@ -86,12 +86,14 @@ contains
     optional_keys(1) = "minimum wavelength"
     optional_keys(2) = "maximum wavelength"
     optional_keys(3) = "temperature ranges"
+    optional_keys(4) = "type"
     call assert_msg( 235183546,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for temperature parameterization." )
 
     ! Load NetCDF file
-    call config%get( "netcdf file", file_path, my_name )
+    call config%get( "netcdf file", netcdf_file, my_name )
+    call netcdf_file%get( "file path", file_path, my_name )
     call netcdf%read_netcdf_file( file_path = file_path%to_char( ),           &
                                   variable_name = "temperature_" )
     n_param = size( netcdf%parameters, dim = 2 ) - 1
@@ -102,7 +104,7 @@ contains
     this%wavelengths_ = netcdf%wavelength
     this%sigma_ = netcdf%parameters(:,1)
     do i_param = 1, n_param
-      this%A_( i_param, : ) = netcdf%parameters( : , i_param )
+      this%A_( i_param, : ) = netcdf%parameters( : , i_param + 1 )
     end do
 
     call config%get( "base temperature", this%base_temperature_, my_name )
@@ -147,6 +149,11 @@ contains
       this%ranges_( i_range ) = temperature_range_t( temp_range )
     end do
     deallocate( iter )
+
+    ! initialize unused data members
+    allocate( this%AA_(0) )
+    allocate( this%BB_(0) )
+    allocate( this%lp_(0) )
 
   end function constructor
 
