@@ -92,7 +92,7 @@ contains
     this%temperature_profile_ = profile_warehouse%get_ptr( "temperature", "K" )
 
     ! Load NetCDF files
-    call config%get( "netcdf file", file_path, my_name, found = found )
+    call config%get( "netcdf file", file_path, my_name )
     call netcdf%read_netcdf_file( file_path = file_path%to_char( ),           &
                                   variable_name = "cross_section_" )
     call assert_msg( 793476078, size( netcdf%parameters, dim = 2 ) == 1,      &

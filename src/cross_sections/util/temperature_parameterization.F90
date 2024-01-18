@@ -57,27 +57,26 @@ module tuvx_temperature_parameterization
     procedure :: merge_wavelength_grids
     !> Calculate the cross section value for a specific temperature
     !! and wavelength
-    procedure :: calculate => temperature_parameterization_calculate
+    procedure :: calculate => calculate
     !> Returns the number of bytes required to pack the parameterization
     !! onto a character buffer
-    procedure :: pack_size => temperature_parameterization_pack_size
+    procedure :: pack_size => pack_size
     !> Packs the parameterization onto a character buffer
-    procedure :: mpi_pack => temperature_parameterization_mpi_pack
+    procedure :: mpi_pack => mpi_pack
     !> Unpacks the parameterization from a character buffer
-    procedure :: mpi_unpack => temperature_parameterization_mpi_unpack
+    procedure :: mpi_unpack => mpi_unpack
   end type temperature_parameterization_t
 
   !> Constructor for temperature_parameterization_t
   interface temperature_parameterization_t
-    module procedure :: temperature_parameterization_constructor
+    module procedure :: constructor
   end interface temperature_parameterization_t
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function temperature_parameterization_constructor( config, wavelengths )    &
-      result( this )
+  function constructor( config, wavelengths ) result( this )
     ! Constructs temperature_parameterization_t objects
 
     use musica_assert,                 only : assert_msg, die_msg
@@ -174,7 +173,7 @@ contains
     end do
     deallocate( iter )
 
-  end function temperature_parameterization_constructor
+  end function constructor
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -258,8 +257,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine temperature_parameterization_calculate( this, temperature,       &
-      wavelengths, cross_section )
+  subroutine calculate( this, temperature, wavelengths, cross_section )
 
     use tuvx_profile,                  only : profile_t
 
@@ -305,12 +303,11 @@ contains
     end associate
     end do
 
-  end subroutine temperature_parameterization_calculate
+  end subroutine calculate
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  integer function temperature_parameterization_pack_size( this, comm )       &
-      result( pack_size )
+  integer function pack_size( this, comm )
     ! Returns the size of a character buffer required to pack the
     ! parameterization
 
@@ -345,12 +342,11 @@ contains
     pack_size = 0
 #endif
 
-  end function temperature_parameterization_pack_size
+  end function pack_size
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine temperature_parameterization_mpi_pack( this, buffer, position,   &
-      comm )
+  subroutine mpi_pack( this, buffer, position, comm )
     ! Packs the parameterization onto a character buffer
 
     use musica_assert,                 only : assert
@@ -387,12 +383,11 @@ contains
     call assert( 267439201, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
-  end subroutine temperature_parameterization_mpi_pack
+  end subroutine mpi_pack
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine temperature_parameterization_mpi_unpack( this, buffer, position, &
-      comm )
+  subroutine mpi_unpack( this, buffer, position, comm )
     ! Unpacks a parameterization from a character buffer
 
     use musica_assert,                 only : assert
@@ -431,7 +426,7 @@ contains
     call assert( 483905106, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
-  end subroutine temperature_parameterization_mpi_unpack
+  end subroutine mpi_unpack
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

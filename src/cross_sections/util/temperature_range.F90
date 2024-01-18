@@ -33,23 +33,23 @@ module tuvx_temperature_range
   contains
     !> Returns the number of bytes required to pack the range onto a
     !! character buffer
-    procedure :: pack_size => temperature_range_pack_size
+    procedure :: pack_size => pack_size
     !> Packs the range onto a character buffer
-    procedure :: mpi_pack => temperature_range_mpi_pack
+    procedure :: mpi_pack => mpi_pack
     !> Unpacks a range from a character buffer
-    procedure :: mpi_unpack => temperature_range_mpi_unpack
+    procedure :: mpi_unpack => mpi_unpack
   end type temperature_range_t
 
   !> Constructor for temperature_range_t
   interface temperature_range_t
-    module procedure :: temperature_range_constructor
+    module procedure :: constructor
   end interface temperature_range_t
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function temperature_range_constructor( config ) result( this )
+  function constructor( config ) result( this )
     ! Constructs temperature range objects
 
     use musica_assert,                 only : assert_msg
@@ -78,12 +78,11 @@ contains
                      found = found )
     this%is_fixed_ = found
 
-  end function temperature_range_constructor
+  end function constructor
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  integer function temperature_range_pack_size( this, comm )                  &
-      result( pack_size )
+  integer function pack_size( this, comm )
     ! Returns the size of a character buffer required to pack the range
 
     use musica_mpi,                    only : musica_mpi_pack_size
@@ -100,11 +99,11 @@ contains
     pack_size = 0
 #endif
 
-  end function temperature_range_pack_size
+  end function pack_size
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine temperature_range_mpi_pack( this, buffer, position, comm )
+  subroutine mpi_pack( this, buffer, position, comm )
     ! Packs the temperature range onto a character buffer
 
     use musica_assert,                 only : assert
@@ -126,11 +125,11 @@ contains
     call assert( 409699380, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
-  end subroutine temperature_range_mpi_pack
+  end subroutine mpi_pack
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine temperature_range_mpi_unpack( this, buffer, position, comm )
+  subroutine mpi_unpack( this, buffer, position, comm )
     ! Unpacks a temperature range from a character buffer
 
     use musica_assert,                 only : assert
@@ -152,7 +151,7 @@ contains
     call assert( 164457757, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
-  end subroutine temperature_range_mpi_unpack
+  end subroutine mpi_unpack
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
