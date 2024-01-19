@@ -12,6 +12,7 @@ target_sources(tuv_doug
     XSQY_CFCL3.f
     XSQY_CH2BR2.f
     XSQY_CH3BR.f
+    XSQY_CH3CL.f
     XSQY_CHBR3.f
     XSQY_CL2O2.f
     XSQY_CLO.f
@@ -24,6 +25,7 @@ target_sources(tuv_doug
     XSQY_HNO3.f
     XSQY_HO2NO2.f
     XSQY_N2O5.f
+    XSQY_SO2.f
 )
 
 ################################################################################

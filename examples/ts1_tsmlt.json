@@ -479,14 +479,37 @@
             "name": "jacet",
             "__reaction": "CH3COCH3 + hv -> CH3CO + CH3",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/CH3COCH3_1.nc" }
-               ],
-               "type": "CH3COCH3+hv->CH3CO+CH3"
-            },
-            "quantum yield": {
-               "type": "CH3COCH3+hv->CH3CO+CH3"
-            }
+               "type": "temperature based",
+               "netcdf file": "data/cross_sections/CH3CL_JPL06.nc",
+               "parameterization": {
+                 "AA": [ -299.80,    5.1047, -3.3630e-2, 9.5805e-5, -1.0135e-7 ],
+                 "BB": [ -7.1727, 1.4837e-1, -1.1463e-3, 3.9188e-6, -4.9994e-9 ],
+                 "lp": [     0.0,       1.0,        2.0,       3.0,        4.0 ],
+                 "minimum wavelength": 174.1,
+                 "maximum wavelength": 216.0,
+                 "base temperature": 273.0,
+                 "base wavelength": 0.0,
+                 "logarithm": "base 10",
+                 "temperature ranges": [
+                   {
+                     "maximum": 209.999999999999,
+                     "fixed value": 210.0
+                   },
+                   {
+                     "minimum": 210,
+                     "maximum": 300
+                   },
+                   {
+                     "minimum": 300.00000000001,
+                     "fixed value": 300.0
+                   }
+                 ]
+               }
+             },
+             "quantum yield": {
+               "type": "base",
+               "constant value": 1.0
+             }
          },
          {
             "name": "jmgly",
@@ -1506,7 +1529,7 @@
             },
             "quantum yield": {
                "type": "base",
-               "constant value": 0.55
+               "constant value": 0.45
             }
          },
          {
@@ -1520,7 +1543,7 @@
             },
             "quantum yield": {
                "type": "base",
-               "constant value": 0.45
+               "constant value": 0.55
             }
          },
          {
@@ -1627,7 +1650,7 @@
             "cross section": {
                "type": "base",
                "netcdf files": [
-                  { "file path": "data/cross_sections/SO2_1.nc" }
+                  { "file path": "data/cross_sections/SO2_Mills.nc" }
                ]
             },
             "quantum yield": {

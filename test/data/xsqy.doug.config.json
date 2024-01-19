@@ -971,5 +971,55 @@
     "__note": "second test: including edges of interpolation with relaxed tolerance",
     "tolerance": 1.0e-3,
     "mask": [ { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CH3CL_JPL06.nc",
+      "parameterization": {
+        "AA": [ -299.80,    5.1047, -3.3630e-2, 9.5805e-5, -1.0135e-7 ],
+        "BB": [ -7.1727, 1.4837e-1, -1.1463e-3, 3.9188e-6, -4.9994e-9 ],
+        "lp": [     0.0,       1.0,        2.0,       3.0,        4.0 ],
+        "minimum wavelength": 174.1,
+        "maximum wavelength": 216.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CH3Cl + hv -> Cl",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/SO2_Mills.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "SO2 + hv -> SO + O",
+    "tolerance": 1.0e-4
   }
 ]
