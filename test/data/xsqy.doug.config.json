@@ -799,5 +799,177 @@
     "label": "BrONO2 + hv -> BrO + NO2",
     "__note": "second test: including edges of interpolation with relaxed tolerance",
     "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.30,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.20
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> OH + NO3",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "tolerance": 1.0e-5,
+    "mask": [ { "index": 29 }, { "index": 78 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.30,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.20
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> OH + NO3",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.70,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.80
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> HO2 + NO2",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "tolerance": 1.0e-5,
+    "mask": [ { "index": 29 }, { "index": 78 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.70,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.80
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> HO2 + NO2",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
   }
 ]

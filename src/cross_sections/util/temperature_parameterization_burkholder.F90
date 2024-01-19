@@ -70,7 +70,7 @@ contains
 
     character(len=*), parameter :: my_name =                                  &
         "Burkholder (2002) temperature parameterization constructor"
-    type(string_t) :: required_keys(3), optional_keys(2), file_path
+    type(string_t) :: required_keys(3), optional_keys(4), file_path
     type(config_t) :: temp_ranges, temp_range, netcdf_file
     class(iterator_t), pointer :: iter
     type(netcdf_t) :: netcdf
@@ -82,6 +82,8 @@ contains
     required_keys(3) = "B"
     optional_keys(1) = "type"
     optional_keys(2) = "temperature ranges"
+    optional_keys(3) = "minimum wavelength"
+    optional_keys(4) = "maximum wavelength"
     call assert_msg( 235183546,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for Burkholder (2002) temperature "// &
@@ -96,6 +98,17 @@ contains
     call assert_msg( 164185428, n_param >= 2, "Burkholder (2002) "//          &
                      "parameterization must have at two sets of "//           &
                      "coefficients" )
+
+    call config%get( "minimum wavelength", this%min_wavelength_, my_name,     &
+                     default = netcdf%wavelength(1) )
+    call config%get( "maximum wavelength", this%max_wavelength_, my_name,     &
+                     default = netcdf%wavelength( size( netcdf%wavelength ) ) )
+    this%min_wavelength_ = max( this%min_wavelength_, netcdf%wavelength(1) )
+    this%max_wavelength_ = min( this%max_wavelength_,                         &
+                               netcdf%wavelength( size( netcdf%wavelength ) ) )
+    call assert_msg( 856954069, this%min_wavelength_ < this%max_wavelength_,  &
+                     "Invalid wavelength range for Burkholder temperature "// &
+                     "parameterization" )
 
     ! Load parameters
     call config%get( "A", this%A_, my_name )
@@ -149,10 +162,10 @@ contains
       else
         temp = temperature - this%base_temperature_
       end if
-      Q = 1.0 + exp( this%A_ / ( this%B_ * temp ) )
+      Q = 1.0_dk + exp( this%A_ / ( this%B_ * temp ) )
       cross_section( w_min:w_max ) = ( this%AA_(:) / Q +                      &
-                                       this%BB_(:) * ( 1.0 - 1.0 / Q )        &
-                                     ) * 1.0e-20
+                                       this%BB_(:) * ( 1.0_dk - 1.0_dk / Q )  &
+                                     ) * 1.0e-20_dk
     end associate
     end do
 

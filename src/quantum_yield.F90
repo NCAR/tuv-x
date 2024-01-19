@@ -602,7 +602,8 @@ file_loop: &
         "quantum yield band override constructor"
     type(string_t) :: type_name
     type(string_t) :: required_keys(2), optional_keys(2)
-    real(kind=dk) :: min_wl, max_wl, i_wl
+    real(kind=dk) :: min_wl, max_wl
+    integer :: i_wl
 
     required_keys(1) = "band"
     required_keys(2) = "value"
@@ -624,8 +625,8 @@ file_loop: &
                        max_wl >= wavelengths%mid_( 1 ),                       &
                        "Maximum wavelength is out-of-bounds for quantum yield")
       do i_wl = 1, wavelengths%ncells_
-        if( wavelengths%mid_( i_wl ) >= min_wl ) then
-          this%min_wavelength_index_ = i_wl
+        if( wavelengths%mid_( i_wl ) < min_wl ) then
+          this%min_wavelength_index_ = i_wl + 1
         end if
         if( wavelengths%mid_( i_wl ) <= max_wl ) then
           this%max_wavelength_index_ = i_wl
