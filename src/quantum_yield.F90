@@ -601,16 +601,43 @@ file_loop: &
     character(len=*), parameter :: my_name =                                  &
         "quantum yield band override constructor"
     type(string_t) :: type_name
-    type(string_t) :: required_keys(2), optional_keys(0)
+    type(string_t) :: required_keys(2), optional_keys(2)
+    real(kind=dk) :: min_wl, max_wl
+    integer :: i_wl
 
     required_keys(1) = "band"
     required_keys(2) = "value"
+    optional_keys(1) = "minimum wavelength"
+    optional_keys(2) = "maximum wavelength"
     call assert_msg( 257437273,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for quantum yield band averride" )
     call config%get( "band", type_name, my_name )
-    this%min_wavelength_index_ = get_band_min_index( type_name, wavelengths )
-    this%max_wavelength_index_ = get_band_max_index( type_name, wavelengths )
+    if( type_name == "range" ) then
+      call config%get( "minimum wavelength", min_wl, my_name,                 &
+                       default = 0.0_dk )
+      call config%get( "maximum wavelength", max_wl, my_name,                 &
+                       default = huge(1.0_dk) )
+      call assert_msg( 976365464,                                             &
+                       min_wl <= wavelengths%mid_( wavelengths%ncells_ ),     &
+                       "Minimum wavelength is out-of-bounds for quantum yield")
+      call assert_msg( 166625638,                                             &
+                       max_wl >= wavelengths%mid_( 1 ),                       &
+                       "Maximum wavelength is out-of-bounds for quantum yield")
+      do i_wl = 1, wavelengths%ncells_
+        if( wavelengths%mid_( i_wl ) < min_wl ) then
+          this%min_wavelength_index_ = i_wl + 1
+        end if
+        if( wavelengths%mid_( i_wl ) <= max_wl ) then
+          this%max_wavelength_index_ = i_wl
+        else
+          exit
+        end if
+      end do
+    else
+      this%min_wavelength_index_ = get_band_min_index( type_name, wavelengths )
+      this%max_wavelength_index_ = get_band_max_index( type_name, wavelengths )
+    end if
     call config%get( "value", this%value_, my_name )
 
   end function override_constructor

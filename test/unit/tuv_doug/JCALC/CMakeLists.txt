@@ -4,6 +4,7 @@
 target_sources(tuv_doug
   PRIVATE
     XSQY_BRO.f
+    XSQY_BRONO2.f
     XSQY_CF2CL2.f
     XSQY_CFC113.f
     XSQY_CFC114.f
@@ -21,6 +22,7 @@ target_sources(tuv_doug
     XSQY_HCFC141b.f
     XSQY_HCFC142b.f
     XSQY_HNO3.f
+    XSQY_HO2NO2.f
     XSQY_N2O5.f
 )
 

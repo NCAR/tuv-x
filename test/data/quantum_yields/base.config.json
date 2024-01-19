@@ -25,6 +25,12 @@
         {
           "band": "schumann-runge continuum",
           "value": 0.932
+        },
+        {
+          "band": "range",
+          "minimum wavelength": 207.0,
+          "maximum wavelength": 250.0,
+          "value": 0.243
         }
       ]
     },
