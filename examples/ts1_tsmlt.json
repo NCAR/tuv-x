@@ -569,11 +569,29 @@
             "name": "jbrono2_a",
             "__reaction": "BrONO2 + hv -> Br + NO3",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/BrONO2_1.nc" }
-               ],
-               "type": "base"
-            },
+               "type": "temperature based",
+               "parameterization": {
+                 "type": "TAYLOR_SERIES",
+                 "netcdf file": {
+                   "file path": "data/cross_sections/BRONO2_JPL06.nc"
+                 },
+                 "base temperature": 296.0,
+                 "temperature ranges": [
+                   {
+                     "maximum": 199.999999999999,
+                     "fixed value": 200.0
+                   },
+                   {
+                     "minimum": 200.0,
+                     "maximum": 296.0
+                   },
+                   {
+                     "minimum": 296.00000000001,
+                     "fixed value": 296.0
+                   }
+                 ]
+               }
+             },
             "quantum yield": {
                "type": "base",
                "constant value": 0.85
@@ -583,11 +601,29 @@
             "name": "jbrono2_b",
             "__reaction": "BrONO2 + hv -> BrO + NO2",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/BrONO2_1.nc" }
-               ],
-               "type": "base"
-            },
+               "type": "temperature based",
+               "parameterization": {
+                 "type": "TAYLOR_SERIES",
+                 "netcdf file": {
+                   "file path": "data/cross_sections/BRONO2_JPL06.nc"
+                 },
+                 "base temperature": 296.0,
+                 "temperature ranges": [
+                   {
+                     "maximum": 199.999999999999,
+                     "fixed value": 200.0
+                   },
+                   {
+                     "minimum": 200.0,
+                     "maximum": 296.0
+                   },
+                   {
+                     "minimum": 296.00000000001,
+                     "fixed value": 296.0
+                   }
+                 ]
+               }
+             },
             "quantum yield": {
                "type": "base",
                "constant value": 0.15
@@ -1254,32 +1290,84 @@
          {
             "name": "jho2no2_a",
             "__reaction": "HNO4 + hv -> OH + NO3",
-            "__comments": "TODO Doug's data sets have special temperature dependence - need new type?",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/HNO4_1.nc" }
-               ],
-               "type": "base"
-            },
-            "quantum yield": {
+               "type": "temperature based",
+               "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+               "parameterization": {
+                 "type": "BURKHOLDER",
+                 "netcdf file": {
+                   "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+                 },
+                 "A": -988.0,
+                 "B": 0.69,
+                 "temperature ranges": [
+                   {
+                     "maximum": 279.999999999999,
+                     "fixed value": 280.0
+                   },
+                   {
+                     "minimum": 280.0,
+                     "maximum": 350.0
+                   },
+                   {
+                     "minimum": 350.00000000001,
+                     "fixed value": 350.0
+                   }
+                 ]
+               }
+             },
+             "quantum yield": {
                "type": "base",
-               "constant value": 0.2
-            }
+               "constant value": 0.30,
+               "override bands": [
+                 {
+                   "band": "range",
+                   "minimum wavelength": 200.0,
+                   "value": 0.20
+                 }
+               ]
+             }
          },
          {
             "name": "jho2no2_b",
             "__reaction": "HNO4 + hv -> HO2 + NO2",
-            "__comments": "TODO Doug's data sets have special temperature dependence - need new type?",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/HNO4_1.nc" }
-               ],
-               "type": "base"
+               "type": "temperature based",
+               "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+               "parameterization": {
+                 "type": "BURKHOLDER",
+                 "netcdf file": {
+                   "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+                 },
+                 "A": -988.0,
+                 "B": 0.69,
+                 "temperature ranges": [
+                   {
+                     "maximum": 279.999999999999,
+                     "fixed value": 280.0
+                   },
+                   {
+                     "minimum": 280.0,
+                     "maximum": 350.0
+                   },
+                   {
+                     "minimum": 350.00000000001,
+                     "fixed value": 350.0
+                   }
+                 ]
+               }             
             },
-            "quantum yield": {
-               "type": "base",
-               "constant value": 0.8
-            }
+               "quantum yield": {
+                 "type": "base",
+                 "constant value": 0.70,
+                 "override bands": [
+                   {
+                     "band": "range",
+                     "minimum wavelength": 200.0,
+                     "value": 0.80
+                   }
+                 ]
+               }
          },
          {
             "name": "jmacr_a",
