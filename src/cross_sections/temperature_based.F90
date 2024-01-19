@@ -18,11 +18,15 @@ module tuvx_cross_section_temperature_based
   private
   public :: cross_section_temperature_based_t
 
+  integer, parameter :: PARAM_BASE          = 1
+  integer, parameter :: PARAM_TAYLOR_SERIES = 2
+
   !> Calculator for temperature-based cross sections
   type, extends(cross_section_t) :: cross_section_temperature_based_t
     real(kind=dk), allocatable :: raw_wavelengths_(:) ! [nm]
     real(kind=dk), allocatable :: raw_data_(:)
-    type(temperature_parameterization_t) :: parameterization_
+    class(temperature_parameterization_t), pointer :: parameterization_ =>    &
+                                                                       null( )
     type(interpolator_conserving_t) :: interpolator_
   contains
     !> Calculate the cross section
@@ -34,6 +38,8 @@ module tuvx_cross_section_temperature_based
     procedure :: mpi_pack
     !> Unpacks a cross section from a character buffer
     procedure :: mpi_unpack
+    !> Clean up memory
+    final :: finalize
   end type cross_section_temperature_based_t
 
   !> Constructor
@@ -49,7 +55,7 @@ contains
       result( this )
     ! Constructs cross_section_temperature_based_t objects
 
-    use musica_assert,                 only : assert, assert_msg
+    use musica_assert,                 only : assert, assert_msg, die_msg
     use musica_string,                 only : string_t
     use tuvx_cross_section,            only : base_constructor
     use tuvx_grid,                     only : grid_t
@@ -57,6 +63,8 @@ contains
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_netcdf,                   only : netcdf_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
+    use tuvx_temperature_parameterization_taylor_series,                      &
+        only : temperature_parameterization_taylor_series_t
 
     class(cross_section_t),    pointer       :: this
     type(config_t),            intent(inout) :: config
@@ -66,10 +74,10 @@ contains
     ! local variables
     character(len=*), parameter :: my_name =                                  &
         'Temperature-based cross section constructor'
-    type(string_t) :: required_keys(3), optional_keys(2)
+    type(string_t) :: required_keys(2), optional_keys(3)
     class(grid_t), pointer :: wavelengths
     type(config_t) :: param_config, interpolator_config, grid_config
-    type(string_t) :: file_path
+    type(string_t) :: file_path, param_type
     type(netcdf_t) :: netcdf
     real(kind=dk), allocatable :: file_data(:), file_wl(:)
     logical :: found
@@ -77,9 +85,9 @@ contains
 
     required_keys(1) = "type"
     required_keys(2) = "parameterization"
-    required_keys(3) = "netcdf file"
     optional_keys(1) = "name"
     optional_keys(2) = "parameterization wavelength grid"
+    optional_keys(3) = "netcdf file"
     call assert_msg( 483410000,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration for temperature-based cross section" )
@@ -92,13 +100,18 @@ contains
     this%temperature_profile_ = profile_warehouse%get_ptr( "temperature", "K" )
 
     ! Load NetCDF files
-    call config%get( "netcdf file", file_path, my_name )
-    call netcdf%read_netcdf_file( file_path = file_path%to_char( ),           &
-                                  variable_name = "cross_section_" )
-    call assert_msg( 793476078, size( netcdf%parameters, dim = 2 ) == 1,      &
-                     "File: "//file_path//" should contain 1 parameter" )
-    file_data = netcdf%parameters(:,1)
-    file_wl   = netcdf%wavelength(:)
+    call config%get( "netcdf file", file_path, my_name, found = found )
+    if( found ) then
+      call netcdf%read_netcdf_file( file_path = file_path%to_char( ),         &
+                                    variable_name = "cross_section_" )
+      call assert_msg( 793476078, size( netcdf%parameters, dim = 2 ) == 1,    &
+                       "File: "//file_path//" should contain 1 parameter" )
+      file_data = netcdf%parameters(:,1)
+      file_wl   = netcdf%wavelength(:)
+    else
+      allocate( file_data(0) )
+      allocate( file_wl(0) )
+    end if
 
     ! Check for custom wavelength grid for parameterization
     call config%get( "parameterization wavelength grid", grid_config, my_name,&
@@ -117,8 +130,19 @@ contains
     select type( this )
     type is( cross_section_temperature_based_t )
       call config%get( "parameterization", param_config, my_name )
-      this%parameterization_ =                                                &
-          temperature_parameterization_t( param_config, wavelengths )
+      call param_config%get( "type", param_type, my_name, found = found )
+      if( found ) then
+        if( param_type == "TAYLOR_SERIES" ) then
+          allocate( this%parameterization_, source =                          &
+            temperature_parameterization_taylor_series_t( param_config ) )
+        else
+          call die_msg( 370773773, "Invalid temperature-based "//             &
+                        "parameterization type: '"//param_type//"'" )
+        end if
+      else
+        allocate( this%parameterization_, source =                            &
+            temperature_parameterization_t( param_config, wavelengths ) )
+      end if
       this%raw_wavelengths_ =                                                 &
           this%parameterization_%merge_wavelength_grids( file_wl )
       allocate( this%raw_data_( size( this%raw_wavelengths_ ) ) )
@@ -230,8 +254,13 @@ contains
 #ifdef MUSICA_USE_MPI
     pack_size = this%cross_section_t%pack_size( comm ) +                      &
                 musica_mpi_pack_size( this%raw_wavelengths_, comm ) +         &
-                musica_mpi_pack_size( this%raw_data_, comm ) +                &
-                this%parameterization_%pack_size( comm )
+                musica_mpi_pack_size( this%raw_data_,        comm ) +         &
+                musica_mpi_pack_size( .false.,               comm )
+    if( associated( this%parameterization_ ) ) then
+      pack_size = pack_size +                                                 &
+                  musica_mpi_pack_size( 1, comm ) +                           &
+                  this%parameterization_%pack_size( comm )
+    end if
 #else
     pack_size = this%cross_section_t%pack_size( comm )
 #endif
@@ -243,8 +272,10 @@ contains
   subroutine mpi_pack( this, buffer, position, comm )
     ! Packs the cross section onto a character buffer
 
-    use musica_assert,                 only : assert
+    use musica_assert,                 only : assert, die
     use musica_mpi,                    only : musica_mpi_pack
+    use tuvx_temperature_parameterization_taylor_series,                      &
+        only : temperature_parameterization_taylor_series_t
 
     class(cross_section_temperature_based_t), intent(in)    :: this      ! cross section to be packed
     character,                                intent(inout) :: buffer(:) ! memory buffer
@@ -252,13 +283,28 @@ contains
     integer,                                  intent(in)    :: comm      ! MPI communicator
 
 #ifdef MUSICA_USE_MPI
-    integer :: prev_pos
+    integer :: prev_pos, param_type
+    logical :: is_alloced
+
+    is alloced = associated( this%parameterization_ )
 
     prev_pos = position
     call this%cross_section_t%mpi_pack( buffer, position, comm )
     call musica_mpi_pack( buffer, position, this%raw_wavelengths_, comm )
-    call musica_mpi_pack( buffer, position, this%raw_data_, comm )
-    call this%parameterization_%mpi_pack( buffer, position, comm )
+    call musica_mpi_pack( buffer, position, this%raw_data_,        comm )
+    call musica_mpi_pack( buffer, position, is_alloced,            comm )
+    if( is_alloced ) then
+      select type( this%parameterization_ )
+        type is( temperature_parameterization_t )
+          param_type = PARAM_BASE
+        type is( temperature_parameterization_taylor_series_t )
+          param_type = PARAM_TAYLOR_SERIES
+        class default
+          call die( 424852458 )
+      end select
+      call musica_mpi_pack( buffer, position, param_type, comm )
+      call this%parameterization_%mpi_pack( buffer, position, comm )
+    end if
     call assert( 322345685, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
@@ -269,8 +315,10 @@ contains
   subroutine mpi_unpack( this, buffer, position, comm )
     ! Unpacks a cross section from a character buffer
 
-    use musica_assert,                 only : assert
+    use musica_assert,                 only : assert, die
     use musica_mpi,                    only : musica_mpi_unpack
+    use tuvx_temperature_parameterization_taylor_series,                      &
+        only : temperature_parameterization_taylor_series_t
 
     class(cross_section_temperature_based_t), intent(out)   :: this      ! cross section to be unpacked
     character,                                intent(inout) :: buffer(:) ! memory buffer
@@ -278,17 +326,44 @@ contains
     integer,                                  intent(in)    :: comm      ! MPI communicator
 
 #ifdef MUSICA_USE_MPI
-    integer :: prev_pos
+    integer :: prev_pos, param_type
+    logical :: is_alloced
 
     prev_pos = position
     call this%cross_section_t%mpi_unpack( buffer, position, comm )
     call musica_mpi_unpack( buffer, position, this%raw_wavelengths_, comm )
-    call musica_mpi_unpack( buffer, position, this%raw_data_, comm )
-    call this%parameterization_%mpi_unpack( buffer, position, comm )
+    call musica_mpi_unpack( buffer, position, this%raw_data_,        comm )
+    call musica_mpi_unpack( buffer, position, is_alloced,            comm )
+    if( is_alloced ) then
+      call musica_mpi_unpack( buffer, position, param_type, comm )
+      select case( param_type )
+        case( PARAM_BASE )
+          allocate( temperature_parameterization_t :: this%parameterization_ )
+        case( PARAM_TAYLOR_SERIES )
+          allocate( temperature_parameterization_taylor_series_t ::          &
+                    this%parameterization_ )
+        case default
+          call die( 324803089 )
+      end select
+      call this%parameterization_%mpi_unpack( buffer, position, comm )
+    end if
     call assert( 820834544, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
   end subroutine mpi_unpack
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Clean-up memory
+  subroutine finalize( this )
+
+    type(cross_section_temperature_based_t), intent(inout) :: this
+
+    if( associated( this%parameterization_ ) ) then
+      deallocate( this%parameterization_ )
+    end if
+
+  end subroutine finalize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

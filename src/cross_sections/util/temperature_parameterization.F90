@@ -202,6 +202,8 @@ contains
 
     if( size( input_grid ) == 0 ) then
       merged_grid = this%wavelengths_
+      this%min_wavelength_index_ = 1
+      this%max_wavelength_index_ = size( merged_grid )
       return
     end if
 
