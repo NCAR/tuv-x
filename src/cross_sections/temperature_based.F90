@@ -286,7 +286,7 @@ contains
     integer :: prev_pos, param_type
     logical :: is_alloced
 
-    is alloced = associated( this%parameterization_ )
+    is_alloced = associated( this%parameterization_ )
 
     prev_pos = position
     call this%cross_section_t%mpi_pack( buffer, position, comm )
@@ -294,7 +294,7 @@ contains
     call musica_mpi_pack( buffer, position, this%raw_data_,        comm )
     call musica_mpi_pack( buffer, position, is_alloced,            comm )
     if( is_alloced ) then
-      select type( this%parameterization_ )
+      select type( param => this%parameterization_ )
         type is( temperature_parameterization_t )
           param_type = PARAM_BASE
         type is( temperature_parameterization_taylor_series_t )
