@@ -1650,7 +1650,7 @@
             "cross section": {
                "type": "base",
                "netcdf files": [
-                  { "file path": "data/cross_sections/SO2_1.nc" }
+                  { "file path": "data/cross_sections/SO2_Mills.nc" }
                ]
             },
             "quantum yield": {

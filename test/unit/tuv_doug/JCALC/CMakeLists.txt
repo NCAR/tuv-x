@@ -25,6 +25,7 @@ target_sources(tuv_doug
     XSQY_HNO3.f
     XSQY_HO2NO2.f
     XSQY_N2O5.f
+    XSQY_SO2.f
 )
 
 ################################################################################

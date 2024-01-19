@@ -1007,5 +1007,19 @@
     },
     "label": "CH3Cl + hv -> Cl",
     "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/SO2_Mills.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "SO2 + hv -> SO + O",
+    "tolerance": 1.0e-4
   }
 ]
