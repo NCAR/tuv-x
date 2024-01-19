@@ -1,9 +1,9 @@
-! Copyright (C) 2020-4 National Center for Atmospheric Research
+! Copyright (C) 2024 National Center for Atmospheric Research
 ! SPDX-License-Identifier: Apache-2.0
 
-module tuvx_temperature_parameterization_taylor_series
-! Calculates cross-section elements using a Taylor-series temperature-based
-! parameterization
+module tuvx_temperature_parameterization_burkholder
+! Calculates cross-section elements using a temperature-based
+! parameterization from Burkholder et al. Phys. Chem. Chem. Phys. 4, 1432-1437 (2002).
 
   ! Including musica_config at the module level to avoid an ICE
   ! with Intel 2022.1 compiler
@@ -16,25 +16,24 @@ module tuvx_temperature_parameterization_taylor_series
   implicit none
 
   private
-  public :: temperature_parameterization_taylor_series_t
+  public :: temperature_parameterization_burkholder_t
 
   !> Parameters for calculating cross section values based on
-  !! temperature using a Taylor series
+  !! temperature using the algoritm in Burkholder et al.
+  !! Phys. Chem. Chem. Phys. 4, 1432-1437 (2002).
   !!
   !! Cross section elements are calculated as:
   !!
   !! \f[
-  !! \sigma(T_{base}) * \[ 1.0 + A_1 * (T - T_{base}) + A_2 * (T - T_{base})^2 \]
+  !! Q(T) = 1 + e^{\frac{A}{B*T}}
+  !! \sigma(T,\lambda) = \frac{aa(\lambda)}{Q(T)} + bb(\lambda)*\[1-\frac{1}{Q(T)}\]
   !! \f]
   !!
-  !! where \f$\sigma\f$ is a reference cross section at temperature [K]
-  !! \f$T_{base}\f$, \f$A_1\f$ and \f$A_2\f$ are fitting parameters, and
-  !! \f$T\f$ is temperature [K].
-  type, extends(temperature_parameterization_t) :: temperature_parameterization_taylor_series_t
-    !> Base cross section element
-    real(kind=dk), allocatable :: sigma_(:)
-    !> Taylor-series coefficients A_n (n,wavelength)
-    real(kind=dk), allocatable :: A_(:,:)
+  !! where A, B, aa, and bb are constants, T is temperature [K] and \f$\lambda\f$ is
+  !! wavelength [nm].
+  type, extends(temperature_parameterization_t) :: temperature_parameterization_burkholder_t
+    real(kind=dk) :: A_
+    real(kind=dk) :: B_
   contains
     !> Calculate the cross section value for a specific temperature and wavelength
     procedure :: calculate
@@ -45,18 +44,18 @@ module tuvx_temperature_parameterization_taylor_series
     procedure :: mpi_pack => mpi_pack
     !> Unpacks the parameterization from a character buffer
     procedure :: mpi_unpack => mpi_unpack
-  end type temperature_parameterization_taylor_series_t
+  end type temperature_parameterization_burkholder_t
 
-  !> Constructor for temperature_parameterization_taylor_series_t
-  interface temperature_parameterization_taylor_series_t
+  !> Constructor for temperature_parameterization_burkholder_t
+  interface temperature_parameterization_burkholder_t
     module procedure :: constructor
-  end interface temperature_parameterization_taylor_series_t
+  end interface temperature_parameterization_burkholder_t
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Constructs a Taylor-series temperature-based parameterization
+  !> Constructs a Burkholder (2002) temperature-based parameterization
   function constructor( config ) result ( this )
 
     use musica_assert,                 only : assert_msg
@@ -66,69 +65,44 @@ contains
     use tuvx_grid,                     only : grid_t
     use tuvx_netcdf,                   only : netcdf_t
 
-    type(temperature_parameterization_taylor_series_t) :: this
+    type(temperature_parameterization_burkholder_t) :: this
     type(config_t), intent(inout)                      :: config
 
     character(len=*), parameter :: my_name =                                  &
-        "Taylor-series temperature parameterization constructor"
-    type(string_t) :: required_keys(2), optional_keys(4), file_path
+        "Burkholder (2002) temperature parameterization constructor"
+    type(string_t) :: required_keys(3), optional_keys(2), file_path
     type(config_t) :: temp_ranges, temp_range, netcdf_file
     class(iterator_t), pointer :: iter
     type(netcdf_t) :: netcdf
-    integer :: i_range, i_param, n_param, i_min_wl, i_max_wl
+    integer :: i_range, i_param, n_param
     logical :: found
 
     required_keys(1) = "netcdf file"
-    required_keys(2) = "base temperature"
-    optional_keys(1) = "minimum wavelength"
-    optional_keys(2) = "maximum wavelength"
-    optional_keys(3) = "temperature ranges"
-    optional_keys(4) = "type"
+    required_keys(2) = "A"
+    required_keys(3) = "B"
+    optional_keys(1) = "type"
+    optional_keys(2) = "temperature ranges"
     call assert_msg( 235183546,                                               &
                      config%validate( required_keys, optional_keys ),         &
-                     "Bad configuration for temperature parameterization." )
+                     "Bad configuration for Burkholder (2002) temperature "// &
+                     "parameterization." )
 
     ! Load NetCDF file
     call config%get( "netcdf file", netcdf_file, my_name )
     call netcdf_file%get( "file path", file_path, my_name )
     call netcdf%read_netcdf_file( file_path = file_path%to_char( ),           &
                                   variable_name = "temperature_" )
-    n_param = size( netcdf%parameters, dim = 2 ) - 1
-    call assert_msg( 164185428, n_param >= 1, "Taylor-series temperature "//  &
-                     "parameterization must have at least one set of "//      &
+    n_param = size( netcdf%parameters, dim = 2 )
+    call assert_msg( 164185428, n_param >= 2, "Burkholder (2002) "//          &
+                     "parameterization must have at two sets of "//           &
                      "coefficients" )
 
     ! Load parameters
-    call config%get( "base temperature", this%base_temperature_, my_name )
-    call config%get( "minimum wavelength", this%min_wavelength_, my_name,     &
-                     default = 0.0_dk )
-    call config%get( "maximum wavelength", this%max_wavelength_, my_name,     &
-                     default = huge( 1.0_dk ) )
-    i_min_wl = 1
-    do while( netcdf%wavelength( i_min_wl ) < this%min_wavelength_            &
-              .and. i_min_wl <= size( netcdf%wavelength ) )
-      i_min_wl = i_min_wl + 1
-    end do
-    call assert_msg( 504874740,                                               &
-             netcdf%wavelength( i_min_wl ) >= this%min_wavelength_,           &
-             "Minimum wavelength for Taylor-series temperature-based cross "//&
-             "section is outside the bounds of the wavelength grid." )
-    i_max_wl = size( netcdf%wavelength )
-    do while( netcdf%wavelength( i_max_wl ) > this%max_wavelength_            &
-              .and. i_max_wl >= 1 )
-      i_max_wl = i_max_wl - 1
-    end do
-    call assert_msg( 587703546,                                               &
-             netcdf%wavelength( i_max_wl ) <= this%max_wavelength_,           &
-             "Maximum wavelength for Taylor-series temperature-based cross "//&
-             "section is outside the bounds of the wavelength grid." )
-    allocate( this%A_( n_param, i_max_wl - i_min_wl + 1 ) )
-    this%wavelengths_ = netcdf%wavelength( i_min_wl:i_max_wl )
-    this%sigma_ = netcdf%parameters( i_min_wl:i_max_wl, 1 )
-    do i_param = 1, n_param
-      this%A_( i_param, : ) =                                                 &
-          netcdf%parameters( i_min_wl:i_max_wl , i_param + 1 )
-    end do
+    call config%get( "A", this%A_, my_name )
+    call config%get( "B", this%B_, my_name )
+    this%wavelengths_ = netcdf%wavelength(:)
+    this%AA_ = netcdf%parameters(:,1)
+    this%BB_ = netcdf%parameters(:,2)
     call config%get( "temperature ranges", temp_ranges, my_name,              &
                      found = found )
     if( .not. found ) then
@@ -146,8 +120,6 @@ contains
     deallocate( iter )
 
     ! initialize unused data members
-    allocate( this%AA_(0) )
-    allocate( this%BB_(0) )
     allocate( this%lp_(0) )
 
   end function constructor
@@ -158,13 +130,13 @@ contains
 
     use tuvx_profile,                  only : profile_t
 
-    class(temperature_parameterization_taylor_series_t), intent(in) :: this
+    class(temperature_parameterization_burkholder_t), intent(in) :: this
     real(kind=dk), intent(in)    :: temperature
     real(kind=dk), intent(in)    :: wavelengths(:)
     real(kind=dk), intent(inout) :: cross_section(:)
 
-    real(kind=dk) :: temp, temp_xs( size( this%wavelengths_ ) )
-    integer :: i_A, i_range, w_min, w_max
+    real(kind=dk) :: temp, Q
+    integer :: i_range, w_min, w_max
 
     w_min = this%min_wavelength_index_
     w_max = this%max_wavelength_index_
@@ -177,11 +149,10 @@ contains
       else
         temp = temperature - this%base_temperature_
       end if
-      temp_xs(:) = 1.0
-      do i_A = 1, size( this%A_, dim = 1 )
-        temp_xs(:) = temp_xs(:) + this%A_(i_A,:) * temp**i_A
-      end do
-      cross_section( w_min:w_max ) = temp_xs(:) * this%sigma_(:)
+      Q = 1.0 + exp( this%A_ / ( this%B_ * temp ) )
+      cross_section( w_min:w_max ) = ( this%AA_(:) / Q +                      &
+                                       this%BB_(:) * ( 1.0 - 1.0 / Q )        &
+                                     ) * 1.0e-20
     end associate
     end do
 
@@ -196,14 +167,14 @@ contains
     use musica_mpi,                    only : musica_mpi_pack_size
 
     !> Parameterization to be packed
-    class(temperature_parameterization_taylor_series_t), intent(in) :: this
+    class(temperature_parameterization_burkholder_t), intent(in) :: this
     !> MPI communicator
     integer,                                             intent(in) :: comm
 
 #ifdef MUSICA_USE_MPI
     pack_size = this%temperature_parameterization_t%pack_size( comm ) +       &
-                musica_mpi_pack_size( this%sigma_,       comm ) +             &
-                musica_mpi_pack_size( this%A_,           comm )
+                musica_mpi_pack_size( this%A_, comm ) +                       &
+                musica_mpi_pack_size( this%B_, comm )
 #else
     pack_size = 0
 #endif
@@ -219,7 +190,7 @@ contains
     use musica_mpi,                    only : musica_mpi_pack
 
     !> Parameterization to be packed
-    class(temperature_parameterization_taylor_series_t), intent(in) :: this
+    class(temperature_parameterization_burkholder_t), intent(in) :: this
     !> Memory buffer
     character, intent(inout) :: buffer(:)
     !> Current buffer position
@@ -232,9 +203,9 @@ contains
 
     prev_pos = position
     call this%temperature_parameterization_t%mpi_pack( buffer, position, comm )
-    call musica_mpi_pack( buffer, position, this%sigma_,       comm )
-    call musica_mpi_pack( buffer, position, this%A_,           comm )
-    call assert( 342538714, position - prev_pos <= this%pack_size( comm ) )
+    call musica_mpi_pack( buffer, position, this%A_, comm )
+    call musica_mpi_pack( buffer, position, this%B_, comm )
+    call assert( 190816083, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
   end subroutine mpi_pack
@@ -248,7 +219,7 @@ contains
     use musica_mpi,                    only : musica_mpi_unpack
 
     !> The parameterization to be unpacked
-    class(temperature_parameterization_taylor_series_t), intent(out) :: this
+    class(temperature_parameterization_burkholder_t), intent(out) :: this
     !> Memory buffer
     character, intent(inout) :: buffer(:)
     !> Current buffer position
@@ -261,13 +232,13 @@ contains
 
     prev_pos = position
     call this%temperature_parameterization_t%mpi_unpack( buffer, position, comm )
-    call musica_mpi_unpack( buffer, position, this%sigma_,       comm )
-    call musica_mpi_unpack( buffer, position, this%A_,           comm )
-    call assert( 966515884, position - prev_pos <= this%pack_size( comm ) )
+    call musica_mpi_unpack( buffer, position, this%A_, comm )
+    call musica_mpi_unpack( buffer, position, this%B_, comm )
+    call assert( 634825156, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
   end subroutine mpi_unpack
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-end module tuvx_temperature_parameterization_taylor_series
+end module tuvx_temperature_parameterization_burkholder
