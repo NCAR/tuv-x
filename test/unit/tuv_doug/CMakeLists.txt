@@ -22,6 +22,7 @@ target_sources(tuv_doug
     inter4.f
     la_srb.f
     lymana.f
+    rdo2xs.f
     schum.f
     ../test_utils.F90
 )

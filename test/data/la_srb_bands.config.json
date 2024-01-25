@@ -1,18 +1,24 @@
 {
   "grids" : [
     {
-    "name": "height",
-        "type": "equal interval",
-        "units": "km",
-        "begins at" : 0.0,
-        "ends at" : 120.0,
-        "cell delta" : 1.0
+      "name": "height",
+      "type": "equal interval",
+      "units": "km",
+      "begins at" : 0.5,
+      "ends at" : 150.5,
+      "cell delta" : 1.0
     },
     {
-    "name": "wavelength",
-        "type": "from csv file",
-        "units": "nm",
-        "file path": "data/grids/wavelength/combined.grid"
+      "name": "wavelength",
+      "type": "from csv file",
+      "units": "nm",
+      "file path": "test/data/waccm2_ref_101_mod.grid"
+    },
+    {
+      "name": "LUT wavelength",
+      "type": "from csv file",
+      "units": "nm",
+      "file path": "test/data/waccm2_ref_101.grid"
     }
   ],
   "cross section parameters file": "data/cross_sections/O2_parameters.txt",
@@ -39,5 +45,15 @@
       "units": "molecule cm-3",
       "file path": "data/profiles/atmosphere/ussa.dens"
     }
-  ]
+  ],
+  "O2 cross section": {
+    "netcdf files": [
+      {
+         "file path": "data/cross_sections/O2_1.nc",
+         "lower extrapolation": { "type": "boundary" },
+         "interpolator": { "type": "fractional target" }
+       }
+     ],
+     "type": "base"
+  }
 }
