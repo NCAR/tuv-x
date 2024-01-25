@@ -26,9 +26,18 @@
           "name": "height",
           "units": "km"
         }
+    },
+    {
+      "name": "air",
+      "type": "air",
+      "units": "molecule cm-3",
+      "file path": "data/profiles/atmosphere/ussa.dens"
+    },
+    {
+      "name": "O2",
+      "type": "O2",
+      "units": "molecule cm-3",
+      "file path": "data/profiles/atmosphere/ussa.dens"
     }
-  ],
-  "O2 estimate" :{
-    "scale factor": 0.2095
-  }
+  ]
 }

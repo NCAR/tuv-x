@@ -67,22 +67,29 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine test_optical_depth( )
-    use tuvx_grid, only : grid_t
-    use tuvx_spherical_geometry, only : spherical_geometry_t
+
+    use tuvx_profile,                  only : profile_t
+    use tuvx_grid,                     only : grid_t
+    use tuvx_spherical_geometry,       only : spherical_geometry_t
 
     real(dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     real(dk), allocatable :: o2_optical_depth(:,:)
-    class(grid_t), pointer :: height_grid => null( ) ! specified altitude working grid [km]
-    type(spherical_geometry_t) :: spherical_geometry
+    class(grid_t), pointer :: height_grid ! specified altitude working grid [km]
+    class(spherical_geometry_t), pointer :: spherical_geometry
+    class(profile_t), pointer :: air
 
     height_grid => grid_warehouse%get_grid( "height", "km" )
-    allocate( air_vertical_column( height_grid%ncells_ ),                      &
-              air_slant_column( height_grid%ncells_ + 1 ) )
+    air => profile_warehouse%get_profile( "air", "molecule cm-3" )
+
+    spherical_geometry => spherical_geometry_t( grid_warehouse )
+    call spherical_geometry%set_parameters( 45.0_dk, grid_warehouse )
+
+    allocate( air_vertical_column( air%ncells_ ),                              &
+              air_slant_column( air%ncells_ + 1 ) )
+    call spherical_geometry%air_mass( air%exo_layer_dens_, air_vertical_column,&
+                                      air_slant_column )
 
     allocate( o2_optical_depth(120, 38) )
-
-    air_vertical_column(:) = 1
-    air_slant_column(:) = 3
     o2_optical_depth(:,:) = 0
 
     ! just checking that it runs. This method apparently requires at least
@@ -93,6 +100,8 @@ contains
       spherical_geometry )
 
     deallocate( height_grid )
+    deallocate( air )
+    deallocate( spherical_geometry )
     deallocate( o2_optical_depth )
     deallocate( air_vertical_column )
     deallocate( air_slant_column )
