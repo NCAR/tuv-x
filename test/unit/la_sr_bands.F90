@@ -75,10 +75,12 @@ contains
     real(dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     real(dk), allocatable :: o2_optical_depth(:,:)
     class(grid_t), pointer :: height_grid ! specified altitude working grid [km]
+    class(grid_t), pointer :: wavelength_grid ! [nm]
     class(spherical_geometry_t), pointer :: spherical_geometry
     class(profile_t), pointer :: air
 
     height_grid => grid_warehouse%get_grid( "height", "km" )
+    wavelength_grid => grid_warehouse%get_grid( "wavelength", "nm" )
     air => profile_warehouse%get_profile( "air", "molecule cm-3" )
 
     spherical_geometry => spherical_geometry_t( grid_warehouse )
@@ -89,7 +91,7 @@ contains
     call spherical_geometry%air_mass( air%exo_layer_dens_, air_vertical_column,&
                                       air_slant_column )
 
-    allocate( o2_optical_depth(120, 38) )
+    allocate( o2_optical_depth(height_grid%ncells_, wavelength_grid%ncells_) )
     o2_optical_depth(:,:) = 0
 
     ! just checking that it runs. This method apparently requires at least
@@ -100,6 +102,7 @@ contains
       spherical_geometry )
 
     deallocate( height_grid )
+    deallocate( wavelength_grid )
     deallocate( air )
     deallocate( spherical_geometry )
     deallocate( o2_optical_depth )

@@ -142,7 +142,7 @@ contains
                    "LUT wavelength (nm), TUV-x O2 optical depth, "//          &
                    "LUT O2 optical depth, TUV-x O2 cross section, "//         &
                    "LUT O2 cross section" 
-        do i_wl = 1, n_wavelengths
+        do i_wl = 1, n_wavelengths - 1
           write(*,*) solar_zenith_angles( i_sza ),                            &
                      heights%edge_( i_height ),                               &
                      wavelengths%edge_( i_wl ), lut_wavelength_edges( i_wl ), &
