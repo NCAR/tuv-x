@@ -4,7 +4,7 @@
 program test_la_srb
   !> Tests against Doug's LA and SR band calculations
 
-  use musica_assert,                   only : assert
+  use musica_assert,                   only : assert, almost_equal
   use musica_constants,                only : dk => musica_dk
   use musica_config,                   only : config_t
   use tuvx_cross_section,              only : cross_section_t
@@ -57,6 +57,7 @@ contains
 
     character(len=80) :: file_path
     real(dk), allocatable :: air_vertical_column(:), air_slant_column(:)
+    real(dk), allocatable :: o2_vertical_column(:), o2_slant_column(:)
     real(dk), allocatable :: tuvx_o2_optical_depth(:,:),                      &
                              tuvx_o2_cross_section(:,:)
     real, dimension(151) :: lut_heights, lut_temperature,                     &
@@ -71,6 +72,7 @@ contains
     real(dk), allocatable :: solar_zenith_angles(:)
     integer :: i_sza, i_height, i_wl, n_heights, n_wavelengths, i_output_height
     integer :: output_heights(4) = (/ 1, 50, 100, 150 /)
+    real(dk) :: rel_tol
 
     heights         => grids%get_grid( "height", "km" )
     wavelengths     => grids%get_grid( "wavelength", "nm" )
@@ -82,6 +84,8 @@ contains
     solar_zenith_angles = (/ 0.0_dk, 13.2_dk, 45.0_dk, 87.3_dk, 90.0_dk /)
     allocate( air_vertical_column( air%ncells_ ),                             &
               air_slant_column( air%ncells_ + 1 ) )
+    allocate( o2_vertical_column( o2%ncells_ ),                               &
+              o2_slant_column( o2%ncells_ + 1) )
     allocate( tuvx_o2_optical_depth( heights%ncells_, wavelengths%ncells_ ) )
     lut_heights(:)               = huge(1.0)
     lut_temperature(:)           = huge(1.0)
@@ -101,6 +105,9 @@ contains
       call geometry%air_mass( air%exo_layer_dens_,                            &
                               air_vertical_column,                            &
                               air_slant_column )
+      call geometry%air_mass( o2%exo_layer_dens_,                             &
+                              o2_vertical_column,                             &
+                              o2_slant_column )
 
       tuvx_o2_optical_depth(:,:) = 0.0_dk
       lut_o2_cross_section(:,:)  = 0.0
@@ -121,7 +128,7 @@ contains
       lut_wavelength_edges(1:n_wavelengths)  = real( lut_wavelengths%edge_(:) )
       lut_wavelength_centers(1:n_wavelengths-1) =                             &
                                                real( lut_wavelengths%mid_(:) )
-      lut_o2_column(1:n_heights)             = real( o2%edge_val_(:) )
+      lut_o2_column(1:n_heights)             = real( o2_slant_column(:) )
       lut_air_vertical_column(1:air%ncells_) = real( air_vertical_column(:) )
       lut_air_slant_column(1:air%ncells_+1)  = real( air_slant_column(:) )
 
@@ -136,20 +143,20 @@ contains
                    lut_o2_base_cross_section, lut_o2_optical_depth,           &
                    lut_o2_cross_section, file_path )
 
-      do i_output_height = 1, size( output_heights )
-        i_height = output_heights( i_output_height )
-        write(*,*) "SZA (degrees), height (km), TUV-x wavelength (nm), "//    &
-                   "LUT wavelength (nm), TUV-x O2 optical depth, "//          &
-                   "LUT O2 optical depth, TUV-x O2 cross section, "//         &
-                   "LUT O2 cross section" 
+      do i_height = 1, n_heights - 1
         do i_wl = 1, n_wavelengths - 1
-          write(*,*) solar_zenith_angles( i_sza ),                            &
-                     heights%edge_( i_height ),                               &
-                     wavelengths%edge_( i_wl ), lut_wavelength_edges( i_wl ), &
-                     tuvx_o2_optical_depth( i_height, i_wl ),                 &
-                     lut_o2_optical_depth( i_height, i_wl ),                  &
-                     tuvx_o2_cross_section( i_height, i_wl ),                 &
-                     lut_o2_cross_section( i_height, i_wl )
+          rel_tol = 1.0e-4
+          if ( i_wl == 1 .or. i_wl == 3 ) cycle
+          if ( i_wl == 20 .or. i_wl == 38 ) rel_tol = 0.5_dk
+          if ( i_wl == 2 .and. i_height >= 112 ) rel_tol = 0.05_dk
+          call assert( 624510149,                                             &
+                       almost_equal( tuvx_o2_cross_section( i_height, i_wl ), &
+                      real( lut_o2_cross_section( i_height, i_wl ), kind=dk ),&
+                                     relative_tolerance = rel_tol ) )
+          call assert( 746904813,                                             &
+                       almost_equal( tuvx_o2_optical_depth( i_height, i_wl ), &
+                      real( lut_o2_optical_depth( i_height, i_wl ), kind=dk ),&
+                                     relative_tolerance = rel_tol ) )
         end do
       end do
       deallocate( tuvx_o2_cross_section )
@@ -165,6 +172,8 @@ contains
     deallocate( tuvx_o2_optical_depth )
     deallocate( air_vertical_column )
     deallocate( air_slant_column )
+    deallocate( o2_vertical_column )
+    deallocate( o2_slant_column )
 
   end subroutine compare_o2_cross_sections
 

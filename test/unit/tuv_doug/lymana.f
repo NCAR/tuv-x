@@ -72,7 +72,9 @@
         DO i = 1, 3
            rm(iz) = rm(iz) + b(i) * DEXP(-c(i) * DBLE(o2col(iz)))
         END DO
-        DO i = 1, 2
+        ! TUV-x logic difference
+        ! DO i = 1, 2
+        DO i = 1, 3
            ro2(iz) = ro2(iz) + d(i) * DEXP(-e(i) * DBLE(o2col(iz)))
         ENDDO
        
@@ -85,7 +87,9 @@
             IF (ro2(iz) .GT. 1.D-100) THEN
                o2xsla(iz,1) = ro2(iz)/rm(iz)
             ELSE
-               o2xsla(iz,1) = 0.               
+               ! TUV-x logic difference
+               ! o2xsla(iz,1) = 0.               
+               o2xsla(iz,1) = xsmin
             ENDIF
 
             IF (rm(iz+1) .GT. 0.) THEN
