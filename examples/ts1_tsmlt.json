@@ -176,7 +176,8 @@
             "name": "jo2_a",
             "__reaction": "O2 + hv -> O + O1D",
             "cross section": {
-              "netcdf files": [
+               "apply O2 bands": true,
+               "netcdf files": [
                 {
                    "file path": "data/cross_sections/O2_1.nc",
                    "lower extrapolation": { "type": "boundary" },
