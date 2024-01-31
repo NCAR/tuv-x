@@ -13,6 +13,22 @@ module tuvx_quantum_yield_h2so4_mills
   private
   public :: quantum_yield_h2so4_mills_t
 
+  !> Quantum yield calculator for H2SO4
+  !!
+  !! See Miller et al. (GRL, 2007)
+  !!
+  !! Quantum yields qy_x are based on parameters r_x set in the
+  !! configuration:
+  !!
+  !!  lambda = R T / ( 2^(1/2) pi d^2 Na P )
+  !!  v = ( 8 R T / ( pi MW ) )^(1/2)
+  !!  qy_x = r_x / ( r_x + v / lambda )
+  !!
+  !! where R is the universal gas constant (J mol-1 K-1 ), T is
+  !! temperature (K), P is pressure (Pa), Na is  Avogadro's number (mol-1)
+  !! and MW is the molecular weight of H2SO4 (kg mol-1), d is the
+  !! molecular diameter (m), and x corresponds to the wavelength band
+  !! being parameterized.
   type, extends(quantum_yield_t) :: quantum_yield_h2so4_mills_t
     !> Indices for wavelengths to update
     integer, allocatable :: wavelength_indices_(:)
@@ -95,8 +111,8 @@ contains
     allocate( this%wavelength_indices_( size( param_wavelengths ) ) )
     this%wavelength_indices_(:) = 0
     do i_param = 1, size( param_wavelengths )
-      do i_wl = 1, wavelengths%ncells_ + 1
-        if( wavelengths%edge_( i_wl ) .eq. param_wavelengths( i_param ) ) then
+      do i_wl = 1, wavelengths%ncells_
+        if( wavelengths%mid_( i_wl ) .eq. param_wavelengths( i_param ) ) then
           this%wavelength_indices_( i_param ) = i_wl
           exit
         end if
@@ -135,17 +151,18 @@ contains
         this%quantum_yield_t%calculate( grid_warehouse, profile_warehouse )
     temperature => profile_warehouse%get_profile( this%temperature_profile_ )
     air => profile_warehouse%get_profile( this%air_profile_ )
-    
+
     ! Overwrite the quantum yields for the parameterized wavelengths
     do i_wl = 1, size( this%wavelength_indices_ )
       quantum_yield( :, this%wavelength_indices_( i_wl ) ) =                  &
           this%collision_rate_( i_wl ) /                                      &
             ( this%collision_rate_( i_wl ) +                                  &
-              sqrt( 4.0_dk * gas_constant * temperature%edge_val_(:)          &
+              sqrt( 16.0_dk * gas_constant * temperature%edge_val_(:)         &
                     / ( pi * this%molecular_weight_ ) )                       &
-              * ( pi * this%molecular_diameter_**2 * Avogadro *               &
-                  air%edge_val_(:) ) )
+              * ( pi * this%molecular_diameter_**2 *                          &
+                  air%edge_val_(:) * 1.0e6_dk ) )
     end do
+    ! The top layer has quantum yields set to 1.0
     quantum_yield( size( quantum_yield, dim=1 ),                              &
                    this%wavelength_indices_(:) ) = 1.0_dk
 
