@@ -218,6 +218,49 @@ contains
     deallocate( input_grid )
     deallocate( cross_section )
 
+    ! load and test cross section w/ specified data points
+    call assert( 906510764, iter%next( ) )
+    call cs_set%get( iter, cs_config, Iam )
+    if( musica_mpi_rank( comm ) == 0 ) then
+      cross_section => cross_section_t( cs_config, grids, profiles )
+      type_name = cross_section_type_name( cross_section )
+      pack_size = type_name%pack_size( comm ) + cross_section%pack_size( comm )
+      allocate( buffer( pack_size ) )
+      pos = 0
+      call type_name%mpi_pack(     buffer, pos , comm )
+      call cross_section%mpi_pack( buffer, pos , comm )
+      call assert( 283721707, pos <= pack_size )
+    end if
+
+    call musica_mpi_bcast( pack_size , comm )
+    if( musica_mpi_rank( comm ) .ne. 0 ) allocate( buffer( pack_size ) )
+    call musica_mpi_bcast( buffer , comm )
+
+    if( musica_mpi_rank( comm ) .ne. 0 ) then
+      pos = 0
+      call type_name%mpi_unpack( buffer, pos , comm )
+      cross_section => cross_section_allocate( type_name )
+      call cross_section%mpi_unpack( buffer, pos , comm )
+      call assert( 396040052, pos <= pack_size )
+    end if
+    deallocate( buffer )
+
+    results = cross_section%calculate( grids, profiles, at_mid_point = .false. )
+    do i_height = 1, 6
+      call assert( 666985743, results( i_height, 1  ) .eq. 12.3_dk )
+      call assert( 775945315, results( i_height, 2  ) .eq. 12.3_dk )
+      call assert( 940837912, results( i_height, 3  ) .eq. 92.3_dk )
+      call assert( 488205759, results( i_height, 4  ) .eq. 53.2_dk )
+      call assert( 383057255, results( i_height, 5  ) .eq. 12.3_dk )
+      call assert( 547949852, results( i_height, 6  ) .eq. 12.3_dk )
+      call assert( 430367200, results( i_height, 7  ) .eq. 12.3_dk )
+      call assert( 942743446, results( i_height, 8  ) .eq. 12.3_dk )
+      call assert( 207636044, results( i_height, 9  ) .eq. 12.3_dk )
+      call assert( 655003890, results( i_height, 10 ) .eq. 12.3_dk )
+      call assert( 884904887, results( i_height, 11 ) .eq. 12.3_dk )
+    end do
+    deallocate( cross_section )
+
     ! clean up
     deallocate( iter )
     deallocate( grids )

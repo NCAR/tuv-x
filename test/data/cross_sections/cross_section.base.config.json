@@ -48,6 +48,18 @@
           "upper extrapolation": { "type": "constant", "value": 32.3 }
         }
       ]
+    },
+    {
+      "name": "from config",
+      "type": "base",
+      "data": {
+        "default value": 12.3,
+        "point values": [
+          { "wavelength":  102.5, "value": 92.3 },
+          { "wavelength": 103.75, "value": 53.2 }
+        ]
+      }
+
     }
   ]
 }
