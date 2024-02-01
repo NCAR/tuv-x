@@ -75,6 +75,8 @@ module tuvx_cross_section
     procedure :: mpi_unpack
     ! Processes a NetCDF input file
     procedure :: process_file
+    ! Apply cross section profile from configuration file
+    procedure :: cross_section_from_config
   end type cross_section_t
 
   interface cross_section_t
@@ -108,7 +110,7 @@ contains
     type(grid_warehouse_t),    intent(inout) :: grid_warehouse ! A :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
     type(profile_warehouse_t), intent(inout) :: profile_warehouse ! A :f:type:`~tuvx_profile_warehouse/profile_warehouse_t`
 
-    type(string_t) :: required_keys(1), optional_keys(5)
+    type(string_t) :: required_keys(1), optional_keys(6)
 
     required_keys(1) = "type"
     optional_keys(1) = "netcdf files"
@@ -116,6 +118,7 @@ contains
     optional_keys(3) = "merge data"
     optional_keys(4) = "override bands"
     optional_keys(5) = "apply O2 bands"
+    optional_keys(6) = "data"
     call assert_msg( 124969900,                                               &
                      config%validate( required_keys, optional_keys ),         &
                      "Bad configuration data format for "//                   &
@@ -147,7 +150,8 @@ contains
     character(len=*), parameter   :: Iam = 'base cross section initialize'
     integer :: i_param, i_file, i_override
     logical :: found
-    type(config_t) :: netcdf_files, netcdf_file, overrides, override
+    type(config_t) :: netcdf_files, netcdf_file, overrides, override,         &
+                      data_config
     class(iterator_t), pointer :: iter
     logical :: merge_data
     class(grid_t), pointer :: wavelengths
@@ -157,7 +161,7 @@ contains
     this%height_grid_ = grid_warehouse%get_ptr( "height", "km" )
     this%temperature_profile_ = profile_warehouse%get_ptr( "temperature", "K" )
 
-    ! get cross section netcdf filespec
+    ! get cross section netcdf data or data specified in config file
     call config%get( 'netcdf files', netcdf_files, Iam, found = found )
     if( found ) then
       iter => netcdf_files%get_iterator( )
@@ -172,6 +176,12 @@ contains
                                 this%cross_section_parms( i_file ) )
       enddo
       deallocate( iter )
+    end if
+
+    ! get cross section data points specified in configuration
+    call config%get( 'data', data_config, Iam, found = found )
+    if( found ) then
+      call this%cross_section_from_config( data_config, grid_warehouse )
     end if
 
     ! get values to overlay for specific bands
@@ -310,6 +320,74 @@ contains
     deallocate( wavelength_grid )
 
   end subroutine process_file
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Apply cross section data points specified in configuration
+  subroutine cross_section_from_config( this, config, grid_warehouse )
+
+    use musica_assert,                 only : assert_msg, almost_equal
+    use musica_config,                 only : config_t
+    use musica_iterator,               only : iterator_t
+    use musica_string,                 only : string_t, to_char
+    use tuvx_grid,                     only : grid_t
+    use tuvx_grid_warehouse,           only : grid_warehouse_t
+
+    !> Cross section calculator
+    class(cross_section_t), intent(inout) :: this
+    !> Configuration data
+    type(config_t),         intent(inout) :: config
+    !> Grids
+    type(grid_warehouse_t), intent(inout) :: grid_warehouse
+
+    character(len=*), parameter :: Iam = 'base cross section data'
+    class(grid_t), pointer :: wavelengths
+    type(config_t) :: points, point
+    class(iterator_t), pointer :: iter
+    real(kind=dk) :: value, wl
+    integer :: i_wl
+    logical :: found
+    type(string_t) :: required_keys(0), optional_keys(2)
+
+    optional_keys(1) = "default value"
+    optional_keys(2) = "point values"
+    call assert_msg( 246462484,                                               &
+                     config%validate( required_keys, optional_keys ),         &
+                     "Invalid configuration for cross section data" )
+
+    wavelengths => grid_warehouse%get_grid( this%wavelength_grid_ )
+    call config%get( "default value", value, Iam, default = 0.0_dk )
+    if( .not. allocated( this%cross_section_parms ) ) then
+      allocate( this%cross_section_parms( 1 ) )
+      allocate( this%cross_section_parms( 1 )%array( wavelengths%ncells_, 1 ) )
+      this%cross_section_parms( 1 )%array(:,:) = value
+    end if
+    call assert_msg( 952054750, size( this%cross_section_parms ) .eq. 1,      &
+                     "Cross section data points cannot be specified when "//  &
+                     "multiple input files are being used." )
+    call config%get( "point values", points, Iam, found = found )
+    if( found ) then
+      iter => points%get_iterator( )
+        do while( iter%next( ) )
+          call points%get( iter, point, Iam )
+          call point%get( "wavelength", wl, Iam )
+          call point%get( "value", value, Iam )
+          do i_wl = 1, wavelengths%ncells_
+            if( almost_equal( wl, wavelengths%mid_( i_wl ) ) ) then
+              this%cross_section_parms( 1 )%array( i_wl, 1 ) = value
+              exit
+            end if
+            call assert_msg( 534489163, i_wl .ne. wavelengths%ncells_,        &
+                             "Cross section wavelength point "//              &
+                             trim( to_char( wl ) )//                          &
+                             " does not exist on wavelength grid." )
+          end do
+        end do
+      deallocate( iter )
+    end if
+    deallocate( wavelengths )
+
+  end subroutine cross_section_from_config
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

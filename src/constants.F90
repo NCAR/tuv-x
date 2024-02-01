@@ -22,5 +22,7 @@ module tuvx_constants
   real(dk), parameter :: pi = 3.1415926535898_dk   ! Pi
   real(dk), parameter :: radius = 6.371E+3_dk      ! Radius of the Earth [km]
   real(dk), parameter :: hc = 6.626068e-34_dk * 2.99792458e8_dk ! Plank's constants x speed of light [J m]
-
+  real(dk), parameter :: Avogadro = 6.02214076e23_dk ! Avogadro's number [mol-1]
+  real(dk), parameter :: gas_constant = 8.31446261815324_dk ! Ideal gas constant [J K-1 mol-1]
+  
 end module tuvx_constants
