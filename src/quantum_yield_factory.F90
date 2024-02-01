@@ -29,6 +29,7 @@ module tuvx_quantum_yield_factory
   use tuvx_quantum_yield_clono2_cl_no3,only : quantum_yield_clono2_cl_no3_t
   use tuvx_quantum_yield_clono2_clo_no2,                                      &
     only : quantum_yield_clono2_clo_no2_t
+  use tuvx_quantum_yield_h2so4_mills,  only : quantum_yield_h2so4_mills_t
 
   implicit none
 
@@ -125,6 +126,9 @@ contains
         quantum_yield => quantum_yield_clono2_clo_no2_t( config,              &
                                                          grid_warehouse,      &
                                                          profile_warehouse )
+      case( 'H2SO4 Mills' )
+        quantum_yield => quantum_yield_h2so4_mills_t( config, grid_warehouse, &
+                                                      profile_warehouse )
       case default
         call die_msg( 450768214, "Invalid quantum yield type: '"//            &
                                  quantum_yield_type%to_char( )//"'" )
@@ -182,6 +186,8 @@ contains
         name = "quantum_yield_clono2_cl_no3_t"
       type is( quantum_yield_clono2_clo_no2_t )
         name = "quantum_yield_clono2_clo_no2_t"
+      type is( quantum_yield_h2so4_mills_t )
+        name = "quantum_yield_h2so4_mills_t"
     class default
       call die( 853572483 )
     end select
@@ -238,6 +244,8 @@ contains
         allocate( quantum_yield_clono2_cl_no3_t :: quantum_yield )
       case( 'quantum_yield_clono2_clo_no2_t' )
         allocate( quantum_yield_clono2_clo_no2_t :: quantum_yield )
+      case( 'quantum_yield_h2so4_mills_t' )
+        allocate( quantum_yield_h2so4_mills_t :: quantum_yield )
     case default
       call die_msg( 894617177, "Invalid quantum yield type: '"//type_name//"'" )
     end select

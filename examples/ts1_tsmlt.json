@@ -16,7 +16,7 @@
          "name": "wavelength",
          "type": "from csv file",
          "units": "nm",
-         "file path": "data/grids/wavelength/combined.grid"
+         "file path": "data/grids/wavelength/cam.csv"
       },
       {
          "name": "time",
@@ -1608,14 +1608,34 @@
             "__reaction": "H2SO4 + hv -> SO3 + H2O",
             "cross section": {
                "type": "base",
-               "netcdf files": [
-                  { "file path": "data/cross_sections/H2SO4_1.nc" }
-               ]
-            },
+               "data": {
+                 "default value": 0.0,
+                 "point values": [
+                   { "wavelength": 121.65, "value":      6.3e-17 },
+                   { "wavelength":  525.0, "value":     1.43e-26 },
+                   { "wavelength":  625.0, "value":   1.8564e-25 },
+                   { "wavelength":  725.0, "value": 3.086999e-24 }
+                 ]
+               }
+             },
             "quantum yield": {
-               "type": "base",
-               "constant value": 1.0
-            }
+               "type": "H2SO4 Mills",
+               "netcdf files": [
+                 "data/quantum_yields/H2SO4_mills.nc"
+               ],
+               "parameterized wavelengths": [
+                 525,
+                 625,
+                 725
+               ],
+               "collision interval s": [
+                 1.1e-9,
+                 8.9e-9,
+                 1.7e-7
+               ],
+               "molecular diameter m": 4.18e-10,
+               "molecular weight kg mol-1": 98.078479e-3
+             }
          },
          {
             "name": "jocs",
@@ -1667,6 +1687,23 @@
                "netcdf files": [
                   { "file path": "data/cross_sections/SO3_1.nc" }
                ]
+            },
+            "quantum yield": {
+               "type": "base",
+               "constant value": 1.0
+            }
+         },
+         {
+            "name": "jno_i",
+            "__reaction": "NO + hv -> NOp + e",
+            "cross section": {
+               "type": "base",
+               "data": {
+                  "default value": 0.0,
+                  "point values": [
+                     { "wavelength": 121.65, "value": 2.0e-18 }
+                  ]
+               }
             },
             "quantum yield": {
                "type": "base",
