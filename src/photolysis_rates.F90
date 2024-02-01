@@ -264,7 +264,7 @@ contains
 
   !> calculate photolysis rate constants
   subroutine get( this, la_srb, spherical_geometry, grid_warehouse,           &
-      profile_warehouse, radiation_field, photolysis_rates, file_tag )
+      profile_warehouse, radiation_field, photolysis_rates, file_tag, bde, cpe_rates )
 
     use musica_assert,                 only : assert_msg, die_msg
     use tuvx_diagnostic_util,          only : diagout
@@ -290,6 +290,10 @@ contains
     character(len=*),           intent(in)    :: file_tag
     !> Calculated photolysis rate constants
     real(dk),                   intent(inout) :: photolysis_rates(:,:)
+
+    !> for photolysis heating rates
+    real(dk), optional,         intent(in)    :: bde(:,:) ! bond disociation energies (joules)
+    real(dk), optional,         intent(inout) :: cpe_rates(:,:) ! chem potential energy rates (joules/sec)
 
     !> Local variables
     character(len=*), parameter :: Iam = "photolysis rates calculator"
@@ -373,6 +377,10 @@ rate_loop:                                                                    &
       do vertNdx = 1, zGrid%ncells_ + 1
         photolysis_rates( vertNdx, rateNdx ) =                                &
             dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) )
+        if (present(bde).and.present(cpe_rates)) then
+           cpe_rates( vertNdx, rateNdx ) =                                &
+                dot_product( actinicFlux(:,vertNdx), bde(:,rateNdx)*xsqy(:,vertNdx)  )
+        end if
       enddo
       if( allocated( cross_section ) ) deallocate( cross_section )
       if( allocated( quantum_yield ) ) deallocate( quantum_yield )

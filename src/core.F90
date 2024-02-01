@@ -191,7 +191,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine run( this, solar_zenith_angle, earth_sun_distance,               &
-      photolysis_rate_constants, dose_rates, diagnostic_label )
+      photolysis_rate_constants, dose_rates, diagnostic_label,  bde, cpe_rates )
     ! Performs calculations for specified photolysis and dose rates for a
     ! given set of conditions
 
@@ -206,6 +206,10 @@ contains
     real(dk),         optional, intent(out)   :: photolysis_rate_constants(:,:) ! (vertical level, reaction) [s-1]
     real(dk),         optional, intent(out)   :: dose_rates(:,:)                ! (vertical level, reaction) [s-1]
     character(len=*), optional, intent(in)    :: diagnostic_label               ! label used in diagnostic file names
+
+    !> for photolysis heating rates
+    real(dk), optional,         intent(in)    :: bde(:,:) ! bond disociation energies (joules)
+    real(dk), optional,         intent(inout) :: cpe_rates(:,:) ! chem potential energy rates (joules/sec)
 
     ! Local variables
     character(len=*), parameter         :: Iam = 'Photolysis core run: '
@@ -245,7 +249,7 @@ contains
                                        this%profile_warehouse_,               &
                                        this%radiation_field_,                 &
                                        photolysis_rate_constants,             &
-                                       diag_label )
+                                       diag_label, bde=bde, cpe_rates=cpe_rates )
     end if
     if( associated( this%dose_rates_ ) .and. present( dose_rates ) ) then
       call this%dose_rates_%get( this%grid_warehouse_,                        &
