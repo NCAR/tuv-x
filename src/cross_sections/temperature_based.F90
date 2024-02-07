@@ -66,6 +66,8 @@ contains
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_temperature_parameterization_burkholder,                         &
         only : temperature_parameterization_burkholder_t
+    use tuvx_temperature_parameterization_harwood,                         &
+        only : temperature_parameterization_harwood_t
     use tuvx_temperature_parameterization_taylor_series,                      &
         only : temperature_parameterization_taylor_series_t
 
@@ -141,6 +143,10 @@ contains
         else if( param_type == "BURKHOLDER" ) then
           allocate( this%parameterization_, source =                          &
             temperature_parameterization_burkholder_t( param_config ) )
+        else if( param_type == "HARWOOD" ) then
+          allocate( this%parameterization_, source =                          &
+            temperature_parameterization_harwood_t( param_config,             &
+                                                    wavelengths ) )
         else
           call die_msg( 370773773, "Invalid temperature-based "//             &
                         "parameterization type: '"//param_type//"'" )

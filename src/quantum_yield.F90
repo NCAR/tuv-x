@@ -226,12 +226,10 @@ file_loop: &
     else has_netcdf_file
       ! check for quantum yield constant
       call config%get( 'constant value', quantum_yield_constant, Iam,         &
-                       found = found )
-      if( found ) then
-        allocate( this%quantum_yield_parms(1) )
-        allocate( this%quantum_yield_parms(1)%array( lambdaGrid%ncells_, 1 ) )
-        this%quantum_yield_parms(1)%array(:,1) = quantum_yield_constant
-      endif
+                       default = 0.0_dk )
+      allocate( this%quantum_yield_parms(1) )
+      allocate( this%quantum_yield_parms(1)%array( lambdaGrid%ncells_, 1 ) )
+      this%quantum_yield_parms(1)%array(:,1) = quantum_yield_constant
     endif has_netcdf_file
 
     ! get values to overlay for specific bands

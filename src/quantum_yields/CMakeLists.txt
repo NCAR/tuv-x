@@ -21,6 +21,7 @@ target_sources(tuvx_object
     no3_aq.F90
     o3-o2_o1d.F90
     o3-o2_o3p.F90
+    taylor_series.F90
     tint.F90
 )
 
