@@ -36,7 +36,8 @@ contains
     use tuvx_profile,                  only : profile_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_quantum_yield,            only : quantum_yield_t
-    use tuvx_quantum_yield_factory,    only : quantum_yield_type_name,        &
+    use tuvx_quantum_yield_factory,    only : quantum_yield_builder,          &
+                                              quantum_yield_type_name,        &
                                               quantum_yield_allocate
     use tuvx_test_utils,               only : check_values
 
@@ -108,7 +109,7 @@ contains
       if( musica_mpi_rank( comm ) == 0 ) then
         cross_section => cross_section_builder( cs_config, grids, profiles )
         cs_type_name = cross_section_type_name( cross_section )
-        quantum_yield => quantum_yield_t( qy_config, grids, profiles )
+        quantum_yield => quantum_yield_builder( qy_config, grids, profiles )
         qy_type_name = quantum_yield_type_name( quantum_yield )
         pack_size = cs_type_name%pack_size( comm ) +                          &
                     cross_section%pack_size( comm ) +                         &
@@ -149,7 +150,7 @@ contains
                       real( air%mid_val_ ), doug_xsqy )
 
       wavelength => grids%get_grid( "wavelength", "nm" )
-      write(*,*) label%val_
+      write(*,*) label%val_, " temperature = ", temperature%edge_val_(62)
       do i = 1, size( tuvx_xsqy, dim=2 )
         write(*,*) i, wavelength%edge_(i), wavelength%mid_(i),                &
                    cross_section_data(62,i),             &

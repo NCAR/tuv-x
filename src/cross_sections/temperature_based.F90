@@ -21,6 +21,7 @@ module tuvx_cross_section_temperature_based
   integer, parameter :: PARAM_BASE          = 1
   integer, parameter :: PARAM_TAYLOR_SERIES = 2
   integer, parameter :: PARAM_BURKHOLDER    = 3
+  integer, parameter :: PARAM_HARWOOD       = 4
 
   !> Calculator for temperature-based cross sections
   type, extends(cross_section_t) :: cross_section_temperature_based_t
@@ -66,6 +67,8 @@ contains
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_temperature_parameterization_burkholder,                         &
         only : temperature_parameterization_burkholder_t
+    use tuvx_temperature_parameterization_harwood,                         &
+        only : temperature_parameterization_harwood_t
     use tuvx_temperature_parameterization_taylor_series,                      &
         only : temperature_parameterization_taylor_series_t
 
@@ -141,6 +144,10 @@ contains
         else if( param_type == "BURKHOLDER" ) then
           allocate( this%parameterization_, source =                          &
             temperature_parameterization_burkholder_t( param_config ) )
+        else if( param_type == "HARWOOD" ) then
+          allocate( this%parameterization_, source =                          &
+            temperature_parameterization_harwood_t( param_config,             &
+                                                    wavelengths ) )
         else
           call die_msg( 370773773, "Invalid temperature-based "//             &
                         "parameterization type: '"//param_type//"'" )
@@ -282,6 +289,8 @@ contains
     use musica_mpi,                    only : musica_mpi_pack
     use tuvx_temperature_parameterization_burkholder,                         &
         only : temperature_parameterization_burkholder_t
+    use tuvx_temperature_parameterization_harwood,                            &
+        only : temperature_parameterization_harwood_t
     use tuvx_temperature_parameterization_taylor_series,                      &
         only : temperature_parameterization_taylor_series_t
 
@@ -309,6 +318,8 @@ contains
           param_type = PARAM_TAYLOR_SERIES
         type is( temperature_parameterization_burkholder_t )
           param_type = PARAM_BURKHOLDER
+        type is( temperature_parameterization_harwood_t )
+          param_type = PARAM_HARWOOD
         class default
           call die( 424852458 )
       end select
@@ -329,6 +340,8 @@ contains
     use musica_mpi,                    only : musica_mpi_unpack
     use tuvx_temperature_parameterization_burkholder,                         &
         only : temperature_parameterization_burkholder_t
+    use tuvx_temperature_parameterization_harwood,                            &
+        only : temperature_parameterization_harwood_t
     use tuvx_temperature_parameterization_taylor_series,                      &
         only : temperature_parameterization_taylor_series_t
 
@@ -356,6 +369,9 @@ contains
                     this%parameterization_ )
         case( PARAM_BURKHOLDER )
           allocate( temperature_parameterization_burkholder_t ::             &
+                    this%parameterization_ )
+        case( PARAM_HARWOOD )
+          allocate( temperature_parameterization_harwood_t ::                &
                     this%parameterization_ )
         case default
           call die( 324803089 )
