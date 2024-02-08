@@ -1263,5 +1263,76 @@
     },
     "label": "N2O5 + hv -> NO3 + NO + O",
     "tolerance": 1.0e-2
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/ACETONE_JPL06.nc"
+        },
+        "base temperature": 0.0,
+        "temperature ranges": [
+          {
+            "maximum": 234.999999999999,
+            "fixed value": 235.0
+          },
+          {
+            "minimum": 235.0,
+            "maximum": 298.0
+          },
+          {
+            "minimum": 298.00000000001,
+            "fixed value": 298.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "CH3COCH3+hv->CH3CO+CH3",
+      "low wavelength value": 1,
+      "minimum temperature": 218,
+      "maximum temperature": 295
+    },
+    "label": "CH3COCH3 + hv -> CH3CO3 + CH3O2",
+    "__note": "quantum yield parameterization includes multiple chained exponentials and single vs double precision seems to be quite different",
+    "tolerance": 2
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/ACETONE_JPL06.nc"
+        },
+        "base temperature": 0.0,
+        "temperature ranges": [
+          {
+            "maximum": 234.999999999999,
+            "fixed value": 235.0
+          },
+          {
+            "minimum": 235.0,
+            "maximum": 298.0
+          },
+          {
+            "minimum": 298.00000000001,
+            "fixed value": 298.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "CH3COCH3+hv->CH3CO+CH3",
+      "low wavelength value": 1,
+      "minimum temperature": 218,
+      "maximum temperature": 295
+    },
+    "label": "CH3COCH3 + hv -> CH3CO3 + CH3O2",
+    "__note": "quantum yield parameterization includes multiple chained exponentials and single vs double precision seems to be quite different",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 59 }, { "index": 60 }, { "index": 61 }, { "index": 62 }, { "index": 63 }, { "index": 64 }, { "index": 65 }, { "index": 66 }, { "index": 67 }, { "index": 68 }, { "index": 69 }, { "index": 70 }, { "index": 71 }, { "index": 72 }, { "index": 73 } ]
   }
 ]
