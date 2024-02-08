@@ -10,6 +10,8 @@ program doug_data_set
 
   implicit none
 
+  integer, parameter :: OUTPUT_LEVEL = 62
+
   call musica_mpi_init( )
   call test_data_set( )
   call musica_mpi_finalize( )
@@ -147,15 +149,18 @@ contains
 
       call calculate( label%val_,                                             &
                       real( temperature%edge_val_(:temperature%ncells_+1) ),  &
-                      real( air%mid_val_ ), doug_xsqy )
+                      real( air%edge_val_ ), doug_xsqy )
 
       wavelength => grids%get_grid( "wavelength", "nm" )
-      write(*,*) label%val_, " temperature = ", temperature%edge_val_(62)
+      write(*,*) label%val_, " temperature = ",                               &
+                 temperature%edge_val_(OUTPUT_LEVEL)
+      write(*,*) "i_wl  wl_edge  wl_mid  xs_TUVx  qy_TUVx  j_TUVx  wl_LUT  j_LUT"
       do i = 1, size( tuvx_xsqy, dim=2 )
         write(*,*) i, wavelength%edge_(i), wavelength%mid_(i),                &
-                   cross_section_data(62,i),             &
-                   quantum_yield_data(62,i), tuvx_xsqy(62,i), wl(i),          &
-                   real( doug_xsqy(62,i), kind=dk )
+                   cross_section_data(OUTPUT_LEVEL,i),                        &
+                   quantum_yield_data(OUTPUT_LEVEL,i),                        &
+                   tuvx_xsqy(OUTPUT_LEVEL,i), wl(i),                          &
+                   real( doug_xsqy(OUTPUT_LEVEL,i), kind=dk )
       end do
       write(*,*) size( tuvx_xsqy, dim=2 ) + 1,                                &
                  wavelength%edge_(wavelength%ncells_+1)

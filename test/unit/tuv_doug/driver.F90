@@ -207,6 +207,9 @@ contains
       case( "SO2 + hv -> SO + O" )
         call XSQY_SO2(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
         xsqy(:,:) = l_xsqy(1,:nz,:nw)
+      case( "CH3COCH3 + hv -> CH3CO3 + CH3O2" )
+        call xsqy_acetone(nw,wl,wc,nz,temperature,air_density,j,l_xsqy,all_labels,pn)
+        xsqy(:,:) = l_xsqy(1,:nz,:nw)
       case default
         call die( 946669022 )
     end select

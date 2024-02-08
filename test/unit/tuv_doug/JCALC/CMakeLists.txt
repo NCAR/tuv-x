@@ -3,6 +3,7 @@
 
 target_sources(tuv_doug
   PRIVATE
+    XSQY_ACETONE.f
     XSQY_BRO.f
     XSQY_BRONO2.f
     XSQY_CF2CL2.f

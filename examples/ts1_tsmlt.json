@@ -572,35 +572,34 @@
             "__reaction": "CH3COCH3 + hv -> CH3CO + CH3",
             "cross section": {
                "type": "temperature based",
-               "netcdf file": "data/cross_sections/CH3CL_JPL06.nc",
                "parameterization": {
-                 "AA": [ -299.80,    5.1047, -3.3630e-2, 9.5805e-5, -1.0135e-7 ],
-                 "BB": [ -7.1727, 1.4837e-1, -1.1463e-3, 3.9188e-6, -4.9994e-9 ],
-                 "lp": [     0.0,       1.0,        2.0,       3.0,        4.0 ],
-                 "minimum wavelength": 174.1,
-                 "maximum wavelength": 216.0,
-                 "base temperature": 273.0,
-                 "base wavelength": 0.0,
-                 "logarithm": "base 10",
+                 "type": "TAYLOR_SERIES",
+                 "netcdf file": {
+                   "file path": "data/cross_sections/ACETONE_JPL06.nc"
+                 },
+                 "base temperature": 0.0,
                  "temperature ranges": [
                    {
-                     "maximum": 209.999999999999,
-                     "fixed value": 210.0
+                     "maximum": 234.999999999999,
+                     "fixed value": 235.0
                    },
                    {
-                     "minimum": 210,
-                     "maximum": 300
+                     "minimum": 235.0,
+                     "maximum": 298.0
                    },
                    {
-                     "minimum": 300.00000000001,
-                     "fixed value": 300.0
+                     "minimum": 298.00000000001,
+                     "fixed value": 298.0
                    }
                  ]
                }
              },
              "quantum yield": {
-               "type": "base",
-               "constant value": 1.0
+               "type": "CH3COCH3+hv->CH3CO+CH3",
+               "branch": "CO+CH3CO",
+               "low wavelength value": 1,
+               "minimum temperature": 218,
+               "maximum temperature": 295
              }
          },
          {
@@ -628,26 +627,6 @@
             "quantum yield": {
                "type": "base",
                "constant value": 0.5
-            }
-         },
-         {
-            "name": "jglyoxal",
-            "__reaction": "GLYOXAL + hv -> 2*CO + 2*HO2",
-            "__comments": "TODO the products of this reaction don't exactly match",
-            "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/CHOCHO_1.nc" }
-               ],
-               "type": "base"
-            },
-            "quantum yield": {
-               "netcdf files": [
-                  "data/quantum_yields/CHOCHO-H2_CO_CO_1.nc"
-               ],
-               "type": "base",
-               "lower extrapolation": {
-                  "type": "boundary"
-               }
             }
          },
          {
@@ -1056,15 +1035,37 @@
             "name": "jch3cl",
             "__reaction": "CH3Cl + hv -> Products",
             "cross section": {
-               "netcdf files": [
-                 { "file path": "data/cross_sections/CH3Cl_1.nc" }
-               ],
-               "type": "tint"
-            },
-            "quantum yield": {
+               "type": "temperature based",
+               "netcdf file": "data/cross_sections/CH3CL_JPL06.nc",
+               "parameterization": {
+                 "AA": [ -299.80,    5.1047, -3.3630e-2, 9.5805e-5, -1.0135e-7 ],
+                 "BB": [ -7.1727, 1.4837e-1, -1.1463e-3, 3.9188e-6, -4.9994e-9 ],
+                 "lp": [     0.0,       1.0,        2.0,       3.0,        4.0 ],
+                 "minimum wavelength": 174.1,
+                 "maximum wavelength": 216.0,
+                 "base temperature": 273.0,
+                 "base wavelength": 0.0,
+                 "logarithm": "base 10",
+                 "temperature ranges": [
+                   {
+                     "maximum": 209.999999999999,
+                     "fixed value": 210.0
+                   },
+                   {
+                     "minimum": 210,
+                     "maximum": 300
+                   },
+                   {
+                     "minimum": 300.00000000001,
+                     "fixed value": 300.0
+                   }
+                 ]
+               }
+             },
+             "quantum yield": {
                "type": "base",
                "constant value": 1.0
-            }
+             }
          },
          {
             "name": "jchbr3",
@@ -2070,6 +2071,11 @@
               "__reaction": "soa5_a2 + hv -> Products",
               "from": "jno2",
               "scale by": 0.0004
+           },
+           {
+              "to": "jglyoxal",
+              "__reaction": "GLYOXAL + hv -> 2*CO + 2*HO2",
+              "from": "jmgly"
            }
         ]
      }
