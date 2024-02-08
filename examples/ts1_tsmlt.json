@@ -596,6 +596,7 @@
              },
              "quantum yield": {
                "type": "CH3COCH3+hv->CH3CO+CH3",
+               "branch": "CO+CH3CO",
                "low wavelength value": 1,
                "minimum temperature": 218,
                "maximum temperature": 295
