@@ -70,8 +70,10 @@
       real AA1, a1, b1, t, qy
       real AA2, AA3, AA4, a2, b2, a3, b3, c3, a4, b4
 
-      ! TUV-x MOD - initializing qyCO
+      !!! TUV-x MOD - initializing qyCO, qyCH3CO !!!
       qyCO(:) = 0.0
+      qyCH3CO(:) = 0.0
+      !!! end TUV-x mod !!!
 
 !---------------------------------------------
 !     ... tin set to tlev

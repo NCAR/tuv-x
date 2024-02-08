@@ -149,7 +149,7 @@ contains
 
       call calculate( label%val_,                                             &
                       real( temperature%edge_val_(:temperature%ncells_+1) ),  &
-                      real( air%mid_val_ ), doug_xsqy )
+                      real( air%edge_val_ ), doug_xsqy )
 
       wavelength => grids%get_grid( "wavelength", "nm" )
       write(*,*) label%val_, " temperature = ",                               &
