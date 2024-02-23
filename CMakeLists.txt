@@ -7,7 +7,7 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE "cmake/set_defaults.cmake")
 project(
   tuv-x
   VERSION 0.7.0
-  LANGUAGES Fortran
+  LANGUAGES Fortran CXX C
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -34,6 +34,7 @@ option(ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(ENABLE_MEMCHECK "Enable memory checking in tests" ON)
 option(ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(BUILD_DOCS "Build the documentation" OFF)
+option(ENABLE_YAML "Uses YAML parser instead of JSON" OFF)
 
 # Set up include and lib directories
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include")

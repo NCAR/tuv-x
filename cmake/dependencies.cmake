@@ -37,25 +37,6 @@ if(ENABLE_OPENMP)
 endif()
 
 ################################################################################
-# json-fortran library
-
-find_path(JSON_INCLUDE_DIR json_module.mod
-  DOC "json-fortran include directory (must include json_*.mod files)"
-  PATHS
-    $ENV{JSON_FORTRAN_HOME}/lib
-    /opt/local/lib
-    /usr/local/lib
-    /usr/local/lib64)
-find_library(JSON_LIB jsonfortran
-  DOC "json-fortran library"
-  PATHS
-    $ENV{JSON_FORTRAN_HOME}/lib
-    /opt/local/lib
-    /usr/local/lib
-    /usr/local/lib64)
-include_directories(${JSON_INCLUDE_DIR})
-
-################################################################################
 # NetCDF library
 
 find_package(PkgConfig REQUIRED)
@@ -73,7 +54,7 @@ else()
 
   FetchContent_Declare(musicacore
     GIT_REPOSITORY https://github.com/NCAR/musica-core.git
-    GIT_TAG v0.4.1
+    GIT_TAG develop-fix-yaml-config # v0.4.2
     FIND_PACKAGE_ARGS NAMES musicacore
   )
 
