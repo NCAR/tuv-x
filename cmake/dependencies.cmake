@@ -54,7 +54,7 @@ else()
 
   FetchContent_Declare(musicacore
     GIT_REPOSITORY https://github.com/NCAR/musica-core.git
-    GIT_TAG develop-fix-yaml-config # v0.4.2
+    GIT_TAG v0.4.3
     FIND_PACKAGE_ARGS NAMES musicacore
   )
 
