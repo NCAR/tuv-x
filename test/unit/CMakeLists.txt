@@ -19,6 +19,7 @@ add_subdirectory(tuv_doug)
 # TUV-x tests
 
 create_standard_test(NAME grid_warehouse SOURCES grid_warehouse.F90)
+create_standard_test(NAME heating_rates SOURCES heating_rates.F90)
 create_standard_test(NAME la_sr_bands SOURCES la_sr_bands.F90 )
 create_standard_test(NAME spherical_geometry SOURCES spherical_geometry.F90 )
 

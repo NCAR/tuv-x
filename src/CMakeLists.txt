@@ -46,6 +46,7 @@ target_sources(tuvx_object
     grid.F90
     grid_factory.F90
     grid_warehouse.F90
+    heating_rates.F90
     interpolate.F90
     la_sr_bands.F90
     linear_algebra.F90

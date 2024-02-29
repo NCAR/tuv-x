@@ -178,7 +178,7 @@ contains
     real(dk)                :: scale_factor
     type(string_t)          :: reaction_key
     logical                 :: do_apply_bands, found
-    type(string_t)          :: required_keys(3), optional_keys(1)
+    type(string_t)          :: required_keys(3), optional_keys(2)
     type(cross_section_ptr), allocatable :: temp_cs(:)
     type(quantum_yield_ptr), allocatable :: temp_qy(:)
     type(string_t),          allocatable :: temp_handle(:)
@@ -190,6 +190,7 @@ contains
     required_keys(2) = "cross section"
     required_keys(3) = "quantum yield"
     optional_keys(1) = "scaling factor"
+    optional_keys(2) = "heating"
 
     call assert_msg( 780273355,                                               &
                      config%validate( required_keys, optional_keys ),         &
