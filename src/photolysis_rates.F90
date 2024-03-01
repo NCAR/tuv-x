@@ -373,7 +373,8 @@ rate_loop:                                                                    &
       xsqy = transpose( cross_section * quantum_yield )
       do vertNdx = 1, zGrid%ncells_ + 1
         photolysis_rates( vertNdx, rateNdx ) =                                &
-            dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) )
+            dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) ) *    &
+            this%scaling_factors_( rateNdx )
       enddo
       if( allocated( cross_section ) ) deallocate( cross_section )
       if( allocated( quantum_yield ) ) deallocate( quantum_yield )

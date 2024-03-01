@@ -18,10 +18,11 @@ module tuvx_heating_rates
 
   type :: heating_parameters_t
     ! Heating parameters for a single photolyzing species
-    type(string_t)             :: label_         ! label for the heating rate
-    type(cross_section_ptr)    :: cross_section_ ! cross section
-    type(quantum_yield_ptr)    :: quantum_yield_ ! quantum yield
-    real(kind=dk), allocatable :: energy_(:)     ! wavelength resolved bond-dissociation energy [J]
+    type(string_t)             :: label_          ! label for the heating rate
+    type(cross_section_ptr)    :: cross_section_  ! cross section
+    type(quantum_yield_ptr)    :: quantum_yield_  ! quantum yield
+    real(kind=dk)              :: scaling_factor_ ! scaling factor for the heating rate
+    real(kind=dk), allocatable :: energy_(:)      ! wavelength resolved bond-dissociation energy [J]
   contains
     !> Returns the size of a character buffer needed to pack the heating parameters
     procedure :: pack_size => heating_parameters_pack_size
@@ -210,6 +211,8 @@ contains
     call config%get( "quantum yield", qy_config, Iam )
     this%quantum_yield_%val_ => quantum_yield_builder( qy_config, grids,      &
                                                        profiles )
+    call config%get( "scaling factor", this%scaling_factor_, Iam,             &
+                     default = 1.0_dk )
     call heating_config%get( "energy term", energy_term, Iam )
     wavelengths => grids%get_grid( "wavelength", "nm" )
     allocate( this%energy_( wavelengths%ncells_ ) )
@@ -247,7 +250,7 @@ contains
     class(profile_warehouse_t),  intent(inout) :: profiles
     !> Radiation field
     class(radiation_field_t),    intent(in)    :: radiation_field
-    !> Heating rates
+    !> Heating rates (vertical interface, reaction)
     real(kind=dk),               intent(inout) :: heating_rates(:,:)
 
     character(len=*), parameter :: Iam = 'heating rates get'
@@ -299,7 +302,8 @@ contains
       do i_height = 1, heights%ncells_ + 1
         heating_rates( i_height, i_rate ) =                                   &
             dot_product( actinic_flux( :, i_height ),                         &
-                         params%energy_(:) * xsqy( :, i_height ) )
+                         params%energy_(:) * xsqy( :, i_height ) ) *          &
+            params%scaling_factor_
       end do
     end associate
     end do
@@ -474,6 +478,7 @@ contains
                 this%cross_section_%val_%pack_size( comm ) +                  &
                 qy_type_name%pack_size( comm ) +                              &
                 this%quantum_yield_%val_%pack_size( comm ) +                  &
+                musica_mpi_pack_size( this%scaling_factor_, comm ) +          &
                 musica_mpi_pack_size( this%energy_, comm )
 #else
     pack_size = 0
@@ -512,6 +517,7 @@ contains
     call this%cross_section_%val_%mpi_pack( buffer, position, comm )
     call qy_type_name%mpi_pack( buffer, position, comm )
     call this%quantum_yield_%val_%mpi_pack( buffer, position, comm )
+    call musica_mpi_pack( buffer, position, this%scaling_factor_, comm )
     call musica_mpi_pack( buffer, position, this%energy_, comm )
     call assert( 243240701, position - prev_pos <= this%pack_size( comm ) )
 #endif
@@ -549,6 +555,7 @@ contains
     call qy_type_name%mpi_unpack( buffer, position, comm )
     this%quantum_yield_%val_ => quantum_yield_allocate( qy_type_name )
     call this%quantum_yield_%val_%mpi_unpack( buffer, position, comm )
+    call musica_mpi_unpack( buffer, position, this%scaling_factor_, comm )
     call musica_mpi_unpack( buffer, position, this%energy_, comm )
     call assert( 243240702, position - prev_pos <= this%pack_size( comm ) )
 #endif
