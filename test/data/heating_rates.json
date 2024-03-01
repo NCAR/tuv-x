@@ -1,0 +1,100 @@
+{
+  "grids" : [
+    {
+      "name": "height",
+      "type": "equal interval",
+      "units": "km",
+      "begins at": 1.0,
+      "ends at": 5.0,
+      "cell delta": 1.0
+    },
+    {
+      "name": "wavelength",
+      "type": "equal interval",
+      "units": "nm",
+      "begins at": 400.0,
+      "ends at": 700.0,
+      "cell delta": 50.0
+    }
+  ],
+  "profiles": [
+    {
+      "name": "temperature",
+      "type": "from config file",
+      "units": "K",
+      "grid": {
+        "name": "height",
+        "units": "km"
+      },
+      "values": [ 200.0, 250.0, 300.0, 350.0, 400.0 ]
+    },
+    {
+      "name": "extraterrestrial flux",
+      "type": "from config file",
+      "units": "photon cm-2 s-1",
+      "grid": {
+        "name": "wavelength",
+        "units": "nm"
+      },
+      "values": [ 1.0e+4, 1.0e+5, 1.0e+6, 1.0e+7, 1.0e+8, 1.0e+9, 1.0e+10 ]
+    },
+    {
+      "name": "air",
+      "type": "from config file",
+      "units": "molecule cm-3",
+      "grid": {
+        "name": "height",
+        "units": "km"
+      },
+      "values": [ 2.5e+19, 2.0e+19, 1.5e+19, 1.0e+19, 5.0e+18 ]
+    }
+  ],
+  "reactions": [
+    {
+      "name": "jfoo",
+      "cross section": {
+        "type": "base",
+        "data": {
+          "default value": 12.3
+        }
+      },
+      "quantum yield": {
+        "type": "base",
+        "constant value": 0.75
+      },
+      "heating": {
+        "energy term": 2.0
+      }
+    },
+    {
+      "name": "jbar",
+      "cross section": {
+        "type": "base",
+        "data": {
+          "default value": 45.6
+        }
+      },
+      "quantum yield": {
+        "type": "base",
+        "constant value": 0.25
+      }
+    },
+    {
+      "name": "jbaz",
+      "cross section": {
+        "type": "base",
+        "data": {
+          "default value": 78.9
+        }
+      },
+      "quantum yield": {
+        "type": "base",
+        "constant value": 0.5
+      },
+      "scaling factor": 1.1,
+      "heating": {
+        "energy term": 3000.0
+      }
+    }
+  ]
+}

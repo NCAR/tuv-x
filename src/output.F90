@@ -23,9 +23,11 @@ module tuvx_output
     class(io_t), pointer        :: file_ => null( )
     logical                     :: do_photo_ = .false.
     logical                     :: do_dose_ = .false.
+    logical                     :: do_heating_ = .false.
     logical                     :: do_radiation_ = .false.
     type(string_t), allocatable :: photo_labels_(:)
     type(string_t), allocatable :: dose_labels_(:)
+    type(string_t), allocatable :: heating_labels_(:)
     type(string_t), allocatable :: photo_cross_sections_(:)
     type(string_t), allocatable :: photo_quantum_yields_(:)
   contains
@@ -58,13 +60,14 @@ contains
     character(len=*), parameter :: Iam = "output writer"
     integer        :: stat
     type(string_t) :: file_path
-    type(string_t) :: required_keys(2), optional_keys(3)
+    type(string_t) :: required_keys(2), optional_keys(4)
     type(config_t) :: tuvx_config, rad_config
 
     required_keys(1) = "file path"
     required_keys(2) = "tuv-x configuration"
     optional_keys(1) = "include photolysis"
     optional_keys(2) = "include dose rates"
+    optional_keys(3) = "include heating rates"
 
     call assert_msg( 215370625,                                               &
                      config%validate( required_keys, optional_keys ),         &
@@ -93,6 +96,10 @@ contains
                      default = .false. )
     if( this%do_dose_ ) this%dose_labels_ = core%dose_rate_labels( )
 
+    call config%get( "include heating rates", this%do_heating_, Iam,          &
+                     default = .false. )
+    if( this%do_heating_ ) this%heating_labels_ = core%heating_rate_labels( )
+
     ! Add custom diagnostics
     call config%get( "tuv-x configuration", tuvx_config, Iam )
     call this%add_photolysis_diagnostics( tuvx_config )
@@ -106,7 +113,7 @@ contains
 
   !> Outputs results
   subroutine output( this, step, core, photolysis_rate_constants, dose_rates, &
-     time, solar_zenith_angle, earth_sun_distance )
+     heating_rates, time, solar_zenith_angle, earth_sun_distance )
 
     use musica_assert,                 only : assert_msg
     use musica_constants,              only : dk => musica_dk
@@ -124,6 +131,8 @@ contains
     real(dk), optional, intent(in) :: photolysis_rate_constants(:,:)
     !> Dose rates (vertical level, dose rate type)
     real(dk), optional, intent(in) :: dose_rates(:,:)
+    !> Heating rates (vertical level, reaction)
+    real(dk), optional, intent(in) :: heating_rates(:,:)
     !> Time [hours]
     real(dk), optional, intent(in) :: time
     !> Solar zenith angle [degrees]
@@ -206,6 +215,18 @@ contains
         var_name = clean_string( this%dose_labels_( i_rate ) )
         call this%file_%append( var_name, units, append_dim, step,            &
                                 dim_names(1), dose_rates( :, i_rate ), Iam )
+      end do
+    end if
+
+    if( present( heating_rates ) ) then
+      call assert_msg( 935671025, this%do_heating_, "Heating rates are not "  &
+                       //"configured to be output" )
+      dim_names(1) = "vertical_level"
+      units = "J s-1"
+      do i_rate = 1, size( this%heating_labels_ )
+        var_name = clean_string( this%heating_labels_( i_rate ) )
+        call this%file_%append( var_name, units, append_dim, step,            &
+                                dim_names(1), heating_rates( :, i_rate ), Iam )
       end do
     end if
 

@@ -199,6 +199,9 @@
                   "value": 1.0
                 }
               ]
+            },
+            "heating" : {
+               "energy term": 175.05
             }
          },
          {
@@ -228,6 +231,9 @@
                    "value": 0.0
                  }
                ]
+            },
+            "heating" : {
+               "energy term": 242.37
             }
          },
          {
@@ -244,6 +250,9 @@
             },
             "quantum yield": {
                "type": "O3+hv->O2+O(1D)"
+            },
+            "heating" : {
+               "energy term": 310.32
             }
          },
          {
@@ -260,6 +269,9 @@
             },
             "quantum yield": {
                "type": "O3+hv->O2+O(3P)"
+            },
+            "heating" : {
+               "energy term": 1179.87
             }
          },
          {

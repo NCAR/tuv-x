@@ -139,11 +139,13 @@ contains
     class(profile_t), pointer :: earth_sun_distance ! [AU]
     real(dk), allocatable     :: photo_rates(:,:,:) ! (time, vertical level, reaction) [s-1]
     real(dk), allocatable     :: dose_rates(:,:,:)  ! (time, vertical level, dose rate) [?]
+    real(dk), allocatable     :: heating_rates(:,:,:)      ! (vertical level, reaction, thread) [K s-1]
     real(dk), allocatable     :: thread_photo_rates(:,:,:) ! (vertical level, reaction, thread) [s-1]
     real(dk), allocatable     :: thread_dose_rates(:,:,:)  ! (vertical level, dose rate, thread) [?]
+    real(dk), allocatable     :: thread_heating_rates(:,:,:)! (vertical level, reaction, thread) [K s-1]
     type(string_t)            :: file_path
     character(len=2)          :: diagnostic_label
-    class(output_t), pointer  :: photo_output, dose_output
+    class(output_t), pointer  :: photo_output, dose_output, heating_output
     type(config_t)            :: config
 
     height => core%get_grid( "height", "km" )
@@ -161,10 +163,15 @@ contains
     allocate( dose_rates(           sza%ncells_ + 1,                          &
                                     height%ncells_ + 1,                       &
                                     core%number_of_dose_rates( ) ) )
+    allocate( heating_rates( sza%ncells_ + 1,                                 &
+                             height%ncells_ + 1,                              &
+                             core%number_of_heating_rates( ) ) )
+
 
     ! set up output files
     nullify( photo_output )
     nullify( dose_output  )
+    nullify( heating_output )
     if( core%number_of_photolysis_reactions( ) > 0 ) then
       call config%empty( )
       call config%add( "file path", "photolysis_rate_constants.nc", Iam )
@@ -179,6 +186,13 @@ contains
       call config%add( "tuv-x configuration", tuvx_config, Iam )
       dose_output => output_t( config, core )
     end if
+    if( core%number_of_heating_rates( ) > 0 ) then
+      call config%empty( )
+      call config%add( "file path", "heating_rates.nc", Iam )
+      call config%add( "include heating rates", .true., Iam )
+      call config%add( "tuv-x configuration", tuvx_config, Iam )
+      heating_output => output_t( config, core )
+    end if
 
     ! calculate photolysis and dose rates
     do i_sza = 1, sza%ncells_ + 1
@@ -187,6 +201,7 @@ contains
                      earth_sun_distance%edge_val_( i_sza ),                   &
                      photolysis_rate_constants = photo_rates( i_sza, :, : ),  &
                      dose_rates = dose_rates( i_sza, :, : ),                  &
+                     heating_rates = heating_rates( i_sza, :, : ),            &
                      diagnostic_label = diagnostic_label )
 
       ! output results
@@ -204,6 +219,13 @@ contains
             solar_zenith_angle = sza%edge_val_( i_sza ),                     &
             earth_sun_distance = earth_sun_distance%edge_val_( i_sza ) )
       end if
+      if( associated( heating_output ) ) then
+        call heating_output%output( i_sza, core,                             &
+            heating_rates = heating_rates( i_sza, : , : ),                   &
+            time = time%edge_( i_sza ),                                      &
+            solar_zenith_angle = sza%edge_val_( i_sza ),                     &
+            earth_sun_distance = earth_sun_distance%edge_val_( i_sza ) )
+      end if
     end do
 
     deallocate( height             )
@@ -212,6 +234,7 @@ contains
     deallocate( earth_sun_distance )
     if( associated( photo_output ) ) deallocate( photo_output )
     if( associated( dose_output  ) ) deallocate( dose_output  )
+    if( associated( heating_output ) ) deallocate( heating_output )
 
 #if MUSICA_USE_OPENMP
     ! Compare results from threads for fixed solar zenith angle
@@ -221,15 +244,20 @@ contains
     allocate( thread_dose_rates(  size( dose_rates,  2 ),                     &
                                   size( dose_rates,  3 ),                     &
                                   omp_get_max_threads( ) ) )
+    allocate( thread_heating_rates( size( heating_rates, 2 ),                 &
+                                    size( heating_rates, 3 ),                 &
+                                    omp_get_max_threads( ) ) )
     !$omp parallel &
     !$omp   shared( threads, thread_photo_rates, thread_dose_rates )
     associate( thread => threads( omp_get_thread_num( ) + 1 ),                &
                photos => thread_photo_rates(:,:, omp_get_thread_num( ) + 1 ), &
-               doses  => thread_dose_rates( :,:, omp_get_thread_num( ) + 1 ) )
+               doses  => thread_dose_rates( :,:, omp_get_thread_num( ) + 1 ), &
+               heat => thread_heating_rates( :,:, omp_get_thread_num( ) + 1 ) )
       call thread%core_%run( 40.0_dk,                                         &
                              1.0_dk,                                          &
                              photolysis_rate_constants = photos,              &
-                             dose_rates = doses )
+                             dose_rates = doses,                              &
+                             heating_rates = heat )
     end associate
     !$omp end parallel
 
@@ -246,6 +274,13 @@ contains
           call assert_msg( 401201021,                                         &
                            thread_dose_rates( i_level, i_dose, i_thread )     &
                            .eq. thread_dose_rates( i_level, i_dose, 1 ),      &
+                           "Thread result mismatch for thread "//             &
+                           to_char( i_thread ) )
+        end do
+        do i_photo = 1, size( thread_heating_rates, 2 )
+          call assert_msg( 389419926,                                         &
+                           thread_heating_rates( i_level, i_photo, i_thread ) &
+                           .eq. thread_heating_rates( i_level, i_photo, 1 ),  &
                            "Thread result mismatch for thread "//             &
                            to_char( i_thread ) )
         end do
