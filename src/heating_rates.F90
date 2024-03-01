@@ -52,6 +52,8 @@ module tuvx_heating_rates
     procedure :: get
     !> Returns the names of each photolysis reaction with a heating rate
     procedure :: labels
+    !> Returns the number of heating rates
+    procedure :: size => get_number
     !> Returns the size of a character buffer needed to pack the heating rates
     procedure :: pack_size
     !> Packs the heating rates into a character buffer
@@ -250,7 +252,7 @@ contains
     class(profile_warehouse_t),  intent(inout) :: profiles
     !> Radiation field
     class(radiation_field_t),    intent(in)    :: radiation_field
-    !> Heating rates (vertical interface, reaction)
+    !> Heating rates (vertical interface, reaction) [J s-1]
     real(kind=dk),               intent(inout) :: heating_rates(:,:)
 
     character(len=*), parameter :: Iam = 'heating rates get'
@@ -329,6 +331,23 @@ contains
     labels(:) = this%heating_parameters_(:)%label_
 
   end function labels
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  !> Returns the number of heating rates
+  function get_number( this ) result( n_rates )
+
+    !> Number of heating rates
+    integer :: n_rates
+    !> Heating rate collection
+    class(heating_rates_t), intent(in) :: this
+
+    n_rates = 0
+    if( allocated( this%heating_parameters_ ) ) then
+      n_rates = size( this%heating_parameters_ )
+    end if
+
+  end function get_number
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

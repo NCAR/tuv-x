@@ -210,6 +210,8 @@ photolysis:
         lower extrapolation:
           type: boundary
       type: base
+    heating:
+      energy term: 175.05
     name: jo2_a
     quantum yield:
       constant value: 0
@@ -229,6 +231,8 @@ photolysis:
         lower extrapolation:
           type: boundary
       type: base
+    heating:
+      energy term: 242.37
     name: jo2_b
     quantum yield:
       constant value: 1.0
@@ -246,6 +250,8 @@ photolysis:
       - file path: data/cross_sections/O3_3.nc
       - file path: data/cross_sections/O3_4.nc
       type: O3
+    heating:
+      energy term: 310.32
     name: jo3_a
     quantum yield:
       type: O3+hv->O2+O(1D)
@@ -257,6 +263,8 @@ photolysis:
       - file path: data/cross_sections/O3_3.nc
       - file path: data/cross_sections/O3_4.nc
       type: O3
+    heating:
+      energy term: 1179.87
     name: jo3_b
     quantum yield:
       type: O3+hv->O2+O(3P)
