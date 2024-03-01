@@ -7,15 +7,20 @@ set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
 )
 
+target_include_directories(tuvx_object
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
+)
+
 message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
   PUBLIC
-    musica::musicacore
     PkgConfig::netcdff
+    yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
     ${LAPACK_LIBRARIES}
-    ${JSON_LIB}
 )
 
 # tuvx library
@@ -28,10 +33,20 @@ set_target_properties(tuvx PROPERTIES
   SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
+target_link_libraries(tuvx
+  PUBLIC
+    PkgConfig::netcdff
+    yaml-cpp::yaml-cpp
+    ${BLAS_LIBRARIES}
+    ${LAPACK_LIBRARIES}
+)
+
 target_include_directories(tuvx
   PUBLIC  
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
 target_sources(tuvx_object
@@ -70,6 +85,6 @@ add_subdirectory(profiles)
 add_subdirectory(quantum_yields)
 add_subdirectory(radiative_transfer)
 add_subdirectory(spectral_weights)
-
+add_subdirectory(util)
 
 ################################################################################

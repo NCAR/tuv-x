@@ -14,6 +14,7 @@ add_subdirectory(radiative_transfer)
 add_subdirectory(radiator)
 add_subdirectory(spectral_weight)
 add_subdirectory(tuv_doug)
+add_subdirectory(util)
 
 ################################################################################
 # TUV-x tests
