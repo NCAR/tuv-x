@@ -17,7 +17,7 @@ jobs:
     - name: build Docker image
       run: docker build -t tuv-x-test .
     - name: run tests in container
-      run: docker run --name test-container -t tuv-x-test bash -c 'make test ARGS="--rerun-failed --output-on-failure -j8"'
+      run: docker run --name test-container -t tuv-x-test bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
   build_test_with_mpi_no_memcheck:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
@@ -28,7 +28,7 @@ jobs:
     - name: build Docker image for MPI tests
       run: docker build -t tuv-x-mpi-test . -f Dockerfile.mpi
     - name: run MPI tests in container
-      run: docker run -t tuv-x-mpi-test bash -c 'make test ARGS="--rerun-failed --output-on-failure -j8"'
+      run: docker run -t tuv-x-mpi-test bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
   build_test_no_mpi_with_memcheck:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
@@ -39,7 +39,7 @@ jobs:
     - name: build Docker image
       run: docker build -t tuv-x-test . -f Dockerfile.memcheck
     - name: run tests in container
-      run: docker run --name test-container -t tuv-x-test bash -c 'make coverage ARGS="--rerun-failed --output-on-failure -j8"'
+      run: docker run --name test-container -t tuv-x-test bash -c 'make coverage ARGS="--rerun-failed --output-on-failure"'
     - name: copy coverage from container
       run: docker cp test-container:build/coverage.info .
     - uses: codecov/codecov-action@v2
@@ -56,4 +56,4 @@ jobs:
     - name: build Docker image for MPI tests
       run: docker build -t tuv-x-mpi-test . -f Dockerfile.mpi.memcheck
     - name: run MPI tests in container
-      run: docker run -t tuv-x-mpi-test bash -c 'make test ARGS="--rerun-failed --output-on-failure -j8"'
+      run: docker run -t tuv-x-mpi-test bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
