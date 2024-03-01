@@ -2,7 +2,6 @@
   "my integer" : 12,
   "this real" : 23.4,
   "is it?" : false,
-  "some time [min]" : 24.5,
   "my sub object" : {
     "sub int" : 42,
     "sub real" : 87.3,
@@ -17,6 +16,5 @@
   "another bunch of strings" : [ "boo", "far" ],
   "another bunch of doubles" : [ 52.3, 0.0 ],
   "another string" : "bar",
-  "is it really?" : true,
-  "some pressure [atm]" : 0.94
+  "is it really?" : true
 }

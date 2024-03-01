@@ -1,8 +1,6 @@
 {
   "my int" : 12,
   "other props" : {
-    "some time [min]" : 12,
-    "a pressure [bar]" : 103.4,
     "an int" : 45
   },
   "real props" : {

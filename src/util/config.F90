@@ -89,17 +89,6 @@ module musica_config
   !!   call sub_config%get( "an int", my_int, my_name )
   !!   write(*,*) "other props->an int value: ", my_int
   !!
-  !!   ! property values need a standard unit to convert to.
-  !!   ! time units must be passed the standard unit 's'
-  !!   ! (non-standard units may be used in the config file, but you cannot
-  !!   !  request non-standard units in the model.)
-  !!   call sub_config%get( "some time", "s", my_real, my_name )
-  !!   write(*,*) "other props->some time value: ", my_real, " s"
-  !!
-  !!   ! units are case-insensitive
-  !!   call sub_config%get( "a pressure", "pa", my_real, my_name )
-  !!   write(*,*) "other props->a pressure value: ", my_real, " Pa"
-  !!
   !!   ! you can iterate over a set of key-value pairs. but remember that
   !!   ! the order is always arbitrary. you also must provide the right type
   !!   ! of variable for the values.
@@ -185,7 +174,6 @@ module musica_config
     procedure, private :: get_config
     procedure, private :: get_string_string_default
     procedure, private :: get_string
-    procedure, private :: get_property
     procedure, private :: get_int
     procedure, private :: get_float
     procedure, private :: get_double
@@ -194,20 +182,18 @@ module musica_config
     procedure, private :: get_double_array
     procedure, private :: get_config_array
     procedure, private :: get_from_iterator
-    procedure, private :: get_property_from_iterator
     procedure, private :: get_array_from_iterator
     generic :: get => get_config, get_string, get_string_string_default,      &
-                      get_property, get_int, get_float, get_double,           &
+                      get_int, get_float, get_double,                         &
                       get_logical, get_string_array, get_double_array,        &
                       get_config_array, get_from_iterator,                    &
-                      get_property_from_iterator, get_array_from_iterator
+                      get_array_from_iterator
     !> @}
     !> @name Adds a named piece of configuration data
     !! @{
     procedure, private :: add_config
     procedure, private :: add_char_array
     procedure, private :: add_string
-    procedure, private :: add_property
     procedure, private :: add_int
     procedure, private :: add_float
     procedure, private :: add_double
@@ -215,7 +201,7 @@ module musica_config
     procedure, private :: add_string_array
     procedure, private :: add_double_array
     procedure, private :: add_config_array
-    generic :: add => add_config, add_char_array, add_string, add_property,  &
+    generic :: add => add_config, add_char_array, add_string,                &
                       add_int, add_float, add_double, add_logical,           &
                       add_string_array, add_double_array, add_config_array
     !> @}
@@ -489,59 +475,6 @@ contains
     end if
 
   end subroutine get_string
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Gets a property from the configuration data
-  subroutine get_property( this, key, units, value, caller, default, found )
-
-    use musica_assert,                 only : assert, assert_msg
-    use musica_convert,                only : convert_t
-    use musica_string,                 only : string_t
-
-    !> Configuration
-    class(config_t), intent(inout) :: this
-    !> Key used to find value
-    character(len=*), intent(in) :: key
-    !> Units for the property
-    character(len=*), intent(in) :: units
-    !> Returned value
-    real(kind=musica_dk), intent(out) :: value
-    !> Name of the calling function (only for use in error messages)
-    character(len=*), intent(in) :: caller
-    !> Default value if not found
-    real(kind=musica_dk), intent(in), optional :: default
-    !> Flag indicating whether key was found
-    logical, intent(out), optional :: found
-
-    type(string_t) :: full_key
-    type(convert_t) :: convert
-    logical :: l_found
-
-    call find_by_prefix( this, key, full_key, l_found )
-
-    if( l_found ) then
-      call this%get_double( full_key%val_, value, caller, found = l_found )
-    end if
-
-    call assert_msg( 616174725, l_found .or. present( default )               &
-                     .or. present( found ), "Key '"//trim( key )//            &
-                     "' requested by "//trim( caller )//" not found" )
-
-    if( present( found ) ) found = l_found
-
-    if( l_found ) then
-      convert = convert_t( units, get_property_units( full_key%val_ ) )
-      value = convert%to_standard( value )
-    else
-      if( present( default ) ) then
-        value = default
-      else
-        value = 0.0d0
-      end if
-    end if
-
-  end subroutine get_property
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -868,44 +801,6 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> Gets a property value using an iterator
-  subroutine get_property_from_iterator( this, iterator, units, ret_val,      &
-      caller )
-
-    use musica_assert,                 only : assert, die_msg
-    use musica_convert,                only : convert_t
-    use musica_string,                 only : string_t
-
-    !> Configuration
-    class(config_t), intent(inout) :: this
-    !> Iterator to use to find value
-    class(iterator_t), intent(in) :: iterator
-    !> Standard units for the property
-    character(len=*), intent(in) :: units
-    !> Returned value
-    real(kind=musica_dk), intent(out) :: ret_val
-    !> Name of the calling function (only used for error messages)
-    character(len=*), intent(in) :: caller
-
-    type(string_t) :: key
-    real(kind=musica_dk) :: tmp_val
-    type(convert_t) :: convert
-
-    select type( iterator )
-      class is( config_iterator_t )
-        key = this%key( iterator )
-        call this%get( key%val_, tmp_val, caller )
-        convert = convert_t( units, get_property_units( key%val_ ) )
-        ret_val = convert%to_standard( tmp_val )
-      class default
-        call die_msg( 605296204, "Iterator type mismatch. Expected "//        &
-                      "config_iterator_t" )
-    end select
-
-  end subroutine get_property_from_iterator
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
   !> Gets an array value using an iterator
   subroutine get_array_from_iterator( this, iterator, value, caller )
 
@@ -1014,34 +909,6 @@ contains
     call yaml_add_string_c( this%node_, c_key, c_value )
 
   end subroutine add_string
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Adds a property to the configuration data
-  subroutine add_property( this, key, units, value, caller )
-
-    use musica_string,                 only : string_t
-
-    !> Configuration
-    class(config_t), intent(inout) :: this
-    !> Key to insert
-    character(len=*), intent(in) :: key
-    !> Units for value
-    character(len=*), intent(in) :: units
-    !> Value to set
-    real(kind=musica_dk), intent(in) :: value
-    !> Name of the calling function (only for use in error messages)
-    character(len=*), intent(in) :: caller
-
-    type(string_t) :: full_key
-    character(len=1, kind=c_char), allocatable :: c_key(:)
-
-    full_key = get_full_key( key, units )
-    c_key = to_c_string( full_key%val_ )
-    if( .not. c_associated( this%node_ ) ) call initialize_config_t( this )
-    call yaml_add_double_c( this%node_, c_key, real( value, kind=c_double ) )
-
-  end subroutine add_property
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -1330,61 +1197,6 @@ contains
     end do
 
   end subroutine finalize_1D_array
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Gets the property name from a key
-  function get_property_name( key ) result( prop_name )
-
-    use musica_string,                 only : string_t
-
-    !> Property name
-    type(string_t) :: prop_name
-    !> Key
-    character(len=*), intent(in) :: key
-
-    integer :: b
-
-    b = index( key, '[' )
-    prop_name = trim( key(1:b-1) )
-
-  end function get_property_name
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Gets the property units from a key
-  function get_property_units( key ) result( units )
-
-    use musica_string,                 only : string_t
-
-    !> Units
-    type(string_t) :: units
-    !> Key
-    character(len=*), intent(in) :: key
-
-    integer :: b1, b2
-
-    b1 = index( key, '[' )
-    b2 = index( key, ']' )
-    units = trim( key(b1+1:b2-1) )
-
-  end function get_property_units
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Gets a full key to use for a property
-  function get_full_key( property_name, units ) result( key )
-
-    !> Full key
-    character(len=:), allocatable :: key
-    !> Property name
-    character(len=*), intent(in) :: property_name
-    !> Property units
-    character(len=*), intent(in) :: units
-
-    key = trim( property_name )//" ["//trim( units )//"]"
-
-  end function get_full_key
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

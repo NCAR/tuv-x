@@ -138,21 +138,6 @@ contains
     call a_file%get( "also not there", sa, my_name, found = found )
     call assert( 564491555, .not. found )
 
-    ! get property
-
-    call a_file%get( "some time", "s", da, my_name )
-    call assert( 741099150, almost_equal( da, 24.5d0 * 60.0d0 ) )
-    call a_file%get( "some pressure", "Pa", da, my_name, found = found )
-    call assert( 731022831, found )
-    call assert( 338134771, almost_equal( da, 0.94d0 * 101325.0d0 ) )
-    call a_file%get( "some time", "s", da, my_name, default = 32.4d0 )
-    call assert( 270219893, almost_equal( da, 24.5d0 * 60.0d0 ) )
-    call a_file%get( "not there", "K", da, my_name, default = 256.7d0, found = found )
-    call assert( 763444445, .not. found )
-    call assert( 705605886, da .eq. 256.7d0 )
-    call a_file%get( "also not there", "K", da, my_name, found = found )
-    call assert( 366642170, .not. found )
-
     ! get integer
 
     call a_file%get( "another int", ia, my_name )
@@ -304,14 +289,6 @@ contains
     call a%get( "new string", sb, my_name )
     call assert( 258713532, sb .eq. "new string value" )
 
-    ! add property
-
-    call a%add( "new pressure", "atm", 0.9765d0, my_name )
-    call a%get( "some int", ia, my_name )
-    call assert( 671014812, ia .eq. 1263 )
-    call a%get( "new pressure", "Pa", da, my_name )
-    call assert( 779974384, almost_equal( da, 0.9765d0 * 101325.0d0 ) )
-
     ! add int
 
     call a%add( "new int", 432, my_name )
@@ -395,9 +372,8 @@ contains
         '  "my logical" : true,'//&
         '  "my string" : "foo bar",'//&
         '  "my sub config" : { "an int" : 3, "a double" : 6.7 },'//&
-        '  "my property [K]" : 295.6,'//&
         '  "my string array" : [ "foo", "bar", "foobar" ] }'
-    call assert( 494127713, a%number_of_children( ) .eq. 8 )
+    call assert( 494127713, a%number_of_children( ) .eq. 7 )
     iterator => a%get_iterator( )
     call assert( 909667855, iterator%next( ) )
     call assert( 432671110, a%key( iterator ) .eq. "my int" )
@@ -422,9 +398,6 @@ contains
     call b%get( "an int", ia, my_name )
     call assert( 915984300, ia .eq. 3 )
     call assert( 182782432, iterator%next( ) )
-    call a%get( iterator, "K", da, my_name )
-    call assert( 739109850, almost_equal( da, 295.6d0 ) )
-    call assert( 846163888, iterator%next( ) )
     call a%get( iterator, saa, my_name )
     call assert( 902549208, saa(1) .eq. "foo" )
     call assert( 334239937, saa(2) .eq. "bar" )
@@ -625,17 +598,6 @@ end if
 call main_config%get( "other props", sub_config, my_name )
 call sub_config%get( "an int", my_int, my_name )
 write(*,*) "other props->an int value: ", my_int
- 
-! property values need a standard unit to convert to.
-! time units must be passed the standard unit 's'
-! (non-standard units may be used in the config file, but you cannot
-!  request non-standard units in the model.)
-call sub_config%get( "some time", "s", my_real, my_name )
-write(*,*) "other props->some time value: ", my_real, " s"
- 
-! units are case-insensitive
-call sub_config%get( "a pressure", "pa", my_real, my_name )
-write(*,*) "other props->a pressure value: ", my_real, " Pa"
  
 ! you can iterate over a set of key-value pairs. but remember that
 ! the order is always arbitrary. you also must provide the right type

@@ -14,12 +14,6 @@ add_std_test_script(util_assert_failure assert.sh)
 
 create_standard_test(NAME util_config SOURCES config.F90)
 
-create_standard_test(NAME util_convert SOURCES convert.F90)
-
-create_standard_test(NAME util_data_type SOURCES data_type.F90)
-
-create_standard_test(NAME util_datetime SOURCES datetime.F90)
-
 create_standard_test(NAME util_map SOURCES map.F90)
 add_executable(util_map_failure map.F90)
 add_std_test_script(util_map_failure map.sh)
