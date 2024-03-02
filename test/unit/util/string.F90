@@ -415,19 +415,6 @@ contains
 
     !$omp end parallel
 
-    ! formatted i/o
-    if( musica_mpi_rank( comm ) == 0 ) then
-      a = "foo"
-      b = ""
-      open( 10, file="formatted_string.dat", status="replace" )
-      write( 10, * ) a
-      close( 10 )
-      open( 11, file="formatted_string.dat", status="old", action="read" )
-      read( 11, * ) b
-      close( 11 )
-      call assert( 348363553, a .eq. b )
-    end if
-
   end subroutine test_string_t
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -438,7 +425,7 @@ contains
 type(string_t) :: my_string
 my_string = "foo bar foobar"
 my_string = my_string%replace( 'foo', 'bar' )
-write(*,*) my_string
+write(*,*) my_string%val_
 
   end subroutine replace_example
 
@@ -453,11 +440,11 @@ integer :: i
 my_string = "my original    string"
 sub_strings = my_string%split( ' ' )
 do i = 1, size( sub_strings )
-  write(*,*) i, sub_strings( i )
+  write(*,*) i, sub_strings( i )%val_
 end do
 sub_strings = my_string%split( ' ', .true. )
 do i = 1, size( sub_strings )
-  write(*,*) i, sub_strings( i )
+  write(*,*) i, sub_strings( i )%val_
 end do
 
   end subroutine split_example
@@ -470,9 +457,9 @@ end do
 type(string_t) :: my_string, sub_string
 my_string = "Hi there!"
 sub_string = my_string%substring( 4, 5 )
-write(*,*) sub_string
+write(*,*) sub_string%val_
 sub_string = my_string%substring( 9, 50 )
-write(*,*) sub_string
+write(*,*) sub_string%val_
 
   end subroutine substring_example
 

@@ -1342,7 +1342,7 @@ contains
     type(string_t) :: str
 
     str = this
-    write(*,*) str
+    write(*,*) str%val_
 
   end subroutine do_print
 

@@ -157,7 +157,7 @@ contains
         monopos = all( Xsection%deltaT > rZERO )
         if( .not. monopos ) then
           if( any( Xsection%deltaT > rZERO ) ) then
-            write(msg,*) Iam//'File: '//file_path//                           &
+            write(msg,*) Iam//'File: '//file_path%val_//                      &
                          '  temperature array not monotonic'
             call die_msg( 175583000, msg )
           endif

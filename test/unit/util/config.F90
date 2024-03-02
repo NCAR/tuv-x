@@ -582,7 +582,7 @@ call main_config%from_file( 'test/data/config_example.json' )
 
 ! this would fail with an error if 'a string' is not found
 call main_config%get( "a string", my_string, my_name )
-write(*,*) "a string value: ", my_string
+write(*,*) "a string value: ", my_string%val_
  
 ! add the found argument to avoid failure if the pair is not found
 call main_config%get( "my int", my_int, my_name, found = found )
@@ -607,7 +607,7 @@ iter => sub_real_config%get_iterator( )
 do while( iter%next( ) )
   my_string = sub_real_config%key( iter )
   call sub_real_config%get( iter, my_real, my_name )
-  write(*,*) my_string, " value: ", my_real
+  write(*,*) my_string%val_, " value: ", my_real
 end do
  
 ! you can also get the number of child objects before iterating over

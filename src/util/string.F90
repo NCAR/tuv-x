@@ -104,13 +104,6 @@ module musica_string
                                double_not_equals_string,                      &
                                logical_not_equals_string
     !> @}
-    !> @name File I/O
-    !! @{
-    procedure :: read_string_formatted
-    generic :: read(formatted) => read_string_formatted
-    procedure :: write_string_formatted
-    generic :: write(formatted) => write_string_formatted
-    !> @}
     !> Returns the string length
     procedure :: length
     !> Converts a string to upper case
@@ -664,87 +657,6 @@ contains
     not_equals = .not. a .eq. b
 
   end function string_not_equals_logical
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Reads a string
-  !!
-  !! \bug There is a memory leak with formatted string reads using GNU compilers
-  !! (issue #35)
-  subroutine read_string_formatted( this, unit, iotype, v_list, iostat,       &
-      iomsg )
-
-#ifdef MUSICA_USING_INTEL
-    use, intrinsic :: ISO_FORTRAN_ENV, only : IOSTAT_EOR
-#endif
-
-    !> String to read data into
-    class(string_t), intent(inout) :: this
-    !> File unit
-    integer(kind=musica_ik), intent(in) :: unit
-    !> Format string
-    character(len=*), intent(in) :: iotype
-    !> V list
-    integer(kind=musica_ik), intent(in) :: v_list(:)
-    !> I/O status
-    integer(kind=musica_ik), intent(out) :: iostat
-    !> I/O error message
-    character(len=*), intent(inout) :: iomsg
-
-#ifdef MUSICA_USING_PGI
-    integer :: sz
-    character(len=256) :: buffer
-    character(len=:), allocatable :: tmp
-#else
-    character(len=1) :: buffer
-#endif
-
-    this%val_ = ""
-    do
-#ifdef MUSICA_USING_PGI
-      read( unit, fmt='(A)', advance='NO', iostat=iostat, iomsg=iomsg,        &
-            size=sz ) buffer
-      tmp = this%val_//buffer(:sz)
-      this%val_ = tmp
-      if( iostat .ne. 0 ) exit
-#else
-      read( unit, fmt='(A)', iostat=iostat, iomsg=iomsg ) buffer
-#ifdef MUSICA_USING_INTEL
-      if( iostat .eq. IOSTAT_EOR ) then
-        iostat = 0
-        iomsg = repeat( ' ', len( iomsg ) )
-        exit
-      end if
-#endif
-      if( iostat .ne. 0 ) exit
-      this%val_ = this%val_//buffer
-#endif
-    end do
-
-  end subroutine read_string_formatted
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Writes a string
-  subroutine write_string_formatted( this, unit, iotype, v_list, iostat,      &
-      iomsg )
-
-    !> String to write
-    class(string_t), intent(in) :: this
-    !> File unit
-    integer(kind=musica_ik), intent(in) :: unit
-    !> Format string
-    character(len=*), intent(in) :: iotype
-    !> V list
-    integer(kind=musica_ik), intent(in) :: v_list(:)
-    !> I/O status
-    integer(kind=musica_ik), intent(out) :: iostat
-    !> I/O error message
-    character(len=*), intent(inout) :: iomsg
-
-    write( unit, fmt='(A)', iostat=iostat, iomsg=iomsg ) this%val_
-
-  end subroutine write_string_formatted
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

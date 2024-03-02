@@ -68,11 +68,11 @@ contains
     if( .not. condition ) then
       write(str_code,'(i30)') code
       write(kErrorId,*) "ERROR (Musica-"//trim( adjustl( str_code ) )//"): "  &
-                        //error_message
+                        //error_message%val_
       open( unit = kErrorFileId, file = "error.json", action = "WRITE" )
       write(kErrorFileId,'(A)') '{'
       write(kErrorFileId,'(A)') '  "code" : "'//trim( adjustl( str_code ) )//'",'
-      write(kErrorFileId,'(A)') '  "message" : "'//error_message//'"'
+      write(kErrorFileId,'(A)') '  "message" : "'//error_message%val_//'"'
       write(kErrorFileId,'(A)') '}'
       close(kErrorFileId)
       stop 3
@@ -142,7 +142,7 @@ contains
     if( .not. condition ) then
       write(str_code,'(i30)') code
       write(kErrorId,*) "WARNING (Musica-"//trim( adjustl( str_code ) )//     &
-                        "): "//warning_message
+                        "): "//warning_message%val_
     end if
 
   end subroutine assert_warn_msg_string
