@@ -69,9 +69,6 @@
       type(string_t)                     :: Handle
       class(base_grid_t), pointer      :: lambdaGrid
 
-      write(*,*) ' '
-      write(*,*) Iam // 'entering'
-
       Handle = 'Photolysis, wavelength' ; lambdaGrid => gridWareHouse%get_grid( Handle )
 
       !> Are la and srb grids fully "inside" the model grid?
@@ -128,9 +125,6 @@ has_la_srb: &
           call this%init_srb_xs
         endif
       endif has_la_srb
-
-      write(*,*) ' '
-      write(*,*) Iam // 'exiting'
 
       end subroutine initialize
 
@@ -201,9 +195,6 @@ has_la_srb: &
 !----------------------------------------------------------------------
     real(dk)    :: dto2k(size(Airvcol),nsrb)
 
-    write(*,*) ' '
-    write(*,*) Iam // 'entering'
-
 has_la_srb: &
     if( this%has_la_srb ) then
 !-----------------------------------------------------------------------------
@@ -256,9 +247,6 @@ has_la_srb: &
         enddo
       endif
     endif has_la_srb
-
-    write(*,*) ' '
-    write(*,*) Iam // 'exiting'
 
     end subroutine la_srb_OD
 

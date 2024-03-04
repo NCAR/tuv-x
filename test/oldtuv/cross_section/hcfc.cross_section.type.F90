@@ -71,8 +71,6 @@ contains
       cross_section(wNdx) = sigma
     enddo
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 end module micm_hcfc_cross_section_type

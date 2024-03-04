@@ -20,8 +20,6 @@
 
    integer :: ios
 
-   write(*,*) 'diagnostic_1d: entering'
-
    open(unit=44,file='odat/OUTPUTS/'//filename,form='unformatted',iostat=ios)
    if( ios /= 0 ) then
      write(*,*) 'diagnostic_1d: failed to open ',filename,'; error = ',ios
@@ -32,8 +30,6 @@
      write(*,*) 'diagnostic_1d: failed to write ',filename,'; error = ',ios
      stop 'OpnErr'
    endif
-
-   write(*,*) 'diagnostic_1d: exiting'
 
    end subroutine diagnostic_1d
 
@@ -44,8 +40,6 @@
 
    integer :: ios
 
-   write(*,*) 'diagnostic_1d_dk: entering'
-
    open(unit=44,file='odat/OUTPUTS/'//filename,form='unformatted',iostat=ios)
    if( ios /= 0 ) then
      write(*,*) 'diagnostic_1d: failed to open ',filename,'; error = ',ios
@@ -56,8 +50,6 @@
      write(*,*) 'diagnostic_1d: failed to write ',filename,'; error = ',ios
      stop 'OpnErr'
    endif
-
-   write(*,*) 'diagnostic_1d_dk: exiting'
 
    end subroutine diagnostic_1d_dk
 

@@ -58,8 +58,6 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_dk) :: lambda, sumA, sumB, t, chi, xs
 
-    write(*,*) Iam,'entering'
-
     associate( wl => this%mdl_lambda_edge, wc => this%mdl_lambda_center )
       do wNdx = 1,size(this%mdl_lambda_center)
 ! Parameterization (JPL94)
@@ -76,8 +74,6 @@ contains
          endif
       enddo
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

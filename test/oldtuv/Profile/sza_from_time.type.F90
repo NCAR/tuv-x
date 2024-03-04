@@ -319,7 +319,6 @@ contains
       DELTA  = YEAR - 1949_ik
       LEAP   = DELTA / 4_ik
       JD     = 32916.5_dk + real(DELTA*365_ik + LEAP + DAY,dk) + HOUR / Day2Hrs
-      write(*,*) 'szaFromTime: delta, leap, day, hour = ',delta, leap, day, hour
 
 !                    ** last yr of century not leap yr unless divisible
 !                    ** by 400 (not executed for the allowed YEAR range,
@@ -337,8 +336,6 @@ contains
       MNLONG = 280.460_dk + 0.9856474_dk*TIME
       MNLONG = MOD( MNLONG, THREE60 )
       IF( MNLONG < rZERO ) MNLONG = MNLONG + THREE60
-
-      write(*,*) 'szaFromTime: jd,time = ',jd,time
 
 !                    ** mean anomaly in radians between 0 and 2*pi
       MNANOM = 357.528_dk + 0.9856003_dk*TIME
@@ -358,8 +355,6 @@ contains
       ECLONG = ECLONG*d2r
       OBLQEC = OBLQEC*d2r
 
-      write(*,*) 'szaFromTime: mnlong,mnanom,eclong = ',mnlong,mnanom,eclong
-
 !                    ** right ascension
       NUM  = COS( OBLQEC )*SIN( ECLONG )
       DEN  = COS( ECLONG )
@@ -374,7 +369,6 @@ contains
 
 !                    ** declination
       DEC  = ASIN( SIN( OBLQEC )*SIN( ECLONG ) )
-      write(*,*) 'szaFromTime: oblqec, eclong = ',oblqec, eclong
 !                    ** Greenwich mean sidereal time in hours
 
       GMST = 6.697375_dk + 0.0657098242_dk*TIME + HOUR
@@ -402,7 +396,6 @@ contains
 
 !                    ** solar elevation
 !     noon when HA = 0
-      write(*,*) 'szaFromTime: dec,lat,ha = ',dec,lat,ha
       solarElevation  = ASIN( SIN( DEC )*SIN( LAT*d2r ) + COS( DEC )*COS( LAT*d2r )*COS( HA ) )
 
 !                     ** Convert elevation to degrees

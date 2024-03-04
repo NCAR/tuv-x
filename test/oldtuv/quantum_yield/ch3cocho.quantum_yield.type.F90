@@ -75,8 +75,6 @@ contains
       quantum_yield(wNdx) = qy
     enddo
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 end module micm_ch3cocho_ch3co_hco_quantum_yield_type

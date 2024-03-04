@@ -44,8 +44,6 @@ contains
     Tadj = environment%temperature - 298._musica_dk
     cross_section = this%cross_section(1)%array(:,1) + this%cross_section(1)%array(:,2) * Tadj 
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 end module micm_ch2o_cross_section_type

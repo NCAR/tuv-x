@@ -55,8 +55,6 @@ contains
     class(abs_interpolator_t), pointer :: theInterpolator
     class(base_grid_t), pointer :: zGrid
 
-    write(*,*) Iam // 'entering'
-
     !> Get the configuration settings
     call profile_config%get( 'Filespec', Filespec, Iam )
     call profile_config%get( 'Handle', this%handle_, Iam, default = 'None' )
@@ -130,16 +128,6 @@ contains
     this%edge_val_ = exp( this%edge_val_ )
     this%edge_val_ = o2Vmr * this%edge_val_
 
-    write(*,*) ' '
-    write(*,*) Iam // 'data z grid'
-    write(*,'(1p10g15.7)') zdata
-    write(*,*) ' '
-    write(*,*) Iam // this%handle_%to_char() // ' on data z grid'
-    write(*,'(1p10g15.7)') Profile
-    write(*,*) ' '
-    write(*,*) Iam // this%handle_%to_char() // ' @ mdl z grid edges'
-    write(*,'(1p10g15.7)') this%edge_val_
-
     this%mid_val_ = .5_dk &
                    *(this%edge_val_(1_ik:this%ncells_) + this%edge_val_(2_ik:this%ncells_+1_ik))
     this%delta_val_ = (this%edge_val_(2_ik:this%ncells_+1_ik) - this%edge_val_(1_ik:this%ncells_))
@@ -148,8 +136,6 @@ contains
     exo_layer_dens = this%edge_val_(this%ncells_+1_ik) * this%hscale_ * km2cm
     this%exo_layer_dens_ = [this%layer_dens_,exo_layer_dens]
     this%layer_dens_(this%ncells_) = this%layer_dens_(this%ncells_) + exo_layer_dens
-
-    write(*,*) Iam // 'exiting'
 
   end subroutine initialize
 

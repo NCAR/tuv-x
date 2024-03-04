@@ -48,8 +48,6 @@ contains
     real(musica_dk), allocatable :: quantum_yield_chnl2(:)
     real(musica_dk), allocatable :: quantum_yield_wrk(:)
 
-    write(*,*) Iam,'entering'
-
     quantum_yield_chnl1 = this%quantum_yield(1)%array(:,2)
     quantum_yield_chnl2 = rONE - this%quantum_yield(1)%array(:,1)
     quantum_yield_wrk = (/ (rZERO,m=1,size(this%quantum_yield(1)%array,dim=1)) /)
@@ -62,8 +60,6 @@ contains
     quantum_yield = quantum_yield_chnl1*(rONE + quantum_yield_wrk) &
                     /(rONE + quantum_yield_wrk*air_den_factor)
     quantum_yield = min( rONE,max(rZERO,quantum_yield) )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

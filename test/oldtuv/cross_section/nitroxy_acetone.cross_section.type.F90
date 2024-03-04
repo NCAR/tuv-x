@@ -46,15 +46,11 @@ contains
 
     character(len=*), parameter :: Iam = 'nitroxy_acetone cross section calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( this%mdl_lambda_center >= 284._musica_dk .and. this%mdl_lambda_center <= 335._musica_dk )
       cross_section = exp( c + this%mdl_lambda_center*(b + a*this%mdl_lambda_center) )
     elsewhere
       cross_section = rZERO
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

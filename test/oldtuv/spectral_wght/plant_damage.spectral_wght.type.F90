@@ -44,14 +44,10 @@ contains
     real(musica_dk), parameter  :: a3 = -1.13118e-5_musica_dk
     character(len=*), parameter :: Iam = 'plant_damage calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = a0 + this%mdl_lambda_center*(a1 + this%mdl_lambda_center*(a2 + this%mdl_lambda_center*a3))
     where( spectral_wght < 0.0_musica_dk .or. this%mdl_lambda_center > 313._musica_dk )
       spectral_wght = 0.0_musica_dk
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

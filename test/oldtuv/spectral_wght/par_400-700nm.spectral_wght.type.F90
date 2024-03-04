@@ -41,15 +41,11 @@ contains
 
     character(len=*), parameter :: Iam = 'par_400_700nm calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( 400._musica_dk < this%mdl_lambda_center(:) .and. this%mdl_lambda_center(:) < 700._musica_dk )
       spectral_wght = 8.36e-3_musica_dk*this%mdl_lambda_center
     elsewhere
       spectral_wght = 0.0_musica_dk
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

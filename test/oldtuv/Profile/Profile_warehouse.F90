@@ -62,8 +62,6 @@ contains
     character(len=32)           :: keychar
     type(string_t)              :: aswkey
 
-    write(*,*) Iam // 'entering'
-
     allocate( Profile_warehouse_obj )
 
     associate(new_obj=>Profile_warehouse_obj)
@@ -78,8 +76,6 @@ contains
     do while( iter%next() )
       keychar = Profile_set%key(iter)
       aswkey  = keychar 
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       call Profile_set%get( iter, Profile_config, Iam )
       call Profile_config%add( 'Handle', aswkey, Iam )
 !-----------------------------------------------------------------------------
@@ -91,12 +87,7 @@ contains
 
     deallocate( iter )
 
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' Profile objects'')') Iam,size(new_obj%Profile_objs_)
-
     end associate
-
-    write(*,*) Iam // 'exiting'
 
   end function constructor
 
@@ -121,9 +112,6 @@ contains
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%Profile_objs_)
       if( Profile_handle .eq. this%Profile_objs_(ndx)%ptr_%handle_ ) then
@@ -137,8 +125,6 @@ contains
     else
       call die_msg( 460768214, "Invalid Profile handle: '"// Profile_handle%to_char()//"'" )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end function get_Profile
 
@@ -156,13 +142,9 @@ contains
     integer(kind=ik) :: ndx
     character(len=*), parameter :: Iam = 'Profile warehouse finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%Profile_objs_ ) ) then
       deallocate( this%Profile_objs_ )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

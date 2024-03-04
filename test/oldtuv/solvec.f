@@ -198,11 +198,6 @@ c        (not available in psndo.f)
          
          SSA = OPRIM
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Neither upward nor downward iteration'
-            write (*,*) '! *** converged; using original result.'
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ENDIF
@@ -216,15 +211,6 @@ c        (not available in psndo.f)
          
          SSA = DSSA
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** The upward iteration did not converge.'
-            write (*,*) '! *** Had to iterate ', DAGAIN,
-     $           ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ENDIF
@@ -232,15 +218,6 @@ c        (not available in psndo.f)
 *bm  if downward iteration did not converge, we are done 
 *bm  (the result of the upward iteration will be used)
       IF (NODN) THEN
-         IF (DEBUG) THEN
-            write (*,*) '! *** The downward iteration did not converge.'
-            write (*,*) '! *** Had to iterate ', UAGAIN,
-     $           ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-         
          DONE = .TRUE.
          GOTO 998
       ENDIF
@@ -258,30 +235,10 @@ c        (not available in psndo.f)
          
          SSA = DSSA
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Both iterations converged;',
-     $           ' using downward.'
-            write (*,*) '! *** Had to iterate ', DAGAIN,
-     $        ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ELSE
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Both iterations converged;',
-     $           ' using upward.'
-            write (*,*) '! *** Had to iterate ', UAGAIN,
-     $        ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          goto 998
       ENDIF

@@ -43,11 +43,7 @@ contains
 
     character(len=*), parameter :: Iam = 'no3-_(aq)+hv->products calculate: '
 
-    write(*,*) Iam,'entering'
-
     quantum_yield = exp( -2400._musica_dk/environment%temperature + 3.6_musica_dk )      ! Chu & Anastasio, 2003
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

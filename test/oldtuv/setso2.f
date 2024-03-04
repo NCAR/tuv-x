@@ -123,7 +123,6 @@
 *! overwrite for specified pbl height, set concentration here
 
       IF(ipbl > 0) THEN
-         write(*,*) 'pbl SO2 = ', xpbl, ' ppb'
          DO i = 1, nz-1
             IF (i <= ipbl) THEN
                cz(i) = xpbl * ppb * dcol(i)

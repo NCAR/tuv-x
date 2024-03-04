@@ -74,9 +74,6 @@ contains
     type(string_t), allocatable :: netcdfFiles(:)
     logical(musica_lk)          :: found
 
-    write(*,*) ' '
-    write(*,*) Iam // 'entering'
-
     allocate( radXfer_xsect_obj )
 
     associate(new_obj=>radXfer_xsect_obj)
@@ -97,8 +94,6 @@ has_radXfer_xsects: &
       do while( iter%next( ) )
         keychar = reaction_set%key(iter)
         areaction_key = keychar 
-        write(*,*) ' '
-        write(*,*) Iam,'key = ',trim(keychar)
         new_obj%handles_ = [new_obj%handles_,areaction_key]
         call reaction_set%get( iter, reaction_config, Iam )
 !-----------------------------------------------------------------------------
@@ -112,13 +107,8 @@ has_radXfer_xsects: &
     endif has_radXfer_xsects
 
     nSize = size(new_obj%cross_section_objs_)
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' cross sections'')') Iam,nSize
 
     end associate
-
-    write(*,*) ' '
-    write(*,*) Iam // 'exiting'
 
   end function constructor
 
@@ -143,9 +133,6 @@ has_radXfer_xsects: &
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%handles_)
       if( radXfer_cross_section_handle .eq. this%handles_(ndx) ) then
@@ -160,8 +147,6 @@ has_radXfer_xsects: &
       call die_msg( 460768224, "Invalid radXfer_cross_section_handle: '"// radXfer_cross_section_handle%to_char()//"'" )
     endif
 
-    write(*,*) Iam,'exiting'
-
   end function get_radXfer_cross_section
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -175,8 +160,6 @@ has_radXfer_xsects: &
     integer(kind=musica_ik) :: ndx
     character(len=*), parameter :: Iam = 'radXfer_xsect finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%cross_section_objs_ ) ) then
       do ndx = 1,size(this%cross_section_objs_)
         if( associated( this%cross_section_objs_(ndx)%val_ ) ) then
@@ -189,8 +172,6 @@ has_radXfer_xsects: &
     if( allocated( this%handles_ ) ) then
       deallocate( this%handles_ )
     end if
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

@@ -163,12 +163,6 @@ contains
       do i_pres = 1, size( file_pressures )
         i_height = i_height + 1
         do i_wl = 1, i_file_offset - 1
-          write(*,*) i_wl, wavelength_grid%edge_( i_wl ),                     &
-                           wavelength_grid%mid_( i_wl ),                      &
-                     quantum_yields( i_height, i_wl  ) *                      &
-                           cross_sections( i_height, i_wl ),                  &
-                           quantum_yields( i_height, i_wl ),                  &
-                           cross_sections( i_height, i_wl )
             call assert( 897976065,                                           &
                          almost_equal( quantum_yields( i_height, i_wl ),      &
                                        1.0_dk ) )
@@ -183,23 +177,6 @@ contains
           end if
         end do
         do i_wl = i_file_offset, n_wl
-          write(*,*) i_temp, file_temperatures( i_temp ),                     &
-                             temperature_profile%edge_val_( i_height ),       &
-                     air_profile%edge_val_( i_height ),                       &
-                     i_pres, file_pressures( i_pres ),                        &
-                             air_profile%edge_val_( i_height )                &
-                              * gas_constant                                  &
-                              * temperature_profile%edge_val_( i_height )     &
-                              / Avogadro * 1.0e6_dk,                          &
-                     i_wl, file_wavelengths( i_wl  - i_file_offset + 1),      &
-                           wavelength_grid%edge_( i_wl ),                     &
-                           wavelength_grid%mid_( i_wl ),                      &
-                     file_photo_rates( i_wl - i_file_offset + 1, i_temp,      &
-                                       i_pres ),                              &
-                           quantum_yields( i_height, i_wl  ) *                &
-                           cross_sections( i_height, i_wl ),                  &
-                           quantum_yields( i_height, i_wl ),                  &
-                           cross_sections( i_height, i_wl )
           ! the top pressure level has different logic, but we're putting
           ! all pressure/temperature combos in one profile for this test,
           ! so skip the lowest pressure util we're on the last profile element

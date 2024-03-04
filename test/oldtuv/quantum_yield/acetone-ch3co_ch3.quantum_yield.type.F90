@@ -59,8 +59,6 @@ contains
     real(musica_dk)    :: dumexp
     real(musica_dk)    :: fco, fac
 
-    write(*,*) Iam,'entering'
-
     Tadj = environment%temperature/295._musica_dk
     M    = environment%number_density_air
 lambda_loop: &
@@ -111,8 +109,6 @@ lambda_loop: &
       endif
       quantum_yield(wNdx) = fac
     enddo lambda_loop
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

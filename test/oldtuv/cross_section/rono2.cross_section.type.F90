@@ -62,7 +62,6 @@ contains
     type(config_t)              :: tmp_config
     type(string_t)              :: addpntVal
 
-    write(*,*) Iam,'entering'
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -119,8 +118,6 @@ file_loop: &
       enddo file_loop
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -141,12 +138,8 @@ file_loop: &
     character(len=*), parameter :: Iam = 'rono2 cross section calculate: '
     real(musica_dk) :: Temp
 
-    write(*,*) Iam,'entering'
-
     Temp = environment%temperature - 298._musica_dk 
     cross_section = this%cross_section(1)%array(:,1)*exp( this%cross_section(1)%array(:,2)*Temp )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

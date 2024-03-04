@@ -42,14 +42,10 @@ contains
     real(kind=musica_dk)        :: accum
     character(len=*), parameter :: Iam = 'eppley_uv_photometer spectral wght calculate: '
 
-    write(*,*) Iam,'entering'
-
     nLambda = size(this%mdl_lambda_edge)
     spectral_wght = this%spectral_wght(1)%array(:,1)
     accum = sum( spectral_wght*(this%mdl_lambda_edge(2:nLambda) - this%mdl_lambda_edge(1:nLambda-1)) )
     spectral_wght = 90._musica_dk*spectral_wght/accum
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

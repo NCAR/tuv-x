@@ -78,7 +78,6 @@ contains
     class(base_grid_t), pointer :: lambdaGrid
     type(string_t)     :: Handle
 
-    write(*,*) Iam,'entering'
     !> Get model wavelength grids
     Handle = 'Photolysis, wavelength'
     lambdaGrid => gridWareHouse%get_grid( Handle )
@@ -161,8 +160,6 @@ file_loop: &
       call die_msg( 400000008, msg )
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -196,8 +193,6 @@ file_loop: &
     class(base_profile_t), pointer :: mdlTemperature
     type(string_t)     :: Handle
 
-    write(*,*) Iam,'entering'
-
     Handle = 'Vertical Z'
     zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength'
@@ -228,8 +223,6 @@ file_loop: &
 
     cross_section = transpose( wrkCrossSection )
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -241,8 +234,6 @@ file_loop: &
 
    character(len=*), parameter :: Iam = 'tint cross section finalize: '
    integer(musica_ik) :: ndx
-
-   write(*,*) Iam,'entering'
 
    if( allocated(this%cross_section_parms) ) then
      do ndx = 1,size(this%cross_section_parms)
@@ -261,8 +252,6 @@ file_loop: &
      deallocate(this%cross_section_parms)
    endif
 
-   write(*,*) Iam,'exiting'
-   
    end subroutine finalize
 
 end module micm_radXfer_tint_cross_section_type

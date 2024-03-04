@@ -44,8 +44,6 @@ contains
     character(len=132) :: InputLine
     type(string_t)     :: Filespec
 
-    write(*,*) Iam // 'entering'
-
     !> Get the configuration settings
     call profile_config%get( 'Filespec', Filespec, Iam )
     call profile_config%get( 'Handle', this%handle_, Iam, default = 'None' )
@@ -94,16 +92,6 @@ contains
     allocate( this%edge_val_(this%ncells_+1_ik) )
     this%edge_val_ = this%inter1( zGrid, zdata,Profile )
 
-    write(*,*) ' '
-    write(*,*) Iam // 'data z grid'
-    write(*,'(1p10g15.7)') zdata
-    write(*,*) ' '
-    write(*,*) Iam // this%handle_%to_char() // ' on data z grid'
-    write(*,'(1p10g15.7)') Profile
-    write(*,*) ' '
-    write(*,*) Iam // this%handle_%to_char() // ' @ mdl z grid edges'
-    write(*,'(1p10g15.7)') this%edge_val_
-
     allocate( this%mid_val_(this%ncells_) )
     allocate( this%delta_val_(this%ncells_) )
     this%mid_val_(:) = .5_dk &
@@ -111,8 +99,6 @@ contains
     this%delta_val_(:) = (this%edge_val_(2_ik:this%ncells_+1_ik) - this%edge_val_(1_ik:this%ncells_))
 
     close(unit=inUnit)
-
-    write(*,*) Iam // 'exiting'
 
   end subroutine initialize
 

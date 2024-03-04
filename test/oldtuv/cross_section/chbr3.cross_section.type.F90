@@ -48,8 +48,6 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_dk)    :: wc, Temp, lambda
 
-    write(*,*) Iam,'entering'
-
     do wNdx = 1,size(this%mdl_lambda_center)
       Temp = environment%temperature
       lambda = this%mdl_lambda_center(wNdx)
@@ -61,8 +59,6 @@ contains
         cross_section(wNdx) = this%cross_section(1)%array(wNdx,1)
       endif
     enddo
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

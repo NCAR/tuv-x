@@ -133,18 +133,6 @@
             cd(is) = rsct(is) + rabs(is)
             omd(is)= rsct(is) / cd(is) 
  
-            if(iw == 1)then
-              print*,"Snowpack: is =",is,"; zs =",zs(is)
-              PRINT*,"          ksct =", ksct(is)
-              PRINT*,"          density =",snwdens(is)
-              PRINT*,"          csoot =",csoot(is)
-              PRINT*, 'cd = ',cd(is),'  omd = ',omd(is),'  gd = ',gd
-              WRITE(kout,*)'snwdens = ',snwdens,' g/cm3'
-              WRITE(kout,*)'ksct_snow = ',ksct(is),' m2.kg-1'
-              WRITE(kout,*)'soot = ',csoot(is),' ng/g' 
-              WRITE(kout,*)'cd = ',cd(is),'omd = ',omd(is),'gd = ',gd
-            endif
-
 * compute integrals and averages over snow layers:
 * for g and omega, use averages weighted by optical depth
             womd(is) = omd(is) * cd(is)

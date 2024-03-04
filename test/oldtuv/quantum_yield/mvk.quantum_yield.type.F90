@@ -44,13 +44,9 @@ contains
     character(len=*), parameter :: Iam = 'mvk+hv->products calculate: '
     real(musica_dk) :: divisor
 
-    write(*,*) Iam,'entering'
-
     divisor = 5.5_musica_dk + 9.2e-19_musica_dk*environment%number_density_air
     quantum_yield = exp( -0.055_musica_dk*(this%mdl_lambda_center - 308._musica_dk)) / divisor
     quantum_yield = min( quantum_yield,rONE )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

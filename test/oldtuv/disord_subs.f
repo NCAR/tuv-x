@@ -1416,7 +1416,6 @@ c     .. Local Scalars ..
       REAL    :: ANG1, ANG2, DIRINT, FACT, FDNTOT, FNET, PLSORC, ZINT
 c     ..
 
-      IF( PRNT( 2 ) ) WRITE( *, 9000 )
 c                                          ** Zero DISORT output arrays
       U0C   = 0.
       FLDIR = 0.
@@ -1547,26 +1546,17 @@ c                                                ** this level
      &                 ( UAVG( LU ) - PLSORC )
 
    70    CONTINUE
-         IF( PRNT( 2 ) ) WRITE( *, FMT = 9010 ) UTAU( LU ), LYU,
-     &       RFLDIR( LU ), RFLDN( LU ), FDNTOT, FLUP( LU ), FNET,
-     &       UAVG( LU ), PLSORC, DFDT( LU )
 
       ENDDO LEVEL_LOOP
 
 
       IF( PRNT( 3 ) ) THEN
 
-         WRITE( *, FMT = 9020 )
-
          DO LU = 1, NTAU
-
-            WRITE( *, FMT = 9030 ) UTAU( LU )
 
             DO IQ = 1, NN
                ANG1   = 180./ PI* ACOS( CMU( 2*NN - IQ + 1 ) )
                ANG2   = 180./ PI* ACOS( CMU( IQ ) )
-               WRITE( *, 9040 ) ANG1, CMU(2*NN-IQ+1), U0C(IQ,LU),
-     $                          ANG2, CMU(IQ),        U0C(IQ+NN,LU)
             ENDDO
          ENDDO
 
@@ -1742,26 +1732,13 @@ c     ..
 
       IF( NUMU.LT.1 )  RETURN
 
-      WRITE( *, '(//,A)' )
-     &   ' *******  AZIMUTHALLY AVERAGED INTENSITIES ' //
-     &   '(at user polar angles)  ********'
-
       LENFMT = 8
       NPASS  = 1 + (NUMU-1) / LENFMT
-
-      WRITE( *,'(/,A,/,A)') '   Optical   Polar Angle Cosines',
-     &                      '     Depth'
 
       DO 20 NP = 1, NPASS
 
          IUMIN  = 1 + LENFMT * ( NP - 1 )
          IUMAX  = MIN( LENFMT*NP, NUMU )
-         WRITE( *,'(/,10X,8F14.5)') ( UMU(IU), IU = IUMIN, IUMAX )
-
-         DO 10 LU = 1, NTAU
-            WRITE( *, '(0P,F10.4,1P,8E14.4)' ) UTAU( LU ),
-     &           ( U0U( IU,LU ), IU = IUMIN, IUMAX )
-   10    CONTINUE
 
    20 CONTINUE
 
@@ -1798,109 +1775,12 @@ c     .. Local Scalars ..
 c     ..
 
 
-      WRITE( *, '(/,A,I4,A,I4)' ) ' No. streams =', NSTR,
-     &       '     No. computational layers =', NLYR
-
-      IF( IBCND /= 1 ) WRITE( *, '(I4,A,10F10.4,/,(26X,10F10.4))' )
-     &    NTAU,' User optical depths :', ( UTAU(LU), LU = 1, NTAU )
-
-      IF( .NOT. ONLYFL ) WRITE( *, '(I4,A,10F9.5,/,(31X,10F9.5))' )
-     &    NUMU,' User polar angle cosines :',( UMU(IU), IU = 1, NUMU )
-
-      IF( .NOT. ONLYFL .AND. IBCND /= 1 )
-     &    WRITE( *, '(I4,A,10F9.2,/,(28X,10F9.2))' )
-     &           NPHI,' User azimuthal angles :',( PHI(J), J = 1, NPHI )
-
-      IF( .NOT. PLANK .OR. IBCND == 1 )
-     &    WRITE( *, '(A)' ) ' No thermal emission'
-
-
-      WRITE( *, '(A,I2)' ) ' Boundary condition flag: IBCND =', IBCND
-
-      IF( IBCND == 0 ) THEN
-
-         WRITE( *, '(A,1P,E11.3,A,0P,F8.5,A,F7.2,/,A,1P,E11.3)' )
-     &          '    Incident beam with intensity =', FBEAM,
-     &          ' and polar angle cosine = ', UMU0,
-     &          '  and azimuth angle =', PHI0,
-     &          '    plus isotropic incident intensity =', FISOT
-
-         IF( LAMBER ) WRITE( *, '(A,0P,F8.4)' )
-     &                '    Bottom albedo (Lambertian) =', ALBEDO
-
-         IF( .NOT. LAMBER ) WRITE( *, '(A,/,(10X,10F9.5))' )
-     &     '    Legendre coeffs of bottom bidirectional reflectivity :',
-     &         ( HL( K ), K = 0, NSTR )
-
-      ELSE IF( IBCND == 1 ) THEN
-
-         WRITE(*,'(A)') '    Isotropic illumination from top and bottom'
-         WRITE( *, '(A,0P,F8.4)' )
-     &          '    Bottom albedo (Lambertian) =', ALBEDO
-      END IF
-
-
-      IF( DELTAM ) WRITE( *, '(A)' ) ' Uses delta-M method'
-      IF( .NOT.DELTAM ) WRITE( *, '(A)' ) ' Does not use delta-M method'
-
-
-      IF( IBCND == 1 ) THEN
-
-         WRITE( *, '(A)' ) ' Calculate albedo and transmissivity of'//
-     &                     ' medium vs. incident beam angle'
-
-      ELSE IF( ONLYFL ) THEN
-
-         WRITE( *, '(A)' )
-     &          ' Calculate fluxes and azim-averaged intensities only'
-
-      ELSE
-
-         WRITE( *, '(A)' ) ' Calculate fluxes and intensities'
-
-      END IF
-
-
-      WRITE( *, '(A,1P,E11.2)' )
-     &       ' Relative convergence criterion for azimuth series =',
-     &       ACCUR
-
-      IF( LYRCUT ) WRITE( *, '(A)' )
-     &    ' Sets radiation = 0 below absorption optical depth 10'
-
-
-c                                        ** Print layer variables
-      IF( PLANK ) WRITE( *, FMT = 9180 )
-      IF( .NOT. PLANK ) WRITE( *, FMT = 9190 )
-
       YESSCT = rZERO
 
       DO LC = 1, NLYR
          YESSCT = YESSCT + SSALB( LC )
-
-         IF( PLANK )
-     &       WRITE(*,'(I4,2F10.4,F10.5,F12.5,2F10.4,F10.5,F9.4,F14.3)')
-     &             LC, DTAUC( LC ), TAUC( LC ), SSALB( LC ), FLYR( LC ),
-     &             DTAUCP( LC ), TAUCPR( LC ), OPRIM( LC ), PMOM(1,LC)
-
-         IF( .NOT.PLANK )
-     &       WRITE(*,'(I4,2F10.4,F10.5,F12.5,2F10.4,F10.5,F9.4)')
-     &             LC, DTAUC( LC ), TAUC( LC ), SSALB( LC ), FLYR( LC ),
-     &             DTAUCP( LC ), TAUCPR( LC ), OPRIM( LC ), PMOM( 1,LC )
       ENDDO
 
-
-      IF( PRTMOM .AND. YESSCT > rZERO ) THEN
-
-         WRITE( *, '(/,A)' ) ' Layer   Phase Function Moments'
-
-         DO LC = 1, NLYR
-            IF( SSALB( LC ).GT.rZERO )
-     &          WRITE( *, '(I6,10F11.6,/,(6X,10F11.6))' )
-     &                 LC, ( PMOM( K, LC ), K = 0, NSTR )
-         ENDDO
-
-      END IF
 
 c                ** (Read every other line in these formats)
 
@@ -1954,16 +1834,8 @@ c     ..
 
       IF( NPHI.LT.1 )  RETURN
 
-      WRITE( *, '(//,A)' )
-     &   ' *********  I N T E N S I T I E S  *********'
-
       LENFMT = 10
       NPASS  = 1 + (NPHI-1) / LENFMT
-
-      WRITE( *, '(/,A,/,A,/,A)' )
-     &   '             Polar   Azimuth angles (degrees)',
-     &   '   Optical   Angle',
-     &   '    Depth   Cosine'
 
       DO 30 LU = 1, NTAU
 
@@ -1971,18 +1843,6 @@ c     ..
 
             JMIN   = 1 + LENFMT * ( NP - 1 )
             JMAX   = MIN( LENFMT*NP, NPHI )
-
-            WRITE( *, '(/,18X,10F11.2)' ) ( PHI(J), J = JMIN, JMAX )
-
-            IF( NP.EQ.1 ) WRITE( *, '(F10.4,F8.4,1P,10E11.3)' )
-     &             UTAU(LU), UMU(1), (UU(1, LU, J), J = JMIN, JMAX)
-            IF( NP.GT.1 ) WRITE( *, '(10X,F8.4,1P,10E11.3)' )
-     &                       UMU(1), (UU(1, LU, J), J = JMIN, JMAX)
-
-            DO 10 IU = 2, NUMU
-               WRITE( *, '(10X,F8.4,1P,10E11.3)' ) 
-     &                 UMU( IU ), ( UU( IU, LU, J ), J = JMIN, JMAX )
-   10       CONTINUE
 
    20    CONTINUE
 
@@ -2764,9 +2624,6 @@ c                      ** Find (real) eigenvalues and eigenvectors
 
       IF( IER.GT.0 ) THEN
 
-         WRITE( *, FMT = '(//,A,I4,A)' ) ' ASYMTX--eigenvalue no. ',
-     &      IER, '  didnt converge.  Lower-numbered eigenvalues wrong.'
-
          CALL ERRMSG( 'ASYMTX--convergence problems',.True.)
 
       END IF
@@ -3518,11 +3375,6 @@ c        (not available in psndo.f)
          
          SSA = OPRIM
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Neither upward nor downward iteration'
-            write (*,*) '! *** converged; using original result.'
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ENDIF
@@ -3536,15 +3388,6 @@ c        (not available in psndo.f)
          
          SSA = DSSA
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** The upward iteration did not converge.'
-            write (*,*) '! *** Had to iterate ', DAGAIN,
-     $           ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ENDIF
@@ -3552,15 +3395,6 @@ c        (not available in psndo.f)
 *bm  if downward iteration did not converge, we are done 
 *bm  (the result of the upward iteration will be used)
       IF (NODN) THEN
-         IF (DEBUG) THEN
-            write (*,*) '! *** The downward iteration did not converge.'
-            write (*,*) '! *** Had to iterate ', UAGAIN,
-     $           ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-         
          DONE = .TRUE.
          GOTO 998
       ENDIF
@@ -3578,30 +3412,10 @@ c        (not available in psndo.f)
          
          SSA = DSSA
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Both iterations converged;',
-     $           ' using downward.'
-            write (*,*) '! *** Had to iterate ', DAGAIN,
-     $        ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          GOTO 777
       ELSE
          
-         IF (DEBUG) THEN
-            write (*,*) '! *** Both iterations converged;',
-     $           ' using upward.'
-            write (*,*) '! *** Had to iterate ', UAGAIN,
-     $        ' times in layer LC =', LC,';'
-            write (*,*) '! *** changed SSA from ',
-     $           OPRIM, ' to ', SSA,','
-            write (*,*) '! *** by a factor of ', SSA/OPRIM
-         ENDIF
-
          DONE = .TRUE.
          goto 998
       ENDIF

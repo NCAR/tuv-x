@@ -85,8 +85,6 @@ contains
     do while( iter%next() )
       keychar = spectral_weight_set%key(iter)
       aswkey  = keychar 
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       new_obj%spectral_wght_key = [new_obj%spectral_wght_key,aswkey]
       call spectral_weight_set%get( iter, spectrum_config, Iam )
 !-----------------------------------------------------------------------------
@@ -100,8 +98,6 @@ contains
     deallocate( iter )
 
     nSize = size(new_obj%spectral_wght_objs_)
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' spectral wghts'')') Iam,nSize
 
 !-----------------------------------------------------------------------------
 !> setup spectral weight arrays
@@ -130,9 +126,6 @@ contains
     real(musica_dk), allocatable :: a_spectral_wght(:)
     real(musica_dk), allocatable :: spectral_wght_tray(:)
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     allocate(spectral_wght_tray(0))
     do ndx = 1, size(this%spectral_wght_objs_)
       associate( calc_ftn => this%spectral_wght_objs_(ndx)%val_ )
@@ -143,11 +136,6 @@ contains
 
     this%spectral_wght_values_ = reshape( spectral_wght_tray, &
                                           (/nwave,size(this%spectral_wght_objs_) /) )
-
-    write(*,*) Iam,'size of spectral weight values = ',&
-        size(this%spectral_wght_values_,dim=1), size(this%spectral_wght_values_,dim=2)
-
-    write(*,*) Iam,'exiting'
 
   end subroutine update_for_new_environmental_state
 
@@ -161,8 +149,6 @@ contains
 
     integer(kind=musica_ik) :: ndx
     character(len=*), parameter :: Iam = 'spectral_wght_warehouse finalize: '
-
-    write(*,*) Iam,'entering'
 
     if( allocated( this%spectral_wght_values_ ) ) then
       deallocate( this%spectral_wght_values_ )
@@ -179,8 +165,6 @@ contains
     if( allocated( this%spectral_wght_key ) ) then
       deallocate( this%spectral_wght_key )
     end if
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

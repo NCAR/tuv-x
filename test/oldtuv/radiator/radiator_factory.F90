@@ -39,7 +39,6 @@ contains
     type(string_t) :: radiator_type
     character(len=*), parameter :: Iam = 'Radiator builder: '
 
-    write(*,*) Iam,'entering'
     new_radiator_t => null()
     call config%get( 'radiator type', radiator_type, Iam )
 
@@ -53,7 +52,6 @@ contains
     end select
 
     call new_radiator_t%initialize( config, gridWareHouse )
-    write(*,*) Iam,'exiting'
 
   end function radiator_builder
 

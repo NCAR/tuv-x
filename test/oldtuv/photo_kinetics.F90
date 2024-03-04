@@ -98,8 +98,6 @@ contains
     do while( iter%next( ) )
       keychar = reaction_set%key(iter)
       areaction_key = keychar 
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       new_obj%reaction_key = [new_obj%reaction_key,areaction_key]
       call reaction_set%get( iter, reaction_config, Iam )
 !-----------------------------------------------------------------------------
@@ -127,11 +125,7 @@ contains
     deallocate( iter )
 
     nSize = size(new_obj%cross_section_objs_)
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' cross sections'')') Iam,nSize
     nSize = size(new_obj%quantum_yield_objs_)
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' quantum yields'')') Iam,nSize
 
 !-----------------------------------------------------------------------------
 !> setup cross section, quantum yield arrays
@@ -164,9 +158,6 @@ contains
     real(musica_dk), allocatable :: a_quantum_yield(:)
     real(musica_dk), allocatable :: quantum_yield_tray(:)
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     allocate(cross_section_tray(0))
     do ndx = 1, size(this%cross_section_objs_)
       associate( calc_ftn => this%cross_section_objs_(ndx)%val_ )
@@ -177,9 +168,6 @@ contains
 
     this%cross_section_values_ = reshape( cross_section_tray, &
                                           (/nwave,size(this%cross_section_objs_) /) )
-
-    write(*,*) Iam,'size of cross section values = ',&
-        size(this%cross_section_values_,dim=1), size(this%cross_section_values_,dim=2)
 
     allocate(quantum_yield_tray(0))
     do ndx = 1, size(this%quantum_yield_objs_)
@@ -195,11 +183,6 @@ contains
     this%quantum_yield_values_ = reshape( quantum_yield_tray, &
                                           (/nwave,size(this%quantum_yield_objs_) /) )
 
-    write(*,*) Iam,'size of quantum_yield values = ',&
-        size(this%quantum_yield_values_,dim=1), size(this%quantum_yield_values_,dim=2)
-
-    write(*,*) Iam,'exiting'
-
   end subroutine update_for_new_environmental_state
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -212,8 +195,6 @@ contains
 
     integer(kind=musica_ik) :: ndx
     character(len=*), parameter :: Iam = 'photo_kinetics finalize: '
-
-    write(*,*) Iam,'entering'
 
     if( allocated( this%cross_section_values_ ) ) then
       deallocate( this%cross_section_values_ )
@@ -244,8 +225,6 @@ contains
     if( allocated( this%reaction_key ) ) then
       deallocate( this%reaction_key )
     end if
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

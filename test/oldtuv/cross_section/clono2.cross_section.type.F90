@@ -45,15 +45,11 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_dk) :: Tadj
 
-    write(*,*) Iam,'entering'
-
     Tadj = environment%temperature - 296._musica_dk
 
     associate( polyCoeff => this%cross_section(1)%array )
       cross_section = polyCoeff(:,1)*(rONE + Tadj*(polyCoeff(:,2) + Tadj*polyCoeff(:,3)))
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

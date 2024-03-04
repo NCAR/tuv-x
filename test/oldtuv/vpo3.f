@@ -130,12 +130,6 @@
       nlyr = nz - 1
       con = inter1(z, zd,xd )
 
-      write(*,*) 'vpo3: data z grid'
-      write(*,'(1p10g15.7)') zd
-      write(*,*) ' '
-      write(*,*) 'vpo3: o3 on data z grid'
-      write(*,'(1p10g15.7)') xd
-     
 * compute column increments
 
       DO i = 1, nlyr
@@ -171,17 +165,11 @@
          con(nz) = con(nz) * scale
       ENDIF
 
-      write(*,*) ' '
-      write(*,*) 'vpo3: o3 on mdl z grid edges'
-      write(*,'(1p10g15.7)') con
-      write(*,*) ' '
-
 *-----------------------------------------------------------------------------*
 *! overwrite column increments for specified pbl height
 * use mixing ratio in pbl
 *-----------------------------------------------------------------------------*
       IF(ipbl > 0) THEN
-         write(*,*) 'pbl O3 = ', mr_pbl, ' ppb'
          DO i = 1, nlyr
             IF (i <= ipbl) THEN
                col(i) = mr_pbl*1.E-9 * aircol(i)

@@ -41,11 +41,7 @@ contains
 
     character(len=*), parameter :: Iam = 'standard_human_erythema calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = fery( this%mdl_lambda_center )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

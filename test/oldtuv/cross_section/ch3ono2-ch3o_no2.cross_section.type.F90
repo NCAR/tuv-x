@@ -42,12 +42,8 @@ contains
     character(len=*), parameter :: Iam = 'ch3ono2->ch3o+no2 cross section run: '
     real(musica_dk) :: Temp
 
-    write(*,*) Iam,'entering'
-
     Temp = environment%temperature - 298._musica_dk 
     cross_section = this%cross_section(1)%array(:,1)*exp( this%cross_section(1)%array(:,2)*Temp )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -79,7 +79,6 @@ contains
     type(string_t), allocatable :: netcdfFiles(:)
     class(base_grid_t), pointer :: lambdaGrid
 
-    write(*,*) Iam,'entering'
     !> Get model wavelength grids
     Handle = 'Photolysis, wavelength'
     lambdaGrid => gridWareHouse%get_grid( Handle )
@@ -133,8 +132,6 @@ file_loop: &
 
     call this%la_srb_obj_%initialize( lambdaGrid )
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -162,8 +159,6 @@ file_loop: &
     type(string_t)                :: Handle
     real(musica_dk), allocatable  :: wrkCrossSection(:,:)
 
-    write(*,*) Iam,'entering'
-
     Handle = 'Vertical Z'
     zGrid => gridWareHouse%get_grid( Handle )
 
@@ -176,8 +171,6 @@ file_loop: &
  
     cross_section = transpose( wrkCrossSection )
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -189,8 +182,6 @@ file_loop: &
 
    character(len=*), parameter :: Iam = 'base cross section finalize: '
    integer(musica_ik) :: ndx
-
-   write(*,*) Iam,'entering'
 
    if( allocated(this%cross_section_parms) ) then
      do ndx = 1,size(this%cross_section_parms)
@@ -208,8 +199,6 @@ file_loop: &
      deallocate(this%la_srb_obj_)
    endif
 
-   write(*,*) Iam,'exiting'
-   
    end subroutine finalize
 
 end module micm_radXfer_o2_cross_section_type
