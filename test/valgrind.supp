@@ -257,6 +257,15 @@
    fun:ucs_rcache_create
    ...
 }
+{
+   <ucs_rcache_create_leak>
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:*alloc
+   ...
+   fun:ucs_rcache_create
+   ...
+}
 ###############################################################
 #
 # Dynamic library linking ???
