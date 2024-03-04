@@ -6,7 +6,7 @@
 {
    <openmp_thread_start>
    Memcheck:Param
-   writev(vector[*])
+   writev(vector[1])
    fun:writev
    fun:pmix_ptl_base_send_handler
    ...
@@ -16,7 +16,7 @@
 {
    <openmp_clone>
    Memcheck:Param
-   writev(vector[*])
+   writev(vector[1])
    fun:writev
    fun:pmix_ptl_base_send_handler
    ...
@@ -26,7 +26,7 @@
 {
    <openmp_clone_2>
    Memcheck:Param
-   writev(vector[*])
+   writev(vector[1])
    fun:writev
    ...
    fun:event_base_loop
@@ -51,7 +51,7 @@
 {
    <thread_unknown_inline_function>
    Memcheck:Param
-   writev(vector[*])
+   writev(vector[1])
    ...
    fun:UnknownInlinedFun
    ...
@@ -197,7 +197,7 @@
    fun:ompi_mpi_finalize
 }
 {
-   <insert_a_suppression_name_here>
+   <orte_daemon_leak>
    Memcheck:Leak
    match-leak-kinds: definite
    fun:*alloc
@@ -225,7 +225,7 @@
 {
    <write_vector>
    Memcheck:Param
-   writev(vector[...])
+   writev(vector[1])
    ...
    fun:start_thread
    fun:thread_start
