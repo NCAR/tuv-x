@@ -39,7 +39,6 @@ contains
     type(string_t) :: grid_type
     character(len=*), parameter :: Iam = 'Grid builder: '
 
-    write(*,*) Iam,'entering'
     new_grid_t => null()
     call config%get( 'Grid type', grid_type, Iam )
 
@@ -55,7 +54,6 @@ contains
     end select
 
     call new_grid_t%initialize( config )
-    write(*,*) Iam,'exiting'
 
   end function grid_builder
 

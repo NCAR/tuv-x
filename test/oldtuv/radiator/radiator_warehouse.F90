@@ -87,8 +87,6 @@ contains
     character(len=32)           :: keychar
     type(string_t)              :: keyString
 
-    write(*,*) Iam // 'entering'
-
     call config%get( 'Radiators', radiator_config_set, Iam )
 
     allocate( radiator_warehouse )
@@ -98,8 +96,6 @@ contains
     iter => radiator_config_set%get_iterator()
     do while( iter%next() )
       keychar = radiator_config_set%key(iter)
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       keyString = keychar
       call radiator_config_set%get( iter, radiator_config, Iam )
       call radiator_config%add( 'Handle', keyString, Iam )
@@ -112,15 +108,6 @@ contains
     end do
 
     deallocate( iter )
-
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' radiators'')') Iam,size(radiator_warehouse%radiators_)
-    write(*,*) 'radiator handles'
-    do ndx = 1,size(radiator_warehouse%handle_)
-      write(*,'(a)') radiator_warehouse%handle_(ndx)%to_char()
-    enddo
-
-    write(*,*) Iam // 'exiting'
 
   end function constructor
 
@@ -144,9 +131,6 @@ contains
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%handle_)
       if( radiator_handle .eq. this%handle_(ndx) ) then
@@ -160,8 +144,6 @@ contains
     else
       call die_msg( 460768324, "Invalid radiator handle: '"// radiator_handle%to_char()//"'" )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end function get_radiator_from_handle
 
@@ -183,9 +165,6 @@ contains
     character(len=*), parameter :: Iam = 'radiator warehouse get_radiator_ndx: '
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do Index = 1,size(this%handle_)
       if( radiator_handle .eq. this%handle_(Index) ) then
@@ -198,8 +177,6 @@ contains
 !     call die_msg( 460768324, "radiator '"// radiator_handle%to_char()//"' not found" )
       Index = -1
     endif
-
-    write(*,*) Iam,'exiting'
 
   end function get_radiator_ndx_from_handle
 
@@ -219,24 +196,9 @@ contains
     character(len=*), parameter :: Iam = 'radiator warehouse get_radiator from iterator: '
     integer(ik) :: ndx
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     ndx = iterator%id_
-    write(*,*) Iam,'radiator handle = ',this%radiators_(ndx)%val_%handle_%to_char()
 
     radiator => this%radiators_(ndx)%val_
-
-    write(*,*) Iam,'radiator diagnostics'
-    write(*,*) Iam,'radiator handle = ',radiator%handle_%to_char()
-    write(*,*) Iam,'radiator state OD is allocated = ',allocated(radiator%state_%layer_OD_)
-    write(*,*) Iam,'radiator state SSA is allocated = ',allocated(radiator%state_%layer_SSA_)
-    write(*,*) Iam,'radiator state G is allocated = ',allocated(radiator%state_%layer_G_)
-
-    write(*,*) ' '
-    write(*,*) Iam,'exiting'
-
-!   stop 'debugging'
 
   end function get_radiator_from_iterator
 
@@ -258,9 +220,6 @@ contains
     character(len=*), parameter :: Iam = 'radiator in warehouse: '
     integer(ik) :: ndx
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     in_warehouse = .false._lk
     do ndx = 1,size(this%handle_)
       if( radiator_handle == this%handle_(ndx) ) then
@@ -268,8 +227,6 @@ contains
         exit
       endif
     end do
-
-    write(*,*) Iam,'exiting'
 
   end function in_warehouse
 
@@ -333,13 +290,9 @@ contains
     integer(kind=musica_ik) :: ndx
     character(len=*), parameter :: Iam = 'radiator_warehouse finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%radiators_ ) ) then
       deallocate( this%radiators_ )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

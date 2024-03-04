@@ -54,7 +54,6 @@ contains
     type(string_t) :: quantum_yield_type
     character(len=*), parameter :: Iam = 'quantum yield builder: '
 
-    write(*,*) Iam,'entering'
     new_quantum_yield_t => null()
     call config%get( 'quantum yield type', quantum_yield_type, Iam )
 
@@ -102,7 +101,6 @@ contains
                                  quantum_yield_type%to_char( )//"'" )
     end select
     call new_quantum_yield_t%initialize( config, mdlLambdaEdge )
-    write(*,*) Iam,'exiting'
 
   end function quantum_yield_builder
 

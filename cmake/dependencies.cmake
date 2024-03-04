@@ -1,3 +1,6 @@
+find_package(PkgConfig REQUIRED)
+include(FetchContent)
+
 ################################################################################
 # LAPACK
 
@@ -43,23 +46,14 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
 
 ################################################################################
-# musica-core library
+# yaml-cpp
 
-if(${CMAKE_VERSION} VERSION_LESS "3.24") 
-    find_package(musicacore REQUIRED)
-else()
-  include(FetchContent)
-
-  set(ENABLE_UTIL_ONLY ON)
-
-  FetchContent_Declare(musicacore
-    GIT_REPOSITORY https://github.com/NCAR/musica-core.git
-    GIT_TAG v0.4.3
-    FIND_PACKAGE_ARGS NAMES musicacore
-  )
-
-  FetchContent_MakeAvailable(musicacore)
-endif()
+FetchContent_Declare(
+  yaml-cpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
+  GIT_TAG 0.8.0
+)
+FetchContent_MakeAvailable(yaml-cpp)
 
 ################################################################################
 # Docs

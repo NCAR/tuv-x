@@ -29,7 +29,7 @@ target_sources(tuv_doug
 
 add_subdirectory(JCALC)
 
-target_link_libraries(tuv_doug PUBLIC musica::tuvx musica::musicacore)
+target_link_libraries(tuv_doug PUBLIC musica::tuvx)
 
 ################################################################################
 

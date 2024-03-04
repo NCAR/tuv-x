@@ -94,8 +94,6 @@ contains
   class(cross_section_t), pointer :: RaylieghCrossSection
   type(string_t)                      :: Handle
 
-    write(*,*) Iam // 'entering'
-
     !> Get copy of grid
     zGrid => this%theGridWarehouse_%get_grid( "height", "km" )
     call assert( 412238768, zGrid%ncells_ .eq. 120_ik )
@@ -110,13 +108,6 @@ contains
     AirProfile => this%theProfileWarehouse_%get_profile( "air", "molecule cm-3" )
     call assert( 412238771, all( AirProfile%delta_val_ < 0._dk ) )
     call assert( 412238771, all( AirProfile%layer_dens_ > 0._dk ) )
-    write(*,*) ' '
-    write(*,*) Iam // 'Air layer density'
-    write(*,'(1p10g15.7)') AirProfile%layer_dens_
-
-    write(*,*) ' '
-    write(*,*) Iam // 'Air burden density'
-    write(*,'(1p10g15.7)') AirProfile%burden_dens_
 
     !> Get copy of the temperature Profile
     TemperatureProfile => this%theProfileWarehouse_%get_profile( "temperature", "K" )
@@ -131,15 +122,9 @@ contains
     call assert( 412238776, all( aCrossSection >= 0._dk ) )
     call assert( 412238776, all( aCrossSection < 1._dk ) )
 
-    write(*,*) ' '
-    write(*,*) Iam // 'aCrossSection is (',size(aCrossSection,dim=1),' x ',size(aCrossSection,dim=2),')'
-
     tstCrossSection = aCrossSection(1,1)
     call assert( 412238774, all( aCrossSection(:,1) == tstCrossSection ) )
 
-    write(*,*) ' '
-    write(*,*) Iam // 'Rayliegh cross section'
-    write(*,'(1p10g15.7)') aCrossSection(1,:)
     call assert( 412238775, all( aCrossSection(1,:) == aCrossSection(zGrid%ncells_,:) ) )
 
     deallocate( zGrid )
@@ -147,7 +132,6 @@ contains
     deallocate( TemperatureProfile )
     deallocate( AirProfile )
     deallocate( RaylieghCrossSection )
-    write(*,*) Iam // 'exiting'
 
   end subroutine run
 

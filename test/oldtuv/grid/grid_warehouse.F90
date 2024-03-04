@@ -62,8 +62,6 @@ contains
     character(len=32)           :: keychar
     type(string_t)              :: aswkey
 
-    write(*,*) Iam // 'entering'
-
     allocate( grid_warehouse_obj )
 
     associate(new_obj=>grid_warehouse_obj)
@@ -78,8 +76,6 @@ contains
     do while( iter%next() )
       keychar = grid_set%key(iter)
       aswkey  = keychar 
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       call grid_set%get( iter, grid_config, Iam )
       call grid_config%add( 'Handle', aswkey, Iam )
 !-----------------------------------------------------------------------------
@@ -91,12 +87,7 @@ contains
 
     deallocate( iter )
 
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' grid objects'')') Iam,size(new_obj%grid_objs_)
-
     end associate
-
-    write(*,*) Iam // 'exiting'
 
   end function constructor
 
@@ -121,9 +112,6 @@ contains
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%grid_objs_)
       if( grid_handle .eq. this%grid_objs_(ndx)%ptr_%handle_ ) then
@@ -137,8 +125,6 @@ contains
     else
       call die_msg( 460768214, "Invalid grid handle: '"// grid_handle%to_char()//"'" )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end function get_grid
 
@@ -156,13 +142,9 @@ contains
     integer(kind=ik) :: ndx
     character(len=*), parameter :: Iam = 'grid warehouse finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%grid_objs_ ) ) then
       deallocate( this%grid_objs_ )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

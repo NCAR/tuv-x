@@ -43,8 +43,6 @@ contains
     integer(musica_ik) :: ndx, nParms
     real(musica_dk)    :: Tfac
 
-    write(*,*) Iam,'entering'
-
     associate( Temp => environment%temperature, Xsection => this%cross_section )
       nParms = size(Xsection)
       if( Temp <= Xsection(1)%temperature(1) ) then
@@ -64,8 +62,6 @@ contains
                       + Tfac*(Xsection(ndx+1)%array(:,1) - Xsection(ndx)%array(:,1))
       endif
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

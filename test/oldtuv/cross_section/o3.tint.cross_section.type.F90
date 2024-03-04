@@ -72,7 +72,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -157,8 +156,6 @@ file_loop: &
       call die_msg( 400000008, msg )
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -180,8 +177,6 @@ file_loop: &
     integer(musica_ik) :: nTemp
     integer(musica_ik) :: fileNdx, tNdx, wNdx
     real(musica_dk)    :: Tadj, Tstar
-
-    write(*,*) Iam,'entering'
 
     cross_section = rZERO
 
@@ -214,8 +209,6 @@ lambda_loop: &
                     + Tstar * (wrkXsect%array(wNdx,tNdx+1) - wrkXsect%array(wNdx,tNdx))
       end associate
     enddo lambda_loop
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

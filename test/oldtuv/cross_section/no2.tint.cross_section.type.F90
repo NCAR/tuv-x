@@ -71,7 +71,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -154,8 +153,6 @@ file_loop: &
       call die_msg( 400000008, msg )
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -177,8 +174,6 @@ file_loop: &
     integer(musica_ik) :: fileNdx, tNdx
     real(musica_dk)    :: Tadj, Tstar
 
-    write(*,*) Iam,'entering'
-
     cross_section = 0.0_musica_dk
     do fileNdx = 1,size(this%cross_section)
       associate( Temp => this%cross_section(fileNdx)%temperature, wrkXsect => this%cross_section(fileNdx) )
@@ -198,8 +193,6 @@ file_loop: &
       end associate
     enddo
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -211,8 +204,6 @@ file_loop: &
 
    character(len=*), parameter :: Iam = 'no2 tint cross section finalize: '
    integer(musica_ik) :: ndx
-
-   write(*,*) Iam,'entering'
 
    if( allocated(this%cross_section) ) then
      do ndx = 1,size(this%cross_section)
@@ -237,8 +228,6 @@ file_loop: &
      deallocate(this%mdl_lambda_center)
    endif
 
-   write(*,*) Iam,'exiting'
-   
-   end subroutine finalize
+  end subroutine finalize
 
 end module micm_no2_tint_cross_section_type

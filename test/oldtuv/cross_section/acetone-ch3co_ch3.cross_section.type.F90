@@ -61,8 +61,6 @@ contains
       call die_msg( 500000001, msg )
     endif
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 end module micm_ch3coch3_ch3co_ch3_cross_section_type

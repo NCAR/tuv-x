@@ -42,12 +42,8 @@ contains
     character(len=*), parameter :: Iam = 'cfc-11->Products cross section run: '
     real(musica_dk) :: Temp
 
-    write(*,*) Iam,'entering'
-
     Temp = 1.e-4_musica_dk*(environment%temperature - 298._musica_dk)
     cross_section = this%cross_section(1)%array(:,1)*exp( (this%mdl_lambda_center(:) - 184.9_musica_dk)*Temp )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

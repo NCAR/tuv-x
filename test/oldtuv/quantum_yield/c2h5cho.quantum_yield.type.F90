@@ -46,8 +46,6 @@ contains
     character(len=*), parameter :: Iam = 'c2h5cho+hv->c2h5+hco calculate: '
     real(musica_dk) :: air_den_fac
 
-    write(*,*) Iam,'entering'
-
     air_den_fac = environment%number_density_air/2.45e19_musica_dk
 
 ! quantum yields:
@@ -58,8 +56,6 @@ contains
       quantum_yield = rONE/(rONE + (rONE/this%quantum_yield(1)%array(:,1) - rONE)*air_den_fac)
       quantum_yield = min( rONE,quantum_yield )
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -69,7 +69,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -115,8 +114,6 @@ file_loop: &
       enddo file_loop
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -135,11 +132,7 @@ file_loop: &
 
     character(len=*), parameter :: Iam = 'base cross section calculate: '
 
-    write(*,*) Iam,'entering'
-
     cross_section = this%cross_section(1)%array(:,1)
-
-    write(*,*) Iam,'exiting'
 
   end function run
 
@@ -153,7 +146,6 @@ file_loop: &
    character(len=*), parameter :: Iam = 'base cross section finalize: '
    integer(musica_ik) :: ndx
 
-   write(*,*) Iam,'entering'
    if( allocated(this%cross_section) ) then
      do ndx = 1,size(this%cross_section)
        if( allocated(this%cross_section(ndx)%array ) ) then
@@ -171,7 +163,6 @@ file_loop: &
    if( allocated(this%mdl_lambda_center) ) then
      deallocate(this%mdl_lambda_center)
    endif
-   write(*,*) Iam,'exiting'
    
    end subroutine finalize
 

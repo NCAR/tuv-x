@@ -66,9 +66,6 @@ contains
     class(base_grid_t), pointer :: zGrid, lambdaGrid
     class(abs_interpolator_t), pointer :: theInterpolator
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     Handle = 'Vertical Z' ; zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength' ; lambdaGrid => gridWareHouse%get_grid( Handle )
 
@@ -76,7 +73,6 @@ contains
 !> Get radiator "Handle"
 !-----------------------------------------------------------------------------
     call radiator_config%get( 'Handle', this%handle_, Iam )
-    write(*,*) Iam // 'handle = ',this%handle_%to_char()
 
 !> allocate radiator state variables
     allocate( this%state_%layer_OD_(zGrid%ncells_,lambdaGrid%ncells_) )
@@ -89,25 +85,14 @@ contains
     nInputBins = size(input_OD)
     if( nInputBins > 1 ) then
 !> interpolate input OD to state variable
-      write(*,*) Iam // 'OD from config'
-      write(*,*) Iam // 'size input_OD = ',nInputBins
-      write(*,*) Iam // 'input_OD'
-      write(*,'(1p10g15.7)') input_OD
       call diagout( 'rawOD.new',input_OD )
       input_OD(:nInputBins-1) = .5_dk*(input_OD(:nInputBins-1)+input_OD(2:))
-      write(*,'(1p10g15.7)') input_OD(:nInputBins-1)
       call diagout( 'inpaerOD.new',input_OD(:nInputBins-1) )
 
       allocate( interp3_t :: theInterpolator )
       input_zgrid = (/ (real(k,dk),k=0,nInputBins-1) /)
-      write(*,*) Iam // 'input zgrid'
-      write(*,'(1p10g15.7)') input_zgrid
       rad_OD = theInterpolator%interpolate( zGrid%edge_, input_zgrid,input_OD, 1 )
       call diagout( 'cz.aer.new',rad_OD )
-      write(*,*) 'size interpolated_OD = ',size(rad_OD)
-      write(*,*) 'size interpolated_OD = ',sizeof(rad_OD)
-      write(*,*) Iam // 'interpolated OD'
-      write(*,'(1p10g15.7)') rad_OD
       do binNdx = 1,lambdaGrid%ncells_
         this%state_%layer_OD_(:,binNdx) = rad_OD
       enddo
@@ -128,9 +113,6 @@ contains
       do binNdx = 2,lambdaGrid%ncells_
         this%state_%layer_SSA_(:,binNdx) = this%state_%layer_SSA_(:,1) 
       enddo
-      write(*,*) Iam // 'SSA from config'
-      write(*,*) Iam // 'size SSA = ',size(input_SSA)
-      write(*,*) input_SSA
     endif
 
     call radiator_config%get( "Asymmetry factor", Aerosol_config, Iam )
@@ -146,15 +128,10 @@ contains
       do binNdx = 2,lambdaGrid%ncells_
         this%state_%layer_G_(:,binNdx) = this%state_%layer_G_(:,1) 
       enddo
-      write(*,*) Iam // 'G from config'
-      write(*,*) Iam // 'size G = ',size(input_G)
-      write(*,*) input_G
     endif
 
     call radiator_config%get( "550 optical depth", tau550, Iam, default=0._dk )
     call radiator_config%get( "Alpha", alpha, Iam, default=1._dk )
-    write(*,*) Iam // 'tau550, alpha from config'
-    write(*,*) tau550, alpha
 
     if( tau550 > 0.235_dk ) then
       coldens = max( sum( this%state_%layer_OD_(:,1) ),pzero )
@@ -175,26 +152,6 @@ contains
         this%state_%layer_G_(:,binNdx)   = 0._dk
       endwhere
     enddo
-
-    write(*,*) Iam // 'layer OD @ lambda = ',lambdaGrid%mid_(1)
-    write(*,'(1p10g15.7)') this%state_%layer_OD_(:,1)
-    write(*,*) Iam // 'layer OD @ lambda = ',lambdaGrid%mid_(lambdaGrid%ncells_)
-    write(*,'(1p10g15.7)') this%state_%layer_OD_(:,lambdaGrid%ncells_)
-    write(*,*) ' '
-    write(*,*) Iam // 'layer SSA @ lambda = ',lambdaGrid%mid_(1)
-    write(*,'(1p10g15.7)') this%state_%layer_SSA_(:,1)
-    write(*,*) Iam // 'layer SSA @ lambda = ',lambdaGrid%mid_(lambdaGrid%ncells_)
-    write(*,'(1p10g15.7)') this%state_%layer_SSA_(:,lambdaGrid%ncells_)
-    write(*,*) ' '
-    write(*,*) Iam // 'layer G @ lambda = ',lambdaGrid%mid_(1)
-    write(*,'(1p10g15.7)') this%state_%layer_G_(:,1)
-    write(*,*) Iam // 'layer G @ lambda = ',lambdaGrid%mid_(lambdaGrid%ncells_)
-    write(*,'(1p10g15.7)') this%state_%layer_G_(:,lambdaGrid%ncells_)
-
-    write(*,*) ' '
-    write(*,*) Iam,'exiting'
-
-!   stop 'Debugging'
 
   end subroutine initialize
 
@@ -228,24 +185,16 @@ contains
     class(base_grid_t), pointer :: zGrid
     class(base_grid_t), pointer :: lambdaGrid
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
-    write(*,*) Iam // 'handle = ',this%handle_%to_char()
 !-----------------------------------------------------------------------------
 !> get specific grids and profiles
 !-----------------------------------------------------------------------------
     Handle = 'Vertical Z' ; zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength' ; lambdaGrid => gridWareHouse%get_grid( Handle )
-    write(*,*) Iam // 'nlyr,nbins = ',zGrid%ncells_,lambdaGrid%ncells_
 
     !> check that radiator state is allocated
     if( .not. allocated( this%state_%layer_OD_ ) ) then
       call die_msg( 2222222,"In radiator%upDateState radiator state not allocate" )
     endif
-
-    write(*,*) ' '
-    write(*,*) Iam,'exiting'
 
   end subroutine upDateState
 

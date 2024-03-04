@@ -49,9 +49,6 @@ contains
     type(string_t)                :: Handle
     class(base_grid_t), pointer :: zGrid, lambdaGrid
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     Handle = 'Vertical Z' ; zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength' ; lambdaGrid => gridWareHouse%get_grid( Handle )
 
@@ -59,19 +56,11 @@ contains
 !> Get radiator "Handle"
 !-----------------------------------------------------------------------------
     call radiator_config%get( 'Handle', this%handle_, Iam )
-    write(*,*) Iam // 'handle = ',this%handle_%to_char()
 
 !> allocate radiator state_ variables
     allocate( this%state_%layer_OD_(zGrid%ncells_,lambdaGrid%ncells_) )
     allocate( this%state_%layer_SSA_(zGrid%ncells_,lambdaGrid%ncells_) )
     allocate( this%state_%layer_G_(zGrid%ncells_,lambdaGrid%ncells_) )
-    write(*,*) Iam // 'state_%layer_OD_ is allocated = ',allocated(this%state_%layer_OD_)
-    write(*,*) Iam // 'state_%layer_SSA_ is allocated = ',allocated(this%state_%layer_SSA_)
-    write(*,*) Iam // 'state_%layer_G_ is allocated = ',allocated(this%state_%layer_G_)
-    write(*,*) Iam // 'state_%layer_OD_ is (',size(this%state_%layer_OD_,dim=1),' x ',size(this%state_%layer_OD_,dim=2),')'
-
-    write(*,*) ' '
-    write(*,*) Iam,'exiting'
 
   end subroutine initialize
 
@@ -111,10 +100,6 @@ contains
     class(base_profile_t), pointer  :: radiatorProfile
     class(abs_cross_section_t), pointer :: radiatorCrossSection
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
-    write(*,*) Iam // 'handle = ',this%handle_%to_char()
 !-----------------------------------------------------------------------------
 !> get specific grids and profiles
 !-----------------------------------------------------------------------------
@@ -122,7 +107,6 @@ contains
     zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength'
     lambdaGrid => gridWareHouse%get_grid( Handle )
-    write(*,*) Iam // 'nlyr,nbins = ',zGrid%ncells_,lambdaGrid%ncells_
 
     !> Note: uses radiator handle for Profile handle
     radiatorProfile => ProfileWareHouse%get_Profile( this%handle_ )
@@ -133,11 +117,7 @@ contains
     !> check radiator state type allocation
     if( .not. allocated( this%state_%layer_OD_ ) ) then
       call die_msg( 2222222,"In radiator%upDateState radiator state not allocate" )
-    else
-      write(*,*) Iam // 'radiator state is allocated'
     endif
-    write(*,*) Iam // 'size OD = ',size(this%state_%layer_OD_,dim=1),' x ', &
-                                  size(this%state_%layer_OD_,dim=2)
 
     !> set radiator state members
     CrossSection = radiatorCrossSection%calculate( gridWareHouse, ProfileWareHouse )
@@ -154,9 +134,6 @@ contains
       this%state_%layer_SSA_ = 0._dk
       this%state_%layer_G_   = 0._dk
     endif
-
-    write(*,*) ' '
-    write(*,*) Iam,'exiting'
 
   end subroutine upDateState
 

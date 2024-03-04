@@ -90,7 +90,6 @@
 
 * Altitudes corresponding to Elterman profile, from bottom to top:
 
-      WRITE(kout,*)'aerosols:  Elterman (1968) continental profile'
       nd = 51
       zd = (/ (REAL(i-1),i=1,kdata) /)
 
@@ -105,9 +104,6 @@
 
       call diagout( 'rawOD.old',aer )
       call diagout( 'inpaerOD.old',cd )
-      write(*,*) 'setaer: hardwired OD'
-      write(*,'(1p10g15.7)') aer
-      write(*,'(1p10g15.7)') cd
 
 *********** end data input.
 
@@ -164,7 +160,6 @@
 *! overwrite for pbl:
 
       IF(ipbl > 0) THEN	
-         write (*,*) 'pbl aerosols, aod330 = ', aod330
 * create wavelength-dependent optical depth and single scattering albedo:
          DO iw = 1, nbins
             aodw(iw) = aod330*(wc(iw)/330.)**(-1.0)

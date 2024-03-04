@@ -47,8 +47,6 @@ contains
     character(len=*), parameter :: Iam = 'ch2chcho+hv->products calculate: '
     real(musica_dk) :: phi0
 
-    write(*,*) Iam,'entering'
-
     associate( M => environment%number_density_air )
       if( M > 2.6e19_musica_dk ) then
         quantum_yield = phiL
@@ -61,8 +59,6 @@ contains
         quantum_yield = phiL + rONE/phi0
       endif
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -96,7 +96,6 @@ contains
     call check_values( 447131776, my_profile%layer_dens_,       dens, tol )
     call check_values( 612024373, my_profile%exo_layer_dens_,   exos, tol )
     call check_values( 159392220, my_profile%burden_dens_,    burden, tol )
-    call my_profile%output( )
 
     ! specify edges, mids, dens
     edges  = (/ 0.5_dk, 9.8_dk, 15.4_dk, 45.0_dk /)
@@ -115,7 +114,6 @@ contains
     call check_values( 613341306, my_profile%layer_dens_,       dens, tol )
     call check_values( 466544996, my_profile%exo_layer_dens_,   exos, tol )
     call check_values( 796782485, my_profile%burden_dens_,    burden, tol )
-    call my_profile%output( )
 
     ! specify edges, dens, scale height
     edges  = (/ 1.0_dk, 2.0_dk, 4.0_dk, 10.0_dk /)
@@ -136,7 +134,6 @@ contains
     call check_values( 927373531, my_profile%layer_dens_,       dens, tol )
     call check_values( 192266129, my_profile%exo_layer_dens_,   exos, tol )
     call check_values( 639633975, my_profile%burden_dens_,    burden, tol )
-    call my_profile%output( )
 
     ! specify edges, mids, dens, exo density
     edges  = (/ 0.5_dk, 9.8_dk, 15.4_dk, 45.0_dk /)
@@ -158,7 +155,6 @@ contains
     call check_values( 124351251, my_profile%layer_dens_,       dens, tol )
     call check_values( 571719097, my_profile%exo_layer_dens_,   exos, tol )
     call check_values( 184095344, my_profile%burden_dens_,    burden, tol )
-    call my_profile%output( )
 
     deallocate( my_profile )
 

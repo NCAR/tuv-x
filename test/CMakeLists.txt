@@ -2,7 +2,7 @@
 # Test utilities
 
 add_library(tuvx_test_utils unit/test_utils.F90)
-target_link_libraries(tuvx_test_utils musica::musicacore)
+target_link_libraries(tuvx_test_utils musica::tuvx)
 
 set_target_properties(tuvx_test_utils PROPERTIES
   Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/test_include
@@ -47,22 +47,20 @@ add_custom_target(link-ts1-tsmlt-example-data ALL COMMAND ${CMAKE_COMMAND}
 add_test(NAME TS1_TSMLT COMMAND tuv-x ../examples/ts1_tsmlt.json
          WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_ts1_tsmlt)
 
-if(ENABLE_YAML)
-  add_custom_target(make-tuv54-yaml-example-dir ALL COMMAND ${CMAKE_COMMAND}
-                    -E make_directory ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml)
-  add_custom_target(link-tuv54-yaml-example-data ALL COMMAND ${CMAKE_COMMAND}
-                    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml/data)
-  add_test(NAME TUV_5_4_YAML COMMAND tuv-x ../examples/tuv_5_4.yml
-           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml)
-  add_test(NAME TUV_5_4_COMPARE COMMAND python3 test/json_yaml_compare.py example_tuv_5_4 example_tuv_5_4_yaml
-           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-  add_custom_target(make-ts1-tsmlt-yaml-example-dir ALL COMMAND ${CMAKE_COMMAND}
-                    -E make_directory ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml)
-  add_custom_target(link-ts1-tsmlt-yaml-example-data ALL COMMAND ${CMAKE_COMMAND}
-                    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml/data)
-  add_test(NAME TS1_TSMLT_YAML COMMAND tuv-x ../examples/ts1_tsmlt.yml
-           WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml)
-  add_test(NAME TS1_TSMLT_COMPARE COMMAND python3 test/json_yaml_compare.py example_ts1_tsmlt example_ts1_tsmlt_yaml
-           WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
-endif()
+add_custom_target(make-tuv54-yaml-example-dir ALL COMMAND ${CMAKE_COMMAND}
+                  -E make_directory ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml)
+add_custom_target(link-tuv54-yaml-example-data ALL COMMAND ${CMAKE_COMMAND}
+                  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml/data)
+add_test(NAME TUV_5_4_YAML COMMAND tuv-x ../examples/tuv_5_4.yml
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_tuv_5_4_yaml)
+add_test(NAME TUV_5_4_COMPARE COMMAND python3 test/json_yaml_compare.py example_tuv_5_4 example_tuv_5_4_yaml
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_custom_target(make-ts1-tsmlt-yaml-example-dir ALL COMMAND ${CMAKE_COMMAND}
+                  -E make_directory ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml)
+add_custom_target(link-ts1-tsmlt-yaml-example-data ALL COMMAND ${CMAKE_COMMAND}
+                  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/../data ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml/data)
+add_test(NAME TS1_TSMLT_YAML COMMAND tuv-x ../examples/ts1_tsmlt.yml
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/example_ts1_tsmlt_yaml)
+add_test(NAME TS1_TSMLT_COMPARE COMMAND python3 test/json_yaml_compare.py example_ts1_tsmlt example_ts1_tsmlt_yaml
+         WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 ################################################################################

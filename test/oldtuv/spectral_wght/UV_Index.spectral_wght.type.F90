@@ -41,11 +41,7 @@ contains
 
     character(len=*), parameter :: Iam = 'uv_index calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = 40._musica_dk*fery( this%mdl_lambda_center )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

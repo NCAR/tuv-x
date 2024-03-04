@@ -44,8 +44,6 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_dk) :: AdjTemp, Tfac
 
-    write(*,*) Iam,'entering'
-
     associate( Temp => environment%temperature )
       AdjTemp = max( Tlower,min(Temp,Tupper) )
       do wNdx = 1,size(this%mdl_lambda_center)
@@ -53,8 +51,6 @@ contains
         cross_section(wNdx) = this%cross_section(1)%array(wNdx,1) * 10._musica_dk**(Tfac)
       enddo
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

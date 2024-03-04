@@ -34,7 +34,6 @@ option(ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(ENABLE_MEMCHECK "Enable memory checking in tests" ON)
 option(ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(BUILD_DOCS "Build the documentation" OFF)
-option(ENABLE_YAML "Uses YAML parser instead of JSON" OFF)
 
 # Set up include and lib directories
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include")
@@ -79,10 +78,15 @@ add_executable(tuv-x src/tuvx.F90 version.F90)
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
-    musica::musicacore
+    yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
     ${LAPACK_LIBRARIES}
 )
+
+target_include_directories(tuv-x
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
 
 if(ENABLE_OPENMP)
   target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)

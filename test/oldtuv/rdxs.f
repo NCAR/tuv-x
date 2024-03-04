@@ -1261,8 +1261,6 @@
       CALL addpnt(x2,y2,kdata,n2,            1.e+38,   0.)
       CALL inter2(nw,wl,yg2,n2,x2,y2,ierr)
       
-      write(*,*) 'no2xs_jpl06a: n1,n2 = ',n1,n2
-
       Tadj = max( 220.,min( 294.,t ) )
       Tfac = (Tadj - 220.)/74.
       DO iw = 1, nw-1

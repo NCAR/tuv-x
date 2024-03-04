@@ -52,8 +52,6 @@ contains
     real(musica_dk) ::  kt, q1, q2, T300, lambda
     real(musica_dk) ::  qfac1, qfac2
 
-    write(*,*) Iam,'entering'
-
 !-----------------------------------------------------------------------------*
 !=  PURPOSE:                                                                 =*
 ! function to calculate the quantum yield O3 + hv -> O(1D) + O2,             =*
@@ -91,8 +89,6 @@ contains
       enddo
 
       end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

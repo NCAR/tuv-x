@@ -33,9 +33,6 @@ def compare_var(var_name,tolerance,var_old,var_new):
 
     diff = np.abs(diff)
     diff_2d = np.reshape( diff,[156,1] )
-    print(f"Shape diff_2d = {np.shape(diff_2d)}")
-    print(f"Max diff @ (row,col) = {np.unravel_index(np.argmax(diff_2d),diff_2d.shape)}")
-    print(f"Max diff @  {np.argmax( diff_2d )}")
     # get comparison stats
     results = {}
     results["minimum difference"] = np.amin( diff )
@@ -79,40 +76,14 @@ def compare_output(fsw_new_path, fsw_old_path, labels_new, labels_old, config):
     nlabels_new = len( labels_new )
     nlabels_old = len( labels_old )
 
-    print(f"\nsw.new type  = {sw_new.dtype}")
     ndata = int(sw_new.shape[0]/nlabels_new)
-    print(f"sw.new size = {ndata}")
-
-    print( f"\nThere are {nlabels_new} new arrays")
-    print( f"There are {nlabels_old} old arrays\n")
 
     SW_new = np.reshape( sw_new,[nlabels_new,ndata] )
-    print(f"\nSW_new type  = {SW_new.dtype}")
-    print(f"SW_new shape = {SW_new.shape}")
-    print( SW_new[0,:] )
-    print("")
-
     # check reshape
     maxind = np.argmax( sw_new )
-    print(f"\nMax val sw_new @ {maxind}")
-    print(f" {maxind-4} <= n <= {maxind+4}")
-    print("sw_new near Max")
-    print( sw_new[maxind-4:maxind-1] )
-    print( sw_new[maxind] )
-    print( sw_new[maxind+1:maxind+4] )
     maxind = np.unravel_index( np.argmax(SW_new),SW_new.shape )
-    print(f"\nMax val SW_new @ {maxind}")
-    print("SW_new near Max")
-    print( SW_new[maxind[0],maxind[1]-4:maxind[1]-1] )
-    print( SW_new[maxind[0],maxind[1]] )
-    print( SW_new[maxind[0],maxind[1]+1:maxind[1]+4] )
-    print("")
 
     SW_old = np.reshape( sw_old,[nlabels_old,ndata] )
-    print( SW_old.dtype )
-    print( SW_old.shape )
-    print( SW_old[0,:] )
-    print("")
 
     success = True
 
@@ -129,17 +100,8 @@ def compare_output(fsw_new_path, fsw_old_path, labels_new, labels_old, config):
         if( not indatasets ):
             print(f"\nNo match for {match} in old dataset")
             continue
-        print(f"\n{match} in both datasets; (old,new) = {ndx_old},{ndx_new}")
         # compare datasets; old first
-        print("old dataset")
-        print(f"Min = {np.amin(SW_old[ndx_old,:])}")
-        print(f"Max = {np.amax(SW_old[ndx_old,:])}")
-        print(f"Non-zero count = {np.count_nonzero(SW_old[ndx_old,:])}")
         # new last
-        print("\nnew dataset")
-        print(f"Min = {np.amin(SW_new[ndx_new,:])}")
-        print(f"Max = {np.amax(SW_new[ndx_new,:])}")
-        print(f"Non-zero count = {np.count_nonzero(SW_new[ndx_new,:])}\n")
         results = compare_var( match, options["maximum difference"], SW_old[ndx_old,:], SW_new[ndx_new,:] )
         for metric, tolerance in options.items():
             if not metric in results.keys():
@@ -160,8 +122,6 @@ def compare_output(fsw_new_path, fsw_old_path, labels_new, labels_old, config):
                 print(f"       Fail cnt = {results['fail count']}\n")
                 success = False
                 continue
-            else:
-                print(f"{match} {metric} within tolerance: {results[metric]}% <= {tolerance}%")
 
     # close open files
     fsw_old.close()
@@ -173,10 +133,6 @@ def compare_output(fsw_new_path, fsw_old_path, labels_new, labels_old, config):
 # main
 script_path, old_output_path, new_output_path  = get_paths()
 labels_new, labels_old = get_labels(script_path)
-
-print("\nslabels.new\n-----------")
-for label in labels_new:
-    print(label.strip())
 
 with open(os.path.join(script_path, f"sw.compare.json"),"r") as f :
     config=json.load(f)

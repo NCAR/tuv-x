@@ -393,7 +393,6 @@ c 333  format(3(0pf11.4))
         CASE( 1 )
 *-----grid option 1: manual -----------------
 * entire grid (nz levels) in increments zincr 
-      WRITE(*,*) 'equally spaced z-grid'
       zincr = (zstop - zstart) / REAL(nz - 1)
       allocate( z(nz) )
       z(1) = zstart
@@ -405,7 +404,6 @@ c 333  format(3(0pf11.4))
 *-----grid option 2: automatic -----------------
 * entire grid (nz levels) in increments zincr 
 
-      WRITE(*,*) 'equally spaced z-grid'
       zincr = (zstop - zstart) / real(nz - 1)
       nlev = nz-1
       n = 1
@@ -416,7 +414,6 @@ c 333  format(3(0pf11.4))
 *-----copy & edit this section for non-uniform grid----
 * the example provided below is high vertical resolution in 
 *   snow, with atmosphere above it.
-      WRITE(*,*) 'snow-atmosphere grid'
 * 0.-10. cm from ground, in 1 cm increments ( 1 cm = 1e-5 km):
       zincr = 1.e-5
       nlev = 10
@@ -477,8 +474,6 @@ c 333  format(3(0pf11.4))
         CASE( 4 )
 *-----grid option 4:  grid for Mexico City
 
-      WRITE(*,*) 'mirage z-grid'
-
 * grid for mirage km: incr(range)i 
 * 0.1(0-4)   2-41
 * 0.2(4-8)   42-61
@@ -512,7 +507,6 @@ c 333  format(3(0pf11.4))
 *  nz = total number of altitudes
 * Table:  z(iz), where iz goes from 1 to nz
 * trivial example of 2-layer (3-altitudes) shown below, user should modify
-      WRITE(*,*) 'user-defined grid, named...'
       nz = 3
       z(1) = 0.
       z(2) = 10.
@@ -526,8 +520,6 @@ c 333  format(3(0pf11.4))
 * specify:
 *  nz = total number of altitudes
 * Table:  z(iz), where iz goes from 1 to nz
-
-      WRITE(*,*) 'user-defined grid, named...'
 
       END SELECT
 

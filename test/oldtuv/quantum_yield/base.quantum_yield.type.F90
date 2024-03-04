@@ -69,8 +69,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
-
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -123,8 +121,6 @@ file_loop: &
       endif
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-   
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -143,11 +139,7 @@ file_loop: &
 
     character(len=*), parameter :: Iam = 'base quantum yield calculate: '
 
-    write(*,*) Iam,'entering'
-
     quantum_yield = this%quantum_yield(1)%array(:,1)
-
-    write(*,*) Iam,'exiting'
 
   end function run
 
@@ -160,8 +152,6 @@ file_loop: &
 
    character(len=*), parameter :: Iam = 'base quantum yield finalize: '
    integer(musica_dk) :: ndx
-
-   write(*,*) Iam,'entering'
 
    if( allocated(this%quantum_yield) ) then
      do ndx = 1,size(this%quantum_yield)
@@ -181,8 +171,6 @@ file_loop: &
      deallocate(this%mdl_lambda_center)
    endif
 
-   write(*,*) Iam,'exiting'
-   
    end subroutine finalize
 
 end module micm_base_quantum_yield_type
