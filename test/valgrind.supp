@@ -24,6 +24,17 @@
    fun:clone
 }
 {
+   <openmp_clone_2>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:event_base_loop
+   ...
+   fun:start_thread
+   fun:clone
+}
+{
    <openmp_parallel>
    Memcheck:Leak
    match-leak-kinds: possible
@@ -67,6 +78,33 @@
    ...
    fun:MAIN__
    fun:main
+}
+{
+   <alloc_event_base_loop>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   fun:event_base_loop
+   ...
+}
+{
+   <callback>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   obj:/usr/*lib*/libevent_core*
+}
+{
+   <orte_init>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:*alloc
+   ...
+   fun:pmix_server_init
+   ...
+   fun:orte_init
 }
 ###############################################################
 #
