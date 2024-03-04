@@ -6,7 +6,7 @@
 {
    <openmp_thread_start>
    Memcheck:Param
-   writev(vector[...])
+   writev(vector[*])
    fun:writev
    fun:pmix_ptl_base_send_handler
    ...
@@ -16,7 +16,7 @@
 {
    <openmp_clone>
    Memcheck:Param
-   writev(vector[...])
+   writev(vector[*])
    fun:writev
    fun:pmix_ptl_base_send_handler
    ...
@@ -26,7 +26,7 @@
 {
    <openmp_clone_2>
    Memcheck:Param
-   writev(vector[...])
+   writev(vector[*])
    fun:writev
    ...
    fun:event_base_loop
@@ -51,7 +51,7 @@
 {
    <thread_unknown_inline_function>
    Memcheck:Param
-   writev(vector[...])
+   writev(vector[*])
    ...
    fun:UnknownInlinedFun
    ...
