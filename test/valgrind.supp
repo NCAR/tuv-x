@@ -78,7 +78,7 @@
    Memcheck:User
    ...
    fun:PMPI_Unpack
-   fun:MPI_UNPACK
+   fun:*MPI_UNPACK
    ...
    fun:MAIN__
    fun:main
