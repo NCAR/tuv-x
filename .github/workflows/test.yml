@@ -57,9 +57,14 @@ jobs:
       run: docker build -t tuv-x-mpi-test . -f Dockerfile.mpi.memcheck
     - name: run MPI tests in container
       run: docker run -t tuv-x-mpi-test bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
-  gcc13:
+  gcc:
     runs-on: ubuntu-latest
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    strategy:
+      matrix:
+        gcc_version: [11, 12, 13]
+    env:
+      FC: gfortran-${{ matrix.gcc_version }}
     steps:
     - uses: actions/checkout@v3
       with:
