@@ -4,12 +4,24 @@
 module tuvx_heating_rates
   ! The chemical potential heating rates type heating_rates_t and related functions
 
-  use musica_constants,                only : dk => musica_dk
-  use musica_string,                   only : string_t
-  use tuvx_cross_section,              only : cross_section_ptr
-  use tuvx_grid_warehouse,             only : grid_warehouse_ptr
-  use tuvx_profile_warehouse,          only : profile_warehouse_ptr
-  use tuvx_quantum_yield,              only : quantum_yield_ptr
+  use musica_assert,                 only : assert, assert_msg
+  use musica_config,                 only : config_t
+  use musica_constants,              only : dk => musica_dk
+  use musica_iterator,               only : iterator_t
+  use musica_mpi,                    only : musica_mpi_pack, musica_mpi_pack_size, musica_mpi_unpack
+  use musica_string,                 only : string_t
+  use tuvx_constants,                only : hc
+  use tuvx_cross_section,            only : cross_section_ptr
+  use tuvx_cross_section_factory,    only : cross_section_allocate, cross_section_builder, cross_section_type_name
+  use tuvx_grid,                     only : grid_t
+  use tuvx_grid_warehouse,           only : grid_warehouse_ptr, grid_warehouse_t
+  use tuvx_la_sr_bands,              only : la_sr_bands_t
+  use tuvx_profile,                  only : profile_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_ptr, profile_warehouse_t
+  use tuvx_quantum_yield,            only : quantum_yield_ptr
+  use tuvx_quantum_yield_factory,    only : quantum_yield_allocate, quantum_yield_builder, quantum_yield_type_name
+  use tuvx_solver,                   only : radiation_field_t
+  use tuvx_spherical_geometry,       only : spherical_geometry_t
 
   implicit none
 
@@ -75,11 +87,6 @@ contains
   !> heating_rates_t constructor
   function constructor( config, grids, profiles ) result( this )
 
-    use musica_assert,                 only : assert, assert_msg
-    use musica_config,                 only : config_t
-    use musica_iterator,               only : iterator_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
 
     !> Heating rate collection
     type(heating_rates_t),     pointer       :: this
@@ -161,14 +168,6 @@ contains
   function heating_parameters_constructor( config, grids, profiles )          &
       result( this )
 
-    use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
-    use tuvx_constants,                only : hc
-    use tuvx_cross_section_factory,    only : cross_section_builder
-    use tuvx_grid,                     only : grid_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_quantum_yield_factory,    only : quantum_yield_builder
 
     !> Heating parameters for a single photolyzing species
     type(heating_parameters_t)               :: this
@@ -231,14 +230,6 @@ contains
   subroutine get( this, la_srb, spherical_geometry, grids, profiles,          &
                   radiation_field, heating_rates )
 
-    use musica_assert,                 only : assert
-    use tuvx_grid,                     only : grid_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_la_sr_bands,              only : la_sr_bands_t
-    use tuvx_profile,                  only : profile_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_solver,                   only : radiation_field_t
-    use tuvx_spherical_geometry,       only : spherical_geometry_t
 
     !> Heating rate collection
     class(heating_rates_t),      intent(in)    :: this
@@ -354,7 +345,6 @@ contains
   !> Returns the size of a character buffer needed to pack the heating rates
   function pack_size( this, comm )
 
-    use musica_mpi,                    only : musica_mpi_pack_size
 
     !> Heating rate collection
     class(heating_rates_t), intent(in) :: this
@@ -393,9 +383,6 @@ contains
   !> Packs the heating rates into a character buffer
   subroutine mpi_pack( this, buffer, position, comm )
 
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_pack
-
     !> Heating rate collection
     class(heating_rates_t), intent(in)    :: this
     !> Character buffer
@@ -433,9 +420,6 @@ contains
 
   !> Unpacks the heating rates from a character buffer
   subroutine mpi_unpack( this, buffer, position, comm )
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_unpack
 
     !> Heating rate collection
     class(heating_rates_t), intent(out) :: this
@@ -476,10 +460,6 @@ contains
   !! parameters
   function heating_parameters_pack_size( this, comm ) result( pack_size )
 
-    use musica_mpi,                    only : musica_mpi_pack_size
-    use tuvx_cross_section_factory,    only : cross_section_type_name
-    use tuvx_quantum_yield_factory,    only : quantum_yield_type_name
-
     !> Heating parameters for a single photolyzing species
     class(heating_parameters_t), intent(in) :: this
     !> MPI communicator
@@ -509,11 +489,6 @@ contains
 
   !> Packs the heating parameters into a character buffer
   subroutine heating_parameters_mpi_pack( this, buffer, position, comm )
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_pack
-    use tuvx_cross_section_factory,    only : cross_section_type_name
-    use tuvx_quantum_yield_factory,    only : quantum_yield_type_name
 
     !> Heating parameters for a single photolyzing species
     class(heating_parameters_t), intent(in)    :: this
@@ -547,11 +522,6 @@ contains
 
   !> Unpacks the heating parameters from a character buffer
   subroutine heating_parameters_mpi_unpack( this, buffer, position, comm )
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_unpack
-    use tuvx_cross_section_factory,    only : cross_section_allocate
-    use tuvx_quantum_yield_factory,    only : quantum_yield_allocate
 
     !> Heating parameters for a single photolyzing species
     class(heating_parameters_t), intent(out) :: this
