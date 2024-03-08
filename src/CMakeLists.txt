@@ -4,8 +4,7 @@
 # object library
 add_library(tuvx_object OBJECT)
 
-# Set the C++ standard for tuvx_object to C++11
-set_property(TARGET tuvx_object PROPERTY CXX_STANDARD 11)
+target_compile_features(tuvx_object INTERFACE cxx_std_11)
 
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
