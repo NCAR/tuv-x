@@ -4,11 +4,22 @@
 module tuvx_radiator
 ! Represents an atmospheric constituent that affects radiative transfer calculations by absorbing or scattering radiation
 
-  use musica_constants,                only : dk => musica_dk
-  use musica_string,                   only : string_t
-  use tuvx_cross_section_warehouse,    only : cross_section_warehouse_ptr
-  use tuvx_grid_warehouse,             only : grid_warehouse_ptr
-  use tuvx_profile_warehouse,          only : profile_warehouse_ptr
+  use musica_assert,                 only : assert, assert_msg
+  use musica_config,                 only : config_t
+  use musica_constants,              only : dk => musica_dk
+  use musica_mpi,                    only : musica_mpi_pack, musica_mpi_pack_size, musica_mpi_unpack
+  use musica_string,                 only : string_t
+  use tuvx_constants,                only : largest, precis
+  use tuvx_cross_section,            only : cross_section_t
+  use tuvx_cross_section_warehouse,  only : cross_section_warehouse_ptr
+  use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
+  use tuvx_diagnostic_util,          only : diagout
+  use tuvx_grid,                     only : grid_t
+  use tuvx_grid_warehouse,           only : grid_warehouse_ptr
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_profile,                  only : profile_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_ptr
+  use tuvx_profile_warehouse,        only : profile_warehouse_t
 
   implicit none
 
@@ -79,11 +90,6 @@ contains
      cross_section_warehouse ) result( new_radiator )
     ! Constructs a base_radiator_t object
 
-    use musica_config,                 only : config_t
-    use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-
     class(radiator_t),               pointer       :: new_radiator ! New :f:type:`~tuvx_radiator/radiator_t` object
     type(config_t),                  intent(inout) :: config ! Radiator configuration
     type(grid_warehouse_t),          intent(inout) :: grid_warehouse ! A :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
@@ -102,13 +108,6 @@ contains
     ! Initializes a radiator_t object
     !
     ! This should only be called by subclasses of radiator_t
-
-    use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
-    use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_grid,                     only : grid_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
 
     class(radiator_t),               intent(inout) :: this ! New :f:type:`~tuvx_radiator/radiator_t` object
     type(config_t),                  intent(inout) :: config ! Radiator configuration
@@ -175,15 +174,6 @@ contains
       cross_section_warehouse )
     ! Update radiator state
 
-    use musica_assert,                 only : assert_msg
-    use tuvx_cross_section,            only : cross_section_t
-    use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
-    use tuvx_diagnostic_util,          only : diagout
-    use tuvx_grid,                     only : grid_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile,                  only : profile_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-
     class(radiator_t),               intent(inout) :: this ! A :f:type:`~tuvx_radiator/radiator_state_t`
     type(grid_warehouse_t),          intent(inout) :: grid_warehouse ! A :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
     type(profile_warehouse_t),       intent(inout) :: profile_warehouse ! A :f:type:`~tuvx_profile_warehouse/profile_warehouse_t`
@@ -246,7 +236,6 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine output_diagnostics( this )
-    use tuvx_diagnostic_util, only : diagout
 
     class(radiator_t), intent(in) :: this ! A :f:type:`~tuvx_radiator/radiator_state_t`
     character(len=:), allocatable :: filename
@@ -273,7 +262,6 @@ contains
   integer function pack_size( this, comm )
     ! Returns the size of a character buffer required to pack the radiator
 
-    use musica_mpi,                    only : musica_mpi_pack_size
 
     class(radiator_t), intent(in) :: this ! radiator to be packed
     integer,           intent(in) :: comm ! MPI communicator
@@ -301,9 +289,6 @@ contains
 
   subroutine mpi_pack( this, buffer, position, comm )
     ! Packs the radiator onto a character buffer
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_pack
 
     class(radiator_t), intent(in)    :: this      ! radiator to be packed
     character,         intent(inout) :: buffer(:) ! memory buffer
@@ -335,9 +320,6 @@ contains
 
   subroutine mpi_unpack( this, buffer, position, comm )
     ! Unpacks a radiator from a character buffer
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_unpack
 
     class(radiator_t), intent(out)   :: this      ! radiator to be unpacked
     character,         intent(inout) :: buffer(:) ! memory buffer
@@ -375,7 +357,6 @@ contains
     !
     ! Optical properties for radiators configured to 'treat as air' are
     ! unique.
-    use tuvx_constants, only : largest, precis
 
     class(radiator_state_t), intent(inout) :: this
     class(radiator_ptr),     intent(in)    :: radiators(:)
@@ -476,9 +457,6 @@ contains
   subroutine state_mpi_pack( this, buffer, position, comm )
     ! Packs the radiator state onto a character buffer
 
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_pack
-
     class(radiator_state_t), intent(in)    :: this      ! radiator state to be packed
     character,               intent(inout) :: buffer(:) ! memory buffer
     integer,                 intent(inout) :: position  ! current buffer position
@@ -500,9 +478,6 @@ contains
 
   subroutine state_mpi_unpack( this, buffer, position, comm )
     ! Unpacks a radiator state from a character buffer
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_unpack
 
     class(radiator_state_t), intent(out)   :: this      ! radiator state to be unpacked
     character,               intent(inout) :: buffer(:) ! memory buffer

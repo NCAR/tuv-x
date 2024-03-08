@@ -3,9 +3,20 @@
 !
 program test_radiator_from_host
 
-  use musica_mpi,                      only : musica_mpi_init,                &
-                                              musica_mpi_finalize
-  use tuvx_test_utils,                 only : check_values
+  use musica_mpi,                    only : musica_mpi_finalize, musica_mpi_init, musica_mpi_rank, musica_mpi_bcast, &
+                                            MPI_COMM_WORLD
+  use tuvx_grid,                     only : grid_t
+  use tuvx_radiator,                 only : radiator_t
+  use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
+  use tuvx_grid_from_host,           only : grid_from_host_t
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_t
+  use tuvx_radiator_from_host,       only : radiator_updater_t, radiator_from_host_t
+  use musica_string,                 only : string_t
+  use musica_constants,              only : dk => musica_dk
+  use musica_assert,                 only : assert, die
+  use tuvx_radiator_factory,         only : radiator_type_name, radiator_allocate
+  use tuvx_test_utils,               only : check_values
 
   implicit none
 
@@ -19,31 +30,16 @@ contains
 
   subroutine test_radiator_from_host_t( )
 
-    use musica_assert,                 only : assert, almost_equal, die
-    use musica_constants,              only : dk => musica_dk
-    use musica_mpi
-    use musica_string,                 only : string_t
-    use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
-    use tuvx_grid,                     only : grid_t
-    use tuvx_grid_from_host,           only : grid_from_host_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_radiator,                 only : radiator_t
-    use tuvx_radiator_from_host,       only : radiator_from_host_t,           &
-                                              radiator_updater_t
-    use tuvx_radiator_factory,         only : radiator_type_name,             &
-                                              radiator_allocate
-
-    class(radiator_t), pointer :: radiator
-    type(radiator_updater_t) :: radiator_updater
+    character, allocatable :: buffer(:)
     class(grid_t), pointer :: height, wavelength
+    class(radiator_t), pointer :: radiator
+    integer :: pos, pack_size
+    integer, parameter :: comm = MPI_COMM_WORLD
+    type(cross_section_warehouse_t) :: cross_sections
     type(grid_warehouse_t) :: grids
     type(profile_warehouse_t) :: profiles
-    type(cross_section_warehouse_t) :: cross_sections
-    character, allocatable :: buffer(:)
-    integer :: pos, pack_size
+    type(radiator_updater_t) :: radiator_updater
     type(string_t) :: type_name
-    integer, parameter :: comm = MPI_COMM_WORLD
 
     real(kind=dk), parameter :: tol = 1.0e-10_dk
     real(kind=dk) :: od(3,2)

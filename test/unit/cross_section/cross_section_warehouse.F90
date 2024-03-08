@@ -3,9 +3,16 @@
 !
 program test_cross_section_warehouse
 
-  use musica_mpi,                      only : musica_mpi_init,                &
-                                              musica_mpi_finalize
+  use musica_assert,                 only : almost_equal, assert
+  use musica_config,                 only : config_t
+  use musica_constants,              only : dk => musica_dk
+  use musica_mpi,                    only : musica_mpi_init, musica_mpi_finalize, musica_mpi_rank, musica_mpi_bcast, &
+                                            MPI_COMM_WORLD 
+  use musica_string,                 only : string_t
+  use tuvx_cross_section,            only : cross_section_t
   use tuvx_cross_section_warehouse
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_t
 
   implicit none
 
@@ -18,16 +25,6 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine test_cross_section_warehouse_t( )
-
-    use musica_assert,                 only : almost_equal, assert
-    use musica_constants,              only : dk => musica_dk
-    use musica_config,                 only : config_t
-    use musica_mpi
-    use musica_string,                 only : string_t
-    use tuvx_cross_section,            only : cross_section_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-
     class(grid_warehouse_t),          pointer :: grids
     class(profile_warehouse_t),       pointer :: profiles
     class(cross_section_warehouse_t), pointer :: cross_sections

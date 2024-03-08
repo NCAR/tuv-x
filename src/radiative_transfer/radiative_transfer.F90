@@ -4,13 +4,26 @@
 module tuvx_radiative_transfer
 ! A calculator for atmospheric radiation
 
-  use musica_config,                   only : config_t
-  use musica_constants,                only : dk => musica_dk
-  use tuvx_cross_section_warehouse,    only : cross_section_warehouse_t
-  use tuvx_profile_warehouse,          only : profile_warehouse_ptr
-  use tuvx_radiator_warehouse,         only : radiator_warehouse_t,           &
-                                              radiator_warehouse_ptr
-  use tuvx_solver,                     only : solver_t
+  use musica_assert,                 only : assert, assert_msg, die_msg
+  use musica_config,                 only : config_t
+  use musica_constants,              only : dk => musica_dk
+  use musica_mpi,                    only : musica_mpi_pack, musica_mpi_pack_size, musica_mpi_unpack
+  use musica_string,                 only : string_t
+  use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_la_sr_bands,              only : la_sr_bands_t
+  use tuvx_profile,                  only : profile_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_ptr, profile_warehouse_t
+  use tuvx_radiator,                 only : radiator_state_t, radiator_t
+  use tuvx_radiator_from_host,       only : radiator_updater_t
+  use tuvx_radiator_warehouse,       only : radiator_warehouse_t, radiator_warehouse_ptr
+  use tuvx_radiator_warehouse,       only : warehouse_iterator_t
+  use tuvx_solver,                   only : solver_t, radiation_field_t
+  use tuvx_solver_factory,           only : solver_allocate, solver_builder, solver_type_name
+  use tuvx_spherical_geometry,       only : spherical_geometry_t
+
+
 
   implicit none
   private
@@ -57,12 +70,6 @@ contains
   function constructor( config, grid_warehouse, profile_warehouse, radiators )&
       result( this )
     ! Initializes the components necessary to solve radiative transfer
-
-    use musica_assert,                 only : assert_msg, die_msg
-    use musica_string,                 only : string_t
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_solver_factory,           only : solver_builder
 
     type(radiative_transfer_t), pointer :: this ! New :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
     type(config_t),                        intent(inout) :: config            ! radXfer configuration data
@@ -119,7 +126,6 @@ contains
   type(string_t) function component_name( this )
     ! Model component name
 
-    use musica_string,                 only : string_t
 
     class(radiative_transfer_t), intent(in) :: this ! A :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
 
@@ -132,7 +138,6 @@ contains
   type(string_t) function description( this )
     ! Model component description
 
-    use musica_string,                 only : string_t
 
     class(radiative_transfer_t), intent(in) :: this ! A :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
 
@@ -145,17 +150,6 @@ contains
   subroutine calculate( this, la_srb, spherical_geometry, grid_warehouse,     &
       profile_warehouse, radiation_field )
     ! Calculate the radiation field
-
-    use musica_assert,                 only : die_msg
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_radiator_warehouse,       only : warehouse_iterator_t
-    use tuvx_radiator,                 only : radiator_t
-    use tuvx_radiator,                 only : radiator_state_t
-    use tuvx_profile,                  only : profile_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_spherical_geometry,       only : spherical_geometry_t
-    use tuvx_la_sr_bands,              only : la_sr_bands_t
-    use tuvx_solver,                   only : radiation_field_t
 
     class(radiative_transfer_t),       intent(inout) :: this               ! A :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
     type(grid_warehouse_t),            intent(inout) :: grid_warehouse     ! :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
@@ -221,10 +215,6 @@ contains
     ! If the optional `found` flag is omitted, an error is returned if the
     ! radiator does not exist in TUV-x
 
-    use musica_assert,                 only : assert_msg
-    use tuvx_radiator,                 only : radiator_t
-    use tuvx_radiator_from_host,       only : radiator_updater_t
-
     class(radiative_transfer_t), intent(in)  :: this     ! Radiative transfer calculator
     class(radiator_t),           intent(in)  :: radiator ! The radiator to get an updater for
     logical, optional,           intent(out) :: found    ! Flag indicating whether the
@@ -243,9 +233,6 @@ contains
     ! Returns the size of a character buffer required to pack the radiative
     ! transfer calculator
 
-    use musica_mpi,                    only : musica_mpi_pack_size
-    use musica_string,                 only : string_t
-    use tuvx_solver_factory,           only : solver_type_name
 
     class(radiative_transfer_t), intent(inout) :: this ! radiative transfer to be packed
     integer,                     intent(in)    :: comm ! MPI communicator
@@ -271,11 +258,6 @@ contains
 
   subroutine mpi_pack( this, buffer, position, comm )
     ! Packs the radiative transfer calculator onto a character buffer
-
-    use musica_assert,                 only : assert
-    use musica_mpi,                    only : musica_mpi_pack
-    use musica_string,                 only : string_t
-    use tuvx_solver_factory,           only : solver_type_name
 
     class(radiative_transfer_t), intent(inout)    :: this   ! radiative transfer to be packed
     character,                   intent(inout) :: buffer(:) ! memory buffer
@@ -306,10 +288,6 @@ contains
   subroutine mpi_unpack( this, buffer, position, comm )
     ! Unpacks a radiative transfer calculator from a character buffer
 
-    use musica_assert,                 only : assert, die_msg
-    use musica_string,                 only : string_t
-    use musica_mpi,                    only : musica_mpi_unpack
-    use tuvx_solver_factory,           only : solver_allocate
 
     class(radiative_transfer_t), intent(out)   :: this      ! radiative transfer to be packed
     character,                   intent(inout) :: buffer(:) ! memory buffer

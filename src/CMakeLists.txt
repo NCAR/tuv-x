@@ -3,6 +3,9 @@
 
 # object library
 add_library(tuvx_object OBJECT)
+
+target_compile_features(tuvx_object INTERFACE cxx_std_11)
+
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
 )
