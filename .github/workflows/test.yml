@@ -73,6 +73,8 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev
+    - name: Install numpy
+      run: pip install numpy
     - name: Run Cmake 
       run: cmake -S . -B build 
     - name: Build
