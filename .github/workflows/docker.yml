@@ -32,11 +32,11 @@ jobs:
 
       - name: Run tests in container
         if: matrix.dockerfile != 'Dockerfile.coverage'
-        run: docker run --name test-container -t tuvx bash -c 'make test ARGS="--rerun-failed --output-on-failure -j8"'
+        run: docker run --name test-container -t tuvx bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
 
       - name: Run coverage tests in container
         if: matrix.dockerfile == 'Dockerfile.coverage'
-        run: docker run --name test-container -t tuvx bash -c 'make coverage ARGS="--rerun-failed --output-on-failure -j8"'
+        run: docker run --name test-container -t tuvx bash -c 'make coverage ARGS="--rerun-failed --output-on-failure"'
 
       - name: Copy coverage from container
         if: matrix.dockerfile == 'Dockerfile.coverage'
