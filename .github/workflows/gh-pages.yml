@@ -54,7 +54,7 @@ jobs:
 
           # create two copies of the documentaiton
           # 1. the frozen version, represented as vX.X in the version switcher
-          docker build -t tuvx -f Dockerfile.docs .
+          docker build -t tuvx -f docker/Dockerfile.docs .
           id=$(docker create tuvx)
           docker cp $id:/build/docs/sphinx tmpdocs
           docker rm -v $id
@@ -63,7 +63,7 @@ jobs:
 
           # 2. stable, represented as vX.X (stable) in the version switcher
           # edit conf.py to produce a version string that looks like vX.X (stable)
-          docker build -t tuvx -f Dockerfile.docs --build-arg SUFFIX=" (stable)" .
+          docker build -t tuvx -f docker/Dockerfile.docs --build-arg SUFFIX=" (stable)" .
           id=$(docker create tuvx)
           docker cp $id:/build/docs/sphinx tmpdocs
           docker rm -v $id
@@ -84,7 +84,7 @@ jobs:
           !contains(github.ref, env.DEFAULT_BRANCH)
         run: |
           set -x
-          docker build -t tuvx -f Dockerfile.docs .
+          docker build -t tuvx -f docker/Dockerfile.docs .
           id=$(docker create tuvx)
           docker cp $id:/build/docs/sphinx tmpdocs
           docker rm -v $id
