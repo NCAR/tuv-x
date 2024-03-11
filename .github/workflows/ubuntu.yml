@@ -32,4 +32,4 @@ jobs:
     - name: Run tests
       run: |
         cd build
-        ctest --rerun-failed --output-on-failure . --verbose -j
+        ctest --rerun-failed --output-on-failure . --verbose
