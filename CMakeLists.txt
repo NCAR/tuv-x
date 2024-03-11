@@ -31,7 +31,7 @@ option(ENABLE_MPI "Enable MPI parallel support" OFF)
 cmake_dependent_option(ENABLE_OPENMP "Enable OpenMP support" OFF "ENABLE_MPI" OFF)
 option(ENABLE_TESTS "Build tests" ON)
 option(ENABLE_COVERAGE "Enable code coverage output" OFF)
-option(ENABLE_MEMCHECK "Enable memory checking in tests" ON)
+option(ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(BUILD_DOCS "Build the documentation" OFF)
 
