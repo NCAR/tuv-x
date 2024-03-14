@@ -143,13 +143,13 @@ The TUV-x software can be cited with
   author       = {Matt Dawson and
                   Kyle Shores and
                   Stacy Walters},
-  title        = {NCAR/tuv-x: Version 0.2.0},
-  month        = sep,
-  year         = 2022,
+  title        = {NCAR/tuv-x: Version 0.5.0},
+  month        = dec,
+  year         = 2023,
   publisher    = {Zenodo},
   version      = {v0.2.0},
-  doi          = {10.5281/zenodo.7126040},
-  url          = {https://doi.org/10.5281/zenodo.7126040}
+  doi          = {10.5281/zenodo.8110063},
+  url          = {https://doi.org/10.5281/zenodo.8110063}
 }
 ```
 

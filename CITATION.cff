@@ -1,0 +1,38 @@
+software:
+  - authors:
+      - Matt Dawson
+      - Kyle Shores
+      - Stacy Walters
+    doi: "10.5281/zenodo.8110063"
+    month: "12"
+    year: 2023
+    publisher: Zenodo
+    title: NCAR/tuv-x: Version 0.5.0
+    url: https://doi.org/10.5281/zenodo.8110063
+    version: v0.5.0
+
+citation:
+  - address: "Berlin, Heidelberg"
+    author:
+      - family: Madronich
+        given: Sasha
+      - family: Flocke
+        given: Siri
+    booktitle: Environmental Photochemistry
+    doi: "10.1007/978-3-540-69044-3_1"
+    editor:
+      - family: Boule
+        given: Pierre
+    isbn: "978-3-540-69044-3"
+    keywords:
+      - Earth-Sun geometry
+      - photolysis rate coefficients
+      - radiative transfer
+      - solar radiation
+      - spectral actinic flux
+    pages: "1--26"
+    publisher: Springer
+    series: The Handbook of Environmental Chemistry
+    title: The Role of Solar Radiation in Atmospheric Chemistry
+    url: https://doi.org/10.1007/978-3-540-69044-3_1
+    year: 1999
