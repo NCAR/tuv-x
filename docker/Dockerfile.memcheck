@@ -24,7 +24,9 @@ RUN pip3 install numpy scipy
 COPY . /tuv-x/
 RUN mkdir /build \
       && cd /build \
-      && cmake /tuv-x \
+      && cmake \
+            -DENABLE_MEMCHECK:BOOL=TRUE \
+        /tuv-x \
       && make -j 8
 
 WORKDIR /build
