@@ -7,9 +7,10 @@ message: "If you use this software, please cite it as below."
     given-names: Kyle
   - family-names: Walters
     given-names: Stacy
-doi: "10.5281/zenodo.8110063"
+doi: 10.5281/zenodo.8110063
 date-released: 2023-07-03
 publisher: Zenodo
 title: "NCAR/tuv-x: Version 0.5.0"
 url: "https://doi.org/10.5281/zenodo.8110063"
-version: v0.5.0
+url: "https://github.com/NCAR/tuv-x"
+version: 0.5.0
