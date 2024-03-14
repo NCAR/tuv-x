@@ -10,6 +10,6 @@ authors:
 title: "NCAR/tuv-x: Version 0.5.0"
 version: 0.5.0
 doi: 10.5281/zenodo.8110063
-url: https://doi.org/10.5281/zenodo.8110063
+url: "https://github.com/NCAR/tuv-x"
 year: 2023
 publisher: Zenodo
