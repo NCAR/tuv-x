@@ -1,9 +1,9 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 - authors:
-    - Matt Dawson
-    - Kyle Shores
-    - Stacy Walters
+  - Matt Dawson
+  - Kyle Shores
+  - Stacy Walters
 doi: "10.5281/zenodo.8110063"
 month: "12"
 year: 2023
