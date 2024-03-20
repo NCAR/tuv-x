@@ -133,7 +133,12 @@ contains
 
     from = (/ 10.0_dk, 20.0_dk, 30.0_dk /)
     
+#ifdef MUSICA_USE_OPENMP
     n_threads = omp_get_num_threads( )
+#else
+    n_threads = 1
+#endif
+
     allocate( omp_to( n_threads, 3 ) )
 
     map = map_t( config, from_labels, to_labels )
