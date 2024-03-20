@@ -5,11 +5,19 @@
 !> Tests for the base cross_section_t type
 program test_cross_section
 
-  use musica_mpi,                      only : musica_mpi_init,                &
-                                              musica_mpi_finalize
   use tuvx_cross_section,              only : cross_section_t
   use tuvx_cross_section_ch3coch3_ch3co_ch3
   use tuvx_test_utils,                 only : check_values
+  use musica_assert,                 only : assert
+  use musica_constants,              only : dk => musica_dk
+  use musica_config,                 only : config_t
+  use musica_iterator,               only : iterator_t
+  use musica_mpi
+  use musica_string,                 only : string_t
+  use tuvx_cross_section_factory,    only : cross_section_type_name,        &
+                                            cross_section_allocate
+  use tuvx_grid_warehouse,           only : grid_warehouse_t
+  use tuvx_profile_warehouse,        only : profile_warehouse_t
 
   implicit none
 
@@ -22,17 +30,6 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine test_cross_section_ch3coch3_ch3co_ch3_t( )
-
-    use musica_assert,                 only : assert
-    use musica_constants,              only : dk => musica_dk
-    use musica_config,                 only : config_t
-    use musica_iterator,               only : iterator_t
-    use musica_mpi
-    use musica_string,                 only : string_t
-    use tuvx_cross_section_factory,    only : cross_section_type_name,        &
-                                              cross_section_allocate
-    use tuvx_grid_warehouse,           only : grid_warehouse_t
-    use tuvx_profile_warehouse,        only : profile_warehouse_t
 
     class(grid_warehouse_t),    pointer :: grids
     class(profile_warehouse_t), pointer :: profiles

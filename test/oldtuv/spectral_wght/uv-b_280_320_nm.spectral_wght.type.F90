@@ -41,15 +41,11 @@ contains
 
     character(len=*), parameter :: Iam = 'uv_b_280_320_nm calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( 280._musica_dk < this%mdl_lambda_center(:) .and. this%mdl_lambda_center(:) < 320._musica_dk )
       spectral_wght = 1.0_musica_dk
     elsewhere
       spectral_wght = 0.0_musica_dk
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

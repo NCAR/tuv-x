@@ -309,18 +309,15 @@
         command_tokens(1) = command_tokens(1)%to_upper()
         select case( command_tokens(1)%to_char() )
           case( 'RADXFER_CONFIG_FILESPEC' )
-            write(*,*) 'Processing radXfer json config file'
             radXfer_config_filespec = command_tokens(2)%to_char()
             CALL radXfer_config%from_file( radXfer_config_filespec )
             Obj_radXfer_xsects = .true.
           case( 'PHOTO_RATE_CONFIG_FILESPEC' )
-            write(*,*) 'Processing photo_rate json config file'
             photo_rate_config_filespec = command_tokens(2)%to_char()
             CALL 
      $       photo_rate_config%from_file( photo_rate_config_filespec )
             Obj_photo_rates = .true.
           case( 'SPECTRAL_WGHT_CONFIG_FILESPEC' )
-            write(*,*) 'Processing spectral_wght json config file'
             spectral_wght_config_filespec = command_tokens(2)%to_char()
             CALL 
      $       spectral_wght_config%from_file( 
@@ -342,13 +339,6 @@
             Stop 'Arg Error'
         end select
       enddo
-
-      write(*,*) 
-     $  'TUV: uses xsect objects in radXfer = ',Obj_radXfer_xsects
-      write(*,*) 
-     $  'TUV: uses photo_rate objects = ',Obj_photo_rates
-      write(*,*) 
-     $  'TUV: uses spectral wght objects = ',Obj_spectral_wghts
 
 * re-entry point
 
@@ -493,15 +483,6 @@
 *   nmj:    number of j-values that will be reported. Selections must be 
 *           made interactively, or by editing input file.
 
-      IF(nstr < 2) THEN
-         WRITE(kout,*) 'Delta-Eddington 2-stream radiative transfer' 
-      ELSE
-         WRITE(kout,*) 'Discrete ordinates ', 
-     $        nstr, '-stream radiative transfer' 
-      ENDIF
-
-      WRITE(*,*) 'calculating....'
-
 * ___ SECTION 2: SET GRIDS _________________________________________________
 
 * altitudes (creates altitude grid, locates index for selected output, izout)
@@ -578,7 +559,6 @@
          ENDDO
 
          ipbl = iz - 1
-         write(*,*) 'top of PBL index, height (km) ', ipbl, z(ipbl)
 
 * specify pbl concetrations, in parts per billion
 
@@ -828,10 +808,6 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
       wdosei = rZERO
       dose(1:ks) = rZERO
 
-      write(*,*) 'Date, Lat, Lon, Min_SZA'
-      write(*,222) iyear,imonth,iday,lat,lon,sznoon
- 222  format(i4,'/',i2,'/',i2,3(1x,F7.3))
-
 * Initialize lymana-alpha, schumann-runge bands
       call init_la_srb(wl)
 
@@ -904,7 +880,6 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
 
          zen = sza(it)
 
-         WRITE(*,200) it, zen, esfact(it)
          WRITE(kout,200) it, zen, esfact(it)
  200     FORMAT('step = ', I4,' sza = ', F9.3, 
      $        ' Earth-sun factor = ', F10.7)
@@ -958,20 +933,6 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
          if( .not. do_clouds   ) then
            omcld = rZERO ; omsnw = rZERO
          endif
-         if( all( dtrl == 0. ) ) write(*,*) 'TUV: dtrl = 0'
-         if( all( dto3 == 0. ) ) write(*,*) 'TUV: dto3 = 0'
-         if( all( dto2 == 0. ) ) write(*,*) 'TUV: dto2 = 0'
-         if( all( dtso2 == 0. ) ) write(*,*) 'TUV: dtso2 = 0'
-         if( all( dtno2 == 0. ) ) write(*,*) 'TUV: dtno2 = 0'
-         if( all( dtcld == 0. ) ) write(*,*) 'TUV: dtcld = 0'
-         if( all( omcld == 0. ) ) write(*,*) 'TUV: omcld = 0'
-         if( all( gcld == 0. ) ) write(*,*) 'TUV: gcld = 0'
-         if( all( dtaer == 0. ) ) write(*,*) 'TUV: dtaer = 0'
-         if( all( omaer == 0. ) ) write(*,*) 'TUV: omaer = 0'
-         if( all( gaer == 0. ) ) write(*,*) 'TUV: gaer = 0'
-         if( all( dtsnw == 0. ) ) write(*,*) 'TUV: dtsnw = 0'
-         if( all( omsnw == 0. ) ) write(*,*) 'TUV: omsnw = 0'
-         if( all( gsnw == 0. ) ) write(*,*) 'TUV: gsnw = 0'
 
 * ____ SECTION 8: WAVELENGTH LOOP ______________________________________
 

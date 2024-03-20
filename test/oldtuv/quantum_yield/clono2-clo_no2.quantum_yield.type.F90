@@ -46,8 +46,6 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_ik)    :: lambda, qyield
 
-    write(*,*) Iam,'entering'
-
     do wNdx = 1,size(this%mdl_lambda_center)
       lambda = this%mdl_lambda_center(wNdx)
       if( lambda < 308._musica_dk ) then
@@ -59,8 +57,6 @@ contains
       endif
       quantum_yield(wNdx) = rONE - qyield
     enddo
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

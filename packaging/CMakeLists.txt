@@ -11,6 +11,14 @@ install(
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+# install yaml-cpp
+install(
+  TARGETS 
+    yaml-cpp
+  EXPORT 
+    tuvx_Exports
+)
+
 # install the mod files
 install(
   DIRECTORY 

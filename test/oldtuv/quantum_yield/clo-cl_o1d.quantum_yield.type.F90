@@ -43,15 +43,11 @@ contains
 
     character(len=*), parameter :: Iam = 'clo+hv->cl+o1d calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( this%mdl_lambda_center < 263.4_musica_dk )
       quantum_yield = rONE
     elsewhere
       quantum_yield = rZERO
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

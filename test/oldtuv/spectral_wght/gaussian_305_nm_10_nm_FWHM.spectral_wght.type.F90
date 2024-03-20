@@ -41,13 +41,9 @@ contains
     real(kind=musica_dk)        :: accum
     character(len=*), parameter :: Iam = 'gaussian_305_nm_10_nm_FWHM calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = exp( -(log(2._musica_dk)*.04_musica_dk*(this%mdl_lambda_center(:) - 305._musica_dk)**2) )
     accum = sum( spectral_wght )
     spectral_wght = spectral_wght/accum
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

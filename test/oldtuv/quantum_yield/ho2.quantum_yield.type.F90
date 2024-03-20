@@ -44,16 +44,12 @@ contains
     real(musica_dk), parameter :: lambda0 = 193._musica_dk
     character(len=*), parameter :: Iam = 'ho2+hv->oh+o calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( this%mdl_lambda_center >= 248._musica_dk )
       quantum_yield = rONE
     elsewhere
       quantum_yield = (rONE + 14._musica_dk*(this%mdl_lambda_center - lambda0)/55._musica_dk)/15._musica_dk
       quantum_yield = max( rZERO,quantum_yield )
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

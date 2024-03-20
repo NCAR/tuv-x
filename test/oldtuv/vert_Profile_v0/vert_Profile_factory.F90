@@ -42,8 +42,6 @@ contains
     character(len=*), parameter :: Iam = 'Vert Profile builder: '
     type(string_t) :: vert_Profile_type
 
-    write(*,*) Iam,'entering'
-
     new_vert_Profile_t => null()
     call config%get( 'Vert Profile type', vert_Profile_type, Iam )
 
@@ -61,8 +59,6 @@ contains
     end select
 
     call new_vert_Profile_t%initialize( config, gridWareHouse )
-
-    write(*,*) Iam,'exiting'
 
   end function vert_Profile_builder
 

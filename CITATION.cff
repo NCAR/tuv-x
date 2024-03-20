@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Dawson
+    given-names: Matt
+  - family-names: Shores
+    given-names: Kyle
+  - family-names: Walters
+    given-names: Stacy
+title: "NCAR/tuv-x: Version 0.8.0"
+version: 0.8.0
+doi: 10.5281/zenodo.7126039
+url: "https://github.com/NCAR/tuv-x"
+year: 2024
+publisher: Zenodo

@@ -71,8 +71,6 @@ contains
       endif
     enddo
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 end module micm_n2o_n2_o1d_cross_section_type

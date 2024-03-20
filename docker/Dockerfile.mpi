@@ -1,0 +1,48 @@
+FROM fedora:37
+
+RUN dnf -y update \
+    && dnf install -y sudo \
+    && adduser test_user \
+    && echo "test_user ALL=(root) NOPASSWD:ALL" > /etc/sudoers.d/test_user \
+    && chmod 0440 /etc/sudoers.d/test_user
+
+USER test_user
+WORKDIR /home/test_user
+
+RUN sudo dnf -y install \
+        openmpi-devel \
+        gcc-fortran \
+        gcc-c++ \
+        gcc \
+        gdb \
+        git \
+        netcdf-fortran-devel \
+        cmake \
+        make \
+        lcov \
+        python3 \
+        python3-pip \
+        valgrind-openmpi \
+        lapack-devel \
+        yaml-cpp-devel \
+    && sudo dnf clean all
+
+ENV PATH="${PATH}:/usr/lib64/openmpi/bin/"
+ENV OMP_NUM_THREADS=5
+
+RUN pip3 install numpy scipy
+
+# build the tuv-x tool
+COPY . tuv-x/
+RUN mkdir build \
+      && cd build \
+      && cmake -D CMAKE_BUILD_TYPE=release \
+               -D CMAKE_Fortran_COMPILER=/usr/lib64/openmpi/bin/mpif90 \
+               -D CMAKE_C_COMPILER=/usr/lib64/openmpi/bin/mpicc \
+               -D CMAKE_CXX_COMPILER=/usr/lib64/openmpi/bin/mpicxx \
+               -D ENABLE_OPENMP:BOOL=TRUE \
+               -D ENABLE_MPI:BOOL=TRUE \
+               ../tuv-x \
+      && make -j 8 
+
+WORKDIR /home/test_user/build

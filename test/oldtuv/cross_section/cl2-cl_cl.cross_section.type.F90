@@ -43,8 +43,6 @@ contains
     integer(musica_ik) :: wNdx
     real(musica_dk) :: aa, bb, bbsq, alpha, ex1, ex2
 
-    write(*,*) Iam,'entering'
-
     aa = 402.7_musica_dk/environment%temperature
     bb = exp( aa )
     bbsq  = bb * bb
@@ -57,8 +55,6 @@ contains
         cross_section(wNdx) = 1.e-20_musica_dk * sqrt(alpha) * (ex1 + ex2)
       enddo
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

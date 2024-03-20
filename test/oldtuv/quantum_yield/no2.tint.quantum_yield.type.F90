@@ -72,8 +72,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
-
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -154,8 +152,6 @@ file_loop: &
       call die_msg( 400000008, msg )
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-   
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -177,8 +173,6 @@ file_loop: &
     integer(musica_ik) :: fileNdx, tNdx
     real(musica_dk)    :: Tadj, Tstar
 
-    write(*,*) Iam,'entering'
-
     quantum_yield = 0.0_musica_dk
     do fileNdx = 1,size(this%quantum_yield)
       associate( Temp => this%quantum_yield(fileNdx)%temperature, wrkQyield => this%quantum_yield(fileNdx) )
@@ -199,8 +193,6 @@ file_loop: &
       end associate
     enddo
 
-    write(*,*) Iam,'exiting'
-
   end function run
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -214,7 +206,6 @@ file_loop: &
    character(len=*), parameter :: Iam = 'no2 tint quantum yield finalize: '
    integer(musica_ik) :: ndx
 
-   write(*,*) Iam,'entering'
    if( allocated(this%quantum_yield) ) then
      do ndx = 1,size(this%quantum_yield)
        associate( Qyield => this%quantum_yield(ndx) )
@@ -237,8 +228,6 @@ file_loop: &
    if( allocated(this%mdl_lambda_center) ) then
      deallocate(this%mdl_lambda_center)
    endif
-
-   write(*,*) Iam,'exiting'
 
    end subroutine finalize
 

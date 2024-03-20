@@ -9,6 +9,7 @@ module tuvx_core
   use musica_constants,                only : dk => musica_dk
   use tuvx_dose_rates,                 only : dose_rates_t
   use tuvx_grid_warehouse,             only : grid_warehouse_t
+  use tuvx_heating_rates,              only : heating_rates_t
   use tuvx_la_sr_bands,                only : la_sr_bands_t
   use tuvx_photolysis_rates,           only : photolysis_rates_t
   use tuvx_profile_warehouse,          only : profile_warehouse_t
@@ -32,10 +33,11 @@ module tuvx_core
     type(radiative_transfer_t),  pointer :: radiative_transfer_ => null()
     type(photolysis_rates_t),    pointer :: photolysis_rates_ => null()
     type(dose_rates_t),          pointer :: dose_rates_ => null()
+    type(heating_rates_t),       pointer :: heating_rates_ => null()
     type(radiation_field_t),     pointer :: radiation_field_ => null()
     logical                              :: enable_diagnostics_ ! determines if diagnostic output is written or not
   contains
-    ! Calculate photolysis rate constants and dose rates
+    ! Calculate photolysis rate constants, dose rates, and heating rates
     procedure :: run
     ! Returns a grid from the warehouse
     procedure :: get_grid
@@ -50,10 +52,14 @@ module tuvx_core
     procedure :: number_of_photolysis_reactions
     ! Returns the number of dose rates
     procedure :: number_of_dose_rates
+    ! Returns the number of heating rates
+    procedure :: number_of_heating_rates
     ! Returns the set of photolysis reaction labels
     procedure :: photolysis_reaction_labels
     ! Returns the set of dose rate labels
     procedure :: dose_rate_labels
+    ! Returns the set of heating rate labels
+    procedure :: heating_rate_labels
     ! Returns the photolysis reaction cross section for the current conditions
     procedure :: get_photolysis_cross_section
     ! Returns the photolysis reaction quantum yield for the current conditions
@@ -165,6 +171,9 @@ contains
           photolysis_rates_t( child_config,                                   &
                               new_core%grid_warehouse_,                       &
                               new_core%profile_warehouse_ )
+      new_core%heating_rates_ => heating_rates_t( child_config,             &
+                                                  new_core%grid_warehouse_, &
+                                                  new_core%profile_warehouse_ )
     end if
 
     ! dose rates
@@ -191,7 +200,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine run( this, solar_zenith_angle, earth_sun_distance,               &
-      photolysis_rate_constants, dose_rates, diagnostic_label )
+      photolysis_rate_constants, dose_rates, heating_rates, diagnostic_label )
     ! Performs calculations for specified photolysis and dose rates for a
     ! given set of conditions
 
@@ -205,6 +214,7 @@ contains
     real(dk),                   intent(in)    :: earth_sun_distance             ! [AU]
     real(dk),         optional, intent(out)   :: photolysis_rate_constants(:,:) ! (vertical level, reaction) [s-1]
     real(dk),         optional, intent(out)   :: dose_rates(:,:)                ! (vertical level, reaction) [s-1]
+    real(dk),         optional, intent(out)   :: heating_rates(:,:)             ! (vertical level, reaction) [J s-1]  
     character(len=*), optional, intent(in)    :: diagnostic_label               ! label used in diagnostic file names
 
     ! Local variables
@@ -246,6 +256,14 @@ contains
                                        this%radiation_field_,                 &
                                        photolysis_rate_constants,             &
                                        diag_label )
+    end if
+    if( associated( this%heating_rates_ ) .and. present( heating_rates ) ) then
+      call this%heating_rates_%get( this%la_sr_bands_,                        &
+                                    this%spherical_geometry_,                 &
+                                    this%grid_warehouse_,                     &
+                                    this%profile_warehouse_,                  &
+                                    this%radiation_field_,                    &
+                                    heating_rates )
     end if
     if( associated( this%dose_rates_ ) .and. present( dose_rates ) ) then
       call this%dose_rates_%get( this%grid_warehouse_,                        &
@@ -412,6 +430,20 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  integer function number_of_heating_rates( this )
+    ! Returns the number of heating rates
+
+    class(core_t), intent(in) :: this
+
+    number_of_heating_rates = 0
+    if( associated( this%heating_rates_ ) ) then
+      number_of_heating_rates = this%heating_rates_%size( )
+    end if
+
+  end function number_of_heating_rates
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   function photolysis_reaction_labels( this ) result( labels )
     ! Returns the set of photolysis reaction labels
 
@@ -441,6 +473,22 @@ contains
     end if
 
   end function dose_rate_labels
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function heating_rate_labels( this ) result( labels )
+    ! Returns the set of heating rate labels
+
+    class(core_t),  intent(in)  :: this
+    type(string_t), allocatable :: labels(:)
+
+    if( associated( this%heating_rates_ ) ) then
+      labels = this%heating_rates_%labels( )
+    else
+      allocate( labels( 0 ) )
+    end if
+
+  end function heating_rate_labels
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -558,6 +606,11 @@ contains
     if( associated( this%dose_rates_ ) ) then
       pack_size = pack_size + this%dose_rates_%pack_size( comm )
     end if
+    pack_size = pack_size +                                                   &
+      musica_mpi_pack_size( associated( this%heating_rates_ ), comm )
+    if( associated( this%heating_rates_ ) ) then
+      pack_size = pack_size + this%heating_rates_%pack_size( comm )
+    end if
 #else
     pack_size = 0
 #endif
@@ -616,6 +669,11 @@ contains
                           associated( this%dose_rates_ ), comm )
     if( associated( this%dose_rates_ ) ) then
       call this%dose_rates_%mpi_pack( buffer, position, comm )
+    end if
+    call musica_mpi_pack( buffer, position,                                   &
+                          associated( this%heating_rates_ ), comm )
+    if( associated( this%heating_rates_ ) ) then
+      call this%heating_rates_%mpi_pack( buffer, position, comm )
     end if
     call assert( 332208077, position - prev_pos <= this%pack_size( comm ) )
 #endif
@@ -676,6 +734,11 @@ contains
       allocate( this%dose_rates_ )
       call this%dose_rates_%mpi_unpack( buffer, position, comm )
     end if
+    call musica_mpi_unpack( buffer, position, alloced, comm )
+    if( alloced ) then
+      allocate( this%heating_rates_ )
+      call this%heating_rates_%mpi_unpack( buffer, position, comm )
+    end if
     call assert( 332208077, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
@@ -712,6 +775,9 @@ contains
     end if
     if( associated( this%radiation_field_ ) ) then
       deallocate( this%radiation_field_ )
+    end if
+    if( associated( this%heating_rates_ ) ) then
+      deallocate( this%heating_rates_ )
     end if
 
   end subroutine finalize

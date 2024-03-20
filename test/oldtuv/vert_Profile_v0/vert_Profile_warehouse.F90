@@ -61,8 +61,6 @@ contains
     character(len=32)           :: keychar
     type(string_t)              :: aswkey
 
-    write(*,*) Iam // 'entering'
-
     allocate( vert_Profile_warehouse_obj )
 
     associate(new_obj=>vert_Profile_warehouse_obj)
@@ -77,8 +75,6 @@ contains
     do while( iter%next() )
       keychar = vert_Profile_set%key(iter)
       aswkey  = keychar 
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       call vert_Profile_set%get( iter, vert_Profile_config, Iam )
       call vert_Profile_config%add( 'Handle', aswkey, Iam )
 !-----------------------------------------------------------------------------
@@ -90,12 +86,7 @@ contains
 
     deallocate( iter )
 
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' vert Profile objects'')') Iam,size(new_obj%vert_Profile_objs_)
-
     end associate
-
-    write(*,*) Iam // 'exiting'
 
   end function constructor
 
@@ -120,9 +111,6 @@ contains
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%vert_Profile_objs_)
       if( vert_Profile_handle .eq. this%vert_Profile_objs_(ndx)%ptr_%handle_ ) then
@@ -136,8 +124,6 @@ contains
     else
       call die_msg( 460768214, "Invalid vert Profile handle: '"// vert_Profile_handle%to_char()//"'" )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end function get_vert_Profile
 
@@ -155,13 +141,9 @@ contains
     integer(kind=ik) :: ndx
     character(len=*), parameter :: Iam = 'vert Profile warehouse finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%vert_Profile_objs_ ) ) then
       deallocate( this%vert_Profile_objs_ )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

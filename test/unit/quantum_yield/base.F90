@@ -217,7 +217,7 @@ contains
       call assert( 896493526, results( i_height, 8  ) == 0.932_dk )
       call assert( 443861373, results( i_height, 9  ) == 0.122_dk )
       call assert( 891229219, results( i_height, 10 ) == 0.122_dk )
-      call assert( 438597066, results( i_height, 11 ) ==   0.0_dk )
+      call assert( 438597066, results( i_height, 11 ) == 0.243_dk )
     end do
     call add_points( input, input_grid, 0.0_dk, 0.0_dk )
     call check_values( results(:,1:4), input, input_grid, 6 )

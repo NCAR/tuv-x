@@ -44,15 +44,11 @@ contains
     real(musica_dk), parameter  :: c  = 7.67e-4_musica_dk
     character(len=*), parameter :: Iam = 'phytoplankton_boucher calculate: '
 
-    write(*,*) Iam,'entering'
-
     where( this%mdl_lambda_center > 290._musica_dk .and. this%mdl_lambda_center < 400._musica_dk )
       spectral_wght = em + exp( a + this%mdl_lambda_center*(b + this%mdl_lambda_center*c) )
     elsewhere
       spectral_wght = 0.0_musica_dk
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

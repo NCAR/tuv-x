@@ -6,8 +6,8 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE "cmake/set_defaults.cmake")
 
 project(
   tuv-x
-  VERSION 0.7.0
-  LANGUAGES Fortran
+  VERSION 0.8.0
+  LANGUAGES Fortran CXX C
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -31,7 +31,7 @@ option(ENABLE_MPI "Enable MPI parallel support" OFF)
 cmake_dependent_option(ENABLE_OPENMP "Enable OpenMP support" OFF "ENABLE_MPI" OFF)
 option(ENABLE_TESTS "Build tests" ON)
 option(ENABLE_COVERAGE "Enable code coverage output" OFF)
-option(ENABLE_MEMCHECK "Enable memory checking in tests" ON)
+option(ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(BUILD_DOCS "Build the documentation" OFF)
 
@@ -78,10 +78,15 @@ add_executable(tuv-x src/tuvx.F90 version.F90)
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
-    musica::musicacore
+    yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
     ${LAPACK_LIBRARIES}
 )
+
+target_include_directories(tuv-x
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
 
 if(ENABLE_OPENMP)
   target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)

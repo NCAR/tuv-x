@@ -53,7 +53,6 @@ contains
     type(string_t) :: spectral_wght_type
     character(len=*), parameter :: Iam = 'spectral wght builder: '
 
-    write(*,*) Iam,'entering'
     new_spectral_wght_t => null()
     call config%get( 'spectral wght type', spectral_wght_type, Iam )
 
@@ -101,7 +100,6 @@ contains
                                  spectral_wght_type%to_char()//"'" )
     end select
     call new_spectral_wght_t%initialize( config, mdlLambdaEdge )
-    write(*,*) Iam,'exiting'
 
   end function spectral_wght_builder
 

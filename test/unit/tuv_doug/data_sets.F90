@@ -10,6 +10,8 @@ program doug_data_set
 
   implicit none
 
+  integer, parameter :: OUTPUT_LEVEL = 62
+
   call musica_mpi_init( )
   call test_data_set( )
   call musica_mpi_finalize( )
@@ -36,7 +38,8 @@ contains
     use tuvx_profile,                  only : profile_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_quantum_yield,            only : quantum_yield_t
-    use tuvx_quantum_yield_factory,    only : quantum_yield_type_name,        &
+    use tuvx_quantum_yield_factory,    only : quantum_yield_builder,          &
+                                              quantum_yield_type_name,        &
                                               quantum_yield_allocate
     use tuvx_test_utils,               only : check_values
 
@@ -45,9 +48,10 @@ contains
     class(cross_section_t),     pointer :: cross_section
     class(quantum_yield_t),     pointer :: quantum_yield
 
-    character(len=*), parameter :: Iam = "H2O cross section test"
+    character(len=*), parameter :: Iam = "Doug's cross section tests"
     type(config_t) :: config, config_pair, cs_config, qy_config
-    class(iterator_t), pointer :: iter
+    type(config_t) :: mask_points_config, mask_point_config
+    class(iterator_t), pointer :: iter, mask_points_iter
     type(string_t) :: cs_type_name, qy_type_name, label
     character, allocatable :: buffer(:)
     integer :: pos, pack_size
@@ -59,7 +63,9 @@ contains
     class(profile_t), pointer :: air, temperature
     class(grid_t), pointer :: wavelength
     real(kind=dk) :: tolerance
+    integer, allocatable :: mask_points(:)
     integer :: i
+    logical :: found
 
     ! Load grids based on Doug's TUV
     grids => get_grids( )
@@ -84,12 +90,28 @@ contains
       call config_pair%get( "label",         label,     Iam )
       call config_pair%get( "tolerance",     tolerance, Iam,                  &
                             default = 1.0e-6_dk )
+      call config_pair%get( "mask", mask_points_config, Iam,           &
+                            found = found )
+      if( found ) then
+        mask_points_iter => mask_points_config%get_iterator( )
+        allocate( mask_points( mask_points_config%number_of_children( ) ) )
+        do i = 1, size( mask_points )
+          call assert( 564855121, mask_points_iter%next( ) )
+          call mask_points_config%get( mask_points_iter, mask_point_config,   &
+                                       Iam )
+          call mask_point_config%get( "index", mask_points( i ), Iam )
+        end do
+        call assert( 888375064, .not. mask_points_iter%next( ) )
+        deallocate( mask_points_iter )
+      else
+        allocate( mask_points(0) )
+      end if
 
       ! Load and test cross section
       if( musica_mpi_rank( comm ) == 0 ) then
         cross_section => cross_section_builder( cs_config, grids, profiles )
         cs_type_name = cross_section_type_name( cross_section )
-        quantum_yield => quantum_yield_t( qy_config, grids, profiles )
+        quantum_yield => quantum_yield_builder( qy_config, grids, profiles )
         qy_type_name = quantum_yield_type_name( quantum_yield )
         pack_size = cs_type_name%pack_size( comm ) +                          &
                     cross_section%pack_size( comm ) +                         &
@@ -127,23 +149,13 @@ contains
 
       call calculate( label%val_,                                             &
                       real( temperature%edge_val_(:temperature%ncells_+1) ),  &
-                      real( air%mid_val_ ), doug_xsqy )
-
-      wavelength => grids%get_grid( "wavelength", "nm" )
-      write(*,*) label%val_
-      do i = 1, size( tuvx_xsqy, dim=2 )
-        write(*,*) i, wavelength%edge_(i), wavelength%mid_(i),                &
-                   cross_section_data(62,i),             &
-                   quantum_yield_data(62,i), tuvx_xsqy(62,i), wl(i),          &
-                   real( doug_xsqy(62,i), kind=dk )
-      end do
-      write(*,*) size( tuvx_xsqy, dim=2 ) + 1,                                &
-                 wavelength%edge_(wavelength%ncells_+1)
-      deallocate( wavelength )
+                      real( air%edge_val_ ), doug_xsqy )
 
       ! Skip first two bins because Lyman-Alpha bins are different in
       ! Doug's version of TUV-x. Data sets were adapted to have Lyman-Alpha
       ! specific data go into the TUV-x Lyman-Alpha bin 121.4-121.9 nm
+      ! Also skip any points explicitly masked in the configuration
+      tuvx_xsqy(:,mask_points(:)) = doug_xsqy(:,mask_points(:))
       call check_values( 377150482, tuvx_xsqy(:,3:),                          &
                          real( doug_xsqy(:,3:), kind=dk ), tolerance )
 
@@ -152,6 +164,7 @@ contains
       deallocate( cross_section_data )
       deallocate( quantum_yield_data )
       deallocate( tuvx_xsqy          )
+      deallocate( mask_points        )
 
     end do
 

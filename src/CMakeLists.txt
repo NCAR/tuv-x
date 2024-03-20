@@ -3,19 +3,27 @@
 
 # object library
 add_library(tuvx_object OBJECT)
+
+target_compile_features(tuvx_object INTERFACE cxx_std_11)
+
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
+)
+
+target_include_directories(tuvx_object
+  PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
 message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
   PUBLIC
-    musica::musicacore
     PkgConfig::netcdff
+    yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
     ${LAPACK_LIBRARIES}
-    ${JSON_LIB}
 )
 
 # tuvx library
@@ -28,10 +36,20 @@ set_target_properties(tuvx PROPERTIES
   SOVERSION ${PROJECT_VERSION_MAJOR}
 )
 
+target_link_libraries(tuvx
+  PUBLIC
+    PkgConfig::netcdff
+    yaml-cpp::yaml-cpp
+    ${BLAS_LIBRARIES}
+    ${LAPACK_LIBRARIES}
+)
+
 target_include_directories(tuvx
   PUBLIC  
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
 target_sources(tuvx_object
@@ -46,6 +64,7 @@ target_sources(tuvx_object
     grid.F90
     grid_factory.F90
     grid_warehouse.F90
+    heating_rates.F90
     interpolate.F90
     la_sr_bands.F90
     linear_algebra.F90
@@ -70,6 +89,6 @@ add_subdirectory(profiles)
 add_subdirectory(quantum_yields)
 add_subdirectory(radiative_transfer)
 add_subdirectory(spectral_weights)
-
+add_subdirectory(util)
 
 ################################################################################

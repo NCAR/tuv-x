@@ -5,12 +5,13 @@
 Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 
 [![License](https://img.shields.io/github/license/NCAR/tuv-x.svg)](https://github.com/NCAR/tuv-x/blob/main/LICENSE)
-[![CI Status](https://github.com/NCAR/tuv-x/actions/workflows/test.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/test.yml)
+[![Ubuntu](https://github.com/NCAR/tuv-x/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/ubuntu.yml)
+[![Docker](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/NCAR/tuv-x/branch/main/graph/badge.svg?token=H46AAEAQF9)](https://codecov.io/gh/NCAR/tuv-x)
 [![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
 [![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/NCAR/tuv-x)
 
-Copyright (C) 2020 National Center for Atmospheric Research
+Copyright (C) 2020-4 National Center for Atmospheric Research
 
 # Try it out!
 
@@ -22,7 +23,7 @@ a tutorial on how to use TUV-x.
 # Building and installing
 To build and install TUV-x locally, you must have the following libraries installed:
 
-- [json-fortran](https://github.com/jacobwilliams/json-fortran)
+- [yaml-cpp](https://github.com/jbeder/yaml-cpp/)
 - [NetCDF](https://www.unidata.ucar.edu/software/netcdf/) (both C and Fortran libraries)
 
 You must also have CMake installed on your machine. 
@@ -143,13 +144,13 @@ The TUV-x software can be cited with
   author       = {Matt Dawson and
                   Kyle Shores and
                   Stacy Walters},
-  title        = {NCAR/tuv-x: Version 0.2.0},
-  month        = sep,
-  year         = 2022,
+  title        = {NCAR/tuv-x: Version 0.5.0},
+  month        = dec,
+  year         = 2023,
   publisher    = {Zenodo},
   version      = {v0.2.0},
-  doi          = {10.5281/zenodo.7126040},
-  url          = {https://doi.org/10.5281/zenodo.7126040}
+  doi          = {10.5281/zenodo.8110063},
+  url          = {https://doi.org/10.5281/zenodo.8110063}
 }
 ```
 
@@ -185,4 +186,4 @@ installation and usage instructions.
 # License
 
 - [Apache 2.0](/LICENSE)
-- Copyright (C) 2022 National Center for Atmospheric Research
+- Copyright (C) 2020-4 National Center for Atmospheric Research

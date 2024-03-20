@@ -46,8 +46,6 @@ contains
 
     character(len=*), parameter :: Iam = 'hobr_oh_br cross section calculate: '
 
-    write(*,*) Iam,'entering'
-
     associate( wc => this%mdl_lambda_center )
     where( wc >= 250._musica_dk .and. wc <= 550._musica_dk )
       cross_section = &
@@ -59,8 +57,6 @@ contains
       cross_section = rZERO
     endwhere
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

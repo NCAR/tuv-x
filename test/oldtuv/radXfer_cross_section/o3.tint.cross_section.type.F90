@@ -79,8 +79,6 @@ contains
     class(base_grid_t), pointer :: lambdaGrid
     type(string_t)     :: Handle
 
-    write(*,*) Iam,'entering'
-
     !> Get model wavelength grids
     Handle = 'Photolysis, wavelength'
     lambdaGrid => gridWareHouse%get_grid( Handle )
@@ -165,8 +163,6 @@ file_loop: &
       call die_msg( 400000008, msg )
     endif has_netcdf_file
 
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -201,8 +197,6 @@ file_loop: &
     class(base_grid_t), pointer :: lambdaGrid
     class(base_profile_t), pointer :: mdlTemperature
     type(string_t)     :: Handle
-
-    write(*,*) Iam,'entering'
 
     Handle = 'Vertical Z'
     zGrid => gridWareHouse%get_grid( Handle )
@@ -249,8 +243,6 @@ lambda_loop: &
     enddo layer_loop
 
     cross_section = transpose( wrkCrossSection )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

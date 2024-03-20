@@ -25,7 +25,7 @@ function(create_standard_test)
   include(CMakeParseArguments)
   cmake_parse_arguments(${prefix} " " "${singleValues}" "${multiValues}" ${ARGN})
   add_executable(test_${TEST_NAME} ${TEST_SOURCES})
-  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils musica::musicacore ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
   if(ENABLE_OPENMP)
     target_link_libraries(test_${TEST_NAME} PUBLIC OpenMP::OpenMP_Fortran)
   endif()
@@ -48,7 +48,7 @@ function(add_tuvx_test test_name test_binary test_args working_dir)
              COMMAND ${test_binary} ${test_args}
              WORKING_DIRECTORY ${working_dir})
   endif()
-  set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1 --trace-children=yes --leak-check=full --gen-suppressions=all ${MEMCHECK_SUPPRESS}")
+  set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1 --trace-children=yes --leak-check=full -s --gen-suppressions=all ${MEMCHECK_SUPPRESS}")
   set(memcheck "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(memcheck)
   if(ENABLE_MPI AND MEMORYCHECK_COMMAND AND ENABLE_MEMCHECK)
@@ -77,5 +77,16 @@ function(add_regression_test test_name command memcheck_command)
 
 endfunction(add_regression_test)
 
+################################################################################
+# Link tuv-x to a test and add it to the suite as a bash script
+
+macro(add_std_test_script test_name script_path)
+  target_include_directories(${test_name} PUBLIC ${CMAKE_BINARY_DIR}/src)
+  target_link_libraries(${test_name} PUBLIC musica::tuvx)
+  if(ENABLE_OPENMP)
+    target_link_libraries(${test_name} PUBLIC OpenMP::OpenMP_Fortran)
+  endif()
+  add_test(NAME ${test_name} COMMAND ${script_path})
+endmacro(add_std_test_script)
 
 ################################################################################

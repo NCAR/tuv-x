@@ -45,8 +45,6 @@ contains
     character(len=*), parameter :: Iam = 'Profile builder: '
     type(string_t) :: Profile_type
 
-    write(*,*) Iam,'entering'
-
     new_Profile_t => null()
     call config%get( 'Profile type', Profile_type, Iam )
 
@@ -72,8 +70,6 @@ contains
     end select
 
     call new_Profile_t%initialize( config, gridWareHouse )
-
-    write(*,*) Iam,'exiting'
 
   end function Profile_builder
 

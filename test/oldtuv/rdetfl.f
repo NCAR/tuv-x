@@ -99,20 +99,6 @@
          CALL addpnt(x1,y1,kdata,n,x1(n)*(1.+deltax),0.)
          CALL addpnt(x1,y1,kdata,n,      1.e+38,0.)
 
-      write(*,*) ' '
-      write(*,*) 'Diagnostics for atlas3_1994_317_a'
-      write(*,*) 'read1: size model lambdaGrid = ',nw
-      write(*,*) 'read1: lambdaGrid'
-      write(*,'(1p10g15.7)') wl(:nw)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputGrid = ',n
-      write(*,*) 'read1: inputGrid'
-      write(*,'(1p10g15.7)') x1(:n)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputData = ',n
-      write(*,*) 'read1: inputData'
-      write(*,'(1p10g15.7)') y1(:n)
-
       call diagout( 'atlas.inputGrid.old', x1(:n) )
       call diagout( 'atlas.inputData.old', y1(:n) )
 
@@ -123,11 +109,6 @@
          ENDIF         
 
       call diagout( 'atlas.interpolated.old', yg2(:nw-1) )
-
-      write(*,*) ' '
-      write(*,*) 'read1: size yg2 = ',size(yg2)
-      write(*,*) 'read1: interpolated Etfl'
-      write(*,'(1p10g15.7)') yg2(:nw-1)
 
          fil = 'odat/DATAE1/SUN/neckel.flx'
          write(kout,*) fil
@@ -156,24 +137,7 @@
       call diagout( 'neckel.inputGrid.old', x1(:n+1) )
       call diagout( 'neckel.inputData.old', y1(:n+1) )
 
-      write(*,*) ' '
-      write(*,*) 'Diagnostics for neckel.flx'
-      write(*,*) 'read1: size model lambdaGrid = ',nw
-      write(*,*) 'read1: lambdaGrid'
-      write(*,'(1p10g15.7)') wl(:nw)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputGrid = ',n+1
-      write(*,*) 'read1: inputGrid'
-      write(*,'(1p10g15.7)') x1(:n+1)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputData = ',n+1
-      write(*,*) 'read1: inputData'
-      write(*,'(1p10g15.7)') y1(:n+1)
          call inter4(nw,wl,yg3,n+1,x1,y1,0)
-      write(*,*) ' '
-      write(*,*) 'read1: size yg3 = ',size(yg3)
-      write(*,*) 'read1: interpolated Etfl'
-      write(*,'(1p10g15.7)') yg3(:nw-1)
       call diagout( 'neckel.interpolated.old', yg3(:nw-1) )
 
          nhead = 8
@@ -309,20 +273,6 @@
      >            lambda_hi(n)*(1.+deltax),0.)
       CALL addpnt(lambda_hi,irrad_hi,10000,n,              1.e38,0.)
 
-      write(*,*) ' '
-      write(*,*) 'Diagnostics for susim_hi.flx'
-      write(*,*) 'read1: size model lambdaGrid = ',nw
-      write(*,*) 'read1: lambdaGrid'
-      write(*,'(1p10g15.7)') wl(:nw)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputGrid = ',n
-      write(*,*) 'read1: inputGrid'
-      write(*,'(1p10g15.7)') lambda_hi(:n)
-      write(*,*) ' '
-      write(*,*) 'read1: size inputData = ',n
-      write(*,*) 'read1: inputData'
-      write(*,'(1p10g15.7)') irrad_hi(:n)
-
       call diagout( 'susim.inputGrid.old', lambda_hi(:n) )
       call diagout( 'susim.inputData.old', irrad_hi(:n) )
 
@@ -333,11 +283,6 @@
       ENDIF
 
       call diagout( 'susim.interpolated.old', f(:nw-1) )
-
-      write(*,*) ' '
-      write(*,*) 'read1: size f = ',size(f)
-      write(*,*) 'read1: interpolated Etfl'
-      write(*,'(1p10g15.7)') f(:nw-1)
 
       END SUBROUTINE read1
 

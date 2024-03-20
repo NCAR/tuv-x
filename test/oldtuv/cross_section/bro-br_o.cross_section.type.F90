@@ -57,7 +57,6 @@ contains
     type(netcdf_t), allocatable :: netcdf_obj
     type(string_t), allocatable :: netcdfFiles(:)
 
-    write(*,*) Iam,'entering'
     !> set model wavelength array
     this%mdl_lambda_edge = mdlLambdaEdge
     nmdlLambda = size( this%mdl_lambda_edge )
@@ -101,8 +100,6 @@ file_loop: &
         deallocate( netcdf_obj )
       enddo file_loop
     endif has_netcdf_file
-
-    write(*,*) Iam,'exiting'
 
   end subroutine initialize
 

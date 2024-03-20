@@ -152,10 +152,10 @@ contains
     use musica_string,                 only : string_t
     use tuvx_grid,                     only : grid_t
 
-    class(grid_warehouse_t), intent(inout) :: this ! This :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
-    type(string_t),          intent(in)    :: name ! The name of a grid, see :ref:`configuration-grids` for grid names
-    type(string_t),          intent(in)    :: units ! The units of the grid
-    class(grid_t), pointer                 :: a_grid_ptr ! The :f:type:`~tuvx_grid/grid_t` which matches the name passed in
+    class(grid_warehouse_t), intent(in) :: this ! This :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
+    type(string_t),          intent(in) :: name ! The name of a grid, see :ref:`configuration-grids` for grid names
+    type(string_t),          intent(in) :: units ! The units of the grid
+    class(grid_t), pointer              :: a_grid_ptr ! The :f:type:`~tuvx_grid/grid_t` which matches the name passed in
 
     a_grid_ptr => this%get_grid_char( name%to_char( ), units%to_char( ) )
 
@@ -169,9 +169,9 @@ contains
     use musica_assert,                 only : assert_msg
     use tuvx_grid,                     only : grid_t
 
-    class(grid_warehouse_t),  intent(inout) :: this ! This grid warehouse
-    type(grid_warehouse_ptr), intent(in)    :: ptr  ! Pointer to a grid in the warehouse
-    class(grid_t),            pointer       :: grid
+    class(grid_warehouse_t),  intent(in) :: this ! This grid warehouse
+    type(grid_warehouse_ptr), intent(in) :: ptr  ! Pointer to a grid in the warehouse
+    class(grid_t),            pointer    :: grid
 
     call assert_msg( 870082797, ptr%index_ > 0, "Invalid grid pointer" )
     allocate( grid, source = this%grids_( ptr%index_ )%val_ )

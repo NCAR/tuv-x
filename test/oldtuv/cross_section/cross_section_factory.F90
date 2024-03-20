@@ -59,7 +59,6 @@ contains
     type(string_t) :: cross_section_type
     character(len=*), parameter :: Iam = 'cross section builder: '
 
-    write(*,*) Iam,'entering'
     new_cross_section_t => null( )
     call config%get( 'cross section type', cross_section_type, Iam )
 
@@ -79,7 +78,6 @@ contains
                                  cross_section_type%to_char( )//"'" )
     end select
     call new_cross_section_t%initialize( config, mdlLambdaEdge )
-    write(*,*) Iam,'exiting'
 
   end function cross_section_builder
 

@@ -42,12 +42,8 @@ contains
     real(kind=musica_dk)        :: factor(1)
     character(len=*), parameter :: Iam = 'scup_mice calculate: '
 
-    write(*,*) Iam,'entering'
-
     factor = 1._musica_dk/sw_futr( (/300._musica_dk/) )
     spectral_wght = sw_futr( this%mdl_lambda_center ) * factor(1)
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -31,4 +31,6 @@ target_sources(tuvx_object
     rayliegh.F90
 )
 
+add_subdirectory(util)
+
 ################################################################################

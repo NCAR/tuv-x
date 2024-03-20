@@ -47,10 +47,6 @@ contains
 
     character(len=*), parameter :: Iam = 'rayliegh cross section initialize: '
 
-    write(*,*) Iam,'entering'
-
-    write(*,*) Iam,'exiting'
-
   end subroutine initialize
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -81,8 +77,6 @@ contains
     real(musica_dk), allocatable  :: pwr(:), wrk(:)
     real(musica_dk), allocatable  :: wrkCrossSection(:,:)
 
-    write(*,*) Iam,'entering'
-
     Handle = 'Vertical Z'
     zGrid => gridWareHouse%get_grid( Handle )
     Handle = 'Photolysis, wavelength'
@@ -109,8 +103,6 @@ contains
     enddo
 
     cross_section = transpose( wrkCrossSection )
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

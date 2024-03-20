@@ -178,7 +178,7 @@ contains
     real(dk)                :: scale_factor
     type(string_t)          :: reaction_key
     logical                 :: do_apply_bands, found
-    type(string_t)          :: required_keys(3), optional_keys(1)
+    type(string_t)          :: required_keys(3), optional_keys(2)
     type(cross_section_ptr), allocatable :: temp_cs(:)
     type(quantum_yield_ptr), allocatable :: temp_qy(:)
     type(string_t),          allocatable :: temp_handle(:)
@@ -190,6 +190,7 @@ contains
     required_keys(2) = "cross section"
     required_keys(3) = "quantum yield"
     optional_keys(1) = "scaling factor"
+    optional_keys(2) = "heating"
 
     call assert_msg( 780273355,                                               &
                      config%validate( required_keys, optional_keys ),         &
@@ -294,7 +295,7 @@ contains
     !> Local variables
     character(len=*), parameter :: Iam = "photolysis rates calculator"
     integer               :: vertNdx, rateNdx, nRates
-    real(dk), allocatable :: airVcol(:), airScol(:)
+    real(dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     real(dk), allocatable :: xsqyWrk(:)
     real(dk), allocatable :: cross_section(:,:)
     real(dk), allocatable :: quantum_yield(:,:)
@@ -343,13 +344,15 @@ rate_loop:                                                                    &
       ! O2 photolysis can have special la & srb band handling
       if( any( this%o2_rate_indices_ == rateNdx ) ) then
         airProfile => profile_warehouse%get_profile( this%air_profile_ )
-        allocate( airVcol( airProfile%ncells_ ),                              &
-                  airScol( airProfile%ncells_ + 1 ) )
-        call spherical_geometry%air_mass( airProfile%exo_layer_dens_, airVcol,&
-                                          airScol )
-        call la_srb%cross_section( grid_warehouse, profile_warehouse, airVcol,&
-                                  airScol, cross_section, spherical_geometry )
-        deallocate( airVcol, airScol )
+        allocate( air_vertical_column( airProfile%ncells_ ),                  &
+                  air_slant_column( airProfile%ncells_ + 1 ) )
+        call spherical_geometry%air_mass( airProfile%exo_layer_dens_,         &
+                                          air_vertical_column,                &
+                                          air_slant_column )
+        call la_srb%cross_section( grid_warehouse, profile_warehouse,         &
+                                   air_vertical_column, air_slant_column,     &
+                                   cross_section, spherical_geometry )
+        deallocate( air_vertical_column, air_slant_column )
         deallocate( airProfile )
       endif
 
@@ -370,7 +373,8 @@ rate_loop:                                                                    &
       xsqy = transpose( cross_section * quantum_yield )
       do vertNdx = 1, zGrid%ncells_ + 1
         photolysis_rates( vertNdx, rateNdx ) =                                &
-            dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) )
+            dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) ) *    &
+            this%scaling_factors_( rateNdx )
       enddo
       if( allocated( cross_section ) ) deallocate( cross_section )
       if( allocated( quantum_yield ) ) deallocate( quantum_yield )

@@ -50,8 +50,6 @@ contains
     real(musica_dk)    :: Temp, lambda, Wpoly
     real(musica_dk)    :: w1, w2, w3, w4
 
-    write(*,*) Iam,'entering'
-
     Temp = max( min( 300._musica_dk,environment%temperature ),210._musica_dk )
     Temp = Temp - 295._musica_dk 
     do wNdx = 1,size(this%mdl_lambda_center)
@@ -66,8 +64,6 @@ contains
         cross_section(wNdx) = this%cross_section(1)%array(wNdx,1)
       endif
     enddo
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

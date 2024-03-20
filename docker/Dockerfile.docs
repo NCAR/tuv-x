@@ -1,0 +1,39 @@
+FROM fedora:37
+
+RUN dnf -y update \
+    && dnf -y install \
+        doxygen \
+        gcc-fortran \
+        gcc-c++ \
+        gcc \
+        gdb \
+        git \
+        netcdf-fortran-devel \
+        cmake \
+        make \
+        lcov \
+        valgrind \
+        python3 \
+        python3-pip \
+        lapack-devel \
+        yaml-cpp-devel \
+    && dnf clean all
+
+# build the tuv-x tool
+COPY . /tuv-x/
+
+RUN pip3 install -r /tuv-x/docs/requirements.txt
+
+ARG SUFFIX=""
+ENV SWITCHER_SUFFIX=$SUFFIX
+
+RUN echo "The suffix is '$SWITCHER_SUFFIX'"
+
+RUN mkdir /build \
+      && cd /build \
+      && cmake -D ENABLE_TESTS=OFF \
+               -D BUILD_DOCS=ON \
+               /tuv-x \
+      && make docs
+
+WORKDIR /build

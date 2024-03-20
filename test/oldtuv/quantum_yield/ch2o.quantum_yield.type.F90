@@ -51,8 +51,6 @@ contains
     real(musica_dk), allocatable :: quantum_yield_tmp(:)
     real(musica_dk), allocatable :: quantum_yield_wrk(:)
 
-    write(*,*) Iam,'entering'
-
     quantum_yield_chnl1 = this%quantum_yield(1)%array(:,1)
     quantum_yield_chnl2 = this%quantum_yield(1)%array(:,2)
     quantum_yield_tmp   = rONE - quantum_yield_chnl1
@@ -68,8 +66,6 @@ contains
     elsewhere
       quantum_yield = quantum_yield_chnl2
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -92,8 +92,6 @@ contains
     logical         :: found
     character(len=:), allocatable :: number
 
-    write(*,*) Iam,'entering'
-
     !> add endpoints to data arrays; first the lower bound
     nRows = size(data_lambda)
     lowerLambda = data_lambda(1) ; upperLambda = data_lambda(nRows)
@@ -122,8 +120,6 @@ contains
 
     call addpnt(x=data_lambda,y=data_parameter,xnew=(rONE+deltax)*upperLambda,ynew=addpnt_val_) 
     call addpnt(x=data_lambda,y=data_parameter,xnew=1.e38_musica_dk,ynew=addpnt_val_) 
-
-    write(*,*) Iam,'exiting'
 
   end subroutine addpnts
 

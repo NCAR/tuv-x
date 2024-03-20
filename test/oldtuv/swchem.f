@@ -386,7 +386,6 @@ c      CALL r10(nw,wl,wc,nz,tlev,airden,j,sq,jlabel,tpflag)
 ****************************************************************
 
       IF (j .GT. kj) STOP '1002'
-      write(*,'(''swchem: Set '',i3,'' photorates'')') j
 
       END SUBROUTINE swchem
 

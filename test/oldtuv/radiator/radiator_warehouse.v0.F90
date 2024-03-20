@@ -62,8 +62,6 @@ contains
     character(len=32)           :: keychar
     type(string_t)              :: keyString
 
-    write(*,*) Iam // 'entering'
-
     call config%get( 'Radiators', radiator_config_set, Iam )
     iter => radiator_config_set%get_iterator()
 
@@ -73,8 +71,6 @@ contains
 
     do while( iter%next() )
       keychar = radiator_config_set%key(iter)
-      write(*,*) ' '
-      write(*,*) Iam,'key = ',trim(keychar)
       keyString = keychar
       call radiator_config_set%get( iter, radiator_config, Iam )
       call radiator_config%add( 'Handle', keyString, Iam )
@@ -87,9 +83,6 @@ contains
     end do
 
     deallocate( iter )
-
-    write(*,*) ' '
-    write(*,'(a,''There are '',i3,'' radiators'')') Iam,size(radiator_warehouse%radiators_)
 
   end function constructor
 
@@ -114,9 +107,6 @@ contains
     integer(ik) :: ndx
     logical(lk) :: found
 
-    write(*,*) ' '
-    write(*,*) Iam,'entering'
-
     found = .false._lk
     do ndx = 1,size(this%handle_)
       if( radiator_handle .eq. this%handle_(ndx) ) then
@@ -131,8 +121,6 @@ contains
       call die_msg( 460768324, "Invalid radiator handle: '"// radiator_handle%to_char()//"'" )
     endif
 
-    write(*,*) Iam,'exiting'
-
   end function get_radiator
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -146,13 +134,9 @@ contains
     integer(kind=musica_ik) :: ndx
     character(len=*), parameter :: Iam = 'radiator_warehouse finalize: '
 
-    write(*,*) Iam,'entering'
-
     if( allocated( this%radiators_ ) ) then
       deallocate( this%radiators_ )
     endif
-
-    write(*,*) Iam,'exiting'
 
   end subroutine finalize
 

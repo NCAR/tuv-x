@@ -244,10 +244,6 @@
               mu2(i) = SIGN( MAX(ABS(mu2(i)),rONE/SQRT(largest)),mu2(i) )
             END IF
     
-            if( initialized .and. i == 2 ) then
-              write(*,*)'TUV: dsdh diagnostic'
-              write(*,*) dsdh(i,1:i)
-            endif
           END IF
 
 !** the following gamma equations are from pg 16,289, Table 1
@@ -301,13 +297,6 @@
          cuptn(i) = up*expon1
          cdntn(i) = dn*expon1
 
-         if( initialized .and. i == 3 ) then
-           write(*,*) 'TUV: cup diagnostic'
-           write(*,*) expon, expon0, expon1, divisr, temp, up, dn
-           write(*,*) lam(i), mu2(i), gam1, gam2, gam3, gam4
-           write(*,*) tauc(i-1:i), tausla(i-1:i)
-         endif
- 
       ENDDO layer_loop
 
        if( initialized ) then
@@ -377,8 +366,6 @@
         call diagout( 'b.old',b )
         call diagout( 'd.old',d )
         call diagout( 'e.old',e )
-        write(*,*) 'e diagnostic'
-        write(*,*) e(5), e1(2), e3(2), cup(3), cdn(3), cuptn(2), cdntn(2)
         initialized = .false.
       endif
 ! solve tri-diagonal system:

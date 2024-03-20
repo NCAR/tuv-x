@@ -15,11 +15,13 @@ target_sources(tuvx_object
     clono2-clo_no2.F90
     clono2-cl_no3.F90
     ho2-oh_o.F90
+    h2so4_mills.F90
     mvk.F90
     no2_tint.F90
     no3_aq.F90
     o3-o2_o1d.F90
     o3-o2_o3p.F90
+    taylor_series.F90
     tint.F90
 )
 

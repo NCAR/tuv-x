@@ -3,6 +3,7 @@
 
 # include things to copy
 !src/
+!include/
 !etc/
 !data/
 !cmake/

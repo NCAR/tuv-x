@@ -1,0 +1,35 @@
+name: Ubuntu
+
+on: [ push, pull_request ]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gcc:
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    strategy:
+      matrix:
+        gcc_version: [11, 12, 13]
+    env:
+      FC: gfortran-${{ matrix.gcc_version }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev
+    - name: Install python dependencies
+      run: pip install numpy scipy
+    - name: Run Cmake 
+      run: cmake -S . -B build 
+    - name: Build
+      run: cmake --build build --parallel
+    - name: Run tests
+      run: |
+        cd build
+        ctest --rerun-failed --output-on-failure . --verbose

@@ -44,16 +44,12 @@ contains
     real(musica_dk), parameter  :: w2 = 390._musica_dk
     character(len=*), parameter :: Iam = 'plant_damage_flint_caldwell_ext calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = EXP( a0*EXP(-EXP(a1*(this%mdl_lambda_center - w1)/1.15_musica_dk)) &
                                      + ((w2 - this%mdl_lambda_center)/121.7557_musica_dk - 4.183832_musica_dk) )
     spectral_wght = spectral_wght * this%mdl_lambda_center / 300._musica_dk
     where( spectral_wght < 0.0_musica_dk .or. this%mdl_lambda_center > 390._musica_dk )
       spectral_wght = 0.0_musica_dk
     endwhere
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

@@ -51,8 +51,6 @@ contains
     integer(musica_ik) :: wndx
     real(musica_dk) :: w1, w2, w3, w4, tcoeff, Tadj
 
-    write(*,*) Iam,'entering'
-
     associate( wc => this%mdl_lambda_center, Temp => environment%temperature )
       Tadj = min(max(Temp,210._musica_dk),300._musica_dk) - 295._musica_dk
       do wNdx = 1,size(wc)
@@ -68,8 +66,6 @@ contains
         endif
       enddo
     end associate
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

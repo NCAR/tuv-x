@@ -41,11 +41,7 @@ contains
 
     character(len=*), parameter :: Iam = 'exponential_decay calculate: '
 
-    write(*,*) Iam,'entering'
-
     spectral_wght = 10._musica_dk**((300._musica_dk - this%mdl_lambda_center)/14._musica_dk)
-
-    write(*,*) Iam,'exiting'
 
   end function run
 

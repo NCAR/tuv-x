@@ -44,13 +44,9 @@ contains
     character(len=*), parameter :: Iam = 'ch3coch2ch3+hv->ch3co+ch2ch3 calculate: '
     real(musica_dk) :: ptorr
 
-    write(*,*) Iam,'entering'
-
     ptorr = 760._musica_dk*environment%number_density_air/2.69e19_musica_dk
     quantum_yield = rONE/(0.96_musica_dk + 2.22E-3_musica_dk*ptorr)
     quantum_yield = min(quantum_yield, rONE)
-
-    write(*,*) Iam,'exiting'
 
   end function run
 
