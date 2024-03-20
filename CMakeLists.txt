@@ -6,7 +6,7 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE "cmake/set_defaults.cmake")
 
 project(
   tuv-x
-  VERSION 0.7.0
+  VERSION 0.8.0
   LANGUAGES Fortran CXX C
 )
 
