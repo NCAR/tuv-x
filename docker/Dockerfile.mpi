@@ -42,7 +42,6 @@ RUN mkdir build \
                -D CMAKE_CXX_COMPILER=/usr/lib64/openmpi/bin/mpicxx \
                -D ENABLE_OPENMP:BOOL=TRUE \
                -D ENABLE_MPI:BOOL=TRUE \
-               -D ENABLE_MEMCHECK:BOOL=FALSE \
                ../tuv-x \
       && make -j 8 
 

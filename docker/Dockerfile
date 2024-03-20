@@ -27,7 +27,6 @@ COPY . /tuv-x/
 RUN mkdir /build \
       && cd /build \
       && cmake -D CMAKE_BUILD_TYPE=release \
-               -D ENABLE_MEMCHECK=OFF \
                /tuv-x \
       && make install -j 8
 
