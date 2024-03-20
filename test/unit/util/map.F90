@@ -46,10 +46,10 @@ contains
     character(len=*), parameter :: my_name = "map_t tests"
     type(map_t) :: map
     type(string_t), allocatable :: from_labels(:), to_labels(:)
-    real(kind=dk), allocatable :: from(:), to(:)
+    real(kind=dk), allocatable :: from(:), to(:), omp_to(:,:)
     type(config_t) :: config
     character, allocatable :: buffer(:)
-    integer :: pos, pack_size
+    integer :: pos, pack_size, i_thread, n_threads
     integer, parameter :: comm = MPI_COMM_WORLD
 
     config = '{'//                                                            &
@@ -132,17 +132,27 @@ contains
     to_labels(3)   = "quz"
 
     from = (/ 10.0_dk, 20.0_dk, 30.0_dk /)
-    allocate( to( 3 ) )
+    
+#ifdef MUSICA_USE_OPENMP
+    n_threads = omp_get_num_threads( )
+#else
+    n_threads = 1
+#endif
+
+    allocate( omp_to( n_threads, 3 ) )
 
     map = map_t( config, from_labels, to_labels )
 
-    !$omp parallel
-    call check_omp_case( map, from, to )
-    !$omp end parallel
+    !$omp parallel do private(i_thread)
+    do i_thread = 1, n_threads
+      call check_omp_case( map, from, omp_to( i_thread, : ) )
+    end do
+    !$omp end parallel do
+    
     deallocate( from_labels )
     deallocate( to_labels   )
     deallocate( from        )
-    deallocate( to          )
+    deallocate( omp_to      )
 
     config = '{'//                                                            &
              '  "match full source": false,'//                                &
