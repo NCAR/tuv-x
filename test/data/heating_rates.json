@@ -70,6 +70,7 @@
       "name": "jbar",
       "cross section": {
         "type": "base",
+        "apply O2 bands": true,
         "data": {
           "default value": 45.6
         }
@@ -83,6 +84,7 @@
       "name": "jbaz",
       "cross section": {
         "type": "base",
+        "apply O2 bands": false,
         "data": {
           "default value": 78.9
         }
@@ -94,6 +96,24 @@
       "scaling factor": 1.1,
       "heating": {
         "energy term": 3000.0
+      }
+    },
+    {
+      "name": "jqux",
+      "cross section": {
+        "type": "base",
+        "apply O2 bands": true,
+        "data": {
+          "default value": 101.1
+        }
+      },
+      "quantum yield": {
+        "type": "base",
+        "constant value": 0.3
+      },
+      "scaling factor": 1.12,
+      "heating": {
+        "energy term": 3100.0
       }
     }
   ]

@@ -45,11 +45,11 @@ contains
     integer :: pos, pack_size, i_height, i_wavelength
     integer, parameter :: comm = MPI_COMM_WORLD
     real(dk), parameter :: hc = 6.62608e-34_dk * 2.9979e8_dk / 1.e-9_dk
-    real(dk) :: bde(6,2), actinic_flux(5,6), etfl(6)
+    real(dk) :: bde(6,3), actinic_flux(5,6), etfl(6)
     real(dk) :: wc(6) = (/ 425.0_dk, 475.0_dk, 525.0_dk, 575.0_dk, 625.0_dk,  &
                            675.0_dk /)
     type(radiation_field_t) :: radiation_field
-    real(dk) :: calculated_rates(5,2), expected_rates(5,2)
+    real(dk) :: calculated_rates(5,3), expected_rates(5,3)
     type(la_sr_bands_t) :: la_srb
     type(spherical_geometry_t) :: spherical_geometry
 
@@ -85,18 +85,30 @@ contains
 
     ! check labels
     labels = heating_rates%labels( )
-    call assert( 152892147, size(labels) == 2 )
+    call assert( 152892147, size(labels) == 3 )
     call assert( 437272930, labels(1) == "jfoo" )
     call assert( 884640776, labels(2) == "jbaz" )
+    call assert( 284609896, labels(3) == "jqux" )
 
     ! check bond dissociation energies
-    call assert( 613305591, size( heating_rates%heating_parameters_ ) == 2 )
+    call assert( 613305591, size( heating_rates%heating_parameters_ ) == 3 )
     bde(:,1) = max( 0.0_dk, hc * ( 2.0_dk - wc(:) ) / ( 2.0_dk * wc(:) ) )
     call check_values( heating_rates%heating_parameters_(1)%energy_,          &
                        bde(:,1), 1.0e-4_dk )
     bde(:,2) = max( 0.0_dk, hc * ( 3000.0_dk - wc(:) ) / ( 3000.0_dk * wc(:) ) )
     call check_values( heating_rates%heating_parameters_(2)%energy_,          &
                        bde(:,2), 1.0e-4_dk )
+    bde(:,3) = max( 0.0_dk, hc * ( 3100.0_dk - wc(:) ) / ( 3100.0_dk * wc(:) ) )
+    call check_values( heating_rates%heating_parameters_(3)%energy_,          &
+                       bde(:,3), 1.0e-4_dk )
+
+    ! Check that O2 bands are applied correctly
+    call assert( 444690481, allocated( heating_rates%o2_rate_indices_ ) )
+    call assert( 218600552, size( heating_rates%o2_rate_indices_ ) == 1 )
+    call assert( 383493149, heating_rates%o2_rate_indices_(1) == 3 )  
+    ! disable O2 bands because LA/SR object not set up
+    deallocate( heating_rates%o2_rate_indices_ )
+    allocate( heating_rates%o2_rate_indices_(0) )
 
     ! check calculated heating rates
     calculated_rates(:,:) = 0.0_dk
@@ -120,11 +132,12 @@ contains
           dot_product( actinic_flux(i_height,:), bde(:,1) * 12.3_dk * 0.75_dk )
         expected_rates( i_height, 2 ) = 1.1_dk *                              &
           dot_product( actinic_flux(i_height,:), bde(:,2) * 78.9_dk * 0.5_dk )
+        expected_rates( i_height, 3 ) = 1.12_dk *                             &
+          dot_product( actinic_flux(i_height,:), bde(:,3) * 101.1_dk * 0.3_dk )
       end do
     end do
     call heating_rates%get( la_srb, spherical_geometry, grids, profiles,      &
                             radiation_field, calculated_rates )
-
     call check_values( calculated_rates, expected_rates, 1.0e-4_dk )
 
     deallocate( grids )
