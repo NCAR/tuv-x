@@ -8,7 +8,9 @@ module tuvx_radiator_warehouse
 
   ! Including musica_config at the module level to avoid an ICE
   ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
   use musica_config,                   only : config_t
+#endif
   use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_ptr
 
@@ -111,6 +113,10 @@ contains
      cross_section_warehouse ) result( radiator_warehouse )
     ! Constructs radiator_warehouse_t abjects
 
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
+    use musica_config,        only : config_t
+#endif
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t

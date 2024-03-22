@@ -45,6 +45,10 @@ set(INSTALL_MOD_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
 # Compiler specific flags
 if(${CMAKE_Fortran_COMPILER_ID} MATCHES "NAG")
   add_definitions(-DMUSICA_IS_NAG_COMPILER)
+elseif(${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
+  add_definitions(-DMUSICA_IS_GNU_COMPILER)
+elseif(${CMAKE_Fortran_COMPILER_ID} MATCHES "Intel")
+  add_definitions(-DMUSICA_IS_INTEL_COMPILER)
 endif()
 
 # MPI

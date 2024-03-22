@@ -2,7 +2,11 @@
 ! SPDX-License-Identifier: Apache-2.0
 module tuvx_radiator_from_netcdf_file
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
   use musica_config,                   only : config_t
+#endif
   use musica_constants,                only : dk => musica_dk
   use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_t
@@ -36,6 +40,10 @@ contains
       result ( this )
 
     use musica_assert,                 only : assert_msg
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
+    use musica_config,        only : config_t
+#endif
     use musica_string,                 only : string_t
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t

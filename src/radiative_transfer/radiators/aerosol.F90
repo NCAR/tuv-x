@@ -4,7 +4,11 @@
 module tuvx_radiator_aerosol
 ! A radiator that accounts for the effects of aerosols on the radiation field
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
   use musica_config,                   only : config_t
+#endif
   use musica_constants,                only : dk => musica_dk
   use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_t
@@ -36,6 +40,10 @@ contains
     ! Initialize radiator_t object
 
     use musica_assert,                 only : assert_msg
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
+    use musica_config,        only : config_t
+#endif
     use tuvx_constants,                only : nzero, pzero
     use tuvx_diagnostic_util,          only : diagout
     use tuvx_interpolate,              only : interpolator_t
