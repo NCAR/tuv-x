@@ -4,6 +4,7 @@
 !solar zenith angle from time type
 module micm_sza_from_time
 
+  use musica_config, only : config_t
   use musica_constants, only : dk => musica_dk, ik => musica_ik, lk => musica_lk
   use micm_Profile,     only : base_profile_t
   use musica_assert,    only : die_msg
@@ -23,7 +24,6 @@ contains
   !> Initialize solar zenith angle profile from time
   subroutine initialize( this, profile_config, gridWareHouse )
       
-    use musica_config, only : config_t
     use musica_string, only : string_t
     use micm_1d_grid,  only : base_grid_t
     use micm_grid_warehouse,  only : grid_warehouse_t

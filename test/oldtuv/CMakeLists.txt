@@ -101,6 +101,7 @@ target_link_libraries(oldphotolib musica::tuvx ${NETCDF_LIBS})
 set_target_properties(oldphotolib PROPERTIES OUTPUT_NAME oldphoto)
 
 add_executable(oldtuv tuv.f)
+set_target_properties(oldtuv PROPERTIES LINKER_LANGUAGE Fortran)
 target_link_libraries(oldtuv oldphotolib)
 
 ################################################################################

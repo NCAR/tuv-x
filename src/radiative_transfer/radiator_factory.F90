@@ -5,6 +5,7 @@ module tuvx_radiator_factory
 ! Builds :f:type:`~tuvx_radiator/radiator_t` s for
 ! :f:type:`~tuvx_radiator_warehouse/radiator_warehouse_t`.
 
+  use musica_config,                   only : config_t
   use tuvx_radiator,                   only : radiator_t
   use tuvx_radiator_aerosol,           only : radiator_aerosol_t
   use tuvx_radiator_from_host,         only : radiator_from_host_t
@@ -24,7 +25,6 @@ contains
     ! Builder of :f:type:`~tuvx_radiator/radiator_t` objects
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t

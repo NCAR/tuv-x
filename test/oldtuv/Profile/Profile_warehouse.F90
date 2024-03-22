@@ -8,6 +8,7 @@
 !!
 module micm_Profile_warehouse
 
+  use musica_config,                 only : config_t
   use micm_Profile, only : abs_Profile_ptr
 
   implicit none
@@ -39,7 +40,6 @@ contains
   !> Profile warehouse constructor
   function constructor( config, gridwarehouse ) result( Profile_warehouse_obj )
 
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use micm_grid_warehouse,           only : grid_warehouse_t

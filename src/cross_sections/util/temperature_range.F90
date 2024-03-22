@@ -53,7 +53,6 @@ contains
     ! Constructs temperature range objects
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
 
     type(temperature_range_t)               :: this

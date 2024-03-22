@@ -6,7 +6,10 @@ module tuvx_profile_warehouse
   ! :f:type:`~tuvx_profile/profile_t` s created by the
   ! :f:mod:`tuvx_profile_factory`
 
-  use tuvx_profile, only : profile_ptr
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
+  use tuvx_profile,                    only : profile_ptr
 
   implicit none
 

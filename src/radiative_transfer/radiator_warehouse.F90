@@ -6,6 +6,9 @@ module tuvx_radiator_warehouse
 ! :f:type:`~tuvx_radiator/radiator_t`'s built by the
 ! :f:mod:`~tuvx_radiator_factory`.
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
   use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_ptr
 
@@ -108,7 +111,6 @@ contains
      cross_section_warehouse ) result( radiator_warehouse )
     ! Constructs radiator_warehouse_t abjects
 
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t

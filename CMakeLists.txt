@@ -75,6 +75,11 @@ configure_file(src/version.F90.in version.F90 @ONLY)
 
 add_executable(tuv-x src/tuvx.F90 version.F90)
 
+set_target_properties(tuv-x
+  PROPERTIES
+  LINKER_LANGUAGE Fortran
+)
+
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx

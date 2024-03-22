@@ -60,7 +60,6 @@ contains
   function constructor( config ) result ( this )
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_grid,                     only : grid_t

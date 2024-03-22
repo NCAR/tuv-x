@@ -4,6 +4,7 @@
 !profile type
 module micm_Profile
 
+  use musica_config, only : config_t
   use musica_constants, only : musica_dk, musica_ik
   use musica_string,    only : string_t
 
@@ -46,7 +47,6 @@ interface
     !> Initialize grid
     subroutine initial( this, profile_config, gridWareHouse )
       
-      use musica_config, only : config_t
       use musica_constants, only : musica_dk
       use micm_grid_warehouse,  only : grid_warehouse_t
 

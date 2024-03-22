@@ -4,6 +4,7 @@
 module tuvx_radiator_aerosol
 ! A radiator that accounts for the effects of aerosols on the radiation field
 
+  use musica_config,                   only : config_t
   use musica_constants,                only : dk => musica_dk
   use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_t
@@ -35,7 +36,6 @@ contains
     ! Initialize radiator_t object
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use tuvx_constants,                only : nzero, pzero
     use tuvx_diagnostic_util,          only : diagout
     use tuvx_interpolate,              only : interpolator_t

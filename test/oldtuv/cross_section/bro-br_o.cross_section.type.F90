@@ -8,6 +8,7 @@
 module micm_bro_br_o_cross_section_type
 
   use micm_base_cross_section_type,    only : base_cross_section_t
+  use musica_config,                   only : config_t
   use musica_constants,                only : musica_dk, musica_ik
 
   implicit none
@@ -29,7 +30,6 @@ contains
   !> Initialize bro_br_o_cross_section_t object
   subroutine initialize( this, config, mdlLambdaEdge )
 
-    use musica_config,                   only : config_t
     use musica_string,                   only : string_t
     use netcdf_util,                     only : netcdf_t
     use photo_utils,                     only : inter4

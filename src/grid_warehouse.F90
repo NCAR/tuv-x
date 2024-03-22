@@ -4,7 +4,10 @@
 module tuvx_grid_warehouse
 ! A warehouse to hold and distribute grids.
 
-  use tuvx_grid, only : grid_ptr
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
+  use tuvx_grid,                       only : grid_ptr
 
   implicit none
 
@@ -79,7 +82,6 @@ contains
     ! Grid warehouse constructor
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_grid_factory,             only : grid_builder

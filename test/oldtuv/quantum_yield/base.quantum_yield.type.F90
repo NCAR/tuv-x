@@ -8,6 +8,7 @@
 module micm_base_quantum_yield_type
 
   use micm_abs_quantum_yield_type,     only : abs_quantum_yield_t
+  use musica_config,                   only : config_t
   use musica_constants,                only : musica_dk, musica_ik
 
   implicit none
@@ -43,7 +44,6 @@ contains
   !> Initialize base quantum yield_t object
   subroutine initialize( this, config, mdlLambdaEdge )
 
-    use musica_config,                   only : config_t
     use musica_string,                   only : string_t
     use netcdf_util,                     only : netcdf_t
     use photo_utils,                     only : inter2

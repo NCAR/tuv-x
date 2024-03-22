@@ -4,8 +4,11 @@
 module tuvx_spectral_weight_exp_decay
   ! The exponential decay spectral weight type and related functions
 
-  use tuvx_spectral_weight,            only : spectral_weight_t
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
   use musica_constants,                only : dk => musica_dk
+  use tuvx_spectral_weight,            only : spectral_weight_t
 
   implicit none
 
@@ -32,7 +35,6 @@ contains
     ! Initialize the spectral weight
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t

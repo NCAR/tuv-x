@@ -35,6 +35,7 @@ target_link_libraries(tuv_doug PUBLIC musica::tuvx)
 
 # Tests refactored configurations based on Doug's data sets and Fortran code
 add_executable(test_data_sets data_sets.F90)
+set_target_properties(test_data_sets PROPERTIES LINKER_LANGUAGE Fortran)
 target_link_libraries(test_data_sets PUBLIC tuv_doug)
 if(ENABLE_OPENMP)
   target_link_libraries(test_data_sets PUBLIC OpenMP::OpenMP_Fortran)
@@ -46,6 +47,7 @@ add_tuvx_test(data_sets test_data_sets "" ${CMAKE_BINARY_DIR})
 # Tests the Lymann-Alpha and Schumann Runge bands calculations in TUV-x against
 # Doug's version used to generate the lookup tables used in CAM
 add_executable(test_la_srb_lut test_la_srb.F90)
+set_target_properties(test_la_srb_lut PROPERTIES LINKER_LANGUAGE Fortran)
 target_link_libraries(test_la_srb_lut PUBLIC tuv_doug)
 if(ENABLE_OPENMP)
   target_link_libraries(test_la_srb_lut PUBLIC OpenMP::OpenMP_Fortran)

@@ -8,6 +8,7 @@
 !!
 module micm_base_radiator_type
 
+  use musica_config,          only : config_t
   use musica_constants,       only : dk => musica_dk, ik => musica_ik
   use musica_string,          only : string_t
   use micm_abs_radiator_type, only : abs_radiator_t
@@ -33,7 +34,6 @@ contains
   !> Initialize radiator_t object
   subroutine initialize( this, radiator_config, gridWareHouse )
 
-    use musica_config,        only : config_t
     use micm_grid_warehouse,  only : grid_warehouse_t
     use micm_1d_grid,         only : base_grid_t
 

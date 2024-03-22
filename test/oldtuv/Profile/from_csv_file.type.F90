@@ -4,6 +4,7 @@
 !from csv file type
 module micm_from_csv_file_Profile
 
+  use musica_config, only : config_t
   use musica_constants,  only : dk => musica_dk, ik => musica_ik, lk => musica_lk
   use micm_Profile, only : base_profile_t
 
@@ -22,7 +23,6 @@ contains
   !> Initialize grid
   subroutine initialize( this, profile_config, gridWareHouse )
       
-    use musica_config, only : config_t
     use musica_string, only : string_t
     use musica_assert, only : die_msg
     use micm_1d_grid,  only : base_grid_t
