@@ -7,6 +7,7 @@
 !> Build grid objects
 module micm_grid_factory
 
+  use musica_config,               only : config_t
   use micm_1d_grid,                only : base_grid_t
   use micm_1d_equal_delta_grid,    only : equalDelta_t
 
@@ -22,7 +23,6 @@ contains
   function grid_builder( config ) result( new_grid_t )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use micm_1d_equal_delta_grid,      only : equalDelta_t
     use micm_1d_from_csv_file_grid,    only : fromCsvFile_t

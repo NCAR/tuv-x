@@ -7,6 +7,7 @@
 !> Build Profile objects
 module micm_Profile_factory
 
+  use musica_config,                   only : config_t
 
   implicit none
 
@@ -20,7 +21,6 @@ contains
   function Profile_builder( config, gridWareHouse ) result( new_Profile_t )
 
     use musica_assert,                   only : die_msg
-    use musica_config,                   only : config_t
     use musica_string,                   only : string_t
     use micm_from_csv_file_Profile,      only : fromCsvFile_t
     use micm_air_from_csv_file_Profile,  only : airfromCsvFile_t

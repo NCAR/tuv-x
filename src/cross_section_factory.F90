@@ -5,6 +5,8 @@ module tuvx_cross_section_factory
 ! Builder of cross section calculators for use by 
 ! :f:type:`~tuvx_cross_section_warehouse/cross_section_warehouse_t`.
 
+  
+  use musica_config,                   only : config_t
   use tuvx_cross_section,              only : cross_section_t
   use tuvx_cross_section_ccl4,         only : cross_section_ccl4_t
   use tuvx_cross_section_cfc11,        only : cross_section_cfc11_t
@@ -54,7 +56,6 @@ contains
       ! Build cross sections from a configuration
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t

@@ -5,6 +5,8 @@ module tuvx_temperature_parameterization_harwood
 ! Calculates cross-section elements using a temperature-based
 ! parameterization. TODO: need reference
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
   use musica_config,                   only : config_t
   use musica_constants,                only : dk => musica_dk
   use tuvx_temperature_parameterization,                                      &
@@ -48,7 +50,6 @@ contains
   function constructor( config, wavelengths ) result( this )
 
     use musica_assert,                 only : assert_msg, die_msg
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t, to_char
     use tuvx_grid,                     only : grid_t

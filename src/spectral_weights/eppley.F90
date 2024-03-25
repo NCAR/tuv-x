@@ -4,8 +4,11 @@
 module tuvx_spectral_weight_eppley
   ! The eppley type and related functions
 
-  use tuvx_spectral_weight,            only : spectral_weight_t
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
   use musica_constants,                only : dk => musica_dk
+  use tuvx_spectral_weight,            only : spectral_weight_t
 
   implicit none
 
@@ -31,7 +34,6 @@ contains
       result ( this )
     ! Initialize the Epply spectral weight
 
-    use musica_config,                 only : config_t
     use tuvx_spectral_weight,          only : base_constructor
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t

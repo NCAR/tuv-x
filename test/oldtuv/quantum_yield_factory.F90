@@ -7,6 +7,7 @@
 !> Builder of quantum yield calculators
 module micm_quantum_yield_factory
 
+  use musica_config,                 only : config_t
   use micm_abs_quantum_yield_type,              only : abs_quantum_yield_t
   use micm_base_quantum_yield_type,             only : base_quantum_yield_t
   use micm_tint_quantum_yield_type,             only : tint_quantum_yield_t
@@ -41,7 +42,6 @@ contains
   function quantum_yield_builder( config, mdlLambdaEdge ) result( new_quantum_yield_t )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use musica_constants,              only : musica_dk
 

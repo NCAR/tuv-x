@@ -10,6 +10,7 @@ module micm_radXfer_xsect_warehouse
 
   use micm_radXfer_abs_cross_section_type,     only : abs_cross_section_ptr
   use micm_radXfer_cross_section_factory, only : cross_section_builder
+  use musica_config,                 only : config_t
   use musica_constants,                only : musica_dk, musica_ik
   use musica_string,                   only : string_t
 
@@ -44,7 +45,6 @@ contains
   !> Constructor of radXfer_xsect_warehouse_t objects
   function constructor( config, gridWareHouse, ProfileWareHouse ) result( radXfer_xsect_obj )
 
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_constants,              only : musica_rk, musica_lk
     use musica_assert,                 only : die_msg

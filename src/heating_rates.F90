@@ -49,7 +49,7 @@ module tuvx_heating_rates
     module procedure :: heating_parameters_constructor
   end interface heating_parameters_t
 
-  type, public :: heating_rates_t
+  type :: heating_rates_t
     type(heating_parameters_t), allocatable :: heating_parameters_(:) ! heating parameters for each photolyzing species
     type(grid_warehouse_ptr) :: height_grid_     ! height grid
     type(grid_warehouse_ptr) :: wavelength_grid_ ! wavelength grid
@@ -557,7 +557,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Cleans up memory
-  elemental subroutine destructor( this )
+  subroutine destructor( this )
 
     !> Heating rates
     type(heating_rates_t), intent(inout) :: this

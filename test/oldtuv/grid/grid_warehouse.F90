@@ -8,6 +8,7 @@
 !!
 module micm_grid_warehouse
 
+  use musica_config,only : config_t
   use micm_1d_grid, only : base_grid_ptr
 ! use micm_1d_grid, only : base_grid_t
 
@@ -41,7 +42,6 @@ contains
   !> Grid warehouse constructor
   function constructor( config ) result( grid_warehouse_obj )
 
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use micm_grid_factory,             only : grid_builder
