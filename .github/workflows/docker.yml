@@ -17,7 +17,6 @@ jobs:
         os: [ubuntu-latest]
         dockerfile:
           - Dockerfile
-          - Dockerfile.intel
           - Dockerfile.coverage
           - Dockerfile.memcheck
           - Dockerfile.mpi
