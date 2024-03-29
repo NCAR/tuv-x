@@ -53,8 +53,8 @@ mkdir -p build
 cd build
 cmake -D CMAKE_Fortran_COMPILER=/opt/local/bin/gfortran \
        -D CMAKE_BUILD_TYPE=release \
-       -D ENABLE_COVERAGE=OFF \
-       -D ENABLE_MEMCHECK=OFF \
+       -D TUVX_ENABLE_COVERAGE=OFF \
+       -D TUVX_ENABLE_MEMCHECK=OFF \
        -D CMAKE_INSTALL_PREFIX=${TUVX_HOME} \
        ..
 make -j4 install

@@ -65,14 +65,14 @@ mkdir -p build
 cd build
 cmake -D CMAKE_Fortran_COMPILER=mpifort \
       -D CMAKE_Fortran_FLAGS="-mismatch -w=uda `nc-config --fflags`" \
-      -D ENABLE_NC_CONFIG=ON \
+      -D TUVX_ENABLE_NC_CONFIG=ON \
       -D CMAKE_BUILD_TYPE=release \
       -D JSON_INCLUDE_DIR=$JSON_FORTRAN_HOME/lib \
       -D JSON_LIB=$JSON_FORTRAN_HOME/lib/libjsonfortran.a \
       -D NETCDF_INCLUDE_DIR=$NETCDF_PATH/include \
       -D NETCDF_C_LIB=$NETCDF_PATH/lib/libnetcdf.so \
       -D NETCDF_FORTRAN_LIB=$NETCDF_PATH/lib/libnetcdff.so \
-      -D ENABLE_COVERAGE=OFF \
-      -D ENABLE_MPI=ON \
+      -D TUVX_ENABLE_COVERAGE=OFF \
+      -D TUVX_ENABLE_MPI=ON \
       ..
 make

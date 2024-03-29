@@ -75,7 +75,7 @@ cd build
 cmake -D CMAKE_Fortran_COMPILER=gfortran \
       -D CMAKE_BUILD_TYPE=release \
       -D musicacore_DIR=${MUSICA_CORE_PACKAGE} \
-      -D ENABLE_COVERAGE=OFF \
+      -D TUVX_ENABLE_COVERAGE=OFF \
       -D CMAKE_INSTALL_PREFIX=${TUVX_HOME} \
       ..
 make install

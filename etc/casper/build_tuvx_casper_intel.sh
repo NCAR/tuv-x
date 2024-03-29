@@ -61,7 +61,7 @@ mkdir -p build
 cd build
 cmake -D CMAKE_Fortran_COMPILER=ifort \
       -D CMAKE_BUILD_TYPE=release \
-      -D ENABLE_UTIL_ONLY=ON \
+      -D TUVX_ENABLE_UTIL_ONLY=ON \
       -D CMAKE_INSTALL_PREFIX=${INSTALL_ROOT} \
       ..
 make install
@@ -75,8 +75,8 @@ cd build
 cmake -D CMAKE_Fortran_COMPILER=ifort \
       -D CMAKE_BUILD_TYPE=release \
       -D musicacore_DIR=${MUSICA_CORE_PACKAGE} \
-      -D ENABLE_MPI=OFF \
-      -D ENABLE_COVERAGE=OFF \
+      -D TUVX_ENABLE_MPI=OFF \
+      -D TUVX_ENABLE_COVERAGE=OFF \
       -D CMAKE_INSTALL_PREFIX=${INSTALL_ROOT} \
       ..
 make install

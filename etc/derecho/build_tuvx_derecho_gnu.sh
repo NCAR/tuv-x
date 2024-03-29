@@ -47,5 +47,5 @@ cd tuv-x
 mkdir build
 cd build
 export JSON_FORTRAN_HOME=$INSTALL_DIR/jsonfortran-gnu-8.3.0
-cmake -D CMAKE_BUILD_TYPE=release -D ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu ..   
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu ..   
 make -j 8

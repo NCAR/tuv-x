@@ -25,7 +25,7 @@ COPY . /tuv-x/
 RUN mkdir /build \
       && cd /build \
       && cmake \
-            -DENABLE_MEMCHECK:BOOL=TRUE \
+            -DTUVX_ENABLE_MEMCHECK:BOOL=TRUE \
         /tuv-x \
       && make -j 8
 

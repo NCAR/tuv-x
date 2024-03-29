@@ -27,13 +27,13 @@ endif()
 # Projet wide setup options
 
 include(CMakeDependentOption)
-option(ENABLE_MPI "Enable MPI parallel support" OFF)
+option(TUVX_ENABLE_MPI "Enable MPI parallel support" OFF)
 cmake_dependent_option(ENABLE_OPENMP "Enable OpenMP support" OFF "ENABLE_MPI" OFF)
-option(ENABLE_TESTS "Build tests" ON)
-option(ENABLE_COVERAGE "Enable code coverage output" OFF)
-option(ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
-option(ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
-option(BUILD_DOCS "Build the documentation" OFF)
+option(TUVX_ENABLE_TESTS "Build tests" ON)
+option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
+option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
+option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
+option(TUVX_BUILD_DOCS "Build the documentation" OFF)
 
 # Set up include and lib directories
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include")
@@ -52,7 +52,7 @@ elseif(${CMAKE_Fortran_COMPILER_ID} MATCHES "Intel")
 endif()
 
 # MPI
-if(ENABLE_MPI)
+if(TUVX_ENABLE_MPI)
   add_definitions(-DMUSICA_USE_MPI)
 endif()
 
@@ -97,7 +97,7 @@ target_include_directories(tuv-x
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
 
-if(ENABLE_OPENMP)
+if(TUVX_ENABLE_OPENMP)
   target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)
 endif()
 
@@ -111,9 +111,9 @@ endif()
 ################################################################################
 # TUV-x tests
 
-if(PROJECT_IS_TOP_LEVEL AND ENABLE_TESTS)
+if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
   # Test code coverage
-  if(ENABLE_COVERAGE)
+  if(TUVX_ENABLE_COVERAGE)
     include(CodeCoverage)
     if(${CMAKE_Fortran_COMPILER_ID} MATCHES "GNU")
       setup_target_for_coverage_lcov(

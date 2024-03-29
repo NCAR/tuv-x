@@ -24,7 +24,7 @@ RUN pip3 install numpy scipy
 COPY . /tuv-x/
 RUN mkdir /build \
       && cd /build \
-      && cmake -D ENABLE_COVERAGE:BOOL=TRUE \
+      && cmake -D TUVX_ENABLE_COVERAGE:BOOL=TRUE \
                -D CMAKE_BUILD_TYPE=COVERAGE \
                /tuv-x \
       && make -j 8
