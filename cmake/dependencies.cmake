@@ -58,7 +58,7 @@ FetchContent_MakeAvailable(yaml-cpp)
 ################################################################################
 # Docs
 
-if(BUILD_DOCS)
+if(TUVX_BUILD_DOCS)
   find_package(Doxygen REQUIRED)
   find_package(Sphinx REQUIRED)
 endif()

@@ -104,7 +104,7 @@ endif()
 ################################################################################
 # TUV-x docs
 
-if(BUILD_DOCS)
+if(TUVX_BUILD_DOCS)
   add_subdirectory(docs)
 endif()
 
