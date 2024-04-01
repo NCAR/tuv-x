@@ -28,7 +28,7 @@ endif()
 
 include(CMakeDependentOption)
 option(TUVX_ENABLE_MPI "Enable MPI parallel support" OFF)
-cmake_dependent_option(ENABLE_OPENMP "Enable OpenMP support" OFF "ENABLE_MPI" OFF)
+cmake_dependent_option(TUVX_ENABLE_OPENMP "Enable OpenMP support" OFF "TUVX_ENABLE_MPI" OFF)
 option(TUVX_ENABLE_TESTS "Build tests" ON)
 option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
