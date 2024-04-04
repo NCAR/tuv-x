@@ -11,7 +11,6 @@ module tuvx_radiator_warehouse
 #ifdef MUSICA_IS_INTEL_COMPILER
   use musica_config,                   only : config_t
 #endif
-  use musica_string,                   only : string_t
   use tuvx_radiator,                   only : radiator_ptr
 
   implicit none
@@ -21,10 +20,8 @@ module tuvx_radiator_warehouse
 
   type radiator_warehouse_t
     ! Radiator warehouse
-
     private
     type(radiator_ptr), allocatable :: radiators_(:) ! Radiators
-    type(string_t),     allocatable :: handle_(:) ! Radiator "handles"
   contains
     !> @name Returns a pointer to a requested radiator
     !! @{
@@ -103,7 +100,6 @@ contains
 
     allocate( radiator_warehouse )
     allocate( radiator_warehouse%radiators_(0) )
-    allocate( radiator_warehouse%handle_(0) )
 
   end function constructor_empty
 
@@ -117,8 +113,8 @@ contains
 #ifndef MUSICA_IS_INTEL_COMPILER
     use musica_config,        only : config_t
 #endif
+    use musica_assert,                 only : assert_msg
     use musica_iterator,               only : iterator_t
-    use musica_string,                 only : string_t
     use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
@@ -136,11 +132,9 @@ contains
     class(iterator_t), pointer      :: iter
     type(radiator_ptr), allocatable :: temp_rads(:)
     type(radiator_ptr)              :: aRadiator
-    type(string_t), allocatable     :: temp_names(:)
 
     allocate( radiator_warehouse )
     allocate( radiator_warehouse%radiators_(0) )
-    allocate( radiator_warehouse%handle_(0) )
 
     iter => config%get_iterator()
     do while( iter%next() )
@@ -150,14 +144,11 @@ contains
       aRadiator%val_ => radiator_builder( radiator_config, grid_warehouse,    &
                                           profile_warehouse,                  &
                                           cross_section_warehouse )
-
-      temp_names = radiator_warehouse%handle_
-      deallocate( radiator_warehouse%handle_ )
-      allocate( radiator_warehouse%handle_( size( temp_names ) + 1 ) )
-      radiator_warehouse%handle_( 1 : size( temp_names ) ) = temp_names(:)
-      radiator_warehouse%handle_( size( temp_names ) + 1 ) =                  &
-          aRadiator%val_%handle_
-      deallocate( temp_names )
+      call assert_msg( 912361446,                                             &
+                       .not. radiator_warehouse%exists(                       &
+                                 aRadiator%val_%handle_ ),                    &
+                        "Radiator '"//aRadiator%val_%handle_//                &
+                        "' already exists." )
 
       temp_rads = radiator_warehouse%radiators_
       deallocate( radiator_warehouse%radiators_ )
@@ -256,8 +247,8 @@ contains
     logical :: found
 
     found = .false.
-    do ndx = 1, size( this%handle_ )
-      if( name .eq. this%handle_( ndx ) ) then
+    do ndx = 1, size( this%radiators_ )
+      if( name .eq. this%radiators_( ndx )%val_%handle_ ) then
         found = .true.
         exit
       endif
@@ -296,8 +287,8 @@ contains
     integer :: ndx
 
     exists_char = .false.
-    do ndx = 1, size( this%handle_ )
-      if( name == this%handle_( ndx ) ) then
+    do ndx = 1, size( this%radiators_ )
+      if( name == this%radiators_( ndx )%val_%handle_ ) then
         exists_char = .true.
         exit
       endif
@@ -332,14 +323,19 @@ contains
     class(radiator_t),           intent(in)    :: radiator
 
     type(radiator_ptr) :: ptr
+    type(radiator_ptr), allocatable :: temp_rads(:)
 
     call assert( 439108556, allocated( this%radiators_ ) )
     call assert_msg( 781327898,                                               &
                      .not. this%exists( radiator%handle_ ),                   &
                      "Radiator '"//radiator%handle_//"' already exists." )
     allocate( ptr%val_, source = radiator )
-    this%radiators_ = [ this%radiators_, ptr ]
-    this%handle_    = [ this%handle_, radiator%handle_ ]
+    temp_rads = this%radiators_
+    deallocate( this%radiators_ )
+    allocate( this%radiators_( size( temp_rads ) + 1 ) )
+    this%radiators_( 1 : size( temp_rads ) ) = temp_rads(:)
+    this%radiators_( size( temp_rads ) + 1 ) = ptr
+    deallocate( temp_rads )
 
   end subroutine add_radiator
 
@@ -416,10 +412,12 @@ contains
   type(string_t) function get_name( this, iterator )
     ! Returns the name of a radiator from an iterator
 
+    use musica_string,                 only : string_t
+
     class(radiator_warehouse_t), intent(in) :: this
     class(warehouse_iterator_t), intent(in) :: iterator
 
-    get_name = this%handle_( iterator%id_ )
+    get_name = this%radiators_( iterator%id_ )%val_%handle_
 
   end function get_name
 
@@ -474,17 +472,13 @@ contains
     type(string_t) :: type_name
 
     call assert( 208683985, allocated( this%radiators_ ) )
-    call assert( 263163771, allocated( this%handle_ ) )
-    call assert( 710531617,                                                   &
-                 size( this%radiators_ ) .eq. size( this%handle_ ) )
     pack_size = musica_mpi_pack_size( size( this%radiators_ ), comm )
     do i_radiator = 1, size( this%radiators_ )
     associate( radiator => this%radiators_( i_radiator )%val_ )
       type_name = radiator_type_name( radiator )
       pack_size = pack_size +                                                 &
                   type_name%pack_size( comm ) +                               &
-                  radiator%pack_size( comm ) +                                &
-                  this%handle_( i_radiator )%pack_size( comm )
+                  radiator%pack_size( comm )
     end associate
     end do
 #else
@@ -513,16 +507,12 @@ contains
 
     prev_pos = position
     call assert( 629181647, allocated( this%radiators_ ) )
-    call assert( 459024743, allocated( this%handle_ ) )
-    call assert( 906392589,                                                   &
-                 size( this%radiators_ ) .eq. size( this%handle_ ) )
     call musica_mpi_pack( buffer, position, size( this%radiators_ ), comm )
     do i_radiator = 1, size( this%radiators_ )
     associate( radiator => this%radiators_( i_radiator )%val_ )
       type_name = radiator_type_name( radiator )
       call type_name%mpi_pack( buffer, position, comm )
       call radiator%mpi_pack( buffer, position, comm )
-      call this%handle_( i_radiator )%mpi_pack( buffer, position, comm )
     end associate
     end do
     call assert( 463435654, position - prev_pos <= this%pack_size( comm ) )
@@ -551,15 +541,12 @@ contains
     prev_pos = position
     call musica_mpi_unpack( buffer, position, n_radiators, comm )
     if( allocated( this%radiators_ ) ) deallocate( this%radiators_ )
-    if( allocated( this%handle_   ) ) deallocate( this%handle_   )
     allocate( this%radiators_( n_radiators ) )
-    allocate( this%handle_(   n_radiators ) )
     do i_radiator = 1, n_radiators
     associate( radiator => this%radiators_( i_radiator ) )
       call type_name%mpi_unpack( buffer, position, comm )
       radiator%val_ => radiator_allocate( type_name )
       call radiator%val_%mpi_unpack( buffer, position, comm )
-      call this%handle_( i_radiator )%mpi_unpack( buffer, position, comm )
     end associate
     end do
     call assert( 928789078, position - prev_pos <= this%pack_size( comm ) )
