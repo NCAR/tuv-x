@@ -462,6 +462,7 @@ contains
 
     use musica_assert,                 only : assert
     use musica_mpi,                    only : musica_mpi_pack_size
+    use musica_string,                 only : string_t
     use tuvx_radiator_factory,         only : radiator_type_name
 
     class(radiator_warehouse_t), intent(in) :: this ! warehouse to be packed
@@ -494,6 +495,7 @@ contains
 
     use musica_assert,                 only : assert
     use musica_mpi,                    only : musica_mpi_pack
+    use musica_string,                 only : string_t
     use tuvx_radiator_factory,         only : radiator_type_name
 
     class(radiator_warehouse_t), intent(in)    :: this      ! warehouse to be packed
@@ -527,6 +529,7 @@ contains
 
     use musica_assert,                 only : assert
     use musica_mpi,                    only : musica_mpi_unpack
+    use musica_string,                 only : string_t
     use tuvx_radiator_factory,         only : radiator_allocate
 
     class(radiator_warehouse_t), intent(out)   :: this      ! warehouse to unpack
