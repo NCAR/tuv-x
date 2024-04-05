@@ -101,7 +101,6 @@ contains
     type(config_t) :: reaction_set, reaction_config, heating_config
     type(config_t) :: cross_section_config
     class(iterator_t), pointer :: iter
-    type(string_t) :: label
     type(string_t) :: required_keys(1), optional_keys(1)
     logical :: found, do_apply_bands
     integer :: n_hr, i_hr, n_O2, i_O2
@@ -147,7 +146,6 @@ contains
       call reaction_config%get( "heating", heating_config, Iam, found = found )
       if( found ) then
         i_hr = i_hr + 1
-        call reaction_config%get( "name", label, Iam )
         this%heating_parameters_( i_hr ) =                                    &
           heating_parameters_constructor( reaction_config, grids, profiles )
         call reaction_config%get( "cross section", cross_section_config, Iam )
