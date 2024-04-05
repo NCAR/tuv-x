@@ -37,7 +37,7 @@ set_target_properties(tuvx PROPERTIES
 )
 
 target_link_libraries(tuvx
-  PUBLIC
+  INTERFACE
     PkgConfig::netcdff
     yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
@@ -45,7 +45,7 @@ target_link_libraries(tuvx
 )
 
 target_include_directories(tuvx
-  PUBLIC  
+  PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>

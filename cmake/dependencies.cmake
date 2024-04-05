@@ -10,7 +10,7 @@ find_package(LAPACK)
 ################################################################################
 # Memory check
 
-if(ENABLE_MEMCHECK)
+if(TUVX_ENABLE_MEMCHECK)
   find_file(MEMCHECK_SUPPRESS_FILE
     DOC "Suppression file for memory checking"
     NAMES openmpi-valgrind.supp
@@ -29,7 +29,7 @@ endif()
 ################################################################################
 # OpenMP
 
-if(ENABLE_OPENMP)
+if(TUVX_ENABLE_OPENMP)
   find_package(OpenMP)
   if(OpenMP_Fortran_FOUND)
     message(STATUS "Compiling with OpenMP support")
@@ -58,7 +58,7 @@ FetchContent_MakeAvailable(yaml-cpp)
 ################################################################################
 # Docs
 
-if(BUILD_DOCS)
+if(TUVX_BUILD_DOCS)
   find_package(Doxygen REQUIRED)
   find_package(Sphinx REQUIRED)
 endif()

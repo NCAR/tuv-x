@@ -296,13 +296,19 @@ contains
     class(profile_t),           intent(in)    :: profile
 
     type(profile_ptr) :: ptr
+    type(profile_ptr), allocatable :: temp_profiles(:)
 
     call assert( 809705750, allocated( this%profiles_ ) )
     call assert_msg( 490846671,                                               &
                      .not. this%exists( profile%handle_, profile%units( ) ),  &
                      "Profile '"//profile%handle_//"' already exists." )
     allocate( ptr%val_, source = profile )
-    this%profiles_ = [ this%profiles_, ptr ]
+    temp_profiles = this%profiles_
+    deallocate( this%profiles_ )
+    allocate( this%profiles_( size( temp_profiles ) + 1 ) )
+    this%profiles_( 1 : size( temp_profiles ) ) = temp_profiles(:)
+    this%profiles_( size( temp_profiles ) + 1 ) = ptr
+    deallocate( temp_profiles )
 
   end subroutine add_profile
 

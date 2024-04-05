@@ -40,9 +40,9 @@ RUN mkdir build \
                -D CMAKE_Fortran_COMPILER=/usr/lib64/openmpi/bin/mpif90 \
                -D CMAKE_C_COMPILER=/usr/lib64/openmpi/bin/mpicc \
                -D CMAKE_CXX_COMPILER=/usr/lib64/openmpi/bin/mpicxx \
-               -D ENABLE_OPENMP:BOOL=TRUE \
-               -D ENABLE_MPI:BOOL=TRUE \
-               -D ENABLE_MEMCHECK:BOOL=TRUE \
+               -D TUVX_ENABLE_OPENMP:BOOL=TRUE \
+               -D TUVX_ENABLE_MPI:BOOL=TRUE \
+               -D TUVX_ENABLE_MEMCHECK:BOOL=TRUE \
                ../tuv-x \
       && make -j 8
 

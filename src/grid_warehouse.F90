@@ -291,13 +291,19 @@ contains
     class(grid_t),           intent(in)    :: grid ! Grid to add
 
     type(grid_ptr) :: ptr
+    type(grid_ptr), allocatable :: temp_grids(:)
 
     call assert( 900933280, allocated( this%grids_  ) )
     call assert_msg( 244177406,                                               &
                      .not. this%exists( grid%handle_, grid%units( ) ),        &
                      "Grid '"//grid%handle_//"' already exists." )
     allocate( ptr%val_, source = grid )
-    this%grids_ = [ this%grids_, ptr ]
+    temp_grids = this%grids_
+    deallocate( this%grids_ )
+    allocate( this%grids_( size( temp_grids ) + 1 ) )
+    this%grids_( 1 : size( temp_grids ) ) = temp_grids(:)
+    this%grids_( size( temp_grids ) + 1 ) = ptr
+    deallocate( temp_grids )
 
   end subroutine add_grid
 

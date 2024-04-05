@@ -67,6 +67,6 @@ cmake -D CMAKE_Fortran_COMPILER=gfortran \
       -D NETCDF_INCLUDE_DIR=$NETCDF_PATH/include \
       -D NETCDF_C_LIB=$NETCDF_PATH/lib/libnetcdf.so \
       -D NETCDF_FORTRAN_LIB=$NETCDF_PATH/lib/libnetcdff.so \
-      -D ENABLE_COVERAGE=OFF \
+      -D TUVX_ENABLE_COVERAGE=OFF \
       ..
 make
