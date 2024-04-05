@@ -59,7 +59,6 @@ contains
 
     this%handle_                 = name
     this%type_                   = "from host"
-    this%cross_section_name_     = "none"
     this%enable_diagnostics_     = .false.
 
     allocate( this%state_%layer_OD_(  height_grid%size( ),                    &

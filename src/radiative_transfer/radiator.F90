@@ -49,7 +49,6 @@ module tuvx_radiator
 
     type(string_t)         :: handle_
     type(string_t)         :: type_
-    type(string_t)         :: cross_section_name_ ! Name of the absorption cross-section to use
     type(radiator_state_t) :: state_ ! Optical properties, a :f:type:`~tuvx_radiator/radiator_state_t`
     logical                :: enable_diagnostics_ ! determines if diagnostic output is written or not
     logical                :: is_air_ = .false. ! Indicates whether the radiator should be treated as "air" in optical property calculations
@@ -117,6 +116,7 @@ contains
     character(len=*), parameter   :: Iam = "Base radiator constructor"
     class(grid_t),    pointer     :: z_grid, lambda_grid
     type(string_t)                :: profile_name, profile_units
+    type(string_t)                :: cross_section_name
     type(string_t)                :: required_keys(5), optional_keys(2)
 
     required_keys(1) = "name"
@@ -132,13 +132,11 @@ contains
                      "Bad configuration data format for "//                   &
                      "base radiator." )
 
-    call config%get( 'name',             this%handle_,                Iam )
-    call config%get( 'type',             this%type_,                Iam )
-    call config%get( 'vertical profile', profile_name, Iam )
-    call config%get( 'vertical profile units', profile_units,  &
-                     Iam )
-    call config%get( 'cross section',    this%cross_section_name_,    Iam )
-
+    call config%get( 'name',                   this%handle_,         Iam )
+    call config%get( 'type',                   this%type_,           Iam )
+    call config%get( 'vertical profile',       profile_name,         Iam )
+    call config%get( 'vertical profile units', profile_units,        Iam )
+    call config%get( 'cross section',          cross_section_name,   Iam )
     call config%get( 'enable diagnostics', this%enable_diagnostics_, Iam,     &
       default=.false. )
     call config%get( 'treat as air', this%is_air_, Iam, default = .false. )
@@ -148,7 +146,7 @@ contains
     this%radiator_profile_ =                                                  &
         profile_warehouse%get_ptr( profile_name, profile_units )
     this%cross_section_ =                                                     &
-        cross_section_warehouse%get_ptr( this%cross_section_name_ )
+        cross_section_warehouse%get_ptr( cross_section_name )
     z_grid => grid_warehouse%get_grid( this%height_grid_ )
     lambda_grid => grid_warehouse%get_grid( this%wavelength_grid_ )
 
@@ -267,7 +265,6 @@ contains
 #ifdef MUSICA_USE_MPI
     pack_size = this%handle_%pack_size( comm ) +                              &
                 this%type_%pack_size( comm ) +                                &
-                this%cross_section_name_%pack_size( comm ) +                  &
                 this%state_%pack_size( comm ) +                               &
                 musica_mpi_pack_size( this%enable_diagnostics_, comm ) +      &
                 musica_mpi_pack_size( this%is_air_, comm ) +                  &
@@ -297,7 +294,6 @@ contains
     prev_pos = position
     call this%handle_%mpi_pack(                 buffer, position, comm )
     call this%type_%mpi_pack(                   buffer, position, comm )
-    call this%cross_section_name_%mpi_pack(     buffer, position, comm )
     call this%state_%mpi_pack(                  buffer, position, comm )
     call musica_mpi_pack( buffer, position, this%enable_diagnostics_, comm )
     call musica_mpi_pack( buffer, position, this%is_air_,             comm )
@@ -326,7 +322,6 @@ contains
     prev_pos = position
     call this%handle_%mpi_unpack(                 buffer, position, comm )
     call this%type_%mpi_unpack(                   buffer, position, comm )
-    call this%cross_section_name_%mpi_unpack(     buffer, position, comm )
     call this%state_%mpi_unpack(                  buffer, position, comm )
     call musica_mpi_unpack( buffer, position, this%enable_diagnostics_, comm )
     call musica_mpi_unpack( buffer, position, this%is_air_,             comm )
