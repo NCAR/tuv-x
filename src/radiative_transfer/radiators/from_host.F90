@@ -59,8 +59,6 @@ contains
 
     this%handle_                 = name
     this%type_                   = "from host"
-    this%vertical_profile_name_  = "none"
-    this%vertical_profile_units_ = "none"
     this%cross_section_name_     = "none"
     this%enable_diagnostics_     = .false.
 
