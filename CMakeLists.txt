@@ -57,12 +57,14 @@ if(TUVX_ENABLE_MPI)
 endif()
 
 # copy data
-add_custom_target(copy-data ALL COMMAND ${CMAKE_COMMAND}
-  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
-add_custom_target(copy-tool ALL COMMAND ${CMAKE_COMMAND}
-  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/tool ${CMAKE_BINARY_DIR}/tool)
-add_custom_target(copy-examples ALL COMMAND ${CMAKE_COMMAND}
-  -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/examples ${CMAKE_BINARY_DIR}/examples)
+if (TUVX_ENABLE_TESTS)
+  add_custom_target(copy-data ALL COMMAND ${CMAKE_COMMAND}
+    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/data ${CMAKE_BINARY_DIR}/data)
+  add_custom_target(copy-tool ALL COMMAND ${CMAKE_COMMAND}
+    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/tool ${CMAKE_BINARY_DIR}/tool)
+  add_custom_target(copy-examples ALL COMMAND ${CMAKE_COMMAND}
+    -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/examples ${CMAKE_BINARY_DIR}/examples)
+endif()
 
 ################################################################################
 # Dependencies
