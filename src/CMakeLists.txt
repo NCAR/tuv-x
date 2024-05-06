@@ -12,6 +12,7 @@ set_target_properties(tuvx_object PROPERTIES
 
 target_include_directories(tuvx_object
   PUBLIC
+    $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
