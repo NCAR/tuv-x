@@ -19,7 +19,7 @@ target_include_directories(tuvx_object
 message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
-  PUBLIC
+  PRIVATE
     PkgConfig::netcdff
     yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
