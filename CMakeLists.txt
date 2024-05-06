@@ -2,7 +2,6 @@
 # Preamble
 
 cmake_minimum_required(VERSION 3.17)
-set(CMAKE_USER_MAKE_RULES_OVERRIDE "cmake/set_defaults.cmake")
 
 project(
   tuv-x
@@ -12,6 +11,8 @@ project(
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
+
+set(CMAKE_USER_MAKE_RULES_OVERRIDE "${PROJECT_SOURCE_DIR}/cmake/set_defaults.cmake")
 
 message ( STATUS "CMake build configuration for tuv-x(${CMAKE_BUILD_TYPE}) ${PROJECT_VERSION}" )
 
