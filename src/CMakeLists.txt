@@ -4,7 +4,7 @@
 # object library
 add_library(tuvx_object OBJECT)
 
-target_compile_features(tuvx_object INTERFACE cxx_std_11)
+target_compile_features(tuvx_object PUBLIC cxx_std_17)
 
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
@@ -37,11 +37,8 @@ set_target_properties(tuvx PROPERTIES
 )
 
 target_link_libraries(tuvx
-  INTERFACE
-    PkgConfig::netcdff
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
+  PRIVATE
+    tuvx_object
 )
 
 target_include_directories(tuvx
