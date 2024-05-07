@@ -4,7 +4,7 @@
 # object library
 add_library(tuvx_object OBJECT)
 
-target_compile_features(tuvx_object PUBLIC cxx_std_17)
+target_compile_features(tuvx_object PUBLIC cxx_std_11)
 
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
@@ -17,7 +17,7 @@ target_include_directories(tuvx_object
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
-message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
+message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
   PRIVATE
@@ -39,7 +39,10 @@ set_target_properties(tuvx PROPERTIES
 
 target_link_libraries(tuvx
   PRIVATE
-    tuvx_object
+    PkgConfig::netcdff
+    yaml-cpp::yaml-cpp
+    ${BLAS_LIBRARIES}
+    ${LAPACK_LIBRARIES}
 )
 
 target_include_directories(tuvx
