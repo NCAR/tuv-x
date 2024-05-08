@@ -13,7 +13,7 @@ set_target_properties(tuvx_object PROPERTIES
 target_include_directories(tuvx_object
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
@@ -48,7 +48,7 @@ target_link_libraries(tuvx
 target_include_directories(tuvx
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
