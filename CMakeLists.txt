@@ -14,6 +14,12 @@ set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
 set(CMAKE_USER_MAKE_RULES_OVERRIDE "${PROJECT_SOURCE_DIR}/cmake/set_defaults.cmake")
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE "Release" CACHE STRING
+      "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
+      FORCE)
+endif(NOT CMAKE_BUILD_TYPE)
+
 message ( STATUS "CMake build configuration for tuv-x(${CMAKE_BUILD_TYPE}) ${PROJECT_VERSION}" )
 
 if(${CMAKE_VERSION} VERSION_LESS "3.21") 
@@ -35,9 +41,11 @@ option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(TUVX_BUILD_DOCS "Build the documentation" OFF)
+set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include" CACHE PATH "Directory to find Fortran module files during the build")
+
+message(STATUS "TUVX mod dir: ${TUVX_MOD_DIR}")
 
 # Set up include and lib directories
-set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include")
 set(TUVX_LIB_DIR "${PROJECT_BINARY_DIR}/lib")
 include(GNUInstallDirs)
 set(INSTALL_PREFIX "tuvx-${PROJECT_VERSION}" )
