@@ -4,7 +4,7 @@
 # object library
 add_library(tuvx_object OBJECT)
 
-target_compile_features(tuvx_object INTERFACE cxx_std_11)
+target_compile_features(tuvx_object PUBLIC cxx_std_11)
 
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
@@ -12,14 +12,16 @@ set_target_properties(tuvx_object PROPERTIES
 
 target_include_directories(tuvx_object
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
+    $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
-message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
+message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
-  PUBLIC
+  PRIVATE
     PkgConfig::netcdff
     yaml-cpp::yaml-cpp
     ${BLAS_LIBRARIES}
@@ -37,17 +39,14 @@ set_target_properties(tuvx PROPERTIES
 )
 
 target_link_libraries(tuvx
-  INTERFACE
-    PkgConfig::netcdff
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
+  PRIVATE
+    tuvx_object
 )
 
 target_include_directories(tuvx
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
     $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
