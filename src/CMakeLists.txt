@@ -14,6 +14,7 @@ target_include_directories(tuvx_object
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
@@ -39,10 +40,7 @@ set_target_properties(tuvx PROPERTIES
 
 target_link_libraries(tuvx
   PRIVATE
-    PkgConfig::netcdff
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
+    tuvx_object
 )
 
 target_include_directories(tuvx
