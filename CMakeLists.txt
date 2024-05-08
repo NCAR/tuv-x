@@ -43,8 +43,6 @@ option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(TUVX_BUILD_DOCS "Build the documentation" OFF)
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include" CACHE PATH "Directory to find Fortran module files during the build")
 
-message(STATUS "TUVX mod dir: ${TUVX_MOD_DIR}")
-
 # Set up include and lib directories
 set(TUVX_LIB_DIR "${PROJECT_BINARY_DIR}/lib")
 include(GNUInstallDirs)
