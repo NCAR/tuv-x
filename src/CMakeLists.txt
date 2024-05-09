@@ -32,6 +32,8 @@ if(BLAS_LIBRARIES)
     PRIVATE
       ${BLAS_LIBRARIES}
   )
+else()
+  message(FATAL_ERROR "BLAS Libraries not found.")
 endif()
 
 if(LAPACK_LIBRARIES)
@@ -39,6 +41,8 @@ if(LAPACK_LIBRARIES)
   PRIVATE
     ${LAPACK_LIBRARIES}
   )
+else()
+  message(FATAL_ERROR "LAPACK libraries not found.")
 endif()
 
 
