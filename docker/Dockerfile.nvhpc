@@ -18,7 +18,7 @@ RUN apt update \
     lcov \
     libcurl4-openssl-dev \
     libhdf5-dev \
-    libnetcdff-dev \
+    libnetcdf-dev \
     m4 \
     make \
     nlohmann-json3-dev \
@@ -33,6 +33,16 @@ RUN apt update \
 ENV CXX=nvc++
 ENV CC=nvc
 ENV FC=nvfortran
+
+# Build netcdf-fortran
+
+RUN git clone https://github.com/Unidata/netcdf-fortran.git \
+    && cd netcdf-fortran \
+    && git checkout v4.6.0 \
+    && mkdir build && cd build \
+    && cmake .. \
+    && make -j 8 \
+    && make install
 
 RUN pip3 install numpy scipy
 
