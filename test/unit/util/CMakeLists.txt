@@ -13,6 +13,8 @@ add_executable(util_assert_failure assert.F90)
 set_target_properties(util_assert_failure PROPERTIES LINKER_LANGUAGE Fortran)
 add_std_test_script(util_assert_failure assert.sh)
 
+set_tests_properties(util_assert_failure PROPERTIES WILL_FAIL TRUE)
+
 create_standard_test(NAME util_config SOURCES config.F90)
 
 create_standard_test(NAME util_map SOURCES map.F90)
