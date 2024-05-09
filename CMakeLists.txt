@@ -91,7 +91,6 @@ add_executable(tuv-x src/tuvx.F90 version.F90)
 set_target_properties(tuv-x
   PROPERTIES
   LINKER_LANGUAGE Fortran
-  POSITION_INDEPENDENT_CODE ON
 )
 
 if(NOT BUILD_SHARED_LIBS)
