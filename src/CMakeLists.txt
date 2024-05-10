@@ -18,15 +18,33 @@ target_include_directories(tuvx_object
     $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
 )
 
+message(STATUS "blas libraries: ${BLAS_LIBRARIES}")
 message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
   PRIVATE
     PkgConfig::netcdff
     yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
 )
+
+if(BLAS_LIBRARIES)
+  target_link_libraries(tuvx_object
+    PRIVATE
+      ${BLAS_LIBRARIES}
+  )
+else()
+  message(FATAL_ERROR "BLAS Libraries not found.")
+endif()
+
+if(LAPACK_LIBRARIES)
+  target_link_libraries(tuvx_object
+  PRIVATE
+    ${LAPACK_LIBRARIES}
+  )
+else()
+  message(FATAL_ERROR "LAPACK libraries not found.")
+endif()
+
 
 # tuvx library
 add_library(tuvx $<TARGET_OBJECTS:tuvx_object>)

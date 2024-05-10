@@ -93,6 +93,13 @@ set_target_properties(tuv-x
   LINKER_LANGUAGE Fortran
 )
 
+if(NOT BUILD_SHARED_LIBS)
+  set_target_properties(tuv-x
+    PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+  )
+endif()
+
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
