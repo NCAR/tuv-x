@@ -61,6 +61,8 @@ target_link_libraries(tuvx
     tuvx_object
 )
 
+message(STATUS "TUV-x build include directories: ${TUVX_MOD_DIR};${CMAKE_CURRENT_SOURCE_DIR}/../include")
+message(STATUS "TUV-x install include directories: ${TUVX_INSTALL_MOD_DIR};${TUVX_INSTALL_INCLUDE_DIR}")
 target_include_directories(tuvx
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
