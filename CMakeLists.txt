@@ -42,12 +42,13 @@ option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(TUVX_BUILD_DOCS "Build the documentation" OFF)
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include" CACHE PATH "Directory to find Fortran module files during the build")
+set(TUVX_INSTALL_MOD_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH "Directory to install Fortran module files")
+set(TUVX_INSTALL_INCLUDE_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH "Directory to install include files")
 
 # Set up include and lib directories
 set(TUVX_LIB_DIR "${PROJECT_BINARY_DIR}/lib")
 include(GNUInstallDirs)
 set(INSTALL_PREFIX "tuvx-${PROJECT_VERSION}" )
-set(INSTALL_MOD_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
 
 # Compiler specific flags
 if(${CMAKE_Fortran_COMPILER_ID} MATCHES "NAG")
@@ -111,7 +112,7 @@ target_link_libraries(tuv-x
 target_include_directories(tuv-x
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>)
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
 
 if(TUVX_ENABLE_OPENMP)
   target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)

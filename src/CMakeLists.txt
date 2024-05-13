@@ -14,8 +14,8 @@ target_include_directories(tuvx_object
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>
 )
 
 message(STATUS "blas libraries: ${BLAS_LIBRARIES}")
@@ -61,12 +61,14 @@ target_link_libraries(tuvx
     tuvx_object
 )
 
+message(STATUS "TUV-x build include directories: ${TUVX_MOD_DIR};${CMAKE_CURRENT_SOURCE_DIR}/../include")
+message(STATUS "TUV-x install include directories: ${TUVX_INSTALL_MOD_DIR};${TUVX_INSTALL_INCLUDE_DIR}")
 target_include_directories(tuvx
   PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
-    $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>
 )
 
 target_sources(tuvx_object
