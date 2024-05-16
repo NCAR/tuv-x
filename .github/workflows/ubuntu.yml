@@ -23,8 +23,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev
-    - name: Install python dependencies
-      run: pip install --user numpy scipy
+        sudo apt-get install -y python3-numpy python3-scipy
     - name: Run Cmake 
       run: cmake -S . -B build 
     - name: Build
