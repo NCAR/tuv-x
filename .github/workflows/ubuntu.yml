@@ -13,6 +13,10 @@ jobs:
     strategy:
       matrix:
         gcc_version: [12, 13, 14]
+    env:
+      CXX: g++-${{ matrix.gcc_version }}
+      CC: gcc-${{ matrix.gcc_version }}
+      FC: gfortran-${{ matrix.gcc_version }}
     steps:
     - uses: actions/checkout@v3
       with:
