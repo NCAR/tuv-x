@@ -13,8 +13,6 @@ jobs:
     strategy:
       matrix:
         gcc_version: [12, 13, 14]
-    env:
-      FC: gfortran-${{ matrix.gcc_version }}
     steps:
     - uses: actions/checkout@v3
       with:
@@ -22,7 +20,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev
+        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev
         sudo apt-get install -y python3-numpy python3-scipy
     - name: Run Cmake 
       run: cmake -S . -B build 
