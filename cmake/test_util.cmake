@@ -37,6 +37,34 @@ function(create_standard_test)
 endfunction(create_standard_test)
 
 ################################################################################
+# build and add a standard test (one linked to the micm library)
+
+function(create_standard_cxx_test)
+  set(prefix TEST)
+  set(optionalValues SKIP_MEMCHECK)
+  set(singleValues NAME WORKING_DIRECTORY)
+  set(multiValues SOURCES LIBRARIES)
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(${prefix} "${optionalValues}" "${singleValues}" "${multiValues}" ${ARGN})
+
+  add_executable(test_${TEST_NAME} ${TEST_SOURCES})
+
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx GTest::gtest_main)
+  
+  # link additional libraries
+  foreach(library ${TEST_LIBRARIES})
+    target_link_libraries(test_${TEST_NAME} PUBLIC ${library})
+  endforeach()
+
+  if(NOT DEFINED TEST_WORKING_DIRECTORY)
+    set(TEST_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+  endif()
+
+  add_tuvx_test(${TEST_NAME} test_${TEST_NAME} "" ${TEST_WORKING_DIRECTORY} ${TEST_SKIP_MEMCHECK})
+endfunction(create_standard_cxx_test)
+
+################################################################################
 # Add a test
 
 function(add_tuvx_test test_name test_binary test_args working_dir)

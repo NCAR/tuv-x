@@ -8,6 +8,8 @@ include(test_util)
 
 create_standard_test(NAME util_array SOURCES array.F90)
 
+create_standard_cxx_test(NAME util_array2d SOURCES array2d.cpp)
+
 create_standard_test(NAME util_assert SOURCES assert.F90)
 add_executable(util_assert_failure assert.F90)
 set_target_properties(util_assert_failure PROPERTIES LINKER_LANGUAGE Fortran)

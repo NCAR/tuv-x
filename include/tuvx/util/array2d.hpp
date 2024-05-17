@@ -4,7 +4,6 @@
 /// @file 2D array with row-major storage.
 #pragma once
 
-#include <iterator>
 #include <vector>
 
 namespace tuvx {
@@ -25,8 +24,12 @@ namespace tuvx {
       size_t Size1() const { return dim1_; }
       size_t Size2() const { return dim2_; }
 
-      std::iterator begin() { return data_.begin(); }
-      std::iterator end() { return data_.end(); }
+      typename std::vector<T>::iterator begin() { return data_.begin(); }
+      typename std::vector<T>::iterator end() { return data_.end(); }
+      typename std::vector<T>::const_iterator begin() const {
+        return data_.begin();
+      }
+      typename std::vector<T>::const_iterator end() const { return data_.end(); }
 
     private:
       size_t index(size_t i, size_t j) const { return i * dim2_ + j; }
