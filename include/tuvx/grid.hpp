@@ -21,22 +21,24 @@ namespace tuvx {
   template <typename T=double>
   class Grid {
   public:
-    /// Units of the grid.
-    std::string units_;
     /// Grid centers
     Array2D<T> mid_points_;
     /// Grid edges
     Array2D<T> edges_;
 
+    Grid() = delete;
+
     /// Constructor for a grid with dimensions that vary by column.
-    Grid(size_t number_of_columns, size_t number_of_grid_cells)
-      : mid_points_(number_of_grid_cells, number_of_columns),
+    Grid(const std::string& units, size_t number_of_columns, size_t number_of_grid_cells)
+      : units_(units),
+        mid_points_(number_of_grid_cells, number_of_columns),
         edges_(number_of_grid_cells+1, number_of_columns),
         is_constant_(false) {}
 
     /// Constructor for a grid with dimensions that are constant.
-    Grid(size_t number_of_grid_cells)
-      : mid_points_(number_of_grid_cells, 1),
+    Grid(const std::string& units, size_t number_of_grid_cells)
+      : units_(units),
+        mid_points_(number_of_grid_cells, 1),
         edges_(number_of_grid_cells+1, 1),
         is_constant_(true) {}
 
@@ -55,11 +57,19 @@ namespace tuvx {
       return edges_.Size1();
     }
 
+    /// Units of the grid.
+    std::string units() const {
+      return units_;
+    }
+
     /// Check if the grid dimensions are constant across columns.
     bool is_constant() const {
       return is_constant_;
     }
   private:
+    /// Units of the grid.
+    std::string units_;
+    /// True if the grid dimensions are constant across columns.
     bool is_constant_;
   };
 

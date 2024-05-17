@@ -19,6 +19,8 @@ add_subdirectory(util)
 ################################################################################
 # TUV-x tests
 
+create_standard_cxx_test(NAME cxx_grid SOURCES grid.cpp)
+create_standard_cxx_test(NAME cxx_profile SOURCES profile.cpp)
 create_standard_test(NAME grid_warehouse SOURCES grid_warehouse.F90)
 create_standard_test(NAME heating_rates SOURCES heating_rates.F90)
 create_standard_test(NAME la_sr_bands SOURCES la_sr_bands.F90 )

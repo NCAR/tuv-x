@@ -7,6 +7,7 @@
 #include <string>
 
 #include <tuvx/util/array2d.hpp>
+#include <tuvx/grid.hpp>
 
 namespace tuvx {
 
@@ -14,17 +15,29 @@ namespace tuvx {
   template <typename T=double>
   class Profile {
   public:
-    /// Units of the profile.
-    std::string units_;
     /// Values at grid mid-points.
     Array2D<T> mid_point_values_;
     /// Values at grid edges.
     Array2D<T> edge_values_;
 
+    Profile() = delete;
+
     /// Constructor
-    Profile(size_t number_of_columns, const Grid& grid)
-      : mid_point_values_(number_of_columns, grid.mid_points_.Size1()),
-        edge_values_(number_of_columns, grid.edges_.Size1()) {}
+    template<typename U>
+    Profile(const std::string& units, size_t number_of_columns, const Grid<U>& grid)
+      : units_(units),
+        mid_point_values_(grid.mid_points_.Size1(), number_of_columns),
+        edge_values_(grid.edges_.Size1(), number_of_columns) {}
+
+    /// Units of the profile.
+    std::string units() const {
+      return units_;
+    }
+
+  private:
+    /// Units of the profile.
+    std::string units_;
+
   };
 
 } // namespace tuvx
