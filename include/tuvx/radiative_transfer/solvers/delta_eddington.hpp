@@ -14,7 +14,7 @@
 
 namespace tuvx {
 
-  /// Radiative flux calculator that applies the delta-Eddington Approximation.
+  /// @brief Radiative flux calculator that applies the delta-Eddington Approximation.
   ///
   /// [DEV NOTES] We can determine whether this should be a class or a set of functions
   class DeltaEddington {

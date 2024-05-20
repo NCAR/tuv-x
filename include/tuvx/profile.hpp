@@ -11,7 +11,7 @@
 
 namespace tuvx {
 
-  /// Profile of a property on a grid.
+  /// @brief Profile of a property on a grid.
   template <typename ArrayPolicy = Array2D<double>>
   class Profile {
   public:
@@ -22,7 +22,10 @@ namespace tuvx {
 
     Profile() = delete;
 
-    /// Constructor
+    /// @brief Constructor of a profile
+    /// @param units Units of the profile.
+    /// @param number_of_columns Number of columns.
+    /// @param grid Grid that the profile is defined on.
     template<typename GridPolicy>
     Profile(const std::string& units, size_t number_of_columns, const GridPolicy& grid)
       : units_(units),
@@ -30,7 +33,7 @@ namespace tuvx {
         edge_values_(grid.edges_.Size1(), number_of_columns) {}
 
     /// Units of the profile.
-    std::string units() const {
+    std::string Units() const {
       return units_;
     }
 

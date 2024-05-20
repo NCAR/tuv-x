@@ -11,7 +11,7 @@
 
 namespace tuvx {
 
-  /// Radiation field components vertically and wavelength resolved.
+  /// @brief Radiation field components vertically and wavelength resolved.
   ///
   /// Data structures are designed to hold the radiation field components
   /// for a collection of columns in a 3D grid.
@@ -25,7 +25,10 @@ namespace tuvx {
     /// Downwelling component of the radiation field.
     ArrayPolicy downwelling_;
 
-    /// Constructor
+    /// @brief Constructor for radiation field components.
+    /// @param number_of_columns Number of columns.
+    /// @param vertical_grid Vertical grid.
+    /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
     RadiationFieldComponents(size_t number_of_columns, GridPolicy& vertical_grid,
                              GridPolicy& wavelength_grid)
@@ -37,7 +40,7 @@ namespace tuvx {
                      wavelength_grid.number_of_cells()) {}
   };
 
-  /// Radiation field vertically and wavelength resolved.
+  /// @brief Radiation field vertically and wavelength resolved.
   template <typename ComponentPolicy = RadiationFieldComponents<Array3D<double>>>
   struct RadiationField {
     /// Total spectral irradiance.
@@ -45,7 +48,10 @@ namespace tuvx {
     /// Total actinic flux.
     ComponentPolicy actinic_flux_;
 
-    /// Constructor
+    /// @brief Constructor for a radiation field.
+    /// @param number_of_columns Number of columns.
+    /// @param vertical_grid Vertical grid.
+    /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
     RadiationField(size_t number_of_columns, GridPolicy& vertical_grid,
                    GridPolicy& wavelength_grid)

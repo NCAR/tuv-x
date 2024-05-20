@@ -10,7 +10,7 @@
 
 namespace tuvx {
 
-  /// Grid dimensions
+  /// @brief Grid dimensions
   ///
   /// When grid dimensions vary by column, the grid is represented by
   /// two 2D arrays: one for the mid-points and one for the edges,
@@ -28,42 +28,57 @@ namespace tuvx {
 
     Grid() = delete;
 
-    /// Constructor for a grid with dimensions that vary by column.
-    Grid(const std::string& units, size_t number_of_columns, size_t number_of_grid_cells)
+    /// @brief Constructor for a grid with dimensions that vary by column.
+    /// @param units Units of the grid.
+    /// @param number_of_columns Number of columns.
+    /// @param number_of_sections Number of grid sections per column.
+    Grid(const std::string& units, size_t number_of_columns, size_t number_of_sections)
       : units_(units),
-        mid_points_(number_of_grid_cells, number_of_columns),
-        edges_(number_of_grid_cells+1, number_of_columns),
+        mid_points_(number_of_sections, number_of_columns),
+        edges_(number_of_sections+1, number_of_columns),
         is_constant_(false) {}
 
-    /// Constructor for a grid with dimensions that are constant.
-    Grid(const std::string& units, size_t number_of_grid_cells)
+    /// @brief Constructor for a grid with dimensions that are constant.
+    /// @param units Units of the grid.
+    /// @param number_of_sections Number of grid sections per column.
+    Grid(const std::string& units, size_t number_of_sections)
       : units_(units),
-        mid_points_(number_of_grid_cells, 1),
-        edges_(number_of_grid_cells+1, 1),
+        mid_points_(number_of_sections, 1),
+        edges_(number_of_sections+1, 1),
         is_constant_(true) {}
 
-    /// Number of columns
-    size_t number_of_columns() const {
+    /// @brief Number of columns
+    ///
+    /// When the grid dimensions are constant, the number of columns is 1.
+    size_t NumberOfColumns() const {
       return mid_points_.Size2();
     }
 
-    /// Number of grid cells
-    size_t number_of_cells() const {
+    /// @brief Number of grid sections
+    ///
+    /// The number of grid sections refers to the discreet intervals along
+    /// the grid for a single column. The total number of values stored by
+    /// the grid would then be the number of grid sections times the number
+    /// of columns.
+    size_t NumberOfSections() const {
       return mid_points_.Size1();
     }
 
-    /// Number of grid edges
-    size_t number_of_edges() const {
+    /// @brief Number of grid edges
+    ///
+    /// Grid edges are the boundaries of the grid sections. The number of
+    /// grid edges is one more than the number of grid sections.
+    size_t NumberOfEdges() const {
       return edges_.Size1();
     }
 
-    /// Units of the grid.
-    std::string units() const {
+    /// @brief Units of the grid.
+    std::string Units() const {
       return units_;
     }
 
-    /// Check if the grid dimensions are constant across columns.
-    bool is_constant() const {
+    /// @brief Check if the grid dimensions are constant across columns.
+    bool IsConstant() const {
       return is_constant_;
     }
   private:

@@ -8,7 +8,7 @@
 
 namespace tuvx {
 
-  /// 2D array with row-major storage.
+  /// @brief 2D array with row-major storage.
   template <typename T=double>
   class Array2D {
     public:

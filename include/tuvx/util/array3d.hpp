@@ -9,7 +9,7 @@
 
 namespace tuvx {
 
-/// 3D array with row-major storage.
+/// @brief 3D array with row-major storage.
 template <typename T = double> class Array3D {
 public:
   Array3D(size_t dim1, size_t dim2, size_t dim3)

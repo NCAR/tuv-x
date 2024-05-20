@@ -9,7 +9,7 @@
 
 namespace tuvx {
 
-  /// Optical properties of a radiative transfer component.
+  /// @brief Optical properties of a radiative transfer component.
   ///
   /// The optical properties are represented by 3D arrays indexed by
   /// [column][wavelength][vertical layer].
@@ -23,7 +23,10 @@ namespace tuvx {
     /// Asymmetry parameter (unitless)
     ArrayPolicy asymmetry_parameter_;
 
-    /// Constructor
+    /// @brief Constructor of a radiator state
+    /// @param number_of_columns Number of columns.
+    /// @param vertical_grid Vertical grid.
+    /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
     RadiatorState(size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
       : optical_depth_(number_of_columns, wavelength_grid.number_of_cells(),
@@ -33,7 +36,9 @@ namespace tuvx {
         asymmetry_parameter_(number_of_columns, wavelength_grid.number_of_cells(),
                              vertical_grid.number_of_cells()) {}
     
-    /// Accumulate a set of optical properties.
+    /// @brief Accumulate a set of optical properties.
+    /// @param states Vector of optical properties for individual optically active components.
+    /// @return Accumulated optical properties.
     template<typename RadiatorStatePolicy>
     static RadiatorStatePolicy Accumulate(const std::vector<RadiatorStatePolicy>& states) {
       // [DEV NOTES] Placeholder for the RadiatorState::Accumulate method
