@@ -23,8 +23,8 @@ namespace tuvx {
     Profile() = delete;
 
     /// Constructor
-    template<typename U>
-    Profile(const std::string& units, size_t number_of_columns, const Grid<U>& grid)
+    template<typename GridPolicy>
+    Profile(const std::string& units, size_t number_of_columns, const GridPolicy& grid)
       : units_(units),
         mid_point_values_(grid.mid_points_.Size1(), number_of_columns),
         edge_values_(grid.edges_.Size1(), number_of_columns) {}

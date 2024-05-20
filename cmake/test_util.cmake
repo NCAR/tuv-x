@@ -37,7 +37,7 @@ function(create_standard_test)
 endfunction(create_standard_test)
 
 ################################################################################
-# build and add a standard test (one linked to the micm library)
+# build and add a standard test (one linked to the tuvx library)
 
 function(create_standard_cxx_test)
   set(prefix TEST)
