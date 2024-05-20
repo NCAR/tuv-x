@@ -26,7 +26,7 @@ namespace tuvx {
     /// @param solar_zenith_angles Solar zenith angles for each column [radians].
     /// @param grids Grids available for the radiative transfer calculation.
     /// @param profiles Profiles available for the radiative transfer calculation.
-    /// @return The calculated radiation field.
+    /// @param radiation_field The calculated radiation field.
     ///
     /// Solves two-stream equations for multiple layers. These routines are based
     /// on equations from: Toon et al., J.Geophys.Res., v94 (D13), Nov 20, 1989.
@@ -35,11 +35,12 @@ namespace tuvx {
     ///
     /// The original delta-Eddington paper is:
     /// Joseph and Wiscombe, J. Atmos. Sci., 33, 2453-2459, 1976
-    template <typename T=double>
-    RadiationField<T> Solve(const std::vector<T>& solar_zenith_angles,
-               const std::map<std::string, Grid<T>>& grids,
-               const std::map<std::string, Profile<T>>& profiles,
-               const RadiatorState<T>& accumulated_radiator_states) const;
+    template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
+    void Solve(const std::vector<T>& solar_zenith_angles,
+               const std::map<std::string, GridPolicy>& grids,
+               const std::map<std::string, ProfilePolicy>& profiles,
+               const RadiatorStatePolicy& accumulated_radiator_states,
+               RadiationFieldPolicy& radiation_field) const;
   };
 
 } // namespace tuvx

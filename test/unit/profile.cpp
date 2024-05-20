@@ -7,8 +7,8 @@
 #include <tuvx/profile.hpp>
 
 TEST(Profile, Constructor) {
-  tuvx::Grid<int> grid("foos", 2, 3);
-  tuvx::Profile<int> a("bars", 2, grid);
+  tuvx::Grid<tuvx::Array2D<int>> grid("foos", 2, 3);
+  tuvx::Profile<tuvx::Array2D<int>> a("bars", 2, grid);
   EXPECT_EQ(a.units(), "bars");
   EXPECT_EQ(a.mid_point_values_.Size1(), 3);
   EXPECT_EQ(a.mid_point_values_.Size2(), 2);

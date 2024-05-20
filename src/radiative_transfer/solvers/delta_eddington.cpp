@@ -5,11 +5,12 @@
 
 namespace tuvx {
 
-  template <typename T>
-  RadiationField<T> DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
-                             const std::map<std::string, Grid<T>>& grids,
-                             const std::map<std::string, Profile<T>>& profiles,
-                             const RadiatorState<T>& accumulated_radiator_state) const {
+  template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
+  void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
+                             const std::map<std::string, GridPolicy>& grids,
+                             const std::map<std::string, ProfilePolicy>& profiles,
+                             const RadiatorStatePolicy& accumulated_radiator_state,
+                             RadiationFieldPolicy& radiation_field) const {
     // Solve the radiative transfer equation.
     // 
     // [DEV NOTES] This is a placeholder for the actual implementation.
@@ -21,6 +22,7 @@ namespace tuvx {
     //    variables were in non-SI units.
     // 2. We will be solving for collections of columns. The original solver
     //    was for a single column.
+    // 3. The variable naming and source-code documentation will be improved.
     const size_t number_of_columns = solar_zenith_angles.size();
     const auto& vertical_grid = grids.at("altitude [m]");
     const auto& wavelength_grid = grids.at("wavelength [m]");
@@ -29,9 +31,6 @@ namespace tuvx {
     assert(vertical_grid.number_of_columns() == number_of_columns);
     assert(wavelength_grid.number_of_columns() == 1);
 
-    RadiationField<T> radiation_field(number_of_columns, vertical_grid, wavelength_grid);
-
-    return radiation_field;
   }
 
 } // namespace tuvx

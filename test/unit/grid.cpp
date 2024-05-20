@@ -7,7 +7,7 @@
 #include <tuvx/grid.hpp>
 
 TEST(Grid, Constructor) {
-  tuvx::Grid<int> a("foos", 2, 3);
+  tuvx::Grid<tuvx::Array2D<int>> a("foos", 2, 3);
   EXPECT_EQ(a.units(), "foos");
   EXPECT_EQ(a.number_of_columns(), 2);
   EXPECT_EQ(a.number_of_cells(), 3);
@@ -17,7 +17,8 @@ TEST(Grid, Constructor) {
   EXPECT_EQ(a.mid_points_.Size2(), 2);
   EXPECT_EQ(a.edges_.Size1(), 4);
   EXPECT_EQ(a.edges_.Size2(), 2);
-  tuvx::Grid<int> b("bars", 4);
+  
+  tuvx::Grid<tuvx::Array2D<int>> b("bars", 4);
   EXPECT_STREQ(b.units().c_str(), "bars");
   EXPECT_EQ(b.number_of_columns(), 1);
   EXPECT_EQ(b.number_of_cells(), 4);

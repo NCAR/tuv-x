@@ -12,13 +12,13 @@
 namespace tuvx {
 
   /// Profile of a property on a grid.
-  template <typename T=double>
+  template <typename ArrayPolicy = Array2D<double>>
   class Profile {
   public:
     /// Values at grid mid-points.
-    Array2D<T> mid_point_values_;
+    ArrayPolicy mid_point_values_;
     /// Values at grid edges.
-    Array2D<T> edge_values_;
+    ArrayPolicy edge_values_;
 
     Profile() = delete;
 

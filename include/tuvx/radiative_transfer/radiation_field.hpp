@@ -16,18 +16,19 @@ namespace tuvx {
   /// Data structures are designed to hold the radiation field components
   /// for a collection of columns in a 3D grid.
   /// Arays are indexed by column, vertical edge, and wavelength.
-  template <typename T=double>
+  template <typename ArrayPolicy = Array3D<double>>
   struct RadiationFieldComponents {
     /// Direct component of the radiation field.
-    Array3D<T> direct_;
+    ArrayPolicy direct_;
     /// Upwelling component of the radiation field.
-    Array3D<T> upwelling_;
+    ArrayPolicy upwelling_;
     /// Downwelling component of the radiation field.
-    Array3D<T> downwelling_;
+    ArrayPolicy downwelling_;
 
     /// Constructor
-    RadiationFieldComponents(size_t number_of_columns, Grid<T>& vertical_grid,
-                             Grid<T>& wavelength_grid)
+    template<typename GridPolicy>
+    RadiationFieldComponents(size_t number_of_columns, GridPolicy& vertical_grid,
+                             GridPolicy& wavelength_grid)
       : direct_(number_of_columns, vertical_grid.number_of_edges(),
                 wavelength_grid.number_of_cells()),
         upwelling_(number_of_columns, vertical_grid.number_of_edges(),
@@ -37,16 +38,17 @@ namespace tuvx {
   };
 
   /// Radiation field vertically and wavelength resolved.
-  template <typename T=double>
+  template <typename ComponentPolicy = RadiationFieldComponents<Array3D<double>>>
   struct RadiationField {
     /// Total spectral irradiance.
-    RadiationFieldComponents<T> spectral_irradiance_;
+    ComponentPolicy spectral_irradiance_;
     /// Total actinic flux.
-    RadiationFieldComponents<T> actinic_flux_;
+    ComponentPolicy actinic_flux_;
 
     /// Constructor
-    RadiationField(size_t number_of_columns, Grid<T>& vertical_grid,
-                   Grid<T>& wavelength_grid)
+    template<typename GridPolicy>
+    RadiationField(size_t number_of_columns, GridPolicy& vertical_grid,
+                   GridPolicy& wavelength_grid)
       : spectral_irradiance_(number_of_columns, vertical_grid, wavelength_grid),
         actinic_flux_(number_of_columns, vertical_grid, wavelength_grid) {}
   };

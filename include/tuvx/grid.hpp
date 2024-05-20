@@ -18,13 +18,13 @@ namespace tuvx {
   ///
   /// When grid dimensions are constant, the size of the column
   /// dimension is 1.
-  template <typename T=double>
+  template <typename ArrayPolicy = Array2D<double>>
   class Grid {
   public:
     /// Grid centers
-    Array2D<T> mid_points_;
+    ArrayPolicy mid_points_;
     /// Grid edges
-    Array2D<T> edges_;
+    ArrayPolicy edges_;
 
     Grid() = delete;
 
