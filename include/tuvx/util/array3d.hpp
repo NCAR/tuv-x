@@ -21,11 +21,11 @@ public:
     return data_[index(i, j, k)];
   }
 
-  size_t size1() const { return dim1_; }
+  size_t Size1() const { return dim1_; }
 
-  size_t size2() const { return dim2_; }
+  size_t Size2() const { return dim2_; }
 
-  size_t size3() const { return dim3_; }
+  size_t Size3() const { return dim3_; }
 
   typename std::vector<T>::iterator begin() { return data_.begin(); }
 

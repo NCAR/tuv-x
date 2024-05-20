@@ -8,9 +8,9 @@
 
 TEST(Array3D, Constructor) {
   tuvx::Array3D<int> a(2, 3, 4);
-  EXPECT_EQ(a.size1(), 2);
-  EXPECT_EQ(a.size2(), 3);
-  EXPECT_EQ(a.size3(), 4);
+  EXPECT_EQ(a.Size1(), 2);
+  EXPECT_EQ(a.Size2(), 3);
+  EXPECT_EQ(a.Size3(), 4);
   int count = 10;
   for (auto &x : a) {
     x = count++;
