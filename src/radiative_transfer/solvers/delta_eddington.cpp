@@ -28,8 +28,8 @@ namespace tuvx {
     const auto& wavelength_grid = grids.at("wavelength [m]");
 
     // Check for consistency between the grids and profiles.
-    assert(vertical_grid.number_of_columns() == number_of_columns);
-    assert(wavelength_grid.number_of_columns() == 1);
+    assert(vertical_grid.NumberOfColumns() == number_of_columns);
+    assert(wavelength_grid.NumberOfColumns() == 1);
 
   }
 
