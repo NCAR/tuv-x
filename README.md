@@ -72,7 +72,9 @@ The full example uses data files from the `data` directory, which is why you nee
 ```
 cd /output
 cp -r /build/data .
-tuv-x /build/examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 Now, in your downloads folder, you should have to nc files, `photolysis_rate_constants.nc` and `dose_rates.nc`.
@@ -93,9 +95,55 @@ make -j 8
 
 You will now have a runnable exectubable for `tuv-x` and the tests in the build directory.
 
-`./tuv-x examples/full_config.json`.
+```
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
+```
 
 Inspect the output file `photolysis_rate_constants.nc` to see the results!
+
+## Build and run (Derecho supercomputer)
+
+```
+# reset module environment
+module purge 
+
+# load required modules 
+module load ncarenv/23.09
+module load intel/2023.2.1
+module load netcdf/4.9.2
+module load ncarcompilers/1.0.0
+module load cmake/3.26.3
+module load mpi/2023.2.1
+
+# build fortran JSON library 
+cd /glade/derecho/scratch/<user-id>/
+curl -LO https://github.com/jacobwilliams/json-fortran/archive/8.3.0.tar.gz
+tar -zxvf 8.3.0.tar.gz
+cd json-fortran-8.3.0
+mkdir build
+cd build
+cmake -D SKIP_DOC_GEN:BOOL=TRUE -D CMAKE_INSTALL_PREFIX=/glade/derecho/scratch/$userx/json-fortran-8.3.0 ..
+make install
+
+# clone tuv-x repository
+cd /glade/derecho/scratch/<user-id>/
+git clone git@github.com:NCAR/tuv-x.git
+
+# build tuv-x
+cd tuv-x
+mkdir build
+cd build
+export JSON_FORTRAN_HOME="/glade/derecho/scratch/<user-id>/json-fortran-8.3.0/jsonfortran-intel-8.3.0"
+cmake -D CMAKE_BUILD_TYPE=release -D ENABLE_MEMCHECK=OFF ..
+make -j 8 
+
+# run `tuv-x` executable on JSON executables in examples/
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
+```
 
 ## Install
 
