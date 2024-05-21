@@ -24,6 +24,7 @@ message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 target_link_libraries(tuvx_object 
   PRIVATE
     PkgConfig::netcdff
+    PkgConfig::netcdfc
     yaml-cpp::yaml-cpp
 )
 
