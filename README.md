@@ -47,7 +47,9 @@ cd build/
 # to run the tests
 make test
 # to use the standalone tool
-./tuv-x examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 ### Sharing data between your computer and the docker container
