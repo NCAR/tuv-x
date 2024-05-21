@@ -30,11 +30,13 @@ namespace tuvx {
     ///
     /// Solves two-stream equations for multiple layers. These routines are based
     /// on equations from: Toon et al., J.Geophys.Res., v94 (D13), Nov 20, 1989.
+    /// DOI: https://doi.org/10.1029/JD094iD13p16287
     /// It contains 9 two-stream methods to choose from. A pseudo-spherical
     /// correction has also been added.
     ///
     /// The original delta-Eddington paper is:
     /// Joseph and Wiscombe, J. Atmos. Sci., 33, 2453-2459, 1976
+    /// DOI: https://doi.org/10.1175/1520-0469(1976)033%3C2452:TDEAFR%3E2.0.CO;2
     template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
     void Solve(const std::vector<T>& solar_zenith_angles,
                const std::map<std::string, GridPolicy>& grids,
