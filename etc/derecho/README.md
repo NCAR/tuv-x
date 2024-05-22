@@ -45,6 +45,8 @@ make test
 
 ```
 cd $TUVX_HOME/tuv-x/build
-./tuv-x examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
