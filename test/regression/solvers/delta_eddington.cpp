@@ -3,6 +3,12 @@
 //
 // Tests for tuvx::DeltaEddington.
 #include "delta_eddington.hpp"
+#include <iostream>
+
+#define ASSERT(x) if (!(x)) { \
+    std::cerr << "Assertion failed at " << __FILE__ << ":" << __LINE__ << " : "<< #x << std::endl; \
+    exit(EXIT_FAILURE); \
+}
 
 double* CopyVector(const std::vector<double>& vec)
 {
@@ -43,6 +49,49 @@ GridPolicy CreateFixedGrid(std::string units, const size_t sections, const doubl
   return grid;
 }
 
+// Checks certian input values to ensure the data is properly transferred
+// from the Fortran side to the C++ side.
+// If the testing conditions change in the future, this function will need to be updated.
+void CheckInputs(const std::vector<double>& solar_zenith_angles,
+                 const std::vector<double>& earth_sun_distances,
+                 const std::map<std::string, tuvx::Grid<tuvx::Array2D<double>>>& grids,
+                 const std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>>& profiles,
+                 const tuvx::RadiatorState<tuvx::Array3D<double>>& accumulated_radiator_states)
+{
+  ASSERT(solar_zenith_angles.size() == 2);
+  ASSERT(earth_sun_distances.size() == 2);
+  ASSERT(grids.size() == 2);
+  ASSERT(grids.at("altitude [m]").NumberOfColumns() == 2);
+  ASSERT(grids.at("altitude [m]").NumberOfSections() == 120);
+  ASSERT(!grids.at("altitude [m]").IsConstant());
+  // heights have been converted to meters from km
+  ASSERT(grids.at("altitude [m]").edges_(0,0) == 0.0); 
+  ASSERT(grids.at("altitude [m]").edges_(42,0) == 42000.0);
+  ASSERT(grids.at("altitude [m]").edges_(120,0) == 120000.0); 
+  ASSERT(grids.at("altitude [m]").edges_(0,1) == 0.0); 
+  ASSERT(grids.at("altitude [m]").edges_(42,1) == 42000.0);
+  ASSERT(grids.at("altitude [m]").edges_(120,1) == 120000.0); 
+  ASSERT(grids.at("altitude [m]").mid_points_(0,0) == 500.0);
+  ASSERT(grids.at("altitude [m]").mid_points_(41,0) == 41500.0);
+  ASSERT(grids.at("altitude [m]").mid_points_(119,0) == 119500.0);
+  ASSERT(grids.at("altitude [m]").mid_points_(0,1) == 500.0);
+  ASSERT(grids.at("altitude [m]").mid_points_(41,1) == 41500.0);
+  ASSERT(grids.at("altitude [m]").mid_points_(119,1) == 119500.0);
+  ASSERT(grids.at("wavelength [m]").NumberOfColumns() == 1);
+  ASSERT(grids.at("wavelength [m]").NumberOfSections() == 156);
+  ASSERT(grids.at("wavelength [m]").IsConstant());
+  // wavelengths have been converted to meters from nm
+  ASSERT(grids.at("wavelength [m]").edges_(0,0) == 120.0*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").edges_(77,0) == 311.5*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").edges_(156,0) == 735.0*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(0,0) > 120.69*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(0,0) < 120.71*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(77,0) > 311.9*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(77,0) < 312.1*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(155,0) > 729.9*1.0e-9);
+  ASSERT(grids.at("wavelength [m]").mid_points_(155,0) < 730.1*1.0e-9);
+}
+
 SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
 {
   using GridPolicy = tuvx::Grid<tuvx::Array2D<double>>;
@@ -59,6 +108,7 @@ SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
                                                                                               grids["altitude [m]"],
                                                                                               grids["wavelength [m]"]);
   tuvx::DeltaEddington solver;
+  CheckInputs(solar_zenith_angles, earth_sun_distances, grids, profiles, accumulated_radiator_states);
   solver.Solve(solar_zenith_angles, grids, profiles, accumulated_radiator_states, radiation_field);
   SolverOutput output;
   output.n_wavelengths_ = input.n_wavelengths_;

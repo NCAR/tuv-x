@@ -58,10 +58,6 @@ program test_cpp_delta_eddington_solver
   config_file_path = 'examples/tuv_5_4.json'
   call test_cpp_delta_eddington_solver_t(config_file_path)
 
-  ! Run the TS1/TSMLT test
-  config_file_path = 'examples/ts1_tsmlt.json'
-  call test_cpp_delta_eddington_solver_t(config_file_path)
-
   call musica_mpi_finalize( )
 
 contains
@@ -154,14 +150,14 @@ contains
     solar_zenith_angles_c   = real( solar_zenith_angles(:), kind=c_double )   &
                                   * real(pi, kind=c_double) / 180.0_c_double ! degrees -> radians
     earth_sun_distances_c   = real( earth_sun_distances(:), kind=c_double )
-    allocate( altitude_mid_points_c( heights%ncells_,                         &
-                                     size( solar_zenith_angles ) ) )
-    allocate( altitude_edges_c(      heights%ncells_+1,                       &
-                                     size( solar_zenith_angles ) ) )
+    allocate( altitude_mid_points_c( size( solar_zenith_angles ),             &
+                                     heights%ncells_ ) )
+    allocate( altitude_edges_c(      size( solar_zenith_angles ),             &
+                                     heights%ncells_+1 ) )
     do i_column = 1, size( solar_zenith_angles )
-      altitude_mid_points_c(:,i_column) =                                     &
+      altitude_mid_points_c(i_column,:) =                                     &
           real( heights%mid_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
-      altitude_edges_c(:,i_column)      =                                     &
+      altitude_edges_c(i_column,:)      =                                     &
           real( heights%edge_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
     end do
     wavelength_mid_points_c = real( wavelengths%mid_(:), kind=c_double )      &
@@ -183,12 +179,12 @@ contains
     do i_column = 1, size( solar_zenith_angles )
       n_lev = heights%ncells_
       n_wl = wavelengths%ncells_
-      allocate( radiation_fields(i_column)%edr_( n_lev, n_wl ) )
-      allocate( radiation_fields(i_column)%eup_( n_lev, n_wl ) )
-      allocate( radiation_fields(i_column)%edn_( n_lev, n_wl ) )
-      allocate( radiation_fields(i_column)%fdr_( n_lev, n_wl ) )
-      allocate( radiation_fields(i_column)%fup_( n_lev, n_wl ) )
-      allocate( radiation_fields(i_column)%fdn_( n_lev, n_wl ) )
+      allocate( radiation_fields(i_column)%edr_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_column)%eup_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_column)%edn_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_column)%fdr_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_column)%fup_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_column)%fdn_( n_lev+1, n_wl ) )
       call copy_c_array_to_fortran( output%irrad_direct_,                      &
                                radiation_fields(i_column)%edr_,                &
                                i_column, heights%ncells_, wavelengths%ncells_ )

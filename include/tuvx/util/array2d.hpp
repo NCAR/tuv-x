@@ -34,6 +34,7 @@ namespace tuvx {
       typename std::vector<T>::const_iterator end() const { return data_.end(); }
 
       std::vector<T> &AsVector() { return data_; }
+      const std::vector<T> &AsVector() const { return data_; }
 
     private:
       size_t index(size_t i, size_t j) const { return i * dim2_ + j; }
