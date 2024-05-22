@@ -22,6 +22,7 @@ if [[ ! -d "${TUVX_HOME}" ]]; then
 fi
 
 # get & build the source code of TUV-x
+echo "Building TUV-x"
 cd ${TUVX_HOME}
 git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
