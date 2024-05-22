@@ -103,6 +103,56 @@ void CheckInputs(const std::vector<double>& solar_zenith_angles,
   ASSERT(grids.at("wavelength [m]").mid_points_(77,0) < 312.1*1.0e-9);
   ASSERT(grids.at("wavelength [m]").mid_points_(155,0) > 729.9*1.0e-9);
   ASSERT(grids.at("wavelength [m]").mid_points_(155,0) < 730.1*1.0e-9);
+
+  // optical depths are unitless
+  ASSERT(accumulated_radiator_states.optical_depth_.Size1() == 156);
+  ASSERT(accumulated_radiator_states.optical_depth_.Size2() == 120);
+  ASSERT(accumulated_radiator_states.optical_depth_.Size3() == 2);
+  ASSERT(accumulated_radiator_states.optical_depth_(0,0,0) > 2896168.4);
+  ASSERT(accumulated_radiator_states.optical_depth_(0,0,0) < 2896168.5);
+  ASSERT(accumulated_radiator_states.optical_depth_(83,41,0) > 4.83152e-4);
+  ASSERT(accumulated_radiator_states.optical_depth_(83,41,0) < 4.83153e-4);
+  ASSERT(accumulated_radiator_states.optical_depth_(155,119,0) > 6.64755e-10);
+  ASSERT(accumulated_radiator_states.optical_depth_(155,119,0) < 6.64756e-10);
+  ASSERT(accumulated_radiator_states.optical_depth_(0,0,1) > 2896168.4);
+  ASSERT(accumulated_radiator_states.optical_depth_(0,0,1) < 2896168.5);
+  ASSERT(accumulated_radiator_states.optical_depth_(83,41,1) > 4.83152e-4);
+  ASSERT(accumulated_radiator_states.optical_depth_(83,41,1) < 4.83153e-4);
+  ASSERT(accumulated_radiator_states.optical_depth_(155,119,1) > 6.64755e-10);
+  ASSERT(accumulated_radiator_states.optical_depth_(155,119,1) < 6.64756e-10);
+
+  // single scattering albedos are unitless
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size1() == 156);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size2() == 120);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size3() == 2);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,0) > 4.78487e-6);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,0) < 4.78488e-6);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,0) > 0.5383450);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,0) < 0.5383451);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,0) > 0.997822);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,0) < 0.997823);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,1) > 4.78487e-6);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,1) < 4.78488e-6);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,1) > 0.5383450);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,1) < 0.5383451);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,1) > 0.997822);
+  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,1) < 0.997823);
+
+  // asymmetry parameters are unitless
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size1() == 156);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size2() == 120);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size3() == 2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,0) > 2.12438e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,0) < 2.12439e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,0) > 2.13209e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,0) < 2.13210e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(155,119,0) == 0.0 );
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,1) > 2.12438e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,1) < 2.12439e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,1) > 2.13209e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,1) < 2.13210e-2);
+  ASSERT(accumulated_radiator_states.asymmetry_parameter_(155,119,1) == 0.0 );
+
 }
 
 SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
@@ -117,6 +167,15 @@ SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
   tuvx::RadiatorState<tuvx::Array3D<double>> accumulated_radiator_states(input.n_columns_,
                                                                          grids["altitude [m]"],
                                                                          grids["wavelength [m]"]);
+  for (int i = 0; i < input.n_wavelengths_; i++) {
+    for (int j = 0; j < input.n_levels_; j++) {
+      for (int k = 0; k < input.n_columns_; k++) {
+        accumulated_radiator_states.optical_depth_(i, j, k) = input.optical_depths_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
+        accumulated_radiator_states.single_scattering_albedo_(i, j, k) = input.single_scattering_albedos_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
+        accumulated_radiator_states.asymmetry_parameter_(i, j, k) = input.asymmetry_parameters_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
+      }
+    }
+  }
   tuvx::RadiationField<tuvx::RadiationFieldComponents<tuvx::Array3D<double>>> radiation_field(input.n_columns_,
                                                                                               grids["altitude [m]"],
                                                                                               grids["wavelength [m]"]);

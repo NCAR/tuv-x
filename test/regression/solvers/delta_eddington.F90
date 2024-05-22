@@ -21,6 +21,9 @@ program test_cpp_delta_eddington_solver
     type(c_ptr) :: altitude_edges_        ! (columns, levels+1)
     type(c_ptr) :: wavelength_mid_points_ ! (wavelengths)
     type(c_ptr) :: wavelength_edges_      ! (wavelengths+1)
+    type(c_ptr) :: layer_OD_              ! (columns, levels, wavelengths)
+    type(c_ptr) :: layer_SSA_             ! (columns, levels, wavelengths)
+    type(c_ptr) :: layer_G_               ! (columns, levels, wavelengths)
   end type solver_input_t_c
 
   ! Struct to hold output radiation fields from the C++ Delta-Eddington solver
@@ -28,12 +31,12 @@ program test_cpp_delta_eddington_solver
     integer(c_int) :: n_wavelengths_
     integer(c_int) :: n_levels_
     integer(c_int) :: n_columns_
-    type(c_ptr) :: flux_direct_  ! (columns, levels, wavelengths)
-    type(c_ptr) :: flux_up_      ! (columns, levels, wavelengths)
-    type(c_ptr) :: flux_down_    ! (columns, levels, wavelengths)
-    type(c_ptr) :: irrad_direct_ ! (columns, levels, wavelengths)
-    type(c_ptr) :: irrad_up_     ! (columns, levels, wavelengths)
-    type(c_ptr) :: irrad_down_   ! (columns, levels, wavelengths)
+    type(c_ptr) :: flux_direct_  ! (columns, levels+1, wavelengths)
+    type(c_ptr) :: flux_up_      ! (columns, levels+1, wavelengths)
+    type(c_ptr) :: flux_down_    ! (columns, levels+1, wavelengths)
+    type(c_ptr) :: irrad_direct_ ! (columns, levels+1, wavelengths)
+    type(c_ptr) :: irrad_up_     ! (columns, levels+1, wavelengths)
+    type(c_ptr) :: irrad_down_   ! (columns, levels+1, wavelengths)
   end type solver_output_t_c
 
   ! Function to calculate the radiation fields using the C++ Delta-Eddington solver
@@ -72,42 +75,54 @@ contains
     use tuvx_core,                     only: core_t
     use tuvx_grid,                     only: grid_t
     use tuvx_profile,                  only: profile_t
+    use tuvx_radiator,                 only: radiator_state_t
     use tuvx_solver,                   only: radiation_field_t
     use musica_string,                 only: string_t
 
     type(string_t), intent(in) :: config_file_path
 
     type(core_t),     pointer :: core
-    class(grid_t),    pointer :: columns
+    class(grid_t),    pointer :: columns, heights, wavelengths
     class(profile_t), pointer :: solar_zenith_angle ! [degrees]
     class(profile_t), pointer :: earth_sun_distance ! [AU]
     type(radiation_field_t), allocatable :: f90_radiation_fields(:),          &
                                             cpp_radiation_fields(:)
+    type(radiator_state_t), allocatable :: radiator_states(:)
     integer :: i_column
 
     core => core_t(config_file_path)
     columns => core%get_grid( "time", "hours" )
+    heights => core%get_grid( "height", "km" )
+    wavelengths => core%get_grid( "wavelength", "nm" )
     solar_zenith_angle => core%get_profile( "solar zenith angle", "degrees" )
     earth_sun_distance => core%get_profile( "Earth-Sun distance", "AU" )
 
     ! Run the solver for each set of conditions
     allocate( f90_radiation_fields( columns%ncells_ + 1 ) )
+    allocate( radiator_states( columns%ncells_ + 1 ) )
     do i_column = 1, columns%ncells_ + 1
       call core%run( solar_zenith_angle%edge_val_( i_column ),                &
                      earth_sun_distance%edge_val_( i_column ) )
 
       f90_radiation_fields( i_column ) = core%get_radiation_field( )
+      allocate( radiator_states( i_column )%layer_G_( heights%ncells_,        &
+                                                      wavelengths%ncells_, 1 ) )
+      call core%radiative_transfer_%radiator_warehouse_%accumulate_states(    &
+                                                  radiator_states( i_column ) )
     end do
     cpp_radiation_fields =                                                    &
         calculate_cpp_radiation_fields( core,                                 &
                                         solar_zenith_angle%edge_val_,         &
-                                        earth_sun_distance%edge_val_ )
+                                        earth_sun_distance%edge_val_,         &
+                                        radiator_states )
     call compare_radiation_fields( f90_radiation_fields, cpp_radiation_fields )
 
     ! Clean up
     deallocate( earth_sun_distance )
     deallocate( solar_zenith_angle )
     deallocate( columns )
+    deallocate( heights )
+    deallocate( wavelengths )
     deallocate( core )
     
   end subroutine test_cpp_delta_eddington_solver_t
@@ -116,17 +131,19 @@ contains
 
   ! Calculates the radiation field using the C++ Delta-Eddington solver
   function calculate_cpp_radiation_fields( tuvx_core, solar_zenith_angles,      &
-      earth_sun_distances ) result( radiation_fields )
+      earth_sun_distances, radiator_states ) result( radiation_fields )
 
     use tuvx_constants,                only: pi
     use tuvx_core,                     only: core_t
     use tuvx_grid,                     only: grid_t
     use tuvx_profile,                  only: profile_t
+    use tuvx_radiator,                 only: radiator_state_t
     use tuvx_solver,                   only: radiation_field_t
 
-    type(core_t),     intent(in) :: tuvx_core
-    real(dk),         intent(in) :: solar_zenith_angles(:)
-    real(dk),         intent(in) :: earth_sun_distances(:)
+    type(core_t),             intent(in) :: tuvx_core
+    real(dk),                 intent(in) :: solar_zenith_angles(:)
+    real(dk),                 intent(in) :: earth_sun_distances(:)
+    type(radiator_state_t),   intent(in) :: radiator_states(:)
     type(radiation_field_t), allocatable :: radiation_fields(:)
 
     class(grid_t), pointer :: heights
@@ -137,6 +154,9 @@ contains
     real(kind=c_double), allocatable, target :: altitude_edges_c(:,:)
     real(kind=c_double), allocatable, target :: wavelength_mid_points_c(:)
     real(kind=c_double), allocatable, target :: wavelength_edges_c(:)
+    real(kind=c_double), allocatable, target :: layer_OD_c(:,:,:)
+    real(kind=c_double), allocatable, target :: layer_SSA_c(:,:,:)
+    real(kind=c_double), allocatable, target :: layer_G_c(:,:,:)
     type(solver_input_t_c) :: input
     type(solver_output_t_c) :: output
     integer :: i_column, n_lev, n_wl
@@ -154,11 +174,23 @@ contains
                                      heights%ncells_ ) )
     allocate( altitude_edges_c(      size( solar_zenith_angles ),             &
                                      heights%ncells_+1 ) )
+    allocate( layer_OD_c(            size( solar_zenith_angles ),             &
+                                     heights%ncells_, wavelengths%ncells_ ) )
+    allocate( layer_SSA_c(           size( solar_zenith_angles ),             &
+                                     heights%ncells_, wavelengths%ncells_ ) )
+    allocate( layer_G_c(             size( solar_zenith_angles ),             &
+                                     heights%ncells_, wavelengths%ncells_ ) )
     do i_column = 1, size( solar_zenith_angles )
       altitude_mid_points_c(i_column,:) =                                     &
           real( heights%mid_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
       altitude_edges_c(i_column,:)      =                                     &
           real( heights%edge_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
+      layer_OD_c(i_column,:,:)          =                                     &
+          real( radiator_states(i_column)%layer_OD_(:,:), kind=c_double )
+      layer_SSA_c(i_column,:,:)         =                                     &
+          real( radiator_states(i_column)%layer_SSA_(:,:), kind=c_double )
+      layer_G_c(i_column,:,:)           =                                     &
+          real( radiator_states(i_column)%layer_G_(:,:,1), kind=c_double )
     end do
     wavelength_mid_points_c = real( wavelengths%mid_(:), kind=c_double )      &
                                     * 1.0e-9_c_double ! nm -> m
@@ -170,6 +202,9 @@ contains
     input%altitude_edges_        = c_loc( altitude_edges_c )
     input%wavelength_mid_points_ = c_loc( wavelength_mid_points_c )
     input%wavelength_edges_      = c_loc( wavelength_edges_c )
+    input%layer_OD_              = c_loc( layer_OD_c )
+    input%layer_SSA_             = c_loc( layer_SSA_c )
+    input%layer_G_               = c_loc( layer_G_c )
 
     ! run the C++ Delta-Eddington solver
     output = run_delta_eddington_solver_c( input )

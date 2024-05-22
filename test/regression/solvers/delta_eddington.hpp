@@ -20,18 +20,21 @@ struct SolverInput {
   double* altitude_edges_; // [levels + 1][columns]
   double* wavelength_mid_points_; // [wavelengths]
   double* wavelength_edges_; // [wavelengths + 1]
+  double* optical_depths_; // [wavelengths][levels][columns]
+  double* single_scattering_albedos_; // [wavelengths][levels][columns]
+  double* asymmetry_parameters_; // [wavelengths][levels][columns]
 };
 
 struct SolverOutput {
   int n_wavelengths_;
   int n_levels_;
   int n_columns_;
-  double* flux_direct_; // [wavelengths][levels][columns]
-  double* flux_up_; // [wavelengths][levels][columns]
-  double* flux_down_; // [wavelengths][levels][columns]
-  double* irrad_direct_; // [wavelengths][levels][columns]
-  double* irrad_up_; // [wavelengths][levels][columns]
-  double* irrad_down_; // [wavelengths][levels][columns]
+  double* flux_direct_; // [wavelengths][levels+1][columns]
+  double* flux_up_; // [wavelengths][levels+1][columns]
+  double* flux_down_; // [wavelengths][levels+1][columns]
+  double* irrad_direct_; // [wavelengths][levels+1][columns]
+  double* irrad_up_; // [wavelengths][levels+1][columns]
+  double* irrad_down_; // [wavelengths][levels+1][columns]
 };
 
 SolverOutput RunDeltaEddingtonSolver(const SolverInput input);
