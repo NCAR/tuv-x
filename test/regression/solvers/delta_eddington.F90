@@ -91,8 +91,8 @@ contains
     earth_sun_distance => core%get_profile( "Earth-Sun distance", "AU" )
 
     ! Run the solver for each set of conditions
-    allocate( f90_radiation_fields( columns%ncells_ ) )
-    do i_column = 1, columns%ncells_
+    allocate( f90_radiation_fields( columns%ncells_ + 1 ) )
+    do i_column = 1, columns%ncells_ + 1
       call core%run( solar_zenith_angle%edge_val_( i_column ),                &
                      earth_sun_distance%edge_val_( i_column ) )
 

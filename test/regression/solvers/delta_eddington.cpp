@@ -58,13 +58,25 @@ void CheckInputs(const std::vector<double>& solar_zenith_angles,
                  const std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>>& profiles,
                  const tuvx::RadiatorState<tuvx::Array3D<double>>& accumulated_radiator_states)
 {
+  // Solar zenith angles have been converted to radians from degrees
   ASSERT(solar_zenith_angles.size() == 2);
+  ASSERT(solar_zenith_angles.at(0) > 1.8294 * 3.14159265 / 180.0);
+  ASSERT(solar_zenith_angles.at(0) < 1.8295 * 3.14159265 / 180.0);
+  ASSERT(solar_zenith_angles.at(1) > 28.199 * 3.14159265 / 180.0);
+  ASSERT(solar_zenith_angles.at(1) < 28.200 * 3.14159265 / 180.0);
+
+  // Earth-Sun distances are in AU
   ASSERT(earth_sun_distances.size() == 2);
+  ASSERT(earth_sun_distances.at(0) > 0.9961);
+  ASSERT(earth_sun_distances.at(0) < 0.9962);
+  ASSERT(earth_sun_distances.at(1) > 0.9962);
+  ASSERT(earth_sun_distances.at(1) < 0.9963);
+
+  // heights have been converted to meters from km
   ASSERT(grids.size() == 2);
   ASSERT(grids.at("altitude [m]").NumberOfColumns() == 2);
   ASSERT(grids.at("altitude [m]").NumberOfSections() == 120);
   ASSERT(!grids.at("altitude [m]").IsConstant());
-  // heights have been converted to meters from km
   ASSERT(grids.at("altitude [m]").edges_(0,0) == 0.0); 
   ASSERT(grids.at("altitude [m]").edges_(42,0) == 42000.0);
   ASSERT(grids.at("altitude [m]").edges_(120,0) == 120000.0); 
@@ -77,10 +89,11 @@ void CheckInputs(const std::vector<double>& solar_zenith_angles,
   ASSERT(grids.at("altitude [m]").mid_points_(0,1) == 500.0);
   ASSERT(grids.at("altitude [m]").mid_points_(41,1) == 41500.0);
   ASSERT(grids.at("altitude [m]").mid_points_(119,1) == 119500.0);
+
+  // wavelengths have been converted to meters from nm
   ASSERT(grids.at("wavelength [m]").NumberOfColumns() == 1);
   ASSERT(grids.at("wavelength [m]").NumberOfSections() == 156);
   ASSERT(grids.at("wavelength [m]").IsConstant());
-  // wavelengths have been converted to meters from nm
   ASSERT(grids.at("wavelength [m]").edges_(0,0) == 120.0*1.0e-9);
   ASSERT(grids.at("wavelength [m]").edges_(77,0) == 311.5*1.0e-9);
   ASSERT(grids.at("wavelength [m]").edges_(156,0) == 735.0*1.0e-9);
