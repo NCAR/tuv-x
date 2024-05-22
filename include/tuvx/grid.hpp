@@ -26,7 +26,7 @@ namespace tuvx {
     /// Grid edges
     ArrayPolicy edges_;
 
-    Grid() = delete;
+    Grid() = default;
 
     /// @brief Constructor for a grid with dimensions that vary by column.
     /// @param units Units of the grid.

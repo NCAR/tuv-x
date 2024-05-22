@@ -29,12 +29,12 @@ namespace tuvx {
     /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
     RadiatorState(size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
-      : optical_depth_(number_of_columns, wavelength_grid.number_of_cells(),
-                       vertical_grid.number_of_cells()),
-        single_scattering_albedo_(number_of_columns, wavelength_grid.number_of_cells(),
-                                  vertical_grid.number_of_cells()),
-        asymmetry_parameter_(number_of_columns, wavelength_grid.number_of_cells(),
-                             vertical_grid.number_of_cells()) {}
+      : optical_depth_(number_of_columns, wavelength_grid.NumberOfSections(),
+                       vertical_grid.NumberOfSections()),
+        single_scattering_albedo_(number_of_columns, wavelength_grid.NumberOfSections(),
+                                  vertical_grid.NumberOfSections()),
+        asymmetry_parameter_(number_of_columns, wavelength_grid.NumberOfSections(),
+                             vertical_grid.NumberOfSections()) {}
     
     /// @brief Accumulate a set of optical properties.
     /// @param states Vector of optical properties for individual optically active components.

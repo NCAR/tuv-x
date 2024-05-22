@@ -4,6 +4,7 @@
 /// @file Delta-Eddington solver for radiative transfer.
 #pragma once
 
+#include <cassert>
 #include <vector>
 #include <map>
 
@@ -46,3 +47,5 @@ namespace tuvx {
   };
 
 } // namespace tuvx
+
+#include "delta_eddington.inl"

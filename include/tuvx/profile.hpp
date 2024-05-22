@@ -20,7 +20,7 @@ namespace tuvx {
     /// Values at grid edges.
     ArrayPolicy edge_values_;
 
-    Profile() = delete;
+    Profile() = default;
 
     /// @brief Constructor of a profile
     /// @param units Units of the profile.

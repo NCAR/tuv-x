@@ -1,12 +1,10 @@
 // Copyright (C) 2023-2024 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 
-#include <tuvx/radiative_transfer/solvers/delta_eddington.hpp>
-
 namespace tuvx {
 
   template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
-  void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
+  inline void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
                              const std::map<std::string, GridPolicy>& grids,
                              const std::map<std::string, ProfilePolicy>& profiles,
                              const RadiatorStatePolicy& accumulated_radiator_state,
