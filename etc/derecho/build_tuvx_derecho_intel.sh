@@ -21,24 +21,7 @@ if [[ ! -d "${TUVX_HOME}" ]]; then
   return
 fi
 
-echo "Building JSON Fortran"
-
-# get & build the source code of JSON Fortran
-
-cd ${TUVX_HOME}
-curl -LO https://github.com/jacobwilliams/json-fortran/archive/8.3.0.tar.gz
-tar -zxvf 8.3.0.tar.gz
-cd json-fortran-8.3.0
-mkdir build
-cd build
-INSTALL_DIR=$TUVX_HOME/json-fortran-8.3.0
-cmake -D SKIP_DOC_GEN:BOOL=TRUE -D CMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
-make install
-
-echo "Building TUV-x"
-
 # get & build the source code of TUV-x
-
 cd ${TUVX_HOME}
 git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
