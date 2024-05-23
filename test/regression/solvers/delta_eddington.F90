@@ -2,6 +2,8 @@
 ! SPDX-License-Identifier: Apache-2.0
 program test_cpp_delta_eddington_solver
 
+#define ASSERT(x) call assert(x, __FILE__, __LINE__)
+
   use, intrinsic :: iso_c_binding
   use musica_constants,                only : dk => musica_dk
   use musica_mpi,                      only : musica_mpi_init,                &
@@ -88,7 +90,7 @@ contains
     type(radiation_field_t), allocatable :: f90_radiation_fields(:),          &
                                             cpp_radiation_fields(:)
     type(radiator_state_t), allocatable :: radiator_states(:)
-    integer :: i_column
+    integer :: i_col
 
     core => core_t(config_file_path)
     columns => core%get_grid( "time", "hours" )
@@ -100,15 +102,15 @@ contains
     ! Run the solver for each set of conditions
     allocate( f90_radiation_fields( columns%ncells_ + 1 ) )
     allocate( radiator_states( columns%ncells_ + 1 ) )
-    do i_column = 1, columns%ncells_ + 1
-      call core%run( solar_zenith_angle%edge_val_( i_column ),                &
-                     earth_sun_distance%edge_val_( i_column ) )
+    do i_col = 1, columns%ncells_ + 1
+      call core%run( solar_zenith_angle%edge_val_( i_col ),                   &
+                     earth_sun_distance%edge_val_( i_col ) )
 
-      f90_radiation_fields( i_column ) = core%get_radiation_field( )
-      allocate( radiator_states( i_column )%layer_G_( heights%ncells_,        &
+      f90_radiation_fields( i_col ) = core%get_radiation_field( )
+      allocate( radiator_states( i_col )%layer_G_( heights%ncells_,           &
                                                       wavelengths%ncells_, 1 ) )
       call core%radiative_transfer_%radiator_warehouse_%accumulate_states(    &
-                                                  radiator_states( i_column ) )
+                                                  radiator_states( i_col ) )
     end do
     cpp_radiation_fields =                                                    &
         calculate_cpp_radiation_fields( core,                                 &
@@ -159,7 +161,7 @@ contains
     real(kind=c_double), allocatable, target :: layer_G_c(:,:,:)
     type(solver_input_t_c) :: input
     type(solver_output_t_c) :: output
-    integer :: i_column, n_lev, n_wl
+    integer :: i_col, n_col, n_lev, n_wl
 
     ! Set up the input struct
     heights => tuvx_core%get_grid( "height", "km" )
@@ -180,17 +182,17 @@ contains
                                      heights%ncells_, wavelengths%ncells_ ) )
     allocate( layer_G_c(             size( solar_zenith_angles ),             &
                                      heights%ncells_, wavelengths%ncells_ ) )
-    do i_column = 1, size( solar_zenith_angles )
-      altitude_mid_points_c(i_column,:) =                                     &
+    do i_col = 1, size( solar_zenith_angles )
+      altitude_mid_points_c(i_col,:) =                                        &
           real( heights%mid_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
-      altitude_edges_c(i_column,:)      =                                     &
+      altitude_edges_c(i_col,:)      =                                        &
           real( heights%edge_(:), kind=c_double ) * 1.0e3_c_double ! km -> m
-      layer_OD_c(i_column,:,:)          =                                     &
-          real( radiator_states(i_column)%layer_OD_(:,:), kind=c_double )
-      layer_SSA_c(i_column,:,:)         =                                     &
-          real( radiator_states(i_column)%layer_SSA_(:,:), kind=c_double )
-      layer_G_c(i_column,:,:)           =                                     &
-          real( radiator_states(i_column)%layer_G_(:,:,1), kind=c_double )
+      layer_OD_c(i_col,:,:)          =                                        &
+          real( radiator_states(i_col)%layer_OD_(:,:), kind=c_double )
+      layer_SSA_c(i_col,:,:)         =                                        &
+          real( radiator_states(i_col)%layer_SSA_(:,:), kind=c_double )
+      layer_G_c(i_col,:,:)           =                                        &
+          real( radiator_states(i_col)%layer_G_(:,:,1), kind=c_double )
     end do
     wavelength_mid_points_c = real( wavelengths%mid_(:), kind=c_double )      &
                                     * 1.0e-9_c_double ! nm -> m
@@ -210,34 +212,35 @@ contains
     output = run_delta_eddington_solver_c( input )
 
     ! copy output to radiation_fields
-    allocate( radiation_fields( size( solar_zenith_angles ) ) )
-    do i_column = 1, size( solar_zenith_angles )
+    allocate( radiation_fields( output%n_columns_ ) )
+    n_col = output%n_columns_
+    do i_col = 1, n_col
       n_lev = heights%ncells_
       n_wl = wavelengths%ncells_
-      allocate( radiation_fields(i_column)%edr_( n_lev+1, n_wl ) )
-      allocate( radiation_fields(i_column)%eup_( n_lev+1, n_wl ) )
-      allocate( radiation_fields(i_column)%edn_( n_lev+1, n_wl ) )
-      allocate( radiation_fields(i_column)%fdr_( n_lev+1, n_wl ) )
-      allocate( radiation_fields(i_column)%fup_( n_lev+1, n_wl ) )
-      allocate( radiation_fields(i_column)%fdn_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%edr_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%eup_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%edn_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%fdr_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%fup_( n_lev+1, n_wl ) )
+      allocate( radiation_fields(i_col)%fdn_( n_lev+1, n_wl ) )
       call copy_c_array_to_fortran( output%irrad_direct_,                      &
-                               radiation_fields(i_column)%edr_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%edr_,                   &
+                               i_col, n_col, n_lev, n_wl )
       call copy_c_array_to_fortran( output%irrad_up_,                          &
-                               radiation_fields(i_column)%eup_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%eup_,                   &
+                               i_col, n_col, n_lev, n_wl )
       call copy_c_array_to_fortran( output%irrad_down_,                        &
-                               radiation_fields(i_column)%edn_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%edn_,                   &
+                               i_col, n_col, n_lev, n_wl )
       call copy_c_array_to_fortran( output%flux_direct_,                       &
-                               radiation_fields(i_column)%fdr_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%fdr_,                   &
+                               i_col, n_col, n_lev, n_wl )
       call copy_c_array_to_fortran( output%flux_up_,                           &
-                               radiation_fields(i_column)%fup_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%fup_,                   &
+                               i_col, n_col, n_lev, n_wl )
       call copy_c_array_to_fortran( output%flux_down_,                         &
-                               radiation_fields(i_column)%fdn_,                &
-                               i_column, heights%ncells_, wavelengths%ncells_ )
+                               radiation_fields(i_col)%fdn_,                   &
+                               i_col, n_col, n_lev, n_wl )
     end do
 
     call free_output_c( output )
@@ -245,6 +248,34 @@ contains
     deallocate( wavelengths )
 
   end function calculate_cpp_radiation_fields
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  ! Compares two double values for closeness
+  function is_close( a, b )
+
+    real(dk), intent(in) :: a, b
+    logical :: is_close
+
+    is_close = abs( a - b ) <= (abs( a ) + abs( b )) * 1.0e-6
+
+  end function is_close
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  ! Asserts that a condition is true
+  subroutine assert( condition, file, line )
+
+    logical, intent(in) :: condition
+    character(len=*), intent(in) :: file
+    integer, intent(in) :: line
+
+    if ( .not. condition ) then
+      write(*,*) 'Assertion failed at line ', line, ' in ', file
+      stop 3
+    end if
+
+  end subroutine assert
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -256,23 +287,66 @@ contains
     type(radiation_field_t), intent(in) :: f90_radiation_fields(:)
     type(radiation_field_t), intent(in) :: cpp_radiation_fields(:)
 
-    ! Compare the radiation fields
-    ! ...
+    integer :: i_col, i_lev, i_wl
+    integer :: n_col, n_lev, n_wl
+    logical :: is_val_close
+
+    ! [DEV NOTES] Temporarily check for the fixed output of the C++ solver
+    n_col = size( f90_radiation_fields )
+    n_lev = size( f90_radiation_fields(1)%edr_, 1 )
+    n_wl = size( f90_radiation_fields(1)%edr_, 2 )
+    do i_wl = 1, n_wl
+      do i_lev = 1, n_lev
+        do i_col = 1, n_col
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%edr_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 42, kind=dk ))
+          ASSERT( is_val_close )
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%eup_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 93, kind=dk ))
+          ASSERT( is_val_close )
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%edn_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 52, kind=dk ))
+          ASSERT( is_val_close )
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%fdr_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 5, kind=dk ))
+          ASSERT( is_val_close )
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%fup_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 24, kind=dk ))
+          ASSERT( is_val_close )
+          is_val_close =                                                     &
+              is_close( cpp_radiation_fields(i_col)%fdn_(i_lev,i_wl),        &
+                   real( (i_wl-1) * n_lev * n_col + (i_lev-1) * n_col +      &
+                         (i_col-1) + 97, kind=dk ))
+          ASSERT( is_val_close )
+        end do
+      end do
+    end do
 
   end subroutine compare_radiation_fields
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   ! Copies a 3D C array pointer to a Fortran array
-  subroutine copy_c_array_to_fortran( c_array_ptr, f_array, i_col, n_lev, n_wl )
+  subroutine copy_c_array_to_fortran( c_array_ptr, f_array, i_col, n_col,     &
+      n_lev, n_wl )
 
     type(c_ptr), intent(in) :: c_array_ptr
     real(dk), intent(inout) :: f_array(:,:)
-    integer, intent(in) :: i_col, n_lev, n_wl
+    integer, intent(in) :: i_col, n_col, n_lev, n_wl
 
     real(kind=c_double), pointer :: c_array(:,:,:)
 
-    call c_f_pointer( c_array_ptr, c_array, [i_col, n_lev+1, n_wl] )
+    call c_f_pointer( c_array_ptr, c_array, [n_col, n_lev+1, n_wl] )
     f_array(:,:) = real( c_array(i_col,:,:), kind=dk )
 
   end subroutine copy_c_array_to_fortran

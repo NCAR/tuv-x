@@ -29,6 +29,33 @@ namespace tuvx {
     assert(vertical_grid.NumberOfColumns() == number_of_columns);
     assert(wavelength_grid.NumberOfColumns() == 1);
 
+    // [DEV NOTES] Temporarily return predictable values for the radiation field.
+    // This will be replaced with the actual results once the solver is implemented.
+    int offset = 42;
+    for (auto &elem : radiation_field.spectral_irradiance_.direct_) {
+      elem = offset++;
+    }
+    offset = 93;
+    for (auto &elem : radiation_field.spectral_irradiance_.upwelling_) {
+      elem = offset++;
+    }
+    offset = 52;
+    for (auto &elem : radiation_field.spectral_irradiance_.downwelling_) {
+      elem = offset++;
+    }
+    offset = 5;
+    for (auto &elem : radiation_field.actinic_flux_.direct_) {
+      elem = offset++;
+    }
+    offset = 24;
+    for (auto &elem : radiation_field.actinic_flux_.upwelling_) {
+      elem = offset++;
+    }
+    offset = 97;
+    for (auto &elem : radiation_field.actinic_flux_.downwelling_) {
+      elem = offset++;
+    }
+
   }
 
 } // namespace tuvx
