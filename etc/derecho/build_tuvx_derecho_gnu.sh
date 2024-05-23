@@ -3,7 +3,6 @@
 # The TUVX_HOME environment variable must be set to the directory to build TUV-x
 # in prior to calling this script
 
-
 module purge
 module load ncarenv/23.09
 module load craype/2.7.20
@@ -12,6 +11,7 @@ module load cray-libsci/23.02.1.1
 module load netcdf/4.9.2
 module load ncarcompilers/1.0.0
 module load cmake/3.26.3
+
 
 if [[ -z "${TUVX_HOME}" ]]; then
   echo "You must set the TUVX_HOME environment variable to the directory where TUV-x should be build."
@@ -23,29 +23,12 @@ if [[ ! -d "${TUVX_HOME}" ]]; then
   return
 fi
 
-echo "Building JSON Fortran"
-
-# get & build the source code of JSON Fortran
-
-cd ${TUVX_HOME}
-curl -LO https://github.com/jacobwilliams/json-fortran/archive/8.3.0.tar.gz
-tar -zxvf 8.3.0.tar.gz
-cd json-fortran-8.3.0
-mkdir build
-cd build
-INSTALL_DIR=$TUVX_HOME/json-fortran-8.3.0
-cmake -D SKIP_DOC_GEN:BOOL=TRUE -D CMAKE_INSTALL_PREFIX=$INSTALL_DIR ..
-make install
-
-echo "Building TUV-x"
-
-# get & build the source code of TUV-x
-
+# download and build TUV-X
+echo "Downloading and Building TUV-x"
 cd ${TUVX_HOME}
 git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
 mkdir build
 cd build
-export JSON_FORTRAN_HOME=$INSTALL_DIR/jsonfortran-gnu-8.3.0
-cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu ..   
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu -D BLAS_LIBRARIES=-lsci_gnu ..   
 make -j 8
