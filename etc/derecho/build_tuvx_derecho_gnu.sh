@@ -24,7 +24,9 @@ if [[ ! -d "${TUVX_HOME}" ]]; then
 fi
 
 # download and build TUV-X
-echo "Building TUV-x"
+echo "Downloading and Building TUV-x"
+cd ${TUVX_HOME}
+git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
 mkdir build
 cd build
