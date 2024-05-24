@@ -27,8 +27,7 @@ add_custom_target(copy_test_data ALL ${CMAKE_COMMAND} -E copy_directory
 string(REGEX MATCH "^[0-9]+" CMAKE_Fortran_COMPILER_MAJOR_VERSION ${CMAKE_Fortran_COMPILER_VERSION})
 
 add_subdirectory(unit)
-if(NOT ${CMAKE_Fortran_COMPILER_ID} MATCHES "NAG" AND NOT (${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU" AND ${CMAKE_Fortran_COMPILER_MAJOR_VERSION} VERSION_EQUAL 13))
-  # oldtuv doesn't build with NAG, so bypass the regression tests
+if(TUVX_ENABLE_REGRESSION_TESTS)
   add_subdirectory(oldtuv)
   add_subdirectory(regression)
 endif()
