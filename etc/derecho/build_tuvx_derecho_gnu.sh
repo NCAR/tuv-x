@@ -12,7 +12,6 @@ module load netcdf/4.9.2
 module load ncarcompilers/1.0.0
 module load cmake/3.26.3
 
-
 if [[ -z "${TUVX_HOME}" ]]; then
   echo "You must set the TUVX_HOME environment variable to the directory where TUV-x should be build."
   return
