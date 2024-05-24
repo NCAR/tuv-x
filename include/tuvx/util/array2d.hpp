@@ -12,6 +12,8 @@ namespace tuvx {
   template <typename T=double>
   class Array2D {
     public:
+      Array2D() = default;
+
       Array2D(size_t dim1, size_t dim2)
         : dim1_(dim1), dim2_(dim2), data_(dim1 * dim2) {}
 
@@ -30,6 +32,9 @@ namespace tuvx {
         return data_.begin();
       }
       typename std::vector<T>::const_iterator end() const { return data_.end(); }
+
+      std::vector<T> &AsVector() { return data_; }
+      const std::vector<T> &AsVector() const { return data_; }
 
     private:
       size_t index(size_t i, size_t j) const { return i * dim2_ + j; }

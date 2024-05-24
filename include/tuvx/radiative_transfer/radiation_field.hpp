@@ -15,7 +15,7 @@ namespace tuvx {
   ///
   /// Data structures are designed to hold the radiation field components
   /// for a collection of columns in a 3D grid.
-  /// Arays are indexed by column, vertical edge, and wavelength.
+  /// Arrays are indexed by wavelength, vertical edge, and column.
   template <typename ArrayPolicy = Array3D<double>>
   struct RadiationFieldComponents {
     /// Direct component of the radiation field.
@@ -32,12 +32,12 @@ namespace tuvx {
     template<typename GridPolicy>
     RadiationFieldComponents(size_t number_of_columns, GridPolicy& vertical_grid,
                              GridPolicy& wavelength_grid)
-      : direct_(number_of_columns, vertical_grid.number_of_edges(),
-                wavelength_grid.number_of_cells()),
-        upwelling_(number_of_columns, vertical_grid.number_of_edges(),
-                   wavelength_grid.number_of_cells()),
-        downwelling_(number_of_columns, vertical_grid.number_of_edges(),
-                     wavelength_grid.number_of_cells()) {}
+      : direct_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(),
+                number_of_columns),
+        upwelling_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(),
+                   number_of_columns),
+        downwelling_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(),
+                     number_of_columns) {}
   };
 
   /// @brief Radiation field vertically and wavelength resolved.
