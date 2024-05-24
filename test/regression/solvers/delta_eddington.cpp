@@ -2,13 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Tests for tuvx::DeltaEddington.
+#include <gtest/gtest.h>
+
 #include "delta_eddington.hpp"
 #include <iostream>
-
-#define ASSERT(x) if (!(x)) { \
-    std::cerr << "Assertion failed at " << __FILE__ << ":" << __LINE__ << " : "<< #x << std::endl; \
-    exit(EXIT_FAILURE); \
-}
 
 double* CopyVector(const std::vector<double>& vec)
 {
@@ -59,99 +56,76 @@ void CheckInputs(const std::vector<double>& solar_zenith_angles,
                  const tuvx::RadiatorState<tuvx::Array3D<double>>& accumulated_radiator_states)
 {
   // Solar zenith angles have been converted to radians from degrees
-  ASSERT(solar_zenith_angles.size() == 2);
-  ASSERT(solar_zenith_angles.at(0) > 1.8294 * 3.14159265 / 180.0);
-  ASSERT(solar_zenith_angles.at(0) < 1.8295 * 3.14159265 / 180.0);
-  ASSERT(solar_zenith_angles.at(1) > 28.199 * 3.14159265 / 180.0);
-  ASSERT(solar_zenith_angles.at(1) < 28.200 * 3.14159265 / 180.0);
+  ASSERT_EQ(solar_zenith_angles.size(), 2);
+  ASSERT_NEAR(solar_zenith_angles.at(0), 1.8294 * 3.14159265 / 180.0, 1.0e-6);
+  ASSERT_NEAR(solar_zenith_angles.at(1), 28.199 * 3.14159265 / 180.0, 1.0e-6);
 
   // Earth-Sun distances are in AU
-  ASSERT(earth_sun_distances.size() == 2);
-  ASSERT(earth_sun_distances.at(0) > 0.9961);
-  ASSERT(earth_sun_distances.at(0) < 0.9962);
-  ASSERT(earth_sun_distances.at(1) > 0.9962);
-  ASSERT(earth_sun_distances.at(1) < 0.9963);
+  ASSERT_EQ(earth_sun_distances.size(), 2);
+  ASSERT_NEAR(earth_sun_distances.at(0), 0.9961, 1.0e-6);
+  ASSERT_NEAR(earth_sun_distances.at(1), 0.9962, 1.0e-6);
 
   // heights have been converted to meters from km
-  ASSERT(grids.size() == 2);
-  ASSERT(grids.at("altitude [m]").NumberOfColumns() == 2);
-  ASSERT(grids.at("altitude [m]").NumberOfSections() == 120);
-  ASSERT(!grids.at("altitude [m]").IsConstant());
-  ASSERT(grids.at("altitude [m]").edges_(0,0) == 0.0); 
-  ASSERT(grids.at("altitude [m]").edges_(42,0) == 42000.0);
-  ASSERT(grids.at("altitude [m]").edges_(120,0) == 120000.0); 
-  ASSERT(grids.at("altitude [m]").edges_(0,1) == 0.0); 
-  ASSERT(grids.at("altitude [m]").edges_(42,1) == 42000.0);
-  ASSERT(grids.at("altitude [m]").edges_(120,1) == 120000.0); 
-  ASSERT(grids.at("altitude [m]").mid_points_(0,0) == 500.0);
-  ASSERT(grids.at("altitude [m]").mid_points_(41,0) == 41500.0);
-  ASSERT(grids.at("altitude [m]").mid_points_(119,0) == 119500.0);
-  ASSERT(grids.at("altitude [m]").mid_points_(0,1) == 500.0);
-  ASSERT(grids.at("altitude [m]").mid_points_(41,1) == 41500.0);
-  ASSERT(grids.at("altitude [m]").mid_points_(119,1) == 119500.0);
+  ASSERT_EQ(grids.size(), 2);
+  ASSERT_EQ(grids.at("altitude [m]").NumberOfColumns(), 2);
+  ASSERT_EQ(grids.at("altitude [m]").NumberOfSections(), 120);
+  ASSERT_FALSE(grids.at("altitude [m]").IsConstant());
+  ASSERT_EQ(grids.at("altitude [m]").edges_(0,0), 0.0); 
+  ASSERT_EQ(grids.at("altitude [m]").edges_(42,0), 42000.0);
+  ASSERT_EQ(grids.at("altitude [m]").edges_(120,0), 120000.0); 
+  ASSERT_EQ(grids.at("altitude [m]").edges_(0,1), 0.0); 
+  ASSERT_EQ(grids.at("altitude [m]").edges_(42,1), 42000.0);
+  ASSERT_EQ(grids.at("altitude [m]").edges_(120,1), 120000.0); 
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(0,0), 500.0);
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(41,0), 41500.0);
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(119,0), 119500.0);
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(0,1), 500.0);
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(41,1), 41500.0);
+  ASSERT_EQ(grids.at("altitude [m]").mid_points_(119,1), 119500.0);
 
   // wavelengths have been converted to meters from nm
-  ASSERT(grids.at("wavelength [m]").NumberOfColumns() == 1);
-  ASSERT(grids.at("wavelength [m]").NumberOfSections() == 156);
-  ASSERT(grids.at("wavelength [m]").IsConstant());
-  ASSERT(grids.at("wavelength [m]").edges_(0,0) == 120.0*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").edges_(77,0) == 311.5*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").edges_(156,0) == 735.0*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(0,0) > 120.69*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(0,0) < 120.71*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(77,0) > 311.9*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(77,0) < 312.1*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(155,0) > 729.9*1.0e-9);
-  ASSERT(grids.at("wavelength [m]").mid_points_(155,0) < 730.1*1.0e-9);
+  ASSERT_EQ(grids.at("wavelength [m]").NumberOfColumns(), 1);
+  ASSERT_EQ(grids.at("wavelength [m]").NumberOfSections(), 156);
+  ASSERT_TRUE(grids.at("wavelength [m]").IsConstant());
+  ASSERT_NEAR(grids.at("wavelength [m]").edges_(0,0), 120.0*1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").edges_(77,0), 311.5*1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").edges_(156,0), 735.0*1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(0,0), 120.69*1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(77,0), 311.9*1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155,0), 729.9*1.0e-9, 1.0e-16);
 
   // optical depths are unitless
-  ASSERT(accumulated_radiator_states.optical_depth_.Size1() == 156);
-  ASSERT(accumulated_radiator_states.optical_depth_.Size2() == 120);
-  ASSERT(accumulated_radiator_states.optical_depth_.Size3() == 2);
-  ASSERT(accumulated_radiator_states.optical_depth_(0,0,0) > 2896168.4);
-  ASSERT(accumulated_radiator_states.optical_depth_(0,0,0) < 2896168.5);
-  ASSERT(accumulated_radiator_states.optical_depth_(83,41,0) > 4.83152e-4);
-  ASSERT(accumulated_radiator_states.optical_depth_(83,41,0) < 4.83153e-4);
-  ASSERT(accumulated_radiator_states.optical_depth_(155,119,0) > 6.64755e-10);
-  ASSERT(accumulated_radiator_states.optical_depth_(155,119,0) < 6.64756e-10);
-  ASSERT(accumulated_radiator_states.optical_depth_(0,0,1) > 2896168.4);
-  ASSERT(accumulated_radiator_states.optical_depth_(0,0,1) < 2896168.5);
-  ASSERT(accumulated_radiator_states.optical_depth_(83,41,1) > 4.83152e-4);
-  ASSERT(accumulated_radiator_states.optical_depth_(83,41,1) < 4.83153e-4);
-  ASSERT(accumulated_radiator_states.optical_depth_(155,119,1) > 6.64755e-10);
-  ASSERT(accumulated_radiator_states.optical_depth_(155,119,1) < 6.64756e-10);
+  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size1(), 156);
+  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size2(), 120);
+  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size3(), 2);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0,0,0), 2896168.4, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83,41,0), 4.83152e-4, 1.0e-10);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155,119,0), 6.64755e-10, 1.0e-18);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0,0,1), 2896168.4, 1.0e-3);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83,41,1), 4.83152e-4, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155,119,1), 6.64755e-10, 1.0e-18);
 
   // single scattering albedos are unitless
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size1() == 156);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size2() == 120);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_.Size3() == 2);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,0) > 4.78487e-6);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,0) < 4.78488e-6);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,0) > 0.5383450);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,0) < 0.5383451);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,0) > 0.997822);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,0) < 0.997823);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,1) > 4.78487e-6);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(0,0,1) < 4.78488e-6);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,1) > 0.5383450);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(83,41,1) < 0.5383451);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,1) > 0.997822);
-  ASSERT(accumulated_radiator_states.single_scattering_albedo_(155,119,1) < 0.997823);
+  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size1(), 156);
+  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size2(), 120);
+  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size3(), 2);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0,0,0), 4.78487e-6, 1.0e-12);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83,41,0), 0.5383450, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155,119,0), 0.997822, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0,0,1), 4.78487e-6, 1.0e-12);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83,41,1), 0.5383450, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155,119,1), 0.997822, 1.0e-8);
 
   // asymmetry parameters are unitless
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size1() == 156);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size2() == 120);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_.Size3() == 2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,0) > 2.12438e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,0) < 2.12439e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,0) > 2.13209e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,0) < 2.13210e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(155,119,0) == 0.0 );
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,1) > 2.12438e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(0,0,1) < 2.12439e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,1) > 2.13209e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(83,41,1) < 2.13210e-2);
-  ASSERT(accumulated_radiator_states.asymmetry_parameter_(155,119,1) == 0.0 );
+  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size1(), 156);
+  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size2(), 120);
+  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size3(), 2);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0,0,0), 2.12438e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83,41,0), 2.13209e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155,119,0), 0.0 , 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0,0,1), 2.12438e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83,41,1), 2.13209e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155,119,1), 0.0 , 1.0e-8);
 
 }
 
