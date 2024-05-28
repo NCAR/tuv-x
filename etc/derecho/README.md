@@ -23,7 +23,7 @@ export TUVX_HOME=/path/to/my-tuvx-build
 ## Build TUV-x
 
 Replace `/path/to/build_tuvx_derecho_X.sh` with the path to the build script you copied to GLADE, in the following:
-> NOTE: Some test cases fail to build with the intel compiler.   
+> NOTE: Some regression tests fail to build with the intel compiler so we have to bypass them. Three tests still fail to run but they are either a little outside the tolerance or could be a potential compiler bug.
 
 ```
 cd $TUVX_HOME
