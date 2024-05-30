@@ -12,7 +12,6 @@ module load netcdf/4.9.2
 module load ncarcompilers/1.0.0
 module load cmake/3.26.3
 
-
 if [[ -z "${TUVX_HOME}" ]]; then
   echo "You must set the TUVX_HOME environment variable to the directory where TUV-x should be build."
   return
@@ -30,5 +29,5 @@ git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
 mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu -D BLAS_LIBRARIES=-lsci_gnu ..   
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D TUVX_ENABLE_REGRESSION_TESTS=OFF -D LAPACK_LIBRARIES=-lsci_gnu -D BLAS_LIBRARIES=-lsci_gnu ..   
 make -j 8
