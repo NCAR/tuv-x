@@ -42,7 +42,7 @@ template <typename T> inline void fill_rand_vec(std::vector<T> &x, int size) {
   std::uniform_int_distribution<std::mt19937::result_type> dist6(1, 6);
   x = std::vector<T>(size);
   for (int i = 0; i < x.size(); i++) {
-    x[i] = (T)dist6(rng);
+    x[i] = (T)dist6(rng) + 1;
   }
 }
 

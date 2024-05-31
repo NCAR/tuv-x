@@ -27,7 +27,6 @@ template <typename T>
 std::vector<T> tridiag_solve(trid_mat<T> A, std::vector<T> b);
 
 template <typename T> std::vector<T> dot(trid_mat<T>, std::vector<T>);
-
 } // namespace linalg
 } // namespace tuvx
 #include "linalg.inl"
