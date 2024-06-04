@@ -1,12 +1,10 @@
 // Copyright (C) 2023-2024 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 
-#include <tuvx/radiative_transfer/solvers/delta_eddington.hpp>
-
 namespace tuvx {
 
   template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
-  void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
+  inline void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
                              const std::map<std::string, GridPolicy>& grids,
                              const std::map<std::string, ProfilePolicy>& profiles,
                              const RadiatorStatePolicy& accumulated_radiator_state,
@@ -30,6 +28,33 @@ namespace tuvx {
     // Check for consistency between the grids and profiles.
     assert(vertical_grid.NumberOfColumns() == number_of_columns);
     assert(wavelength_grid.NumberOfColumns() == 1);
+
+    // [DEV NOTES] Temporarily return predictable values for the radiation field.
+    // This will be replaced with the actual results once the solver is implemented.
+    int offset = 42;
+    for (auto &elem : radiation_field.spectral_irradiance_.direct_) {
+      elem = offset++;
+    }
+    offset = 93;
+    for (auto &elem : radiation_field.spectral_irradiance_.upwelling_) {
+      elem = offset++;
+    }
+    offset = 52;
+    for (auto &elem : radiation_field.spectral_irradiance_.downwelling_) {
+      elem = offset++;
+    }
+    offset = 5;
+    for (auto &elem : radiation_field.actinic_flux_.direct_) {
+      elem = offset++;
+    }
+    offset = 24;
+    for (auto &elem : radiation_field.actinic_flux_.upwelling_) {
+      elem = offset++;
+    }
+    offset = 97;
+    for (auto &elem : radiation_field.actinic_flux_.downwelling_) {
+      elem = offset++;
+    }
 
   }
 

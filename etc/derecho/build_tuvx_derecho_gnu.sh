@@ -24,10 +24,11 @@ if [[ ! -d "${TUVX_HOME}" ]]; then
 fi
 
 # download and build TUV-X
+echo "Downloading and Building TUV-x"
 cd ${TUVX_HOME}
 git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
 mkdir build
 cd build
-cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D LAPACK_LIBRARIES=-lsci_gnu -D BLAS_LIBRARIES=-lsci_gnu ..   
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D TUVX_ENABLE_REGRESSION_TESTS=OFF -D LAPACK_LIBRARIES=-lsci_gnu -D BLAS_LIBRARIES=-lsci_gnu ..   
 make -j 8

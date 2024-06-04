@@ -12,6 +12,8 @@ namespace tuvx {
 /// @brief 3D array with row-major storage.
 template <typename T = double> class Array3D {
 public:
+  Array3D() = default;
+
   Array3D(size_t dim1, size_t dim2, size_t dim3)
       : dim1_(dim1), dim2_(dim2), dim3_(dim3), data_(dim1 * dim2 * dim3) {}
 
@@ -36,6 +38,9 @@ public:
   }
 
   typename std::vector<T>::const_iterator end() const { return data_.end(); }
+
+  std::vector<T> &AsVector() { return data_; }
+  const std::vector<T> &AsVector() const { return data_; }
 
 private:
   size_t index(size_t i, size_t j, size_t k) const {
