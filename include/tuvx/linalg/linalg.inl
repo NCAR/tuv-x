@@ -1,4 +1,5 @@
 
+#include <vector>
 namespace tuvx {
 namespace linalg {
 
@@ -45,12 +46,22 @@ template <typename T> inline void fill_rand_vec(std::vector<T> &x, int size) {
     x[i] = (T)dist6(rng) + 1;
   }
 }
-
 template <typename T> inline void fill_rand_mat(trid_mat<T> &tridmat, int n) {
   tridmat.size = n;
   fill_rand_vec(tridmat.mdiag, n);
   fill_rand_vec(tridmat.ldiag, n - 1);
   fill_rand_vec(tridmat.udiag, n - 1);
+  for (int i = 0; i < n; i++) {
+    tridmat.mdiag[i] = std::pow(tridmat.mdiag[i], 3);
+  }
+}
+
+template <typename T> inline void norm(std::vector<T> x, int order) {
+  T nrm = (T)0;
+  for (int i = 0; i < x.size(); i++) {
+    nrm += std::pow(x[i], order);
+  }
+  return (1.0 / nrm) * std::pow(nrm, 1.0 / order);
 }
 
 template <typename T> inline void print_vec(std::vector<T> x) {
@@ -67,5 +78,6 @@ template <typename T> inline void print_trid_mat(trid_mat<T> x) {
   print_vec(x.ldiag);
   std::cout << "----" << std::endl;
 }
+
 } // namespace linalg
 } // namespace tuvx

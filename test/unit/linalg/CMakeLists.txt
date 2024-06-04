@@ -6,6 +6,6 @@ include(test_util)
 ################################################################################
 # tests
 
-create_standard_cxx_test(NAME test_tridiag SOURCES test_tridiag.cpp) 
+create_standard_cxx_test(NAME test_tridiag SOURCES tridiag.cpp) 
 
 ################################################################################
