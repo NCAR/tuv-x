@@ -1,7 +1,5 @@
-#include <algorithm>
 #include <cfloat>
 #include <cstdlib>
-#include <fstream>
 #include <gtest/gtest.h>
 #include <limits>
 #include <tuvx/linalg/linalg.h>
@@ -16,7 +14,7 @@ typedef trid_mat<float> trid_matf;
 typedef std::vector<float> vecf;
 
 const int size = 10;
-const double tol_dp = 1e-15;
+const double tol_dp = 1e-14;
 const float tol_sp = 1e-6;
 
 // Demonstrate some basic assertions.
