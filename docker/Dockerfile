@@ -27,6 +27,8 @@ COPY . /tuv-x/
 RUN mkdir /build \
       && cd /build \
       && cmake -D CMAKE_BUILD_TYPE=release \
+               -D TUVX_INSTALL_INCLUDE_DIR=/usr/local/include \
+               -D TUVX_INSTALL_MOD_DIR=/usr/local/include \
                /tuv-x \
       && make install -j 8
 

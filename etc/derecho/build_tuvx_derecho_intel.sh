@@ -24,10 +24,11 @@ fi
 # get & build the source code of TUV-x
 echo "Downloading and Building TUV-x"
 cd ${TUVX_HOME}
+
 git clone git@github.com:NCAR/tuv-x.git
 cd tuv-x
 mkdir build
 cd build
 export JSON_FORTRAN_HOME=$INSTALL_DIR/jsonfortran-intel-8.3.0
-cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -DBLAS_LIBRARIES=-lmkl_rt -DLAPACK_LIBRARIES=-lmkl_rt ..
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D TUVX_ENABLE_REGRESSION_TESTS=OFF -D BLAS_LIBRARIES=-lmkl_rt -D LAPACK_LIBRARIES=-lmkl_rt ..
 make -j 8

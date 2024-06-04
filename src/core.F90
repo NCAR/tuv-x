@@ -30,7 +30,7 @@ module tuvx_core
     type(profile_warehouse_t),   pointer :: profile_warehouse_ => null()
     type(spherical_geometry_t),  pointer :: spherical_geometry_ => null()
     type(la_sr_bands_t),         pointer :: la_sr_bands_ => null()
-    type(radiative_transfer_t),  pointer :: radiative_transfer_ => null()
+    type(radiative_transfer_t),  pointer, public :: radiative_transfer_ => null()
     type(photolysis_rates_t),    pointer :: photolysis_rates_ => null()
     type(dose_rates_t),          pointer :: dose_rates_ => null()
     type(heating_rates_t),       pointer :: heating_rates_ => null()
