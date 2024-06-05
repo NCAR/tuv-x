@@ -7,13 +7,13 @@
 
 using namespace tuvx::linalg;
 
-typedef trid_mat<double> trid_matd;
+typedef TridiagonalMatrix<double> trid_matd;
 typedef std::vector<double> vecd;
 
-typedef trid_mat<float> trid_matf;
+typedef TridiagonalMatrix<float> trid_matf;
 typedef std::vector<float> vecf;
 
-const int size = 10;
+const size_t size = 10;
 const double tol_dp = 1e-14;
 const float tol_sp = 1e-6;
 
