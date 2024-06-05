@@ -27,12 +27,12 @@ TEST(TridiagSolveCPP, DoublePrecision) {
   trid_matd A;
 
   // initialize random matrix A and vector
-  fill_rand_mat(A, size);
-  fill_rand_vec(x, size);
-  b = dot(A, x);
+  FillRandMat(A, size);
+  FillRandVec(x, size);
+  b = Dot(A, x);
 
   // reconstruct x by tridiagonal solve
-  vecd x_approx = tridiag_solve(A, b);
+  vecd x_approx = TridiagSolve(A, b);
 
   // compute reconstruction error
   double error = 0.0;
@@ -55,12 +55,12 @@ TEST(TridiagSolveCPP, SinglePrecision) {
   vecf b;
   trid_matf A;
 
-  fill_rand_mat(A, size);
-  fill_rand_vec(x, size);
+  FillRandMat(A, size);
+  FillRandVec(x, size);
 
-  b = dot(A, x);
+  b = Dot(A, x);
 
-  vecf x_approx = tridiag_solve(A, b);
+  vecf x_approx = TridiagSolve(A, b);
   float error = 0.0;
   for (int i = 0; i < x_approx.size(); i++) {
     error += std::pow(std::abs(x[i] - x_approx[i]), 2);
@@ -71,3 +71,5 @@ TEST(TridiagSolveCPP, SinglePrecision) {
                            << std::numeric_limits<float>::epsilon()
                            << std::endl;
 }
+
+/// @test Comparing Tridiagonal

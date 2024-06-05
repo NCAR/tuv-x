@@ -2,7 +2,7 @@
 namespace tuvx {
 
 template <typename T>
-inline std::vector<T> dot(TridiagonalMatrix<T> A, std::vector<T> x) {
+inline std::vector<T> Dot(TridiagonalMatrix<T> A, std::vector<T> x) {
   std::size_t size = x.size();
   std::vector<T> v(size);
   v[0] = A.main_diagonal_[0] * x[0] + A.upper_diagonal_[0] * x[1];
@@ -17,7 +17,7 @@ inline std::vector<T> dot(TridiagonalMatrix<T> A, std::vector<T> x) {
 }
 
 template <typename T>
-inline std::vector<T> tridiag_solve(TridiagonalMatrix<T> A, std::vector<T> b) {
+inline std::vector<T> TridiagSolve(TridiagonalMatrix<T> A, std::vector<T> b) {
   T temp;
   std::size_t N = b.size();
   std::vector<T> x(N);
@@ -36,7 +36,7 @@ inline std::vector<T> tridiag_solve(TridiagonalMatrix<T> A, std::vector<T> b) {
 }
 
 template <typename T>
-inline void fill_rand_vec(std::vector<T> &x, std::size_t size) {
+inline void FillRandVec(std::vector<T> &x, std::size_t size) {
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> dist6(1, 6);
@@ -47,17 +47,17 @@ inline void fill_rand_vec(std::vector<T> &x, std::size_t size) {
 }
 
 template <typename T>
-inline void fill_rand_mat(TridiagonalMatrix<T> &tridmat, std::size_t n) {
+inline void FillRandMat(TridiagonalMatrix<T> &tridmat, std::size_t n) {
   tridmat.size = n;
-  fill_rand_vec(tridmat.main_diagonal_, n);
-  fill_rand_vec(tridmat.lower_diagonal_, n - 1);
-  fill_rand_vec(tridmat.upper_diagonal_, n - 1);
+  FillRandVec<T>(tridmat.main_diagonal_, n);
+  FillRandVec<T>(tridmat.lower_diagonal_, n - 1);
+  FillRandVec<T>(tridmat.upper_diagonal_, n - 1);
   for (int i = 0; i < n; i++) {
     tridmat.main_diagonal_[i] = std::pow(tridmat.main_diagonal_[i], 3);
   }
 }
 
-template <typename T> inline void norm(std::vector<T> x, int order) {
+template <typename T> inline void Norm(std::vector<T> x, int order) {
   T nrm = (T)0;
   for (int i = 0; i < x.size(); i++) {
     nrm += std::pow(x[i], order);
@@ -65,7 +65,7 @@ template <typename T> inline void norm(std::vector<T> x, int order) {
   return (1.0 / nrm) * std::pow(nrm, 1.0 / order);
 }
 
-template <typename T> inline void print_vec(std::vector<T> x) {
+template <typename T> inline void PrintVec(std::vector<T> x) {
   std::cout << std::endl;
   for (int i = 0; i < (int)x.size(); i++) {
     std::cout << x.at(i) << std::endl;
@@ -73,7 +73,7 @@ template <typename T> inline void print_vec(std::vector<T> x) {
   std::cout << std::endl;
 }
 
-template <typename T> inline void print_trid_mat(TridiagonalMatrix<T> x) {
+template <typename T> inline void PrintTridMat(TridiagonalMatrix<T> x) {
   print_vec(x.upper_diagonal_);
   print_vec(x.main_diagonal_);
   print_vec(x.lower_diagonal_);
