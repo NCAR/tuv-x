@@ -23,7 +23,7 @@ inline std::vector<T> tridiag_solve(trid_mat<T> A, std::vector<T> b) {
   std::size_t N = b.size();
   std::vector<T> x(N);
   // forward pass
-  for (int i = 1; i < N; i++) {
+  for (std::size_t i = 1; i < N; i++) {
     temp = A.ldiag[i - 1] / A.mdiag[i - 1];
     A.mdiag[i] -= temp * A.udiag[i - 1];
     b[i] -= temp * b[i - 1];
