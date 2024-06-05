@@ -10,9 +10,9 @@ namespace linalg {
 // tridiag matrix
 template <typename T> struct trid_mat {
   std::size_t size;
-  std::vector<T> udiag; // upper diagonal
-  std::vector<T> ldiag; // lower diagonal
-  std::vector<T> mdiag; // main diagonal
+  std::vector<T> upper_diagonal_; // upper diagonal
+  std::vector<T> lower_diagonal_; // lower diagonal
+  std::vector<T> main_diagonal_; // main diagonal
 };
 
 template <typename T> void fill_rand_vec(std::vector<T> &x, std::size_t size);
