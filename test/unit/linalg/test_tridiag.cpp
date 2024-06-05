@@ -17,7 +17,10 @@ const size_t size = 10;
 const double tol_dp = 1e-14;
 const float tol_sp = 1e-6;
 
-// Demonstrate some basic assertions.
+/// @test Tridiagonal Solver Test for Double Precision Floats.
+/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// compute $b=A \cdot x$, and check if solution is reconstructed
+/// accurately using L2 norm (double precision).
 TEST(TridiagSolveCPP, DoublePrecision) {
   vecd x;
   vecd b;
@@ -43,6 +46,10 @@ TEST(TridiagSolveCPP, DoublePrecision) {
                            << std::endl;
 }
 
+/// @test Tridiagonal Solver Test for single Precision Floats.
+/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// compute $b=A \cdot x$, and check if solution is reconstructed
+/// accurately using L2 norm (single precision).
 TEST(TridiagSolveCPP, SinglePrecision) {
   vecf x;
   vecf b;
