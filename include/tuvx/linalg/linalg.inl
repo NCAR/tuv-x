@@ -24,8 +24,8 @@ inline std::vector<T> tridiag_solve(TridiagonalMatrix<T> A, std::vector<T> b) {
   std::vector<T> x(N);
   // forward pass
   for (std::size_t i = 1; i < N; i++) {
-    temp = A.ldiag[i - 1] / A.mdiag[i - 1];
-    A.mdiag[i] -= temp * A.udiag[i - 1];
+    temp = A.lower_diagonal_[i - 1] / A.main_diagonal_[i - 1];
+    A.main_diagonal_[i] -= temp * A.upper_diagonal_[i - 1];
     b[i] -= temp * b[i - 1];
   }
   // back substitution
