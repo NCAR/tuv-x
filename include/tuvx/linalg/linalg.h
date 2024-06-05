@@ -8,7 +8,7 @@ namespace tuvx {
 namespace linalg {
 
 // tridiag matrix
-template <typename T> struct trid_mat {
+template <typename T> struct TridiagonalMatrix {
   std::size_t size;
   std::vector<T> upper_diagonal_; // upper diagonal
   std::vector<T> lower_diagonal_; // lower diagonal
