@@ -8,8 +8,8 @@ inline std::vector<T> dot(trid_mat<T> A, std::vector<T> x) {
   std::vector<T> v(size);
   v[0] = A.mdiag[0] * x[0] + A.udiag[0] * x[1];
 
-  int i = 0;
-  for (i = 1; i < x.size() - 1; i++) {
+  std::size_t i = 0;
+  for (i = 1; i < size - 1; i++) {
     v[i] =
         A.mdiag[i] * x[i] + A.udiag[i] * x[i + 1] + A.ldiag[i - 1] * x[i - 1];
   }
