@@ -7,7 +7,10 @@
 namespace tuvx {
 namespace linalg {
 
-// tridiag matrix
+/// @brief Tridiagonal Matrix Data Structure.
+/// Given a matrix of shape (n, n), the
+/// data structure holds three std::vectors
+/// storing the diagonal values.
 template <typename T> struct TridiagonalMatrix {
   std::size_t size;
   std::vector<T> upper_diagonal_; // upper diagonal
