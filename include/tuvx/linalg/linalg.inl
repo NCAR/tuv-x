@@ -5,7 +5,7 @@ namespace linalg {
 
 template <typename T>
 inline std::vector<T> dot(trid_mat<T> A, std::vector<T> x) {
-  int size = x.size();
+  std::size_t size = x.size();
   std::vector<T> v(size);
   v[0] = A.mdiag[0] * x[0] + A.udiag[0] * x[1];
 
@@ -21,7 +21,7 @@ inline std::vector<T> dot(trid_mat<T> A, std::vector<T> x) {
 template <typename T>
 inline std::vector<T> tridiag_solve(trid_mat<T> A, std::vector<T> b) {
   T temp;
-  int N = b.size();
+  std::size_t N = b.size();
   std::vector<T> x(N);
   // forward pass
   for (int i = 1; i < N; i++) {
@@ -37,7 +37,8 @@ inline std::vector<T> tridiag_solve(trid_mat<T> A, std::vector<T> b) {
   return x;
 }
 
-template <typename T> inline void fill_rand_vec(std::vector<T> &x, int size) {
+template <typename T>
+inline void fill_rand_vec(std::vector<T> &x, std::size_t size) {
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> dist6(1, 6);
@@ -46,7 +47,9 @@ template <typename T> inline void fill_rand_vec(std::vector<T> &x, int size) {
     x[i] = (T)dist6(rng) + 1;
   }
 }
-template <typename T> inline void fill_rand_mat(trid_mat<T> &tridmat, int n) {
+
+template <typename T>
+inline void fill_rand_mat(trid_mat<T> &tridmat, std::size_t n) {
   tridmat.size = n;
   fill_rand_vec(tridmat.mdiag, n);
   fill_rand_vec(tridmat.ldiag, n - 1);
