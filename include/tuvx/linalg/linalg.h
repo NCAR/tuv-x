@@ -5,7 +5,6 @@
 #include <vector>
 
 namespace tuvx {
-namespace linalg {
 
 /// @struct Tridiagonal Matrix Data Structure.
 /// @brief Given a matrix of shape (n, n), the
@@ -60,6 +59,5 @@ template <typename T> std::vector<T> dot(TridiagonalMatrix<T>, std::vector<T>);
 /// @returns $\frac{1}{N}(\sum_{i=1}^{N} |x|^p)^{\frac{1}{p}}$
 template <typename T> T norm(std::vector<T> x, int p);
 
-} // namespace linalg
 } // namespace tuvx
 #include "linalg.inl"

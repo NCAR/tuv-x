@@ -5,7 +5,7 @@
 #include <tuvx/linalg/linalg.h>
 #include <vector>
 
-using namespace tuvx::linalg;
+using namespace tuvx;
 
 typedef TridiagonalMatrix<double> trid_matd;
 typedef std::vector<double> vecd;

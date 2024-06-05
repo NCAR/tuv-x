@@ -1,6 +1,5 @@
 
 namespace tuvx {
-namespace linalg {
 
 template <typename T>
 inline std::vector<T> dot(TridiagonalMatrix<T> A, std::vector<T> x) {
@@ -81,5 +80,4 @@ template <typename T> inline void print_trid_mat(TridiagonalMatrix<T> x) {
   std::cout << "----" << std::endl;
 }
 
-} // namespace linalg
 } // namespace tuvx
