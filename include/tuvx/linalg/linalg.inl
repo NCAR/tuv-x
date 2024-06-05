@@ -1,5 +1,4 @@
 
-#include <vector>
 namespace tuvx {
 namespace linalg {
 
