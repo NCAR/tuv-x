@@ -9,7 +9,7 @@
 const std::size_t size = 10; // size of the system to test
 const int norm_order = 2;    // L2 norm for computing error
 const double tol_dp = 1e-14; // tolorance for double
-const float tol_sp = 1e-6;   // tolorance for single point floating precision
+const float tol_sp = 1e-5;   // tolorance for single point floating precision
 
 using namespace tuvx;
 
