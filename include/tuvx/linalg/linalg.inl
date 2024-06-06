@@ -17,7 +17,8 @@ inline std::vector<T> Dot(TridiagonalMatrix<T> A, std::vector<T> x) {
 }
 
 template <typename T>
-inline std::vector<T> TridiagSolve(TridiagonalMatrix<T> A, std::vector<T> b) {
+inline std::vector<T> TridiagonalSolve(TridiagonalMatrix<T> A,
+                                       std::vector<T> b) {
   T temp;
   std::size_t N = b.size();
   std::vector<T> x(N);
@@ -36,7 +37,7 @@ inline std::vector<T> TridiagSolve(TridiagonalMatrix<T> A, std::vector<T> b) {
 }
 
 template <typename T>
-inline void FillRandVec(std::vector<T> &x, std::size_t size) {
+inline void FillRandomVector(std::vector<T> &x, std::size_t size) {
   std::random_device dev;
   std::mt19937 rng(dev());
   std::uniform_int_distribution<std::mt19937::result_type> dist6(1, 6);
@@ -47,25 +48,25 @@ inline void FillRandVec(std::vector<T> &x, std::size_t size) {
 }
 
 template <typename T>
-inline void FillRandMat(TridiagonalMatrix<T> &tridmat, std::size_t n) {
-  tridmat.size = n;
-  FillRandVec<T>(tridmat.main_diagonal_, n);
-  FillRandVec<T>(tridmat.lower_diagonal_, n - 1);
-  FillRandVec<T>(tridmat.upper_diagonal_, n - 1);
-  for (int i = 0; i < n; i++) {
+inline void FillRandomMatrix(TridiagonalMatrix<T> &tridmat, std::size_t n) {
+  tridmat.size_ = n;
+  FillRandomVector<T>(tridmat.main_diagonal_, n);
+  FillRandomVector<T>(tridmat.lower_diagonal_, n - 1);
+  FillRandomVector<T>(tridmat.upper_diagonal_, n - 1);
+  for (auto i = 0; i < n; i++) {
     tridmat.main_diagonal_[i] = std::pow(tridmat.main_diagonal_[i], 3);
   }
 }
 
 template <typename T> inline void Norm(std::vector<T> x, int order) {
   T nrm = (T)0;
-  for (int i = 0; i < x.size(); i++) {
+  for (auto i = 0; i < x.size(); i++) {
     nrm += std::pow(x[i], order);
   }
   return (1.0 / nrm) * std::pow(nrm, 1.0 / order);
 }
 
-template <typename T> inline void PrintVec(std::vector<T> x) {
+template <typename T> inline void PrintVector(std::vector<T> x) {
   std::cout << std::endl;
   for (int i = 0; i < (int)x.size(); i++) {
     std::cout << x.at(i) << std::endl;
@@ -73,7 +74,8 @@ template <typename T> inline void PrintVec(std::vector<T> x) {
   std::cout << std::endl;
 }
 
-template <typename T> inline void PrintTridMat(TridiagonalMatrix<T> x) {
+template <typename T>
+inline void PrintTridiagonalMatrix(TridiagonalMatrix<T> x) {
   print_vec(x.upper_diagonal_);
   print_vec(x.main_diagonal_);
   print_vec(x.lower_diagonal_);

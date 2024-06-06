@@ -13,7 +13,7 @@ typedef std::vector<double> vecd;
 typedef TridiagonalMatrix<float> trid_matf;
 typedef std::vector<float> vecf;
 
-const size_t size = 10;
+const std::size_t size = 10;
 const double tol_dp = 1e-14;
 const float tol_sp = 1e-6;
 
@@ -27,16 +27,16 @@ TEST(TridiagSolveCPP, DoublePrecision) {
   trid_matd A;
 
   // initialize random matrix A and vector
-  FillRandMat(A, size);
-  FillRandVec(x, size);
-  b = Dot(A, x);
+  FillRandomMatrix<double>(A, size);
+  FillRandomVector<double>(x, size);
+  b = Dot<double>(A, x);
 
   // reconstruct x by tridiagonal solve
-  vecd x_approx = TridiagSolve(A, b);
+  vecd x_approx = TridiagonalSolve<double>(A, b);
 
   // compute reconstruction error
   double error = 0.0;
-  for (int i = 0; i < x_approx.size(); i++) {
+  for (auto i = 0; i < x_approx.size(); i++) {
     error += std::pow(std::abs(x[i] - x_approx[i]), 2);
   }
   error = std::sqrt(error) / x_approx.size();
@@ -55,14 +55,14 @@ TEST(TridiagSolveCPP, SinglePrecision) {
   vecf b;
   trid_matf A;
 
-  FillRandMat(A, size);
-  FillRandVec(x, size);
+  FillRandomMatrix<float>(A, size);
+  FillRandomVector<float>(x, size);
 
-  b = Dot(A, x);
+  b = Dot<float>(A, x);
 
-  vecf x_approx = TridiagSolve(A, b);
+  vecf x_approx = TridiagonalSolve<float>(A, b);
   float error = 0.0;
-  for (int i = 0; i < x_approx.size(); i++) {
+  for (auto i = 0; i < x_approx.size(); i++) {
     error += std::pow(std::abs(x[i] - x_approx[i]), 2);
   }
   error = std::sqrt(error) / x_approx.size();

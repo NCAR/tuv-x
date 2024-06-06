@@ -11,7 +11,7 @@ namespace tuvx {
 /// data structure holds three std::vectors
 /// storing the diagonal values.
 template <typename T> struct TridiagonalMatrix {
-  std::size_t size;
+  std::size_t size_;
   std::vector<T> upper_diagonal_; // upper diagonal
   std::vector<T> lower_diagonal_; // lower diagonal
   std::vector<T> main_diagonal_;  // main diagonal
@@ -20,21 +20,23 @@ template <typename T> struct TridiagonalMatrix {
 /// @brief Allocates a vector to a given size and fills it with random values
 /// @param x Vector to allocate and fill
 /// @param size Size of the vector
-template <typename T> void FillRandVec(std::vector<T> &x, std::size_t size);
+template <typename T>
+void FillRandomVector(std::vector<T> &x, std::size_t size);
 
 /// @brief Allocates a matrix to a given size and fills it with random values
 /// @param A tridiagonal matrix to allocate and fill
 /// @param size Size of the vector
-template <typename T> void FillRandMat(TridiagonalMatrix<T> &A, std::size_t n);
+template <typename T>
+void FillRandomMatrix(TridiagonalMatrix<T> &A, std::size_t n);
 
 /// @brief displays the data stored inside a std::vector
 /// @param x Vector to print
-template <typename T> void PrintVec(std::vector<T>);
+template <typename T> void PrintVector(std::vector<T>);
 
 /// @brief displays the data stored inside a tridiagonal matrix.
 /// For now, this function simply calls printvec() on the three diagonals.
 /// @param A tridiagonal matrix to print
-template <typename T> void PrintTridMat(TridiagonalMatrix<T> x);
+template <typename T> void PrintTridiagonalMatrix(TridiagonalMatrix<T> x);
 
 /// @fn Tridiagonal Linear System Solver
 /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b)
@@ -42,7 +44,7 @@ template <typename T> void PrintTridMat(TridiagonalMatrix<T> x);
 /// @param b right hand side vector of the tridiagonal system.
 /// @returns x solution that solves A x = b.
 template <typename T>
-std::vector<T> TridiagSolve(TridiagonalMatrix<T> A, std::vector<T> b);
+std::vector<T> TridiagonalSolve(TridiagonalMatrix<T> A, std::vector<T> b);
 
 /// @fn Tridiagonal Matrix - vector dot product
 /// @brief Specialized dot product function for tridiagonal matrices.
