@@ -14,7 +14,7 @@ add_subdirectory(radiative_transfer)
 add_subdirectory(radiator)
 add_subdirectory(spectral_weight)
 add_subdirectory(tuv_doug)
-add_subdirectory(linalg)
+add_subdirectory(linear_algebra)
 add_subdirectory(util)
 
 ################################################################################

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <algorithm>
+#include <functional>
 #include <iostream>
 #include <random>
 #include <vector>
@@ -15,28 +17,33 @@ template <typename T> struct TridiagonalMatrix {
   std::vector<T> upper_diagonal_; // upper diagonal
   std::vector<T> lower_diagonal_; // lower diagonal
   std::vector<T> main_diagonal_;  // main diagonal
+  /// @fn tridiagonal matrix structure constructor
+  /// @brief initializes the three internal vectors based on
+  /// size. Main diagonal will be of size $n$, while the upper/lower
+  /// diagonals will be of size $n-1#
+  TridiagonalMatrix(std::size_t size);
 };
 
-/// @brief Allocates a vector to a given size and fills it with random values
+/// @fn  Random vector function
+/// @brief Fill a std::vector with random values
 /// @param x Vector to allocate and fill
-/// @param size Size of the vector
-template <typename T>
-void FillRandomVector(std::vector<T> &x, std::size_t size);
+template <typename T> void FillRandom(std::vector<T> &x);
 
-/// @brief Allocates a matrix to a given size and fills it with random values
+/// @fn Initialize random matrix function
+/// @brief Fills a matrix with uniformly distributed random values.
 /// @param A tridiagonal matrix to allocate and fill
-/// @param size Size of the vector
-template <typename T>
-void FillRandomMatrix(TridiagonalMatrix<T> &A, std::size_t n);
+template <typename T> void FillRandom(TridiagonalMatrix<T> &A);
 
+/// @fn print vector function
 /// @brief displays the data stored inside a std::vector
 /// @param x Vector to print
-template <typename T> void PrintVector(std::vector<T>);
+template <typename T> void Print(const std::vector<T> &x);
 
+/// @fn print matrix function
 /// @brief displays the data stored inside a tridiagonal matrix.
 /// For now, this function simply calls printvec() on the three diagonals.
 /// @param A tridiagonal matrix to print
-template <typename T> void PrintTridiagonalMatrix(TridiagonalMatrix<T> x);
+template <typename T> void Print(const TridiagonalMatrix<T> &A);
 
 /// @fn Tridiagonal Linear System Solver
 /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b)
@@ -44,21 +51,25 @@ template <typename T> void PrintTridiagonalMatrix(TridiagonalMatrix<T> x);
 /// @param b right hand side vector of the tridiagonal system.
 /// @returns x solution that solves A x = b.
 template <typename T>
-std::vector<T> TridiagonalSolve(TridiagonalMatrix<T> A, std::vector<T> b);
+std::vector<T> Solve(TridiagonalMatrix<T> A, std::vector<T> b);
 
 /// @fn Tridiagonal Matrix - vector dot product
 /// @brief Specialized dot product function for tridiagonal matrices.
 /// @param A tridiagonal matrix
 /// @param x vector to multiply the matrix with
 /// @returns dot product between A and x
-template <typename T> std::vector<T> Dot(TridiagonalMatrix<T>, std::vector<T>);
+template <typename T>
+std::vector<T> Dot(const TridiagonalMatrix<T> &A, const std::vector<T> &b);
 
-/// @fn LP norm
-/// @brief LP of a vectors. Used for computing errors
-/// @param x vector to compute the norm of
-/// @param p of the norm
-/// @returns $\frac{1}{N}(\sum_{i=1}^{N} |x|^p)^{\frac{1}{p}}$
-template <typename T> T Norm(std::vector<T> x, int p);
+/// @fn residual vector  function
+/// @brief Computes the LP error norm between two vectors. Used for computing
+/// approximation errors.
+/// @param x true solution
+/// @param x_approx approximated solution
+/// @param norm_order order of the error norm to compute
+template <typename T>
+T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx,
+               int norm_order);
 
 } // namespace tuvx
-#include "linalg.inl"
+#include "linear_algebra.inl"
