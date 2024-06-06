@@ -7,8 +7,7 @@ inline std::vector<T> Dot(TridiagonalMatrix<T> A, std::vector<T> x) {
   std::vector<T> v(size);
   v[0] = A.main_diagonal_[0] * x[0] + A.upper_diagonal_[0] * x[1];
 
-  std::size_t i = 0;
-  for (i = 1; i < size - 1; i++) {
+  for (std::size_t i = 1; i < size - 1; i++) {
     v[i] = A.main_diagonal_[i] * x[i] + A.upper_diagonal_[i] * x[i + 1] +
            A.lower_diagonal_[i - 1] * x[i - 1];
   }
