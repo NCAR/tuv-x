@@ -56,18 +56,17 @@ template <typename T> inline void FillRandom(std::vector<T> &x) {
   }
 }
 
-template <typename T> inline void FillRandom(TridiagonalMatrix<T> &tridmat) {
-  FillRandom<T>(tridmat.main_diagonal_);
-  FillRandom<T>(tridmat.lower_diagonal_);
-  FillRandom<T>(tridmat.upper_diagonal_);
+template <typename T> inline void FillRandom(TridiagonalMatrix<T> &A) {
+  FillRandom<T>(A.main_diagonal_);
+  FillRandom<T>(A.lower_diagonal_);
+  FillRandom<T>(A.upper_diagonal_);
   // make diagonally dominant (diagonal value greater than sum of its row)
   std::size_t i = 0;
-  tridmat.main_diagonal_[i] += tridmat.upper_diagonal_[i];
-  for (i = 1; i < tridmat.size_ - 1; i++) {
-    tridmat.main_diagonal_[i] +=
-        tridmat.lower_diagonal_[i] + tridmat.upper_diagonal_[i - 1];
+  A.main_diagonal_[i] += A.upper_diagonal_[i];
+  for (i = 1; i < A.size_ - 1; i++) {
+    A.main_diagonal_[i] += A.lower_diagonal_[i - 1] + A.upper_diagonal_[i];
   }
-  tridmat.main_diagonal_[i] += tridmat.lower_diagonal_[i];
+  A.main_diagonal_[i] += A.lower_diagonal_[i - 1];
 }
 
 template <typename T> inline void Print(const std::vector<T> &x) {
