@@ -2,11 +2,12 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-#include <gtest/gtest.h>
-
 #include <tuvx/profile.hpp>
 
-TEST(Profile, Constructor) {
+#include <gtest/gtest.h>
+
+TEST(Profile, Constructor)
+{
   tuvx::Grid<tuvx::Array2D<int>> grid("foos", 2, 3);
   tuvx::Profile<tuvx::Array2D<int>> a("bars", 2, grid);
   EXPECT_EQ(a.Units(), "bars");

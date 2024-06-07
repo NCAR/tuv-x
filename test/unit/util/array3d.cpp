@@ -2,17 +2,19 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  */
-#include <gtest/gtest.h>
-
 #include <tuvx/util/array3d.hpp>
 
-TEST(Array3D, Constructor) {
+#include <gtest/gtest.h>
+
+TEST(Array3D, Constructor)
+{
   tuvx::Array3D<int> a(2, 3, 4);
   EXPECT_EQ(a.Size1(), 2);
   EXPECT_EQ(a.Size2(), 3);
   EXPECT_EQ(a.Size3(), 4);
   int count = 10;
-  for (auto &x : a) {
+  for (auto &x : a)
+  {
     x = count++;
   }
   a(1, 0, 0) = 45;
