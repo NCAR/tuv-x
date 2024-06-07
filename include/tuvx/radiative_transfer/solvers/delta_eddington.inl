@@ -1,6 +1,7 @@
-// Copyright (C) 2023-2024 National Center for Atmospheric Research
-// SPDX-License-Identifier: Apache-2.0
-
+/* Copyright (C) 2023-2024 National Center for Atmospheric Research
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 namespace tuvx {
 
   template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>

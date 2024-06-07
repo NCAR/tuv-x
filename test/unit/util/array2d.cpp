@@ -1,7 +1,7 @@
-// Copyright (C) 2023-2024 National Center for Atmospheric Research
-// SPDX-License-Identifier: Apache-2.0
-//
-// Tests for tuvx::Array2D.
+/* Copyright (C) 2023-2024 National Center for Atmospheric Research
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 #include <gtest/gtest.h>
 
 #include <tuvx/util/array2d.hpp>
