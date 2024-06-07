@@ -34,7 +34,7 @@ namespace tuvx
     /// @param units Units of the grid.
     /// @param number_of_columns Number of columns.
     /// @param number_of_sections Number of grid sections per column.
-    Grid(const std::string& units, size_t number_of_columns, size_t number_of_sections)
+    Grid(const std::string& units, std::size_t number_of_columns, std::size_t number_of_sections)
         : units_(units),
           mid_points_(number_of_sections, number_of_columns),
           edges_(number_of_sections + 1, number_of_columns),
@@ -45,7 +45,7 @@ namespace tuvx
     /// @brief Constructor for a grid with dimensions that are constant.
     /// @param units Units of the grid.
     /// @param number_of_sections Number of grid sections per column.
-    Grid(const std::string& units, size_t number_of_sections)
+    Grid(const std::string& units, std::size_t number_of_sections)
         : units_(units),
           mid_points_(number_of_sections, 1),
           edges_(number_of_sections + 1, 1),
@@ -56,7 +56,7 @@ namespace tuvx
     /// @brief Number of columns
     ///
     /// When the grid dimensions are constant, the number of columns is 1.
-    size_t NumberOfColumns() const
+    std::size_t NumberOfColumns() const
     {
       return mid_points_.Size2();
     }
@@ -67,7 +67,7 @@ namespace tuvx
     /// the grid for a single column. The total number of values stored by
     /// the grid would then be the number of grid sections times the number
     /// of columns.
-    size_t NumberOfSections() const
+    std::size_t NumberOfSections() const
     {
       return mid_points_.Size1();
     }
@@ -76,7 +76,7 @@ namespace tuvx
     ///
     /// Grid edges are the boundaries of the grid sections. The number of
     /// grid edges is one more than the number of grid sections.
-    size_t NumberOfEdges() const
+    std::size_t NumberOfEdges() const
     {
       return edges_.Size1();
     }

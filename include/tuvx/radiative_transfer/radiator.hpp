@@ -32,7 +32,7 @@ namespace tuvx
     /// @param vertical_grid Vertical grid.
     /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
-    RadiatorState(size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
+    RadiatorState(std::size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
         : optical_depth_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns),
           single_scattering_albedo_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns),
           asymmetry_parameter_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns)

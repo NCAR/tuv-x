@@ -22,7 +22,7 @@ namespace tuvx {
     // 2. We will be solving for collections of columns. The original solver
     //    was for a single column.
     // 3. The variable naming and source-code documentation will be improved.
-    const size_t number_of_columns = solar_zenith_angles.size();
+    const std::size_t number_of_columns = solar_zenith_angles.size();
     const auto& vertical_grid = grids.at("altitude [m]");
     const auto& wavelength_grid = grids.at("wavelength [m]");
 

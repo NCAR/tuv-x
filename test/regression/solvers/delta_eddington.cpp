@@ -19,11 +19,15 @@ double* CopyVector(const std::vector<double>& vec)
 }
 
 template<typename GridPolicy>
-GridPolicy
-CreateGrid(std::string units, const size_t n_columns, const size_t n_sections, const double* mid_points, const double* edges)
+GridPolicy CreateGrid(
+    std::string units,
+    const std::size_t n_columns,
+    const std::size_t n_sections,
+    const double* mid_points,
+    const double* edges)
 {
   GridPolicy grid(units, n_columns, n_sections);
-  size_t index = 0;
+  std::size_t index = 0;
   for (auto& elem : grid.mid_points_)
   {
     elem = mid_points[index++];
@@ -37,10 +41,10 @@ CreateGrid(std::string units, const size_t n_columns, const size_t n_sections, c
 }
 
 template<typename GridPolicy>
-GridPolicy CreateFixedGrid(std::string units, const size_t sections, const double* mid_points, const double* edges)
+GridPolicy CreateFixedGrid(std::string units, const std::size_t sections, const double* mid_points, const double* edges)
 {
   GridPolicy grid(units, sections);
-  size_t index = 0;
+  std::size_t index = 0;
   for (auto& elem : grid.mid_points_)
   {
     elem = mid_points[index++];

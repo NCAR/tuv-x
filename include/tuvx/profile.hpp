@@ -7,6 +7,7 @@
 #include <tuvx/grid.hpp>
 #include <tuvx/util/array2d.hpp>
 
+#include <cstddef>
 #include <string>
 
 namespace tuvx
@@ -29,7 +30,7 @@ namespace tuvx
     /// @param number_of_columns Number of columns.
     /// @param grid Grid that the profile is defined on.
     template<typename GridPolicy>
-    Profile(const std::string& units, size_t number_of_columns, const GridPolicy& grid)
+    Profile(const std::string& units, std::size_t number_of_columns, const GridPolicy& grid)
         : units_(units),
           mid_point_values_(grid.mid_points_.Size1(), number_of_columns),
           edge_values_(grid.edges_.Size1(), number_of_columns)
