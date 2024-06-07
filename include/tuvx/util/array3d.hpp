@@ -6,6 +6,7 @@
 
 #include <iterator>
 #include <vector>
+#include <cstddef>
 
 namespace tuvx
 {
@@ -17,7 +18,7 @@ namespace tuvx
    public:
     Array3D() = default;
 
-    Array3D(size_t dim1, size_t dim2, size_t dim3)
+    Array3D(std::size_t dim1, std::size_t dim2, std::size_t dim3)
         : dim1_(dim1),
           dim2_(dim2),
           dim3_(dim3),
@@ -25,27 +26,27 @@ namespace tuvx
     {
     }
 
-    T &operator()(size_t i, size_t j, size_t k)
+    T &operator()(std::size_t i, std::size_t j, std::size_t k)
     {
       return data_[index(i, j, k)];
     }
 
-    const T &operator()(size_t i, size_t j, size_t k) const
+    const T &operator()(std::size_t i, std::size_t j, std::size_t k) const
     {
       return data_[index(i, j, k)];
     }
 
-    size_t Size1() const
+    std::size_t Size1() const
     {
       return dim1_;
     }
 
-    size_t Size2() const
+    std::size_t Size2() const
     {
       return dim2_;
     }
 
-    size_t Size3() const
+    std::size_t Size3() const
     {
       return dim3_;
     }
@@ -80,12 +81,12 @@ namespace tuvx
     }
 
    private:
-    size_t index(size_t i, size_t j, size_t k) const
+    std::size_t index(std::size_t i, std::size_t j, std::size_t k) const
     {
       return i * dim2_ * dim3_ + j * dim3_ + k;
     }
 
-    size_t dim1_, dim2_, dim3_;
+    std::size_t dim1_, dim2_, dim3_;
     std::vector<T> data_;
   };
 

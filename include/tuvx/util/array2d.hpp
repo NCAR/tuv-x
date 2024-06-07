@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include <cstddef>
 
 namespace tuvx
 {
@@ -16,28 +17,28 @@ namespace tuvx
    public:
     Array2D() = default;
 
-    Array2D(size_t dim1, size_t dim2)
+    Array2D(std::size_t dim1, std::size_t dim2)
         : dim1_(dim1),
           dim2_(dim2),
           data_(dim1 * dim2)
     {
     }
 
-    T &operator()(size_t i, size_t j)
+    T &operator()(std::size_t i, std::size_t j)
     {
       return data_[index(i, j)];
     }
 
-    const T &operator()(size_t i, size_t j) const
+    const T &operator()(std::size_t i, std::size_t j) const
     {
       return data_[index(i, j)];
     }
 
-    size_t Size1() const
+    std::size_t Size1() const
     {
       return dim1_;
     }
-    size_t Size2() const
+    std::size_t Size2() const
     {
       return dim2_;
     }
@@ -69,12 +70,12 @@ namespace tuvx
     }
 
    private:
-    size_t index(size_t i, size_t j) const
+    std::size_t index(std::size_t i, std::size_t j) const
     {
       return i * dim2_ + j;
     }
 
-    size_t dim1_, dim2_;
+    std::size_t dim1_, dim2_;
     std::vector<T> data_;
   };
 }  // namespace tuvx
