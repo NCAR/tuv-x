@@ -1,10 +1,12 @@
+#include <tuvx/linear_algebra/linear_algebra.hpp>
+
+#include <gtest/gtest.h>
+
 #include <cfloat>
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
-#include <gtest/gtest.h>
 #include <limits>
-#include <tuvx/linear_algebra/linear_algebra.hpp>
 #include <vector>
 
 using namespace tuvx;
@@ -23,10 +25,12 @@ const float tol_sp = std::numeric_limits<float>::epsilon();
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (single precision). Check for different
 /// sizes to check consistency
-TEST(TridiagSolveTest, SinglePrecision) {
-  std::size_t sizes[5] = {5, 10, 1000, 100000, 10000000};
+TEST(TridiagSolveTest, SinglePrecision)
+{
+  std::size_t sizes[5] = { 5, 10, 1000, 100000, 10000000 };
   float error = 0;
-  for (std::size_t i = 0; i < 5; i++) {
+  for (std::size_t i = 0; i < 5; i++)
+  {
     vecf x(sizes[i]);
     vecf b(sizes[i]);
     trid_matf A(sizes[i]);
@@ -46,10 +50,12 @@ TEST(TridiagSolveTest, SinglePrecision) {
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (double precision). Check for different
 /// sizes to check consistency
-TEST(TridiagSolveTest, DoublePrecision) {
-  std::size_t sizes[5] = {5, 10, 1000, 100000, 10000000};
+TEST(TridiagSolveTest, DoublePrecision)
+{
+  std::size_t sizes[5] = { 5, 10, 1000, 100000, 10000000 };
   double error = 0;
-  for (std::size_t i = 0; i < 5; i++) {
+  for (std::size_t i = 0; i < 5; i++)
+  {
     vecd x(sizes[i]);
     vecd b(sizes[i]);
     trid_matd A(sizes[i]);

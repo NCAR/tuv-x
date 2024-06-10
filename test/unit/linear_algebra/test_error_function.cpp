@@ -1,14 +1,16 @@
 
+#include <tuvx/linear_algebra/linear_algebra.hpp>
+
+#include <gtest/gtest.h>
+
 #include <cfloat>
 #include <cstddef>
 #include <cstdlib>
-#include <gtest/gtest.h>
-#include <tuvx/linear_algebra/linear_algebra.hpp>
 #include <vector>
 
-const std::size_t size = 10; // size of the system to test
-const double tol_dp = 1e-14; // tolorance for double
-const float tol_sp = 1e-5;   // tolorance for single point floating precision
+const std::size_t size = 10;  // size of the system to test
+const double tol_dp = 1e-14;  // tolorance for double
+const float tol_sp = 1e-5;    // tolorance for single point floating precision
 
 using namespace tuvx;
 
@@ -21,8 +23,8 @@ typedef std::vector<float> vecf;
 /// @test Error function test
 /// @brief Test the correctness of the error function used for
 /// testing the Linear approximation solvers
-TEST(ErrorFunctionTest, DoublePrecision) {
-
+TEST(ErrorFunctionTest, DoublePrecision)
+{
   // same vector should return 0 error
   vecd x(size);
   vecd x1(size);
@@ -43,7 +45,8 @@ TEST(ErrorFunctionTest, DoublePrecision) {
 /// @test Error function test
 /// @brief Test the correctness of the error function used for
 /// testing the Linear approximation solvers
-TEST(ErrorFunctionTest, SinglePrecision) {
+TEST(ErrorFunctionTest, SinglePrecision)
+{
   // same vector should return 0 error
   vecf x(size);
   vecf x1(size);
