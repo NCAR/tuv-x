@@ -91,9 +91,9 @@ T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx,
 
 template <typename T> inline void Print(const TridiagonalMatrix<T> &x) {
   std::cout << "----" << std::endl;
-  print_vec(x.upper_diagonal_);
-  print_vec(x.main_diagonal_);
-  print_vec(x.lower_diagonal_);
+  Print(x.upper_diagonal_);
+  Print(x.main_diagonal_);
+  Print(x.lower_diagonal_);
   std::cout << "----" << std::endl;
 }
 
