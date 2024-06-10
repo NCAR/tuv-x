@@ -83,9 +83,9 @@ T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx,
                int norm_order) {
   T error = 0;
   for (std::size_t i = 0; i < x.size(); i++) {
-    error += std::pow(std::abs(x[i] - x_approx[i]), norm_order);
+    error +=
+        abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i]) / (T)x.size();
   }
-  error = ((T)1 / x.size()) * std::pow(error, (T)1 / (T)norm_order);
   return error;
 }
 

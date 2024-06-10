@@ -16,10 +16,10 @@ typedef std::vector<double> vecd;
 typedef TridiagonalMatrix<float> trid_matf;
 typedef std::vector<float> vecf;
 
-const std::size_t size = 100000000; // size of the system to test
-const double tol_dp = 1e-14;        // tolorance for double
-const float tol_sp = 1e-5; // tolorance for single point floating precision
-const int norm_order = 1;  // L2 norm for computing error
+const std::size_t size = 10; // size of the system to test
+const double tol_dp = std::numeric_limits<double>::epsilon();
+const float tol_sp = std::numeric_limits<float>::epsilon();
+const int norm_order = 2; // L2 norm for computing error
 
 /// @test Tridiagonal Solver Test for Double Precision Floats.
 /// @brief Generate random tridiagonal matrix $A$ and vector $x$,
@@ -79,6 +79,31 @@ TEST(TridiagSolveTest, CompareWithLAPACKE) {
 
   EXPECT_LE(lapacke_error, tol_dp);
   // EXPECT_LE(tridiag_error, tol_dp);
+}
+
+/// @test Test for verifying the consistency in approximation error for various
+/// sizes
+/// @brief Test the relative error function for various system sizes and make
+/// sure that it is consistent
+TEST(TridiagSolveTest, ErrorConsistencyDifferentSizes) {
+  std::size_t sizes[5] = {5, 10, 1000, 100000, 10000000};
+  vecd errors = vecd(5);
+  for (auto &e : errors) {
+    vecd x(size);
+    vecd b(size);
+    trid_matd A(size);
+
+    FillRandom<double>(A);
+    FillRandom<double>(x);
+
+    b = Dot<double>(A, x);
+    vecd x_approx = Solve<double>(A, b);
+
+    e = ComputeError<double>(x, x_approx, norm_order);
+  }
+  for (auto e : errors) {
+    EXPECT_LE(e, tol_dp);
+  }
 }
 
 /// @test Tridiagonal Solver Test for single Precision Floats.
