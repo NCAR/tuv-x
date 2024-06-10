@@ -15,7 +15,6 @@ typedef std::vector<double> vecd;
 typedef TridiagonalMatrix<float> trid_matf;
 typedef std::vector<float> vecf;
 
-const std::size_t size = 10; // size of the system to test
 const double tol_dp = std::numeric_limits<double>::epsilon();
 const float tol_sp = std::numeric_limits<float>::epsilon();
 const int norm_order = 2; // L2 norm for computing error
@@ -27,22 +26,19 @@ const int norm_order = 2; // L2 norm for computing error
 /// sizes to check consistency
 TEST(TridiagSolveTest, SinglePrecision) {
   std::size_t sizes[5] = {5, 10, 1000, 100000, 10000000};
-  vecf errors = vecf(5);
-  for (auto &e : errors) {
-    vecf x(size);
-    vecf b(size);
-    trid_matf A(size);
+  float error = 0;
+  for (std::size_t i = 0; i < 5; i++) {
+    vecf x(sizes[i]);
+    vecf b(sizes[i]);
+    trid_matf A(sizes[i]);
 
     FillRandom<float>(A);
     FillRandom<float>(x);
-
     b = Dot<float>(A, x);
-    vecf x_approx = Solve<float>(A, b);
 
-    e = ComputeError<float>(x, x_approx, norm_order);
-  }
-  for (auto e : errors) {
-    EXPECT_LE(e, tol_sp);
+    vecf x_approx = Solve<float>(A, b);
+    error = ComputeError<float>(x, x_approx, norm_order);
+    EXPECT_LE(error, tol_sp);
   }
 }
 
@@ -53,21 +49,18 @@ TEST(TridiagSolveTest, SinglePrecision) {
 /// sizes to check consistency
 TEST(TridiagSolveTest, DoublePrecision) {
   std::size_t sizes[5] = {5, 10, 1000, 100000, 10000000};
-  vecd errors = vecd(5);
-  for (auto &e : errors) {
-    vecd x(size);
-    vecd b(size);
-    trid_matd A(size);
+  double error = 0;
+  for (std::size_t i = 0; i < 5; i++) {
+    vecd x(sizes[i]);
+    vecd b(sizes[i]);
+    trid_matd A(sizes[i]);
 
     FillRandom<double>(A);
     FillRandom<double>(x);
-
     b = Dot<double>(A, x);
-    vecd x_approx = Solve<double>(A, b);
 
-    e = ComputeError<double>(x, x_approx, norm_order);
-  }
-  for (auto e : errors) {
-    EXPECT_LE(e, tol_dp);
+    vecd x_approx = Solve<double>(A, b);
+    error = ComputeError<double>(x, x_approx, norm_order);
+    EXPECT_LE(error, tol_sp);
   }
 }
