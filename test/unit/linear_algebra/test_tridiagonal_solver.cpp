@@ -37,7 +37,7 @@ TEST(TridiagSolveTest, SinglePrecision) {
     b = Dot<float>(A, x);
 
     vecf x_approx = Solve<float>(A, b);
-    error = ComputeError<float>(x, x_approx, norm_order);
+    error = ComputeError<float>(x, x_approx);
     EXPECT_LE(error, tol_sp);
   }
 }
@@ -60,7 +60,7 @@ TEST(TridiagSolveTest, DoublePrecision) {
     b = Dot<double>(A, x);
 
     vecd x_approx = Solve<double>(A, b);
-    error = ComputeError<double>(x, x_approx, norm_order);
+    error = ComputeError<double>(x, x_approx);
     EXPECT_LE(error, tol_sp);
   }
 }

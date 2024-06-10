@@ -79,8 +79,7 @@ template <typename T> inline void Print(const std::vector<T> &x) {
 }
 
 template <typename T>
-T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx,
-               int norm_order) {
+T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx) {
   T error = 0;
   for (std::size_t i = 0; i < x.size(); i++) {
     error +=

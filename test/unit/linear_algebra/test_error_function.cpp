@@ -7,7 +7,6 @@
 #include <vector>
 
 const std::size_t size = 10; // size of the system to test
-const int norm_order = 2;    // L2 norm for computing error
 const double tol_dp = 1e-14; // tolorance for double
 const float tol_sp = 1e-5;   // tolorance for single point floating precision
 
@@ -29,7 +28,7 @@ TEST(ErrorFunctionTest, DoublePrecision) {
   vecd x1(size);
   FillRandom<double>(x);
   x1 = x;
-  double error = ComputeError<double>(x, x1, norm_order);
+  double error = ComputeError<double>(x, x1);
   EXPECT_EQ(error, (double)0);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
@@ -37,7 +36,7 @@ TEST(ErrorFunctionTest, DoublePrecision) {
   x1 = x;
 
   x[0] += 0.1;
-  error = ComputeError(x, x1, 1);
+  error = ComputeError(x, x1);
   EXPECT_LE(error - (double)0.1 / size, tol_sp);
 }
 
@@ -51,7 +50,7 @@ TEST(ErrorFunctionTest, SinglePrecision) {
   vecf x1(size);
   FillRandom<float>(x);
   x1 = x;
-  float error = ComputeError<float>(x, x1, norm_order);
+  float error = ComputeError<float>(x, x1);
   EXPECT_EQ(error, (float)0);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
@@ -59,6 +58,6 @@ TEST(ErrorFunctionTest, SinglePrecision) {
   x1 = x;
 
   x[0] += 0.1;
-  error = ComputeError(x, x1, 1);
+  error = ComputeError(x, x1);
   EXPECT_LE(error - (float)0.1 / size, tol_sp);
 }
