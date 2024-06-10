@@ -17,7 +17,6 @@ typedef std::vector<float> vecf;
 
 const double tol_dp = std::numeric_limits<double>::epsilon();
 const float tol_sp = std::numeric_limits<float>::epsilon();
-const int norm_order = 2; // L2 norm for computing error
 
 /// @test Tridiagonal Solver Test for single Precision Floats.
 /// @brief Generate random tridiagonal matrix $A$ and vector $x$,
