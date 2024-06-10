@@ -29,35 +29,34 @@ TEST(ErrorFunctionTest, DoublePrecision) {
   FillRandom<double>(x);
   x1 = x;
   double error = ComputeError<double>(x, x1);
-  EXPECT_EQ(error, (double)0);
+  EXPECT_EQ(error, 0.0);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
-  std::fill(x1.begin(), x1.end(), (double)1);
+  std::fill(x1.begin(), x1.end(), 1.0);
   x1 = x;
 
   x[0] += 0.1;
   error = ComputeError(x, x1);
-  EXPECT_LE(error - (double)0.1 / size, tol_sp);
+  EXPECT_LE(error - 0.1 / size, tol_sp);
 }
 
 /// @test Error function test
 /// @brief Test the correctness of the error function used for
 /// testing the Linear approximation solvers
 TEST(ErrorFunctionTest, SinglePrecision) {
-
   // same vector should return 0 error
   vecf x(size);
   vecf x1(size);
   FillRandom<float>(x);
   x1 = x;
   float error = ComputeError<float>(x, x1);
-  EXPECT_EQ(error, (float)0);
+  EXPECT_EQ(error, 0.0f);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
-  std::fill(x1.begin(), x1.end(), (float)1);
+  std::fill(x1.begin(), x1.end(), 1.0f);
   x1 = x;
 
-  x[0] += 0.1;
+  x[0] += 0.1f;
   error = ComputeError(x, x1);
-  EXPECT_LE(error - (float)0.1 / size, tol_sp);
+  EXPECT_LE(error - 0.1f / size, tol_sp);
 }
