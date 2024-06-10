@@ -1,9 +1,13 @@
-// Copyright (C) 2024 National Center for Atmospheric Research
-// SPDX-License-Identifier: Apache-2.0
+/* Copyright (C) 2024 National Center for Atmospheric Research
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 #include <tuvx/util/config_yaml.h>
+
 #include <yaml-cpp/yaml.h>
-#include <fstream>
+
 #include <cstring>
+#include <fstream>
 
 Yaml* yaml_create_from_string(const char* yaml_string)
 {
@@ -68,7 +72,8 @@ string_t yaml_get_string(Yaml* node, const char* key, bool& found)
 {
   found = (*node)[key].IsDefined();
   string_t string;
-  if (found) {
+  if (found)
+  {
     std::string str = (*node)[key].as<std::string>();
     string.size_ = str.length();
     string.ptr_ = new char[string.size_ + 1];
@@ -83,28 +88,32 @@ string_t yaml_get_string(Yaml* node, const char* key, bool& found)
 int yaml_get_int(Yaml* node, const char* key, bool& found)
 {
   found = (*node)[key].IsDefined();
-  if (found) return (*node)[key].as<int>();
+  if (found)
+    return (*node)[key].as<int>();
   return 0;
 }
 
 float yaml_get_float(Yaml* node, const char* key, bool& found)
 {
   found = (*node)[key].IsDefined();
-  if (found) return (*node)[key].as<float>();
+  if (found)
+    return (*node)[key].as<float>();
   return 0.0f;
 }
 
 double yaml_get_double(Yaml* node, const char* key, bool& found)
 {
   found = (*node)[key].IsDefined();
-  if (found) return (*node)[key].as<double>();
+  if (found)
+    return (*node)[key].as<double>();
   return 0.0;
 }
 
 bool yaml_get_bool(Yaml* node, const char* key, bool& found)
 {
   found = (*node)[key].IsDefined();
-  if (found) return (*node)[key].as<bool>();
+  if (found)
+    return (*node)[key].as<bool>();
   return false;
 }
 
@@ -115,14 +124,15 @@ string_array_t yaml_get_string_array(Yaml* node, const char* key, bool& found)
   array.ptr_ = nullptr;
   YAML::Node array_node = (*node)[key];
   found = array_node.IsDefined();
-  if (!found) return array;
+  if (!found)
+    return array;
   array.size_ = array_node.size();
-  array.ptr_ = new string_t[ array.size_ ];
+  array.ptr_ = new string_t[array.size_];
   for (std::size_t i = 0; i < array_node.size(); ++i)
   {
     std::string str = array_node[i].as<std::string>();
     array.ptr_[i].size_ = str.length();
-    array.ptr_[i].ptr_ = new char[ str.length() + 1 ];
+    array.ptr_[i].ptr_ = new char[str.length() + 1];
     strcpy(array.ptr_[i].ptr_, str.c_str());
   }
   return array;
@@ -135,9 +145,10 @@ double_array_t yaml_get_double_array(Yaml* node, const char* key, bool& found)
   array.ptr_ = nullptr;
   YAML::Node array_node = (*node)[key];
   found = array_node.IsDefined();
-  if (!found) return array;
+  if (!found)
+    return array;
   array.size_ = array_node.size();
-  array.ptr_ = new double[ array.size_ ];
+  array.ptr_ = new double[array.size_];
   for (std::size_t i = 0; i < array_node.size(); ++i)
   {
     array.ptr_[i] = array_node[i].as<double>();
@@ -152,9 +163,10 @@ node_array_t yaml_get_node_array(Yaml* node, const char* key, bool& found)
   array.ptr_ = nullptr;
   YAML::Node array_node = (*node)[key];
   found = array_node.IsDefined();
-  if (!found) return array;
+  if (!found)
+    return array;
   array.size_ = array_node.size();
-  array.ptr_ = new YAML::Node*[ array.size_ ];
+  array.ptr_ = new YAML::Node*[array.size_];
   for (std::size_t i = 0; i < array_node.size(); ++i)
   {
     array.ptr_[i] = new YAML::Node(array_node[i].as<YAML::Node>());
@@ -202,12 +214,12 @@ string_array_t yaml_get_string_array_from_iterator(YamlIterator* iter)
   string_array_t array;
   YAML::Node array_node = (*iter)->IsDefined() ? (*iter)->as<YAML::Node>() : (*iter)->second.as<YAML::Node>();
   array.size_ = array_node.size();
-  array.ptr_ = new string_t[ array.size_ ];
+  array.ptr_ = new string_t[array.size_];
   for (std::size_t i = 0; i < array_node.size(); ++i)
   {
     std::string str = array_node[i].as<std::string>();
     array.ptr_[i].size_ = str.length();
-    array.ptr_[i].ptr_ = new char[ str.length() + 1 ];
+    array.ptr_[i].ptr_ = new char[str.length() + 1];
     strcpy(array.ptr_[i].ptr_, str.c_str());
   }
   return array;
@@ -291,14 +303,16 @@ string_t yaml_to_string(Yaml* node)
 
 bool yaml_merge_node(Yaml* node, const Yaml* other)
 {
-  if (!node->IsMap() || !other->IsMap()) return false;
-  for(YAML::const_iterator it=(*other).begin(); it!=(*other).end(); ++it)
+  if (!node->IsMap() || !other->IsMap())
+    return false;
+  for (YAML::const_iterator it = (*other).begin(); it != (*other).end(); ++it)
   {
     std::string key = it->first.as<std::string>();
     if ((*node)[key].IsDefined() && (*node)[key].IsMap() && it->second.IsMap())
     {
       Yaml subnode = (*node)[key];
-      if (!yaml_merge_node(&subnode, &it->second)) return false;
+      if (!yaml_merge_node(&subnode, &it->second))
+        return false;
       (*node)[key] = subnode;
     }
     else
@@ -320,27 +334,28 @@ void yaml_delete_node(Yaml* ptr)
 
 void yaml_delete_string(string_t string)
 {
-  delete [] string.ptr_;
+  delete[] string.ptr_;
 }
 
 void yaml_delete_string_array(string_array_t array)
 {
-  if (!array.ptr_) return;
+  if (!array.ptr_)
+    return;
   for (std::size_t i = 0; i < array.size_; ++i)
   {
-    delete [] array.ptr_[i].ptr_;
+    delete[] array.ptr_[i].ptr_;
   }
-  delete [] array.ptr_;
+  delete[] array.ptr_;
 }
 
 void yaml_delete_double_array(double_array_t array)
 {
-  delete [] array.ptr_;
+  delete[] array.ptr_;
 }
 
 void yaml_delete_node_array(node_array_t array)
 {
-  delete [] array.ptr_;
+  delete[] array.ptr_;
 }
 
 void yaml_delete_iterator(YamlIterator* ptr)

@@ -1,12 +1,13 @@
-// Copyright (C) 2023-2024 National Center for Atmospheric Research
-// SPDX-License-Identifier: Apache-2.0
-//
-// Tests for tuvx::Grid.
-#include <gtest/gtest.h>
-
+/* Copyright (C) 2023-2024 National Center for Atmospheric Research
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ */
 #include <tuvx/grid.hpp>
 
-TEST(Grid, Constructor) {
+#include <gtest/gtest.h>
+
+TEST(Grid, Constructor)
+{
   tuvx::Grid<tuvx::Array2D<int>> a("foos", 2, 3);
   EXPECT_EQ(a.Units(), "foos");
   EXPECT_EQ(a.NumberOfColumns(), 2);
