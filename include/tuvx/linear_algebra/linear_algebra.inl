@@ -84,7 +84,7 @@ T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx,
   T error = 0;
   for (std::size_t i = 0; i < x.size(); i++) {
     error +=
-        abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i]) / (T)x.size();
+        (abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.size();
   }
   return error;
 }
