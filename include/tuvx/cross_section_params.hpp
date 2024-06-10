@@ -1,10 +1,9 @@
-#pragma once 
+#pragma once
 
 #include <string>
-
 #include <vector>
 
-namespace tuvx {
-  public:
-     
+namespace tuvx
+{
+ public:
 }

@@ -1,7 +1,5 @@
 
-class tuvx_cross_section {
-  private:
-    
-
-
+class tuvx_cross_section
+{
+ private:
 };
