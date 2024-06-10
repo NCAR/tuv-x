@@ -66,7 +66,6 @@ std::vector<T> Dot(const TridiagonalMatrix<T> &A, const std::vector<T> &b);
 /// approximation errors.
 /// @param x true solution
 /// @param x_approx approximated solution
-/// @param norm_order order of the error norm to compute
 template <typename T>
 T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx);
 
