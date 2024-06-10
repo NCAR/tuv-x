@@ -36,8 +36,8 @@ TEST(ErrorFunctionTest, DoublePrecision) {
   x1 = x;
 
   x[0] += 0.1;
-  error = ComputeError(x, x1);
-  EXPECT_LE(error - 0.1 / size, tol_sp);
+  error = ComputeError<double>(x, x1);
+  EXPECT_LE(error - 0.1 / size, tol_dp);
 }
 
 /// @test Error function test
