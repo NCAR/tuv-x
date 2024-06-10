@@ -22,28 +22,7 @@ typedef std::vector<float> vecf;
 /// @test Error function test
 /// @brief Test the correctness of the error function used for
 /// testing the Linear approximation solvers
-TEST(ErrorFunctionTest, ErrorSinglePrecision) {
-
-  // same vector should return 0 error
-  vecf x(size);
-  vecf x1(size);
-  FillRandom<float>(x);
-  x1 = x;
-  float error = ComputeError<float>(x, x1, norm_order);
-  EXPECT_EQ(error, (float)0);
-
-  // L1 norm between [0.1 0 0 0 ...] and [0 0 0 0 0] should be 0.1/size;
-  std::fill(x.begin(), x.end(), (float)0);
-  std::fill(x1.begin(), x1.end(), (float)0);
-  x[0] = 0.1;
-  error = ComputeError(x, x1, 1);
-  EXPECT_LE(error - (float)0.1 / size, tol_sp);
-}
-
-/// @test Error function test
-/// @brief Test the correctness of the error function used for
-/// testing the Linear approximation solvers
-TEST(ErrorFunctionTest, ErrorDoublePrecision) {
+TEST(ErrorFunctionTest, DoublePrecision) {
 
   // same vector should return 0 error
   vecd x(size);
@@ -53,10 +32,33 @@ TEST(ErrorFunctionTest, ErrorDoublePrecision) {
   double error = ComputeError<double>(x, x1, norm_order);
   EXPECT_EQ(error, (double)0);
 
-  // L1 norm between [0.1 0 0 0 ...] and [0 0 0 0 0] should be 0.1/size;
-  std::fill(x.begin(), x.end(), (double)0);
-  std::fill(x1.begin(), x1.end(), (double)0);
-  x[0] = 0.1;
+  // L1 norm between x and (x[1]+0.1) should be 0.1/size;
+  std::fill(x1.begin(), x1.end(), (double)1);
+  x1 = x;
+
+  x[0] += 0.1;
   error = ComputeError(x, x1, 1);
-  EXPECT_LE(error - (double)0.1 / size, tol_dp);
+  EXPECT_LE(error - (double)0.1 / size, tol_sp);
+}
+
+/// @test Error function test
+/// @brief Test the correctness of the error function used for
+/// testing the Linear approximation solvers
+TEST(ErrorFunctionTest, SinglePrecision) {
+
+  // same vector should return 0 error
+  vecf x(size);
+  vecf x1(size);
+  FillRandom<float>(x);
+  x1 = x;
+  float error = ComputeError<float>(x, x1, norm_order);
+  EXPECT_EQ(error, (float)0);
+
+  // L1 norm between x and (x[1]+0.1) should be 0.1/size;
+  std::fill(x1.begin(), x1.end(), (float)1);
+  x1 = x;
+
+  x[0] += 0.1;
+  error = ComputeError(x, x1, 1);
+  EXPECT_LE(error - (float)0.1 / size, tol_sp);
 }
