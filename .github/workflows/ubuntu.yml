@@ -18,7 +18,7 @@ jobs:
       CC: gcc-${{ matrix.gcc_version }}
       FC: gfortran-${{ matrix.gcc_version }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Install dependencies

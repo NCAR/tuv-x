@@ -41,6 +41,8 @@ module tuvx_core
     procedure :: run
     ! Returns a grid from the warehouse
     procedure :: get_grid
+    ! Returns the grid warehouse
+    procedure :: get_grid_warehouse
     ! Returns a profile from the warehouse
     procedure :: get_profile
     ! Returns an updater for use TUV-x data
@@ -305,6 +307,23 @@ contains
     grid => this%grid_warehouse_%get_grid( grid_name, units )
 
   end function get_grid
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_grid_warehouse( this ) result( grid_warehouse )
+    ! Returns a copy of a grid from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_grid,                     only : grid_t
+
+    class(core_t),    intent(in) :: this
+    class(grid_warehouse_t),    pointer    :: grid_warehouse
+
+    call assert_msg( 423051914, associated( this%grid_warehouse_ ),           &
+                     "Grids not available" )
+    grid_warehouse => this%grid_warehouse_
+
+  end function get_grid_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
