@@ -9,5 +9,6 @@ include(test_util)
 create_standard_cxx_test(NAME tridiagonal_solver SOURCES
                          test_tridiagonal_solver.cpp)
 create_standard_cxx_test(NAME error_function SOURCES test_error_function.cpp)
+create_standard_cxx_test(NAME lapacke SOURCES test_lapacke.cpp)
 
 # ##############################################################################

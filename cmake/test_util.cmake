@@ -49,9 +49,10 @@ function(create_standard_cxx_test)
   cmake_parse_arguments(${prefix} "${optionalValues}" "${singleValues}" "${multiValues}" ${ARGN})
 
   add_executable(test_${TEST_NAME} ${TEST_SOURCES})
-
-  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx GTest::gtest_main)
-  
+  target_include_directories(test_${TEST_NAME} PUBLIC ${LAPACK_INCLUDE_DIRS})
+  target_link_libraries(test_${TEST_NAME} PUBLIC LAPACK::LAPACK musica::tuvx GTest::gtest_main)
+  message(STATUS ${OpenBLAS_INCLUDE_DIRS})
+   
   # link additional libraries
   foreach(library ${TEST_LIBRARIES})
     target_link_libraries(test_${TEST_NAME} PUBLIC ${library})
