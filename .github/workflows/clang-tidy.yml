@@ -1,4 +1,4 @@
-name: Clang-Format
+name: Clang-Tidy
 
 on:
   push:
