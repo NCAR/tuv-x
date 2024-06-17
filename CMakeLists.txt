@@ -105,9 +105,6 @@ endif()
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
 )
 
 target_include_directories(tuv-x
