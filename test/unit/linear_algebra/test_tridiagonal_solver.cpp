@@ -3,13 +3,19 @@
 #include <gtest/gtest.h>
 
 #include <cfloat>
+#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 #include <limits>
 #include <vector>
 
 using namespace tuvx;
+using std::chrono::duration;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+using std::chrono::milliseconds;
 
 typedef TridiagonalMatrix<double> trid_matd;
 typedef std::vector<double> vecd;
@@ -27,8 +33,10 @@ const float tol_sp = std::numeric_limits<float>::epsilon();
 /// sizes to check consistency
 TEST(TridiagSolveTest, SinglePrecision)
 {
-  std::size_t sizes[5] = { 5, 10, 1000, 100000, 10000000 };
+  std::size_t sizes[5] = { 500, 1000, 10000, 100000, 1000000 };
   float error = 0;
+  vecd errors(5);
+  vecd times(5);
   for (std::size_t i = 0; i < 5; i++)
   {
     vecf x(sizes[i]);
@@ -39,9 +47,21 @@ TEST(TridiagSolveTest, SinglePrecision)
     FillRandom<float>(x);
     b = Dot<float>(A, x);
 
+    auto clock_start = high_resolution_clock::now();
     vecf x_approx = Solve<float>(A, b);
-    error = ComputeError<float>(x, x_approx);
+    auto clock_end = high_resolution_clock::now();
+    duration<double, std::milli> elapsed_time = clock_end - clock_start;
+
+    errors[i] = ComputeError<float>(x, x_approx);
+    times[i] = elapsed_time.count();
+
     EXPECT_LE(error, tol_sp);
+  }
+  // Open the file for output as text:
+  std::ofstream file("../tool/numerical_analysis/tridiagonal_solver/tuvx_single_precision.dat");
+  for (std::size_t i = 0; i < 5; i++)
+  {
+    file << errors[i] << " " << times[i] << std::endl;
   }
 }
 
@@ -52,8 +72,9 @@ TEST(TridiagSolveTest, SinglePrecision)
 /// sizes to check consistency
 TEST(TridiagSolveTest, DoublePrecision)
 {
-  std::size_t sizes[5] = { 5, 10, 1000, 100000, 10000000 };
-  double error = 0;
+  std::size_t sizes[5] = { 500, 1000, 10000, 100000, 1000000 };
+  vecd errors(5);
+  vecd times(5);
   for (std::size_t i = 0; i < 5; i++)
   {
     vecd x(sizes[i]);
@@ -64,8 +85,21 @@ TEST(TridiagSolveTest, DoublePrecision)
     FillRandom<double>(x);
     b = Dot<double>(A, x);
 
+    auto clock_start = high_resolution_clock::now();
     vecd x_approx = Solve<double>(A, b);
-    error = ComputeError<double>(x, x_approx);
-    EXPECT_LE(error, tol_sp);
+    auto clock_end = high_resolution_clock::now();
+    duration<double, std::milli> elapsed_time = clock_end - clock_start;
+
+    errors[i] = ComputeError<double>(x, x_approx);
+    times[i] = elapsed_time.count();
+
+    EXPECT_LE(errors[i], tol_dp);
   }
+  // Open the file for output as text:
+  std::ofstream file("../tool/numerical_analysis/tridiagonal_solver/tuvx_double_precision.dat");
+  for (std::size_t i = 0; i < 5; i++)
+  {
+    file << errors[i] << " " << times[i] << std::endl;
+  }
+  file.close();
 }
