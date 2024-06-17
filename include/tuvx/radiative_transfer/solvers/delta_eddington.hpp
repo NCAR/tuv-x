@@ -1,9 +1,7 @@
-/* Copyright (C) 2023-2024 National Center for Atmospheric Research
- *
- * SPDX-License-Identifier: Apache-2.0
- *
- * Delta-Eddington solver for radiative transfer.
- */
+// Copyright (C) 2023-2024 National Center for Atmospheric Research
+// SPDX-License-Identifier: Apache-2.0
+//
+// Delta-Eddington solver for radiative transfer
 #pragma once
 
 #include <tuvx/grid.hpp>
