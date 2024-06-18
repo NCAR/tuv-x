@@ -83,15 +83,7 @@ if(TUVX_ENABLE_TESTS)
       OFF
       CACHE BOOL "" FORCE)
 
-  # google benchmark
-
-  FetchContent_Declare(
-    googlebenchmark
-    GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG main) # need main for benchmark::benchmark
-
-  FetchContent_MakeAvailable(googletest googlebenchmark)
-
+  FetchContent_MakeAvailable(googletest)
   # don't run clang-tidy on google test
   set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
   set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")

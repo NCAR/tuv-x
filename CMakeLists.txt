@@ -155,7 +155,6 @@ if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
 
   enable_testing()
   add_subdirectory(test)
-  add_subdirectory(benchmark)
 endif()
 
 # ##############################################################################
