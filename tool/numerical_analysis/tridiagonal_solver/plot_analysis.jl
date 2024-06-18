@@ -1,7 +1,7 @@
 using DataFrames, CSV, StatsPlots
 
 
-sizes = [500, 1000, 10000, 100000, 1000000]
+sizes = [1000, 10000, 100000, 1000000, 10000000]
 
 f1=DataFrame(CSV.File("lapacke_single_precision.dat", delim=" ", header=false))
 f2=DataFrame(CSV.File("lapacke_double_precision.dat", delim=" ", header=false))
@@ -22,11 +22,11 @@ tuvx_errors_double_precision = f4[:, 1]
 tuvx_times_double_precision = f4[:, 2]
 
 #scatter plots
-#scatter(lapack_times_single_precision, lapack_errors_single_precision, label="LAPACKE SINGLE PRECISION")
-scatter(lapack_times_double_precision, lapack_errors_double_precision, label="LAPACKE DOUBLE PRECISION")
-scatter!(tuvx_times_double_precision, tuvx_errors_double_precision, label="TUV-X SINGLE PRECISION")
-#scatter!(tuvx_times_single_precision, tuvx_errors_single_precision, label="TUV-X DOUBLE PRECISION")
-savefig("scatter.png")
+bar(string.(sizes), lapack_errors_single_precision.-tuvx_errors_single_precision)
+savefig("single_errors.png")
+
+bar(string.(sizes), lapack_errors_double_precision.-tuvx_errors_double_precision)
+savefig("double_errors.png")
 
 
 # bar plots  
@@ -40,14 +40,14 @@ data = [lapack_errors_single_precision; tuvx_errors_single_precision]
 groups =  repeat(["LAPACKE", "TUV-X"], inner = 5)
 plot(groupedbar(nam, data, groups=groups))
 title!("Comparing Accuracy (Single Precision)")
-xlabel!("System Size")
 ylabel!("Relative Error")
+xlabel!("System Size")
 savefig("single_precision_errors.png")
 
-data = [lapack_times_single_precision; tuvx_times_single_precision]
+data = [lapack_times_single_precision ./ sizes; tuvx_times_single_precision ./ sizes]
 groups =  repeat(["LAPACKE", "TUV-X"], inner = 5)
 plot(groupedbar(nam, data, groups=groups), yaxis=:log)
-title!("Comparing Speed (Double Precision)")
+title!("Comparing Speed (Single Precision)")
 xlabel!("System Size")
 ylabel!("Run Time (ms)")
 savefig("single_precision_times.png")
@@ -60,7 +60,7 @@ xlabel!("System Size")
 ylabel!("Relative Error")
 savefig("double_precision_errors.png")
 
-data = [lapack_times_double_precision; tuvx_times_double_precision]
+data = [lapack_times_double_precision ./ sizes; tuvx_times_double_precision ./ sizes]
 groups =  repeat(["LAPACKE", "TUV-X"], inner = 5)
 plot(groupedbar(nam, data, groups=groups), yaxis=:log)
 title!("Comparing Speed (Double Precision)")

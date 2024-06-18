@@ -37,7 +37,7 @@ const std::size_t number_of_runs = 100;
 /// sizes to check consistency
 TEST(LapackeTest, SinglePrecision)
 {
-  std::size_t sizes[5] = { 500, 1000, 10000, 100000, 1000000 };
+  std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
   vecf errors(5, 0);
   vecd times(5, 0);
 
@@ -91,8 +91,7 @@ TEST(LapackeTest, SinglePrecision)
 /// sizes to check consistency
 TEST(LapackeTest, DoublePrecision)
 {
-  std::size_t sizes[5] = { 500, 1000, 10000, 100000, 1000000 };
-
+  std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
   vecd errors(5, 0);
   vecd times(5, 0);
   for (std::size_t i = 0; i < 5; i++)
