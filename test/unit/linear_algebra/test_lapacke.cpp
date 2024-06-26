@@ -3,12 +3,9 @@
 #include <gtest/gtest.h>
 
 #include <cfloat>
-#include <chrono>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
-#include <ctime>
-#include <fstream>
 #include <limits>
 #include <vector>
 
@@ -19,10 +16,6 @@
 #endif
 
 using namespace tuvx;
-using std::chrono::duration;
-using std::chrono::duration_cast;
-using std::chrono::high_resolution_clock;
-using std::chrono::milliseconds;
 
 typedef TridiagonalMatrix<double> trid_matd;
 typedef std::vector<double> vecd;
@@ -34,6 +27,7 @@ const double tol_dp = std::numeric_limits<double>::epsilon();
 const float tol_sp = std::numeric_limits<float>::epsilon();
 
 const std::size_t number_of_runs = 100;
+const std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
 
 /// @test LAPACKE Tridiagonal Solver Test for single Precision Floats.
 /// @brief Generate random tridiagonal matrix $A$ and vector $x$,
@@ -42,9 +36,7 @@ const std::size_t number_of_runs = 100;
 /// sizes to check consistency
 TEST(LapackeTest, SinglePrecision)
 {
-  std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
   vecf errors(5, 0);
-  vecd times(5, 0);
 
   for (std::size_t i = 0; i < 5; i++)
   {
@@ -58,7 +50,6 @@ TEST(LapackeTest, SinglePrecision)
       FillRandom<float>(x);
       b = Dot<float>(A, x);
 
-      auto clock_start = high_resolution_clock::now();
       LAPACKE_sgtsv(
           LAPACK_ROW_MAJOR,
           sizes[i],
@@ -68,25 +59,13 @@ TEST(LapackeTest, SinglePrecision)
           A.upper_diagonal_.data(),
           b.data(),
           1);
-      auto clock_end = high_resolution_clock::now();
-      duration<double, std::milli> elapsed_time = clock_end - clock_start;
 
       // to be written to a file
       errors[i] += ComputeError<float>(x, b);
-      times[i] += elapsed_time.count();
     }
     errors[i] /= number_of_runs;
-    times[i] /= number_of_runs;
     EXPECT_LE(errors[i], tol_sp);
   }
-
-  // Open the file for output as text:
-  std::ofstream file("../tool/numerical_analysis/tridiagonal_solver/lapacke_single_precision.dat");
-  for (std::size_t i = 0; i < 5; i++)
-  {
-    file << errors[i] << " " << times[i] << std::endl;
-  }
-  file.close();
 }
 
 /// @test LAPACKE Tridiagonal Solver Test for double Precision Floats.
@@ -96,7 +75,6 @@ TEST(LapackeTest, SinglePrecision)
 /// sizes to check consistency
 TEST(LapackeTest, DoublePrecision)
 {
-  std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
   vecd errors(5, 0);
   vecd times(5, 0);
   for (std::size_t i = 0; i < 5; i++)
@@ -111,7 +89,6 @@ TEST(LapackeTest, DoublePrecision)
       FillRandom<double>(x);
       b = Dot<double>(A, x);
 
-      auto clock_start = high_resolution_clock::now();
       LAPACKE_dgtsv(
           LAPACK_ROW_MAJOR,
           sizes[i],
@@ -122,22 +99,9 @@ TEST(LapackeTest, DoublePrecision)
           b.data(),
           1);
 
-      auto clock_end = high_resolution_clock::now();
-      duration<double, std::milli> elapsed_time = clock_end - clock_start;
-
       errors[i] += ComputeError<double>(x, b);
-      times[i] += elapsed_time.count();
     }
     errors[i] /= number_of_runs;
-    times[i] /= number_of_runs;
     EXPECT_LE(errors[i], tol_dp);
   }
-
-  // Open the file for output as text:
-  std::ofstream file("../tool/numerical_analysis/tridiagonal_solver/lapacke_double_precision.dat");
-  for (std::size_t i = 0; i < 5; i++)
-  {
-    file << errors[i] << " " << times[i] << std::endl;
-  }
-  file.close();
 }

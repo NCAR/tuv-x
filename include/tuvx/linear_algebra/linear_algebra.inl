@@ -32,7 +32,6 @@ namespace tuvx
   {
     T temp;
     std::size_t N = b.size();
-    std::vector<T> x(N);
     // forward pass
     for (std::size_t i = 1; i < N; i++)
     {
@@ -41,16 +40,16 @@ namespace tuvx
       b[i] -= temp * b[i - 1];
     }
     // back substitution
-    x[N - 1] = b[N - 1] / A.main_diagonal_[N - 1];
+    b[N - 1] = b[N - 1] / A.main_diagonal_[N - 1];
     for (std::size_t i = N - 2;; i--)
     {
-      x[i] = (b[i] - A.upper_diagonal_[i] * x[i + 1]) / A.main_diagonal_[i];
+      b[i] = (b[i] - A.upper_diagonal_[i] * b[i + 1]) / A.main_diagonal_[i];
       if (i == 0)
       {
         break;
       }
     }
-    return x;
+    return b;
   }
 
   template<typename T>
