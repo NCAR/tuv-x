@@ -146,27 +146,6 @@ you prefer.
 }
 ```
 
-The TUV-x software can be cited with
-
-```
-@software{acom.software.tuvx,
-  author       = {Matt Dawson and
-                  Kyle Shores and
-                  Stacy Walters},
-  title        = {NCAR/tuv-x: Version 0.5.0},
-  month        = dec,
-  year         = 2023,
-  publisher    = {Zenodo},
-  version      = {v0.2.0},
-  doi          = {10.5281/zenodo.8110063},
-  url          = {https://doi.org/10.5281/zenodo.8110063}
-}
-```
-
-and the specific verstion of TUV-x that you are using can be found by
-clicking on the zenodo banner above. Choose the appropraite version there
-and use the citation provided by Zenodo.
-
 # Community and contributions
 We welcome contributions and feedback from anyone, everything from updating
 the content or appearance of the documentation to new and
