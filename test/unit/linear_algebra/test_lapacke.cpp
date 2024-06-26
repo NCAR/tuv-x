@@ -9,9 +9,14 @@
 #include <cstring>
 #include <ctime>
 #include <fstream>
-#include <lapacke.h>
 #include <limits>
 #include <vector>
+
+#ifdef TUVX_COMPILE_WITH_INTEL
+  #include <mkl_lapacke.h>
+#elif TUVX_COMPILE_WITH_GCC
+  #include <lapacke.h>
+#endif
 
 using namespace tuvx;
 using std::chrono::duration;

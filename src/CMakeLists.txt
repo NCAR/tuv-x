@@ -22,6 +22,12 @@ message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 target_link_libraries(tuvx_object PRIVATE PkgConfig::netcdff PkgConfig::netcdfc
                                           yaml-cpp::yaml-cpp)
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "IntelLLVM")
+  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_INTEL)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_GCC)
+endif()
+
 if(BLAS_LIBRARIES)
   target_link_libraries(tuvx_object PRIVATE ${BLAS_LIBRARIES})
 else()
@@ -44,7 +50,7 @@ set_target_properties(
              VERSION ${PROJECT_VERSION}
              SOVERSION ${PROJECT_VERSION_MAJOR})
 
-target_link_libraries(tuvx PRIVATE tuvx_object)
+target_link_libraries(tuvx PUBLIC tuvx_object)
 
 message(
   STATUS
