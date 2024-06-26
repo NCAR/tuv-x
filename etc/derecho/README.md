@@ -1,5 +1,6 @@
 # Building TUV-x on Derecho 
 
+
 ## Get the source code
 
 - Copy the build script you wish to use from this folder to GLADE.
@@ -22,6 +23,7 @@ export TUVX_HOME=/path/to/my-tuvx-build
 ## Build TUV-x
 
 Replace `/path/to/build_tuvx_derecho_X.sh` with the path to the build script you copied to GLADE, in the following:
+> NOTE: Some regression tests fail to build with the intel compiler so we have to bypass them. Three tests still fail to run but they are either a little outside the tolerance or could be a potential compiler bug.
 
 ```
 cd $TUVX_HOME
@@ -45,6 +47,8 @@ make test
 
 ```
 cd $TUVX_HOME/tuv-x/build
-./tuv-x examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 

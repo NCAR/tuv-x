@@ -49,7 +49,7 @@ module tuvx_heating_rates
     module procedure :: heating_parameters_constructor
   end interface heating_parameters_t
 
-  type, public :: heating_rates_t
+  type :: heating_rates_t
     type(heating_parameters_t), allocatable :: heating_parameters_(:) ! heating parameters for each photolyzing species
     type(grid_warehouse_ptr) :: height_grid_     ! height grid
     type(grid_warehouse_ptr) :: wavelength_grid_ ! wavelength grid
@@ -99,8 +99,8 @@ contains
 
     character(len=*), parameter :: Iam = 'heating rates constructor'
     type(config_t) :: reaction_set, reaction_config, heating_config
+    type(config_t) :: cross_section_config
     class(iterator_t), pointer :: iter
-    type(string_t) :: label
     type(string_t) :: required_keys(1), optional_keys(1)
     logical :: found, do_apply_bands
     integer :: n_hr, i_hr, n_O2, i_O2
@@ -121,7 +121,6 @@ contains
 
     ! iterate over photolysis reactions looking for those with
     ! heating rate parameters
-    allocate( this%o2_rate_indices_( 0 ) )
     call config%get( "reactions", reaction_set, Iam )
     iter => reaction_set%get_iterator( )
     n_hr = 0
@@ -131,12 +130,14 @@ contains
       call reaction_config%get( "heating", heating_config, Iam, found = found )
       if( found ) then
         n_hr = n_hr + 1
-        call reaction_config%get( "apply O2 bands", do_apply_bands, Iam,      &
+        call reaction_config%get( "cross section", cross_section_config, Iam )
+        call cross_section_config%get( "apply O2 bands", do_apply_bands, Iam, &
                                   default = .false. )
         if( do_apply_bands ) n_O2 = n_O2 + 1
       end if
     end do
     allocate( this%heating_parameters_( n_hr ) )
+    allocate( this%o2_rate_indices_( n_O2 ) )
     call iter%reset( )
     i_hr = 0
     i_O2 = 0
@@ -145,10 +146,10 @@ contains
       call reaction_config%get( "heating", heating_config, Iam, found = found )
       if( found ) then
         i_hr = i_hr + 1
-        call reaction_config%get( "name", label, Iam )
         this%heating_parameters_( i_hr ) =                                    &
           heating_parameters_constructor( reaction_config, grids, profiles )
-        call reaction_config%get( "apply O2 bands", do_apply_bands, Iam,      &
+        call reaction_config%get( "cross section", cross_section_config, Iam )
+        call cross_section_config%get( "apply O2 bands", do_apply_bands, Iam, &
                                   default = .false. )
         if( do_apply_bands ) then
           i_O2 = i_O2 + 1
@@ -554,7 +555,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Cleans up memory
-  elemental subroutine destructor( this )
+  subroutine destructor( this )
 
     !> Heating rates
     type(heating_rates_t), intent(inout) :: this

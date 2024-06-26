@@ -5,6 +5,11 @@ module tuvx_radiator_factory
 ! Builds :f:type:`~tuvx_radiator/radiator_t` s for
 ! :f:type:`~tuvx_radiator_warehouse/radiator_warehouse_t`.
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
+  use musica_config,                   only : config_t
+#endif
   use tuvx_radiator,                   only : radiator_t
   use tuvx_radiator_aerosol,           only : radiator_aerosol_t
   use tuvx_radiator_from_host,         only : radiator_from_host_t
@@ -23,8 +28,11 @@ contains
      cross_section_warehouse ) result( new_radiator )
     ! Builder of :f:type:`~tuvx_radiator/radiator_t` objects
 
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
+    use musica_config,        only : config_t
+#endif
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t

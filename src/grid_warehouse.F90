@@ -4,7 +4,12 @@
 module tuvx_grid_warehouse
 ! A warehouse to hold and distribute grids.
 
-  use tuvx_grid, only : grid_ptr
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
+  use musica_config,                   only : config_t
+#endif
+  use tuvx_grid,                       only : grid_ptr
 
   implicit none
 
@@ -79,7 +84,10 @@ contains
     ! Grid warehouse constructor
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
+    use musica_config,        only : config_t
+#endif
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_grid_factory,             only : grid_builder
@@ -283,13 +291,19 @@ contains
     class(grid_t),           intent(in)    :: grid ! Grid to add
 
     type(grid_ptr) :: ptr
+    type(grid_ptr), allocatable :: temp_grids(:)
 
     call assert( 900933280, allocated( this%grids_  ) )
     call assert_msg( 244177406,                                               &
                      .not. this%exists( grid%handle_, grid%units( ) ),        &
                      "Grid '"//grid%handle_//"' already exists." )
     allocate( ptr%val_, source = grid )
-    this%grids_ = [ this%grids_, ptr ]
+    temp_grids = this%grids_
+    deallocate( this%grids_ )
+    allocate( this%grids_( size( temp_grids ) + 1 ) )
+    this%grids_( 1 : size( temp_grids ) ) = temp_grids(:)
+    this%grids_( size( temp_grids ) + 1 ) = ptr
+    deallocate( temp_grids )
 
   end subroutine add_grid
 

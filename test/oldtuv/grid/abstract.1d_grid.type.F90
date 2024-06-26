@@ -38,8 +38,8 @@ interface
     !> Initialize grid
     subroutine initial( this, grid_config )
       
-      use musica_config, only : config_t
-
+      use musica_config,    only : config_t
+      
       import base_grid_t
       class(base_grid_t), intent(inout) :: this
       type(config_t), intent(inout)       :: grid_config

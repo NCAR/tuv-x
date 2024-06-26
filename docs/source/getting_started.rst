@@ -137,7 +137,7 @@ the call to cmake with:
 .. code-block:: bash
 
    cmake -D CMAKE_Fortran_COMPILER=/path/to/mpif90 \
-         -D ENABLE_MPI:BOOL=TRUE \
+         -D TUVX_ENABLE_MPI:BOOL=TRUE \
          ..
 
 

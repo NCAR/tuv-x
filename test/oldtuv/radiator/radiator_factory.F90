@@ -7,6 +7,7 @@
 !> Build radiator objects
 module micm_radiator_factory
 
+  use musica_config,                only : config_t
   use micm_abs_radiator_type,       only : abs_radiator_t
 
   implicit none
@@ -21,7 +22,6 @@ contains
   function radiator_builder( config, gridWareHouse ) result( new_radiator_t )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use micm_grid_warehouse,           only : grid_warehouse_t
     use micm_base_radiator_type,       only : base_radiator_t

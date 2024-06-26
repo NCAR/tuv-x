@@ -6,7 +6,7 @@ module tuvx_temperature_parameterization_burkholder
 ! parameterization from Burkholder et al. Phys. Chem. Chem. Phys. 4, 1432-1437 (2002).
 
   ! Including musica_config at the module level to avoid an ICE
-  ! with Intel 2022.1 compiler
+  ! with Intel 2022/2023 compiler
   use musica_config,                   only : config_t
   use musica_constants,                only : dk => musica_dk
   use tuvx_temperature_parameterization,                                      &
@@ -59,7 +59,6 @@ contains
   function constructor( config ) result ( this )
 
     use musica_assert,                 only : assert_msg
-    use musica_config,                 only : config_t
     use musica_iterator,               only : iterator_t
     use musica_string,                 only : string_t
     use tuvx_grid,                     only : grid_t

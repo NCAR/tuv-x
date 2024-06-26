@@ -1,7 +1,7 @@
 ################################################################################
 # Utility functions for creating tests
 
-if(ENABLE_MEMCHECK)
+if(TUVX_ENABLE_MEMCHECK)
   find_program(MEMORYCHECK_COMMAND "valgrind")
 endif()
 
@@ -25,8 +25,9 @@ function(create_standard_test)
   include(CMakeParseArguments)
   cmake_parse_arguments(${prefix} " " "${singleValues}" "${multiValues}" ${ARGN})
   add_executable(test_${TEST_NAME} ${TEST_SOURCES})
-  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
-  if(ENABLE_OPENMP)
+  set_target_properties(test_${TEST_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES} GTest::gtest_main)
+  if(TUVX_ENABLE_OPENMP)
     target_link_libraries(test_${TEST_NAME} PUBLIC OpenMP::OpenMP_Fortran)
   endif()
   if(NOT DEFINED TEST_WORKING_DIRECTORY)
@@ -36,10 +37,38 @@ function(create_standard_test)
 endfunction(create_standard_test)
 
 ################################################################################
+# build and add a standard test (one linked to the tuvx library)
+
+function(create_standard_cxx_test)
+  set(prefix TEST)
+  set(optionalValues SKIP_MEMCHECK)
+  set(singleValues NAME WORKING_DIRECTORY)
+  set(multiValues SOURCES LIBRARIES)
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(${prefix} "${optionalValues}" "${singleValues}" "${multiValues}" ${ARGN})
+
+  add_executable(test_${TEST_NAME} ${TEST_SOURCES})
+
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx GTest::gtest_main)
+  
+  # link additional libraries
+  foreach(library ${TEST_LIBRARIES})
+    target_link_libraries(test_${TEST_NAME} PUBLIC ${library})
+  endforeach()
+
+  if(NOT DEFINED TEST_WORKING_DIRECTORY)
+    set(TEST_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+  endif()
+
+  add_tuvx_test(${TEST_NAME} test_${TEST_NAME} "" ${TEST_WORKING_DIRECTORY} ${TEST_SKIP_MEMCHECK})
+endfunction(create_standard_cxx_test)
+
+################################################################################
 # Add a test
 
 function(add_tuvx_test test_name test_binary test_args working_dir)
-  if(ENABLE_MPI)
+  if(TUVX_ENABLE_MPI)
     add_test(NAME ${test_name}
       COMMAND mpirun -v -np 2 ${CMAKE_BINARY_DIR}/${test_binary} ${test_args}
              WORKING_DIRECTORY ${working_dir})
@@ -51,11 +80,11 @@ function(add_tuvx_test test_name test_binary test_args working_dir)
   set(MEMORYCHECK_COMMAND_OPTIONS "--error-exitcode=1 --trace-children=yes --leak-check=full -s --gen-suppressions=all ${MEMCHECK_SUPPRESS}")
   set(memcheck "${MEMORYCHECK_COMMAND} ${MEMORYCHECK_COMMAND_OPTIONS}")
   separate_arguments(memcheck)
-  if(ENABLE_MPI AND MEMORYCHECK_COMMAND AND ENABLE_MEMCHECK)
+  if(TUVX_ENABLE_MPI AND MEMORYCHECK_COMMAND AND TUVX_ENABLE_MEMCHECK)
     add_test(NAME memcheck_${test_name}
       COMMAND mpirun -v -np 2 ${memcheck} ${CMAKE_BINARY_DIR}/${test_binary} ${test_args}
              WORKING_DIRECTORY ${working_dir})
-  elseif(MEMORYCHECK_COMMAND AND ENABLE_MEMCHECK)
+  elseif(MEMORYCHECK_COMMAND AND TUVX_ENABLE_MEMCHECK)
     add_test(NAME memcheck_${test_name}
              COMMAND ${memcheck} ${CMAKE_BINARY_DIR}/${test_binary} ${test_args}
              WORKING_DIRECTORY ${working_dir})
@@ -71,7 +100,7 @@ endfunction(add_tuvx_test)
 function(add_regression_test test_name command memcheck_command)
   add_test(NAME ${test_name} COMMAND ${command} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 
-  if(MEMORYCHECK_COMMAND AND ENABLE_MEMCHECK)
+  if(MEMORYCHECK_COMMAND AND TUVX_ENABLE_MEMCHECK)
     add_test(NAME memcheck_${test_name} COMMAND ${memcheck_command} WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
   endif()
 
@@ -83,7 +112,7 @@ endfunction(add_regression_test)
 macro(add_std_test_script test_name script_path)
   target_include_directories(${test_name} PUBLIC ${CMAKE_BINARY_DIR}/src)
   target_link_libraries(${test_name} PUBLIC musica::tuvx)
-  if(ENABLE_OPENMP)
+  if(TUVX_ENABLE_OPENMP)
     target_link_libraries(${test_name} PUBLIC OpenMP::OpenMP_Fortran)
   endif()
   add_test(NAME ${test_name} COMMAND ${script_path})

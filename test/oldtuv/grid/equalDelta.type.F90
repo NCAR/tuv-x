@@ -6,6 +6,8 @@ module micm_1d_equal_delta_grid
 
   use musica_constants, only : dk => musica_dk, ik => musica_ik, lk => musica_lk
   use micm_1d_grid,     only : base_grid_t
+  use musica_config, only : config_t
+  use musica_string, only : string_t
 
   implicit none
 
@@ -21,9 +23,6 @@ contains
   !> Initialize grid
   subroutine initialize( this, grid_config )
       
-    use musica_config, only : config_t
-    use musica_string, only : string_t
-
     !> arguments
     class(equalDelta_t), intent(inout) :: this
     type(config_t), intent(inout)      :: grid_config

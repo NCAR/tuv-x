@@ -4,6 +4,9 @@
 module tuvx_spectral_weight_factory
   ! Builds spectral weight calculators
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+  use musica_config,                   only : config_t
   use tuvx_spectral_weight,            only : spectral_weight_t
   use tuvx_spectral_weight_notch_filter,                                      &
     only : spectral_weight_notch_filter_t
@@ -38,7 +41,6 @@ contains
       profile_warehouse ) result( new_spectral_weight )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t

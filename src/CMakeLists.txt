@@ -4,7 +4,7 @@
 # object library
 add_library(tuvx_object OBJECT)
 
-target_compile_features(tuvx_object INTERFACE cxx_std_11)
+target_compile_features(tuvx_object PUBLIC cxx_std_11)
 
 set_target_properties(tuvx_object PROPERTIES
   Fortran_MODULE_DIRECTORY ${TUVX_MOD_DIR}
@@ -12,23 +12,51 @@ set_target_properties(tuvx_object PROPERTIES
 
 target_include_directories(tuvx_object
   PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>
 )
 
-message(INFO "lapack libraries: ${LAPACK_LIBRARIES}")
+message(STATUS "blas libraries: ${BLAS_LIBRARIES}")
+message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
 
 target_link_libraries(tuvx_object 
-  PUBLIC
+  PRIVATE
     PkgConfig::netcdff
+    PkgConfig::netcdfc
     yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
 )
+
+if(BLAS_LIBRARIES)
+  target_link_libraries(tuvx_object
+    PRIVATE
+      ${BLAS_LIBRARIES}
+  )
+else()
+  message(FATAL_ERROR "BLAS Libraries not found.")
+endif()
+
+if(LAPACK_LIBRARIES)
+  target_link_libraries(tuvx_object
+  PRIVATE
+    ${LAPACK_LIBRARIES}
+  )
+else()
+  message(FATAL_ERROR "LAPACK libraries not found.")
+endif()
+
 
 # tuvx library
 add_library(tuvx $<TARGET_OBJECTS:tuvx_object>)
 add_library(musica::tuvx ALIAS tuvx)
+
+if(NOT BUILD_SHARED_LIBS)
+  set_target_properties(tuvx_object
+    PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+  )
+endif()
 
 set_target_properties(tuvx PROPERTIES 
   ARCHIVE_OUTPUT_DIRECTORY ${TUVX_LIB_DIR}
@@ -37,19 +65,18 @@ set_target_properties(tuvx PROPERTIES
 )
 
 target_link_libraries(tuvx
-  PUBLIC
-    PkgConfig::netcdff
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
+  PRIVATE
+    tuvx_object
 )
 
+message(STATUS "TUV-x build include directories: ${TUVX_MOD_DIR};${CMAKE_CURRENT_SOURCE_DIR}/../include")
+message(STATUS "TUV-x install include directories: ${TUVX_INSTALL_MOD_DIR};${TUVX_INSTALL_INCLUDE_DIR}")
 target_include_directories(tuvx
-  PUBLIC  
+  PUBLIC
     $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/../include>
-    $<INSTALL_INTERFACE:${INSTALL_MOD_DIR}>
-    $<INSTALL_INTERFACE:${INSTALL_INCLUDE_DIR}>
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
+    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>
 )
 
 target_sources(tuvx_object
@@ -90,5 +117,4 @@ add_subdirectory(quantum_yields)
 add_subdirectory(radiative_transfer)
 add_subdirectory(spectral_weights)
 add_subdirectory(util)
-
 ################################################################################

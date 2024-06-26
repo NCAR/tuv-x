@@ -7,6 +7,7 @@
 !> Builder of cross section calculators
 module micm_radXfer_cross_section_factory
 
+  use musica_config,                 only : config_t
   use micm_radXfer_abs_cross_section_type,  only : abs_cross_section_t
   use micm_radXfer_base_cross_section_type, only : base_cross_section_t
   use micm_radXfer_tint_cross_section_type, only : tint_cross_section_t
@@ -25,7 +26,6 @@ contains
   function cross_section_builder( config, gridWareHouse, ProfileWareHouse ) result( new_cross_section_t )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use musica_constants,              only : musica_dk
     use micm_grid_warehouse,           only : grid_warehouse_t

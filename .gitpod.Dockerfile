@@ -36,7 +36,7 @@ RUN git clone https://github.com/NCAR/tuv-x \
     && cd tuv-x \
     && mkdir build \
     && cd build \
-    && cmake -D CMAKE_BUILD_TYPE=release -D ENABLE_MEMCHECK=OFF -D ENABLE_TESTS=OFF .. \
+    && cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D TUVX_ENABLE_TESTS=OFF .. \
     && make -j 4 \
     && sudo make install
 

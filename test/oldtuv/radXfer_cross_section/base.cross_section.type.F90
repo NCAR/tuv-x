@@ -8,6 +8,7 @@
 module micm_radXfer_base_cross_section_type
 
   use micm_radXfer_abs_cross_section_type, only : abs_cross_section_t
+  use musica_config,                   only : config_t
   use musica_constants,                    only : musica_dk, musica_ik
 
   implicit none
@@ -40,7 +41,6 @@ contains
   !> Initialize base_cross_section_t object
   subroutine initialize( this, config, gridWareHouse, ProfileWareHouse )
 
-    use musica_config,                   only : config_t
     use musica_string,                   only : string_t
     use netcdf_util,                     only : netcdf_t
     use photo_utils,                     only : inter2

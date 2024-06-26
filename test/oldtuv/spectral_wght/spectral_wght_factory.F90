@@ -7,6 +7,7 @@
 !> Builder of cross section calculators
 module micm_spectral_wght_factory
 
+  use musica_config,                 only : config_t
   use micm_abs_spectral_wght_type,          only : abs_spectral_wght_t
   use micm_base_spectral_wght_type,         only : base_spectral_wght_t
   use micm_uv_b_280_315_nm_spectral_wght_type, only : uv_b_280_315_nm_spectral_wght_t
@@ -40,7 +41,6 @@ contains
   function spectral_wght_builder( config, mdlLambdaEdge ) result( new_spectral_wght_t )
 
     use musica_assert,                 only : die_msg
-    use musica_config,                 only : config_t
     use musica_string,                 only : string_t
     use musica_constants,              only : musica_dk
 

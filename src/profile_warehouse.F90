@@ -6,7 +6,12 @@ module tuvx_profile_warehouse
   ! :f:type:`~tuvx_profile/profile_t` s created by the
   ! :f:mod:`tuvx_profile_factory`
 
-  use tuvx_profile, only : profile_ptr
+  ! Including musica_config at the module level to avoid an ICE
+  ! with Intel 2022/2023 compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
+  use musica_config,                   only : config_t
+#endif
+  use tuvx_profile,                    only : profile_ptr
 
   implicit none
 
@@ -81,7 +86,10 @@ contains
     ! profile warehouse constructor
 
     use musica_assert,        only : assert_msg
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
     use musica_config,        only : config_t
+#endif
     use musica_iterator,      only : iterator_t
     use musica_string,        only : string_t
     use tuvx_grid_warehouse,  only : grid_warehouse_t
@@ -288,13 +296,19 @@ contains
     class(profile_t),           intent(in)    :: profile
 
     type(profile_ptr) :: ptr
+    type(profile_ptr), allocatable :: temp_profiles(:)
 
     call assert( 809705750, allocated( this%profiles_ ) )
     call assert_msg( 490846671,                                               &
                      .not. this%exists( profile%handle_, profile%units( ) ),  &
                      "Profile '"//profile%handle_//"' already exists." )
     allocate( ptr%val_, source = profile )
-    this%profiles_ = [ this%profiles_, ptr ]
+    temp_profiles = this%profiles_
+    deallocate( this%profiles_ )
+    allocate( this%profiles_( size( temp_profiles ) + 1 ) )
+    this%profiles_( 1 : size( temp_profiles ) ) = temp_profiles(:)
+    this%profiles_( size( temp_profiles ) + 1 ) = ptr
+    deallocate( temp_profiles )
 
   end subroutine add_profile
 

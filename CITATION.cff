@@ -7,7 +7,7 @@ authors:
     given-names: Kyle
   - family-names: Walters
     given-names: Stacy
-title: "NCAR/tuv-x: Version 0.8.0"
+title: "NCAR/tuv-x: Version 0.9.0"
 version: 0.8.0
 doi: 10.5281/zenodo.7126039
 url: "https://github.com/NCAR/tuv-x"

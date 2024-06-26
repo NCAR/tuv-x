@@ -62,7 +62,7 @@ cd build
 cmake -D CMAKE_Fortran_COMPILER=mpifort \
       -D CMAKE_BUILD_TYPE=release \
       -D CMAKE_INSTALL_PREFIX=${INSTALL_ROOT} \
-      -D ENABLE_MPI=ON \
+      -D TUVX_ENABLE_MPI=ON \
       ..
 make install
 
@@ -76,9 +76,9 @@ cd build
 cmake -D CMAKE_Fortran_COMPILER=mpifort \
       -D CMAKE_BUILD_TYPE=release \
       -D musicacore_DIR=${MUSICA_CORE_PACKAGE} \
-      -D ENABLE_MPI=ON \
-      -D ENABLE_MEMCHECK=OFF \
-      -D ENABLE_COVERAGE=OFF \
+      -D TUVX_ENABLE_MPI=ON \
+      -D TUVX_ENABLE_MEMCHECK=OFF \
+      -D TUVX_ENABLE_COVERAGE=OFF \
       -D CMAKE_INSTALL_PREFIX=${TUVX_HOME} \
       ..
 make install

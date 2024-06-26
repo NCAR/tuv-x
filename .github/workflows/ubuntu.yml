@@ -8,23 +8,24 @@ concurrency:
 
 jobs:
   gcc:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
     strategy:
       matrix:
-        gcc_version: [11, 12, 13]
+        gcc_version: [12, 13, 14]
     env:
+      CXX: g++-${{ matrix.gcc_version }}
+      CC: gcc-${{ matrix.gcc_version }}
       FC: gfortran-${{ matrix.gcc_version }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: recursive
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev
-    - name: Install python dependencies
-      run: pip install numpy scipy
+        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev
+        sudo apt-get install -y python3-numpy python3-scipy
     - name: Run Cmake 
       run: cmake -S . -B build 
     - name: Build

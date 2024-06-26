@@ -47,7 +47,9 @@ cd build/
 # to run the tests
 make test
 # to use the standalone tool
-./tuv-x examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 ### Sharing data between your computer and the docker container
@@ -70,7 +72,10 @@ The full example uses data files from the `data` directory, which is why you nee
 ```
 cd /output
 cp -r /build/data .
-tuv-x /build/examples/full_config.json
+# to use the standalone tool
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 Now, in your downloads folder, you should have to nc files, `photolysis_rate_constants.nc` and `dose_rates.nc`.
@@ -91,8 +96,12 @@ make -j 8
 
 You will now have a runnable exectubable for `tuv-x` and the tests in the build directory.
 
-`./tuv-x examples/full_config.json`.
-
+```
+# to use the standalone tool
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
+```
 Inspect the output file `photolysis_rate_constants.nc` to see the results!
 
 ## Install

@@ -8,6 +8,7 @@
 module micm_base_spectral_wght_type
 
   use micm_abs_spectral_wght_type,     only : abs_spectral_wght_t
+  use musica_config,                   only : config_t
   use musica_constants,                only : musica_dk, musica_ik
 
   implicit none
@@ -40,7 +41,6 @@ contains
   !> Initialize base_spectral_wght_t object
   subroutine initialize( this, config, mdlLambdaEdge )
 
-    use musica_config,                   only : config_t
     use musica_string,                   only : string_t
     use netcdf_util,                     only : netcdf_t
     use photo_utils,                     only : inter2
