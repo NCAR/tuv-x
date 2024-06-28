@@ -1,5 +1,5 @@
 
-class tuvx_cross_section
+class TuvxCrossSection
 {
  private:
 };

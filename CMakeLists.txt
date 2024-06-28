@@ -5,8 +5,9 @@ cmake_minimum_required(VERSION 3.17)
 
 project(
   tuv-x
-  VERSION 0.8.0
-  LANGUAGES Fortran CXX C)
+  VERSION 0.9.0
+  LANGUAGES Fortran CXX C
+)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
@@ -115,7 +116,11 @@ if(NOT BUILD_SHARED_LIBS)
   set_target_properties(tuv-x PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
-target_link_libraries(tuv-x PUBLIC musica::tuvx yaml-cpp::yaml-cpp)
+target_link_libraries(tuv-x 
+  PUBLIC 
+    musica::tuvx
+    yaml-cpp::yaml-cpp
+)
 
 target_include_directories(
   tuv-x PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>

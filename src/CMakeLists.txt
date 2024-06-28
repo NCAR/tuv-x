@@ -44,11 +44,19 @@ endif()
 add_library(tuvx $<TARGET_OBJECTS:tuvx_object>)
 add_library(musica::tuvx ALIAS tuvx)
 
-set_target_properties(
-  tuvx
-  PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${TUVX_LIB_DIR}
-             VERSION ${PROJECT_VERSION}
-             SOVERSION ${PROJECT_VERSION_MAJOR})
+
+if(NOT BUILD_SHARED_LIBS)
+  set_target_properties(tuvx_object
+    PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+  )
+endif()
+
+set_target_properties(tuvx PROPERTIES 
+  ARCHIVE_OUTPUT_DIRECTORY ${TUVX_LIB_DIR}
+  VERSION ${PROJECT_VERSION}
+  SOVERSION ${PROJECT_VERSION_MAJOR}
+)
 
 target_link_libraries(tuvx PUBLIC tuvx_object)
 
