@@ -45,6 +45,8 @@ module tuvx_core
     procedure :: get_grid_warehouse
     ! Returns a profile from the warehouse
     procedure :: get_profile
+    ! Returns the profile warehouse
+    procedure :: get_profile_warehouse
     ! Returns an updater for use TUV-x data
     procedure, private :: get_grid_updater, get_profile_updater,              &
                           get_radiator_updater
@@ -343,6 +345,23 @@ contains
     profile => this%profile_warehouse_%get_profile( profile_name, units )
 
   end function get_profile
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_profile_warehouse( this ) result( profile_warehouse )
+    ! Returns a copy of a profile from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_profile,                  only : profile_t
+
+    class(core_t),    intent(in) :: this
+    class(profile_warehouse_t),    pointer    :: profile_warehouse
+
+    call assert_msg( 423051914, associated( this%profile_warehouse_ ),        &
+                     "Profiles not available" )
+    profile_warehouse => this%profile_warehouse_
+
+  end function get_profile_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
