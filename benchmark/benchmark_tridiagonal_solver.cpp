@@ -52,6 +52,7 @@ static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
   vecd b(system_size);
   trid_matd A(system_size);
 
+  // Perform setup here
   for (auto _ : state)
   {
     state.PauseTiming();
@@ -76,6 +77,7 @@ static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
   vecd x(system_size);
   vecd b(system_size);
   trid_matd A(system_size);
+  vecd x_approx(system_size);
 
   for (auto _ : state)
   {
@@ -92,6 +94,7 @@ static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
   vecf x(system_size);
   vecf b(system_size);
   trid_matf A(system_size);
+  vecf x_approx(system_size);
 
   // Perform setup here
   for (auto _ : state)
@@ -105,7 +108,7 @@ static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
   }
 }
 
-// Registering benchmarks
+// Register the function as a benchmark
 BENCHMARK(BM_LAPACKE_DOUBLE_PRECISISON);
 BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON);
 BENCHMARK(BM_TUVX_DOUBLE_PRECISISON);

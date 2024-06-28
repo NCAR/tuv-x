@@ -56,10 +56,11 @@ namespace tuvx
   {
     std::random_device dev;
     std::mt19937 rng(dev());
-    std::uniform_int_distribution<std::mt19937::result_type> dist6(1, 6);
+    // sample from normal distribution
+    std::normal_distribution<double> distribution(5.0, 1.0);
     for (std::size_t i = 0; i < x.size(); i++)
     {
-      x[i] = (T)dist6(rng) + 1;
+      x[i] = (T)distribution(rng);
     }
   }
 
