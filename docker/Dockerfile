@@ -29,6 +29,7 @@ RUN mkdir /build \
       && cmake -D CMAKE_BUILD_TYPE=release \
                -D TUVX_INSTALL_INCLUDE_DIR=/usr/local/include \
                -D TUVX_INSTALL_MOD_DIR=/usr/local/include \
+               -D LAPACK_LIBRARIES=-llapacke \
                /tuv-x \
       && make install -j 8
 

@@ -42,6 +42,7 @@ RUN mkdir build \
                -D CMAKE_CXX_COMPILER=/usr/lib64/openmpi/bin/mpicxx \
                -D TUVX_ENABLE_OPENMP:BOOL=TRUE \
                -D TUVX_ENABLE_MPI:BOOL=TRUE \
+               -D LAPACK_LIBRARIES=-llapacke \
                ../tuv-x \
       && make -j 8 
 

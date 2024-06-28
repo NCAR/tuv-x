@@ -27,6 +27,7 @@ RUN mkdir /build \
       && cmake \
             -DTUVX_ENABLE_MEMCHECK:BOOL=TRUE \
             -DCMAKE_BUILD_TYPE=DEBUG \
+            -D LAPACK_LIBRARIES=-llapacke \
         /tuv-x \
       && make -j 8
 
