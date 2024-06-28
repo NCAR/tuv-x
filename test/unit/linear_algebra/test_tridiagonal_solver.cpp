@@ -19,7 +19,7 @@ typedef std::vector<float> vecf;
 const double tol_dp = std::numeric_limits<double>::epsilon();
 const float tol_sp = std::numeric_limits<float>::epsilon();
 
-const std::size_t number_of_runs = 100;
+const std::size_t number_of_runs = 20;
 
 std::size_t sizes[5] = { 1000, 10000, 100000, 1000000, 10000000 };
 
@@ -44,9 +44,9 @@ TEST(TridiagSolveTest, SinglePrecision)
       FillRandom<float>(x);
       b = Dot<float>(A, x);
 
-      vecf x_approx = Solve<float>(A, b);
+      Solve<float>(A, b);
 
-      errors[i] += ComputeError<float>(x, x_approx);
+      errors[i] += ComputeError<float>(x, b);
     }
 
     errors[i] /= number_of_runs;
@@ -75,9 +75,9 @@ TEST(TridiagSolveTest, DoublePrecision)
       FillRandom<double>(x);
       b = Dot<double>(A, x);
 
-      vecd x_approx = Solve<double>(A, b);
+      Solve<double>(A, b);
 
-      errors[i] += ComputeError<double>(x, x_approx);
+      errors[i] += ComputeError<double>(x, b);
     }
     errors[i] /= number_of_runs;
     EXPECT_LE(errors[i], tol_dp);

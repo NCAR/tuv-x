@@ -28,7 +28,7 @@ namespace tuvx
   }
 
   template<typename T>
-  inline std::vector<T> Solve(TridiagonalMatrix<T> A, std::vector<T> b)
+  inline void Solve(TridiagonalMatrix<T> &A, std::vector<T> &b)
   {
     T temp;
     std::size_t N = b.size();
@@ -49,7 +49,6 @@ namespace tuvx
         break;
       }
     }
-    return b;
   }
 
   template<typename T>
@@ -65,19 +64,23 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(TridiagonalMatrix<T> &A)
+  inline void FillRandom(TridiagonalMatrix<T> &A, bool diagonally_dominant)
   {
     FillRandom<T>(A.main_diagonal_);
     FillRandom<T>(A.lower_diagonal_);
     FillRandom<T>(A.upper_diagonal_);
-    // make diagonally dominant (diagonal value greater than sum of its row)
-    std::size_t i = 0;
-    A.main_diagonal_[i] += A.upper_diagonal_[i] + (T)500;
-    for (i = 1; i < A.size_ - 1; i++)
+
+    if (diagonally_dominant)
     {
-      A.main_diagonal_[i] += A.lower_diagonal_[i - 1] + A.upper_diagonal_[i] + (T)500;
+      // make diagonally dominant (diagonal value greater than sum of its row)
+      std::size_t i = 0;
+      A.main_diagonal_[i] += A.upper_diagonal_[i];
+      for (i = 1; i < A.size_ - 1; i++)
+      {
+        A.main_diagonal_[i] += A.lower_diagonal_[i - 1] + A.upper_diagonal_[i];
+      }
+      A.main_diagonal_[i] += A.lower_diagonal_[i - 1];
     }
-    A.main_diagonal_[i] += A.lower_diagonal_[i - 1] + (T)500;
   }
 
   template<typename T>
