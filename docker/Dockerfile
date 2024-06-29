@@ -24,7 +24,7 @@ ENV LD_LIBRARY_PATH=/usr/local/lib64
 
 # build the tuv-x tool
 COPY . /tuv-x
-RUN cd /tuv-x
+RUN cd /tuv-x \
       && mkdir build \
       && cd build \
       && cmake -D CMAKE_BUILD_TYPE=release \
