@@ -16,7 +16,7 @@ function(add_test_dependency run_second run_first)
                                                 f_${run_first})
 endfunction(add_test_dependency)
 
-# ##############################################################################
+################################################################################
 # build and add a standard test (one linked to the tuvx library)
 
 function(create_standard_test)
@@ -72,7 +72,7 @@ function(create_standard_cxx_test)
                 ${TEST_SKIP_MEMCHECK})
 endfunction(create_standard_cxx_test)
 
-# ##############################################################################
+################################################################################
 # Add a test
 
 function(add_tuvx_test test_name test_binary test_args working_dir)
