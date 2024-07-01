@@ -100,6 +100,9 @@ if(TUVX_ENABLE_TESTS)
 
   FetchContent_MakeAvailable(googletest)
 
+  # don't run clang-tidy on google test
+  set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
+  set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
 endif()
 
 ################################################################################
