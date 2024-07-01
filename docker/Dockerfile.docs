@@ -31,9 +31,11 @@ RUN echo "The suffix is '$SWITCHER_SUFFIX'"
 
 RUN mkdir /build \
       && cd /build \
-      && cmake -D TUVX_ENABLE_TESTS=OFF \
-               -D TUVX_BUILD_DOCS=ON \
-               /tuv-x \
+      && cmake \
+        -D TUVX_ENABLE_TESTS=OFF \
+        -D TUVX_ENABLE_BENCHMARK=OFF \
+        -D TUVX_BUILD_DOCS=ON \
+        /tuv-x \
       && make docs
 
 WORKDIR /build
