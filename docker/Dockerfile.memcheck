@@ -30,4 +30,4 @@ RUN mkdir /build \
         /tuv-x \
       && make -j 8
 
-WORKDIR /build
+WORKDIR /tuvx/build
