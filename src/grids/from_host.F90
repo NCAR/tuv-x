@@ -24,9 +24,6 @@ module tuvx_grid_from_host
   end interface grid_from_host_t
 
   type :: grid_updater_t
-#ifndef MUSICA_IS_NAG_COMPILER
-    private
-#endif
     ! updater for `grid_from_host_t` grids
     class(grid_from_host_t), pointer :: grid_ => null( )
   contains
