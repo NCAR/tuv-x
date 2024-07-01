@@ -2,20 +2,20 @@ FROM fedora:37
 
 RUN dnf -y update \
     && dnf -y install \
+        cmake \
         doxygen \
-        gcc-fortran \
-        gcc-c++ \
         gcc \
+        gcc-c++ \
+        gcc-fortran \
         gdb \
         git \
-        netcdf-fortran-devel \
-        cmake \
-        make \
+        lapack-devel \
         lcov \
-        valgrind \
+        make \
+        netcdf-fortran-devel \
         python3 \
         python3-pip \
-        lapack-devel \
+        valgrind \
         yaml-cpp-devel \
     && dnf clean all
 

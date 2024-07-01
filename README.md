@@ -2,6 +2,8 @@
 <img src="docs/source/_static/logo.svg" width="300">
 </h1><br>
 
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=anuraghazra&layout=compact)
+
 Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 
 [![License](https://img.shields.io/github/license/NCAR/tuv-x.svg)](https://github.com/NCAR/tuv-x/blob/main/LICENSE)

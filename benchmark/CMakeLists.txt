@@ -4,4 +4,9 @@ target_include_directories(
                                       ${LAPACK_INCLUDE_DIRS})
 
 target_link_libraries(benchmark_tridiagonal_solver
-                      PUBLIC LAPACK::LAPACK benchmark::benchmark musica::tuvx)
+  PUBLIC 
+    LAPACK::LAPACK 
+    ${LAPACKE_LIBRARIES}
+    benchmark::benchmark 
+    musica::tuvx
+)

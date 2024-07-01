@@ -2,19 +2,19 @@ FROM fedora:37
 
 RUN dnf -y update \
     && dnf -y install \
-        gcc-fortran \
-        gcc-c++ \
+        cmake \
         gcc \
+        gcc-c++ \
+        gcc-fortran \
         gdb \
         git \
-        netcdf-fortran-devel \
-        cmake \
-        make \
+        lapack-devel \
         lcov \
-        valgrind \
+        make \
+        netcdf-fortran-devel \
         python3 \
         python3-pip \
-        lapack-devel \
+        valgrind \
         yaml-cpp-devel \
     && dnf clean all
 
@@ -30,7 +30,6 @@ RUN cd /tuv-x \
       && cmake -D CMAKE_BUILD_TYPE=release \
                -D TUVX_INSTALL_INCLUDE_DIR=/usr/local/include \
                -D TUVX_INSTALL_MOD_DIR=/usr/local/include \
-               -D LAPACK_LIBRARIES=-llapacke \
                .. \
       && make install -j 8
 
