@@ -37,7 +37,7 @@ namespace tuvx
   /// @brief Fills a matrix with uniformly distributed random values.
   /// @param A tridiagonal matrix to allocate and fill
   template<typename T>
-  void FillRandom(TridiagonalMatrix<T> &A);
+  void FillRandom(TridiagonalMatrix<T> &A, bool diagonally_dominant = false);
 
   /// @fn print vector function
   /// @brief displays the data stored inside a std::vector
@@ -53,12 +53,12 @@ namespace tuvx
   void Print(const TridiagonalMatrix<T> &A);
 
   /// @fn Tridiagonal Linear System Solver
-  /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b)
+  /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b).
+  /// store solution in b.
   /// @param A tridiagonal coeffcient matrix
   /// @param b right hand side vector of the tridiagonal system.
-  /// @returns x solution that solves A x = b.
   template<typename T>
-  std::vector<T> Solve(TridiagonalMatrix<T> A, std::vector<T> b);
+  void Solve(TridiagonalMatrix<T> &A, std::vector<T> &b);
 
   /// @fn Tridiagonal Matrix - vector dot product
   /// @brief Specialized dot product function for tridiagonal matrices.
