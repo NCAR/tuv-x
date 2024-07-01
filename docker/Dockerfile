@@ -33,4 +33,4 @@ RUN cd /tuv-x \
                .. \
       && make install -j 8
 
-WORKDIR /tuvx/build
+WORKDIR /tuv-x/build
