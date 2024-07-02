@@ -1,14 +1,14 @@
 find_package(PkgConfig REQUIRED)
 include(FetchContent)
 
-################################################################################
+# ##############################################################################
 # LAPACK
 
 find_package(BLAS)
 find_package(LAPACK)
 find_package(LAPACKE)
 
-################################################################################
+# ##############################################################################
 # Memory check
 
 if(TUVX_ENABLE_MEMCHECK)
@@ -28,7 +28,7 @@ if(TUVX_ENABLE_MEMCHECK)
   endif()
 endif()
 
-################################################################################
+# ##############################################################################
 # OpenMP
 
 if(TUVX_ENABLE_OPENMP)
@@ -41,7 +41,7 @@ if(TUVX_ENABLE_OPENMP)
   endif()
 endif()
 
-################################################################################
+# ##############################################################################
 # NetCDF library
 
 find_package(PkgConfig REQUIRED)
@@ -49,7 +49,7 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
 pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
 
-################################################################################
+# ##############################################################################
 # yaml-cpp
 
 FetchContent_Declare(
@@ -60,7 +60,7 @@ FetchContent_Declare(
   ${FETCHCONTENT_QUIET})
 FetchContent_MakeAvailable(yaml-cpp)
 
-################################################################################
+# ##############################################################################
 # Docs
 
 if(TUVX_BUILD_DOCS)
@@ -68,15 +68,14 @@ if(TUVX_BUILD_DOCS)
   find_package(Sphinx REQUIRED)
 endif()
 
-################################################################################
+# ##############################################################################
 # google test and benchmark
 
 if(TUVX_ENABLE_BENCHMARK)
   FetchContent_Declare(
     googlebenchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG v1.8.3
-    )
+    GIT_TAG v1.8.3)
 
   set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
   set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
@@ -105,4 +104,4 @@ if(TUVX_ENABLE_TESTS)
   set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
 endif()
 
-################################################################################
+# ##############################################################################

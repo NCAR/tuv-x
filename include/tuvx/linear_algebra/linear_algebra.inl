@@ -1,4 +1,5 @@
 
+#include <random>
 namespace tuvx
 {
 
@@ -52,24 +53,24 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(std::vector<T> &x)
+  inline void FillRandom(std::vector<T> &x, const unsigned &seed)
   {
-    std::random_device dev;
-    std::mt19937 rng(dev());
     // sample from normal distribution
+
+    std::mt19937 random_device(seed);
     std::normal_distribution<double> distribution(5.0, 1.0);
     for (std::size_t i = 0; i < x.size(); i++)
     {
-      x[i] = (T)distribution(rng);
+      x[i] = (T)distribution(random_device);
     }
   }
 
   template<typename T>
-  inline void FillRandom(TridiagonalMatrix<T> &A, bool diagonally_dominant)
+  inline void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, bool diagonally_dominant)
   {
-    FillRandom<T>(A.main_diagonal_);
-    FillRandom<T>(A.lower_diagonal_);
-    FillRandom<T>(A.upper_diagonal_);
+    FillRandom<T>(A.main_diagonal_, seed);
+    FillRandom<T>(A.lower_diagonal_, seed);
+    FillRandom<T>(A.upper_diagonal_, seed);
 
     if (diagonally_dominant)
     {

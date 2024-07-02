@@ -31,13 +31,13 @@ namespace tuvx
   /// @brief Fill a std::vector with random values
   /// @param x Vector to allocate and fill
   template<typename T>
-  void FillRandom(std::vector<T> &x);
+  void FillRandom(std::vector<T> &x, const unsigned &seed);
 
   /// @fn Initialize random matrix function
   /// @brief Fills a matrix with uniformly distributed random values.
   /// @param A tridiagonal matrix to allocate and fill
   template<typename T>
-  void FillRandom(TridiagonalMatrix<T> &A, bool diagonally_dominant = false);
+  void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, bool diagonally_dominant = false);
 
   /// @fn print vector function
   /// @brief displays the data stored inside a std::vector
