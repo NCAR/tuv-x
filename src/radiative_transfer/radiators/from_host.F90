@@ -26,9 +26,6 @@ module tuvx_radiator_from_host
   end interface radiator_from_host_t
 
   type :: radiator_updater_t
-#ifndef MUSICA_IS_NAG_COMPILER
-    private
-#endif
     ! updater for `radiator_from_host_t` radiators
     class(radiator_from_host_t), pointer :: radiator_ => null( )
   contains

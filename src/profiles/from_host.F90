@@ -24,9 +24,6 @@ module tuvx_profile_from_host
   end interface profile_from_host_t
 
   type :: profile_updater_t
-#ifndef MUSICA_IS_NAG_COMPILER
-    private
-#endif
     ! updater for `profile_from_host_t` profiles
     class(profile_from_host_t), pointer :: profile_ => null( )
   contains
