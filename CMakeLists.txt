@@ -1,12 +1,13 @@
-# ##############################################################################
+################################################################################
 # Preamble
 
 cmake_minimum_required(VERSION 3.17)
 
 project(
   tuv-x
-  VERSION 0.8.0
-  LANGUAGES Fortran CXX C)
+  VERSION 0.9.0
+  LANGUAGES Fortran CXX C
+)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
@@ -36,7 +37,7 @@ if(${CMAKE_VERSION} VERSION_LESS "3.21")
   endif()
 endif()
 
-# ##############################################################################
+################################################################################
 # Projet wide setup options
 
 include(CMakeDependentOption)
@@ -44,6 +45,7 @@ option(TUVX_ENABLE_MPI "Enable MPI parallel support" OFF)
 cmake_dependent_option(TUVX_ENABLE_OPENMP "Enable OpenMP support" OFF
                        "TUVX_ENABLE_MPI" OFF)
 option(TUVX_ENABLE_TESTS "Build tests" ON)
+option(TUVX_ENABLE_BENCHMARK "Build benchmark examples" ON)
 option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
@@ -94,12 +96,12 @@ if(TUVX_ENABLE_TESTS)
             ${CMAKE_CURRENT_SOURCE_DIR}/examples ${CMAKE_BINARY_DIR}/examples)
 endif()
 
-# ##############################################################################
+################################################################################
 # Dependencies
 
 include(cmake/dependencies.cmake)
 
-# ##############################################################################
+################################################################################
 # TUV-x targets
 
 add_subdirectory(src)
@@ -115,8 +117,11 @@ if(NOT BUILD_SHARED_LIBS)
   set_target_properties(tuv-x PROPERTIES POSITION_INDEPENDENT_CODE ON)
 endif()
 
-target_link_libraries(tuv-x PUBLIC musica::tuvx yaml-cpp::yaml-cpp
-                                   ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+target_link_libraries(tuv-x 
+  PUBLIC 
+    musica::tuvx
+    yaml-cpp::yaml-cpp
+)
 
 target_include_directories(
   tuv-x PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
@@ -126,14 +131,14 @@ if(TUVX_ENABLE_OPENMP)
   target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)
 endif()
 
-# ##############################################################################
+################################################################################
 # TUV-x docs
 
 if(TUVX_BUILD_DOCS)
   add_subdirectory(docs)
 endif()
 
-# ##############################################################################
+################################################################################
 # TUV-x tests
 
 if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
@@ -155,10 +160,9 @@ if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
 
   enable_testing()
   add_subdirectory(test)
-  add_subdirectory(benchmark)
 endif()
 
-# ##############################################################################
+################################################################################
 # Packaging
 
 # only include packaging if we are the top level project being built
@@ -166,4 +170,11 @@ if(PROJECT_IS_TOP_LEVEL)
   add_subdirectory(packaging)
 endif()
 
-# ##############################################################################
+################################################################################
+# benchmarking
+
+if(TUVX_ENABLE_BENCHMARK)
+  add_subdirectory(benchmark)
+endif()
+
+################################################################################
