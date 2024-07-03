@@ -66,13 +66,13 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, bool diagonally_dominant)
+  inline void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, const bool &make_diagonally_dominant)
   {
     FillRandom<T>(A.main_diagonal_, seed);
     FillRandom<T>(A.lower_diagonal_, seed);
     FillRandom<T>(A.upper_diagonal_, seed);
 
-    if (diagonally_dominant)
+    if (make_diagonally_dominant)
     {
       // make diagonally dominant (diagonal value greater than sum of its row)
       std::size_t i = 0;

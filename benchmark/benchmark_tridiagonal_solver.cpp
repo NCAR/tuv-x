@@ -12,29 +12,29 @@
   #include <lapacke.h>
 #endif
 
-const std::size_t system_size = 1e6;
+const std::size_t SYSTEM_SIZE = 1e6;
 
-const bool diagonally_dominant = true;
+const bool MAKE_DIAGONALLY_DOMINANT = true;
 
-const unsigned random_number_seed = 1;
+const unsigned RANDOM_NUMBER_SEED = 1;
 
 static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 {
-  std::vector<float> x(system_size);
-  std::vector<float> b(system_size);
-  tuvx::TridiagonalMatrix<float> A(system_size);
-  std::mt19937 random_device(random_number_seed);
+  std::vector<float> x(SYSTEM_SIZE);
+  std::vector<float> b(SYSTEM_SIZE);
+  tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
+  std::mt19937 random_device(RANDOM_NUMBER_SEED);
   for (auto _ : state)
   {
     state.PauseTiming();
-    tuvx::FillRandom<float>(A, random_number_seed, diagonally_dominant);
-    tuvx::FillRandom<float>(x, random_number_seed);
+    tuvx::FillRandom<float>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
     b = tuvx::Dot<float>(A, x);
     state.ResumeTiming();
 
     LAPACKE_sgtsv(
         LAPACK_ROW_MAJOR,
-        system_size,
+        SYSTEM_SIZE,
         1,
         A.lower_diagonal_.data(),
         A.main_diagonal_.data(),
@@ -46,23 +46,23 @@ static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 
 static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 {
-  std::vector<double> x(system_size);
-  std::vector<double> b(system_size);
-  tuvx::TridiagonalMatrix<double> A(system_size);
+  std::vector<double> x(SYSTEM_SIZE);
+  std::vector<double> b(SYSTEM_SIZE);
+  tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
 
-  std::mt19937 random_device(random_number_seed);
+  std::mt19937 random_device(RANDOM_NUMBER_SEED);
   // Perform setup here
   for (auto _ : state)
   {
     state.PauseTiming();
-    tuvx::FillRandom<double>(A, random_number_seed, diagonally_dominant);
-    tuvx::FillRandom<double>(x, random_number_seed);
+    tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
     b = tuvx::Dot<double>(A, x);
     state.ResumeTiming();
 
     LAPACKE_dgtsv(
         LAPACK_ROW_MAJOR,
-        system_size,
+        SYSTEM_SIZE,
         1,
         A.lower_diagonal_.data(),
         A.main_diagonal_.data(),
@@ -74,16 +74,16 @@ static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 
 static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 {
-  std::vector<double> x(system_size);
-  std::vector<double> b(system_size);
-  tuvx::TridiagonalMatrix<double> A(system_size);
-  std::vector<double> x_approx(system_size);
+  std::vector<double> x(SYSTEM_SIZE);
+  std::vector<double> b(SYSTEM_SIZE);
+  tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
+  std::vector<double> x_approx(SYSTEM_SIZE);
 
   for (auto _ : state)
   {
     state.PauseTiming();
-    tuvx::FillRandom<double>(A, random_number_seed, diagonally_dominant);
-    tuvx::FillRandom<double>(x, random_number_seed);
+    tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
     state.ResumeTiming();
     tuvx::Solve<double>(A, b);
   }
@@ -91,17 +91,17 @@ static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 
 static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
 {
-  std::vector<float> x(system_size);
-  std::vector<float> b(system_size);
-  tuvx::TridiagonalMatrix<float> A(system_size);
-  std::vector<float> x_approx(system_size);
+  std::vector<float> x(SYSTEM_SIZE);
+  std::vector<float> b(SYSTEM_SIZE);
+  tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
+  std::vector<float> x_approx(SYSTEM_SIZE);
 
   // Perform setup here
   for (auto _ : state)
   {
     state.PauseTiming();
-    tuvx::FillRandom<float>(A, random_number_seed, diagonally_dominant);
-    tuvx::FillRandom<float>(x, random_number_seed);
+    tuvx::FillRandom<float>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
     b = tuvx::Dot<float>(A, x);
     state.ResumeTiming();
     tuvx::Solve<float>(A, b);
