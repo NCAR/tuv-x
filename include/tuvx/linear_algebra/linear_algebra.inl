@@ -102,7 +102,7 @@ namespace tuvx
     T error = 0;
     for (std::size_t i = 0; i < x.size(); i++)
     {
-      error += (abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.size();
+      error += (std::abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.size();
     }
     return error;
   }
