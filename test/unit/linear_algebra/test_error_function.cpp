@@ -12,14 +12,6 @@ const std::size_t SIZE = 10;  // size of the system to test
 const double TOL_DP = 1e-14;  // tolorance for double
 const float TOL_SP = 1e-5;    // tolorance for single point floating precision
 
-using namespace tuvx;
-
-typedef TridiagonalMatrix<double> trid_matd;
-typedef std::vector<double> vecd;
-
-typedef TridiagonalMatrix<float> trid_matf;
-typedef std::vector<float> vecf;
-
 const unsigned RANDOM_NUMBER_SEED = 1;
 
 /// @test Error function test
@@ -28,11 +20,11 @@ const unsigned RANDOM_NUMBER_SEED = 1;
 TEST(ErrorFunctionTest, DoublePrecision)
 {
   // same vector should return 0 error
-  vecd x(SIZE);
-  vecd x1(SIZE);
-  FillRandom<double>(x, RANDOM_NUMBER_SEED);
+  std::vector<double> x(SIZE);
+  std::vector<double> x1(SIZE);
+  tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
   x1 = x;
-  double error = ComputeError<double>(x, x1);
+  double error = tuvx::ComputeError<double>(x, x1);
   EXPECT_EQ(error, 0.0);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
@@ -40,7 +32,7 @@ TEST(ErrorFunctionTest, DoublePrecision)
   x1 = x;
 
   x[0] += 0.1;
-  error = ComputeError<double>(x, x1);
+  error = tuvx::ComputeError<double>(x, x1);
   EXPECT_LE(error - 0.1 / SIZE, TOL_SP);
 }
 
@@ -50,11 +42,11 @@ TEST(ErrorFunctionTest, DoublePrecision)
 TEST(ErrorFunctionTest, SinglePrecision)
 {
   // same vector should return 0 error
-  vecf x(SIZE);
-  vecf x1(SIZE);
-  FillRandom<float>(x, RANDOM_NUMBER_SEED);
+  std::vector<float> x(SIZE);
+  std::vector<float> x1(SIZE);
+  tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
   x1 = x;
-  float error = ComputeError<float>(x, x1);
+  float error = tuvx::ComputeError<float>(x, x1);
   EXPECT_EQ(error, 0.0f);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
@@ -62,6 +54,6 @@ TEST(ErrorFunctionTest, SinglePrecision)
   x1 = x;
 
   x[0] += 0.1f;
-  error = ComputeError(x, x1);
+  error = tuvx::ComputeError(x, x1);
   EXPECT_LE(error - 0.1f / SIZE, TOL_SP);
 }
