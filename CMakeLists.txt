@@ -16,18 +16,13 @@ set(CMAKE_USER_MAKE_RULES_OVERRIDE
     "${PROJECT_SOURCE_DIR}/cmake/set_defaults.cmake")
 
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE
-      "Release"
-      CACHE
-        STRING
-        "Choose the type of build, options are: Debug Release RelWithDebInfo MinSizeRel."
-        FORCE)
+  set(CMAKE_BUILD_TYPE "Release"
+      CACHE STRING
+        "Choose the type of build, options are: ${CMAKE_CONFIGURATION_TYPES}."
+      FORCE)
 endif(NOT CMAKE_BUILD_TYPE)
 
-message(
-  STATUS
-    "CMake build configuration for tuv-x(${CMAKE_BUILD_TYPE}) ${PROJECT_VERSION}"
-)
+message(STATUS "CMake build configuration for tuv-x(${CMAKE_BUILD_TYPE}) ${PROJECT_VERSION}")
 
 if(${CMAKE_VERSION} VERSION_LESS "3.21")
   if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
