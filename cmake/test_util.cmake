@@ -51,7 +51,7 @@ function(create_standard_cxx_test)
   add_executable(test_${TEST_NAME} ${TEST_SOURCES})
 
   target_include_directories(test_${TEST_NAME} PUBLIC ${LAPACK_INCLUDE_DIRS})
-  target_link_libraries(test_${TEST_NAME} PUBLIC LAPACK::LAPACK musica::tuvx GTest::gtest_main)
+  target_link_libraries(test_${TEST_NAME} PUBLIC LAPACK::LAPACK ${LAPACKE_LIBRARIES} musica::tuvx GTest::gtest_main)
 
   # link additional libraries
   foreach(library ${TEST_LIBRARIES})
