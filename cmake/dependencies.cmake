@@ -6,7 +6,7 @@ include(FetchContent)
 
 find_package(BLAS)
 find_package(LAPACK)
-# find_package(LAPACKE)
+find_package(LAPACKE)
 
 # ##############################################################################
 # Memory check
