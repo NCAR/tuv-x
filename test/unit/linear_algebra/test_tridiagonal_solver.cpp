@@ -104,7 +104,6 @@ TEST(LapackeTest, SinglePrecision)
         b.data(),
         1);
 
-    // to be written to a file
     error += tuvx::ComputeError<float>(x, b);
   }
   error /= NUMBER_OF_RUNS;
