@@ -82,7 +82,7 @@ TEST(TridiagSolveTest, DoublePrecision)
 /// sizes to check consistency
 TEST(LapackeTest, SinglePrecision)
 {
-  float error;
+  float error = 0;
 
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
@@ -117,7 +117,7 @@ TEST(LapackeTest, SinglePrecision)
 /// sizes to check consistency
 TEST(LapackeTest, DoublePrecision)
 {
-  double error;
+  double error = 0;
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
     std::vector<double> x(SYSTEM_SIZE);
