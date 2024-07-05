@@ -14,9 +14,8 @@ const float TOL_SP = 1e-5;    // tolorance for single point floating precision
 
 const unsigned RANDOM_NUMBER_SEED = 1;
 
-/// @test Error function test
 /// @brief Test the correctness of the error function used for
-/// testing the Linear approximation solvers
+/// testing the Linear approximation solvers with double precision data types.
 TEST(ErrorFunctionTest, DoublePrecision)
 {
   // same vector should return 0 error
@@ -36,9 +35,8 @@ TEST(ErrorFunctionTest, DoublePrecision)
   EXPECT_LE(error - 0.1 / SIZE, TOL_SP);
 }
 
-/// @test Error function test
 /// @brief Test the correctness of the error function used for
-/// testing the Linear approximation solvers
+/// testing the Linear approximation solvers with single precision data types.
 TEST(ErrorFunctionTest, SinglePrecision)
 {
   // same vector should return 0 error
