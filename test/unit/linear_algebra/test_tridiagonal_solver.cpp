@@ -22,8 +22,8 @@ const std::size_t SYSTEM_SIZE = 10;
 const bool MAKE_DIAGONALLY_DOMINANT = true;
 
 const unsigned RANDOM_NUMBER_SEED = 1;
-/// @test Tridiagonal Solver Test for single Precision Floats.
-/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// @brief Tridiagonal Solver Test for single Precision Floats.
+/// Generate random tridiagonal matrix $A$ and vector $x$,
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (single precision). Check for different
 /// sizes to check consistency
@@ -50,8 +50,8 @@ TEST(TridiagSolveTest, SinglePrecision)
   EXPECT_LE(error, TOL_SP);
 }
 
-/// @test Tridiagonal Solver Test for Double Precision Floats.
 /// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// Tridiagonal Solver Test for Double Precision Floats.
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (double precision). Check for different
 /// sizes to check consistency
@@ -75,8 +75,8 @@ TEST(TridiagSolveTest, DoublePrecision)
   EXPECT_LE(error, TOL_DP);
 }
 
-/// @test LAPACKE Tridiagonal Solver Test for single Precision Floats.
-/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// @brief LAPACKE Tridiagonal Solver Test for single Precision Floats.
+/// Generate random tridiagonal matrix $A$ and vector $x$,
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (single precision). Check for different
 /// sizes to check consistency
@@ -110,8 +110,8 @@ TEST(LapackeTest, SinglePrecision)
   EXPECT_LE(error, TOL_SP);
 }
 
-/// @test LAPACKE Tridiagonal Solver Test for double Precision Floats.
-/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
+/// @brief LAPACKE Tridiagonal Solver Test for double Precision Floats.
+/// Generate random tridiagonal matrix $A$ and vector $x$,
 /// compute $b=A \cdot x$, and check if solution is reconstructed
 /// accurately using L2 norm (double precision). Check for different
 /// sizes to check consistency
