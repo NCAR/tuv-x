@@ -30,7 +30,8 @@ namespace tuvx
   /// @brief Fills a matrix with uniformly distributed random values.
   /// @param A tridiagonal matrix to allocate and fill
   /// @param seed for random number generation
-  /// @param make_diagonally_dominant make the tridiagonal matrix diagonally dominant.
+  /// @param make_diagonally_dominant Flag that is set to true if matrix is diagonally dominant; false otherwise
+  ;
   template<typename T>
   void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, const bool &make_diagonally_dominant = false);
 
