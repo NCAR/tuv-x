@@ -16,6 +16,7 @@ const unsigned RANDOM_NUMBER_SEED = 1;
 
 /// @brief Test the correctness of the error function used for
 /// testing the Linear approximation solvers with double precision data types.
+/// @param ErrorFunctionTest Name of the test suite
 TEST(ErrorFunctionTest, DoublePrecision)
 {
   // same vector should return 0 error

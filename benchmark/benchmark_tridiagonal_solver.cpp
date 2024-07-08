@@ -19,6 +19,7 @@ const bool MAKE_DIAGONALLY_DOMINANT = true;
 const unsigned RANDOM_NUMBER_SEED = 1;
 
 /// @brief This function benchmarks the lapacke tridiagonal matrix solver for single precision
+/// @param state Benchmarking argument
 static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 {
   std::vector<float> x(SYSTEM_SIZE);
@@ -46,6 +47,7 @@ static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 }
 
 /// @brief This function benchmarks the lapacke tridiagonal matrix solver for double precision
+/// @param state Benchmarking argument
 static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 {
   std::vector<double> x(SYSTEM_SIZE);
@@ -75,6 +77,7 @@ static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 }
 
 /// @brief This function benchmarks the tuvx tridiagonal matrix solver for single precision
+/// @param state Benchmarking argument
 static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 {
   std::vector<double> x(SYSTEM_SIZE);
@@ -93,6 +96,7 @@ static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 }
 
 /// @brief This function benchmarks the tuvx tridiagonal matrix solver for double precision
+/// @param state Benchmarking argument
 static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
 {
   std::vector<float> x(SYSTEM_SIZE);
@@ -118,5 +122,5 @@ BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON);
 BENCHMARK(BM_TUVX_DOUBLE_PRECISISON);
 BENCHMARK(BM_TUVX_SINGLE_PRECISISON);
 
-/// @brief run all benchmarks
+/// @brief Run all benchmarks
 BENCHMARK_MAIN();
