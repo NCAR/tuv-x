@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.17)
 
 project(
   tuv-x
-  VERSION 0.8.0
+  VERSION 0.9.0
   LANGUAGES Fortran CXX C
 )
 
@@ -105,9 +105,6 @@ endif()
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
-    yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
-    ${LAPACK_LIBRARIES}
 )
 
 target_include_directories(tuv-x

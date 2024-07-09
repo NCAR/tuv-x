@@ -42,7 +42,7 @@ module musica_yaml_util
 
     !> Constructor from a YAML string
     function yaml_create_from_string_c(yaml_string)                           &
-        bind(c, name="yaml_create_from_string")
+        bind(c, name="YamlCreateFromString")
       use iso_c_binding
       implicit none
       type(c_ptr)                               :: yaml_create_from_string_c
@@ -51,7 +51,7 @@ module musica_yaml_util
 
     !> Constructor from a YAML file
     function yaml_create_from_file_c(file_path)                               &
-        bind(c, name="yaml_create_from_file")
+        bind(c, name="YamlCreateFromFile")
       use iso_c_binding
       implicit none
       type(c_ptr)                               :: yaml_create_from_file_c
@@ -59,7 +59,7 @@ module musica_yaml_util
     end function yaml_create_from_file_c
 
     !> Outputs YAML configuration to a file
-    subroutine yaml_to_file_c(node, file_path) bind(c, name="yaml_to_file")
+    subroutine yaml_to_file_c(node, file_path) bind(c, name="YamlToFile")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -67,7 +67,7 @@ module musica_yaml_util
     end subroutine yaml_to_file_c
 
     !> Gets the number of elements
-    function yaml_size_c(node) bind(c, name="yaml_size")
+    function yaml_size_c(node) bind(c, name="YamlSize")
       use iso_c_binding
       implicit none
       integer(kind=c_int) :: yaml_size_c
@@ -75,7 +75,7 @@ module musica_yaml_util
     end function yaml_size_c
 
     !> Gets an beginning iterator for a node
-    function yaml_begin_c(node) bind(c, name="yaml_begin")
+    function yaml_begin_c(node) bind(c, name="YamlBegin")
       use iso_c_binding
       implicit none
       type(c_ptr) :: yaml_begin_c
@@ -83,7 +83,7 @@ module musica_yaml_util
     end function yaml_begin_c
 
     !> Gets an ending iterator for a node
-    function yaml_end_c(node) bind(c, name="yaml_end")
+    function yaml_end_c(node) bind(c, name="YamlEnd")
       use iso_c_binding
       implicit none
       type(c_ptr) :: yaml_end_c
@@ -93,7 +93,7 @@ module musica_yaml_util
     !> Increments an iterator
     !!
     !! Returns true if incremented iterator is < end, false otherwise
-    function yaml_increment_c(iter, end) bind(c, name="yaml_increment")
+    function yaml_increment_c(iter, end) bind(c, name="YamlIncrement")
       use iso_c_binding
       implicit none
       logical(kind=c_bool) :: yaml_increment_c
@@ -102,7 +102,7 @@ module musica_yaml_util
     end function yaml_increment_c
 
     !> Returns whether an iterator is == end
-    function yaml_at_end_c(iter, end) bind(c, name="yaml_at_end")
+    function yaml_at_end_c(iter, end) bind(c, name="YamlAtEnd")
       use iso_c_binding
       implicit none
       logical(kind=c_bool) :: yaml_at_end_c
@@ -111,7 +111,7 @@ module musica_yaml_util
     end function yaml_at_end_c
 
     !> Gets the key associated with an iterator
-    function yaml_key_c(iter) bind(c, name="yaml_key")
+    function yaml_key_c(iter) bind(c, name="YamlKey")
       use iso_c_binding
       import :: string_t_c
       implicit none
@@ -120,7 +120,7 @@ module musica_yaml_util
     end function yaml_key_c
 
     !> Gets a sub-node by key
-    function yaml_get_node_c(node, key, found) bind(c, name="yaml_get_node")
+    function yaml_get_node_c(node, key, found) bind(c, name="YamlGetNode")
       use iso_c_binding
       implicit none
       type(c_ptr) :: yaml_get_node_c
@@ -130,7 +130,7 @@ module musica_yaml_util
     end function yaml_get_node_c
 
     !> Gets a string by key
-    function yaml_get_string_c(node, key, found) bind(c, name="yaml_get_string")
+    function yaml_get_string_c(node, key, found) bind(c, name="YamlGetString")
       use iso_c_binding
       import :: string_t_c
       implicit none
@@ -141,7 +141,7 @@ module musica_yaml_util
     end function yaml_get_string_c
 
     !> Gets an integer by key
-    function yaml_get_int_c(node, key, found) bind(c, name="yaml_get_int")
+    function yaml_get_int_c(node, key, found) bind(c, name="YamlGetInt")
       use iso_c_binding
       implicit none
       integer(kind=c_int) :: yaml_get_int_c
@@ -151,7 +151,7 @@ module musica_yaml_util
     end function yaml_get_int_c
 
     !> Gets a float by key
-    function yaml_get_float_c(node, key, found) bind(c, name="yaml_get_float")
+    function yaml_get_float_c(node, key, found) bind(c, name="YamlGetFloat")
       use iso_c_binding
       implicit none
       real(kind=c_float) :: yaml_get_float_c
@@ -161,7 +161,7 @@ module musica_yaml_util
     end function yaml_get_float_c
 
     !> Gets a double by key
-    function yaml_get_double_c(node, key, found) bind(c, name="yaml_get_double")
+    function yaml_get_double_c(node, key, found) bind(c, name="YamlGetDouble")
       use iso_c_binding
       implicit none
       real(kind=c_double) :: yaml_get_double_c
@@ -171,7 +171,7 @@ module musica_yaml_util
     end function yaml_get_double_c
 
     !> Gets a boolean by key
-    function yaml_get_bool_c(node, key, found) bind(c, name="yaml_get_bool")
+    function yaml_get_bool_c(node, key, found) bind(c, name="YamlGetBool")
       use iso_c_binding
       implicit none
       logical(kind=c_bool) :: yaml_get_bool_c
@@ -182,7 +182,7 @@ module musica_yaml_util
 
     !> Gets a string array by key
     function yaml_get_string_array_c(node, key, found)                        &
-        bind(c, name="yaml_get_string_array")
+        bind(c, name="YamlGetStringArray")
       use iso_c_binding
       import :: string_array_t_c
       implicit none
@@ -194,7 +194,7 @@ module musica_yaml_util
 
     !> Gets a double array by key
     function yaml_get_double_array_c(node, key, found)                        &
-        bind(c, name="yaml_get_double_array")
+        bind(c, name="YamlGetDoubleArray")
       use iso_c_binding
       import :: double_array_t_c
       implicit none
@@ -206,7 +206,7 @@ module musica_yaml_util
 
     !> Gets a node array by key
     function yaml_get_node_array_c(node, key, found)                          &
-        bind(c, name="yaml_get_node_array")
+        bind(c, name="YamlGetNodeArray")
       use iso_c_binding
       import :: node_array_t_c
       implicit none
@@ -218,7 +218,7 @@ module musica_yaml_util
 
     !> Gets a node using an iterator
     function yaml_get_node_from_iterator_c(iter)                              &
-        bind(c, name="yaml_get_node_from_iterator")
+        bind(c, name="YamlGetNodeFromIterator")
       use iso_c_binding
       implicit none
       type(c_ptr) :: yaml_get_node_from_iterator_c
@@ -227,7 +227,7 @@ module musica_yaml_util
 
     !> Gets a string using an iterator
     function yaml_get_string_from_iterator_c(iter)                            &
-        bind(c, name="yaml_get_string_from_iterator")
+        bind(c, name="YamlGetStringFromIterator")
       use iso_c_binding
       import :: string_t_c
       implicit none
@@ -237,7 +237,7 @@ module musica_yaml_util
 
     !> Gets an integer using an iterator
     function yaml_get_int_from_iterator_c(iter)                               &
-        bind(c, name="yaml_get_int_from_iterator")
+        bind(c, name="YamlGetIntFromIterator")
       use iso_c_binding
       implicit none
       integer(kind=c_int) :: yaml_get_int_from_iterator_c
@@ -246,7 +246,7 @@ module musica_yaml_util
 
     !> Gets a float using an iterator
     function yaml_get_float_from_iterator_c(iter)                             &
-        bind(c, name="yaml_get_float_from_iterator")
+        bind(c, name="YamlGetFloatFromIterator")
       use iso_c_binding
       implicit none
       real(kind=c_float) :: yaml_get_float_from_iterator_c
@@ -255,7 +255,7 @@ module musica_yaml_util
 
     !> Gets a double using an iterator
     function yaml_get_double_from_iterator_c(iter)                            &
-        bind(c, name="yaml_get_double_from_iterator")
+        bind(c, name="YamlGetDoubleFromIterator")
       use iso_c_binding
       implicit none
       real(kind=c_double) :: yaml_get_double_from_iterator_c
@@ -264,7 +264,7 @@ module musica_yaml_util
 
     !> Gets a boolean using an iterator
     function yaml_get_bool_from_iterator_c(iter)                              &
-        bind(c, name="yaml_get_bool_from_iterator")
+        bind(c, name="YamlGetBoolFromIterator")
       use iso_c_binding
       implicit none
       logical(kind=c_bool) :: yaml_get_bool_from_iterator_c
@@ -273,7 +273,7 @@ module musica_yaml_util
 
     !> Gets a string array using an iterator
     function yaml_get_string_array_from_iterator_c(iter)                      &
-        bind(c, name="yaml_get_string_array_from_iterator")
+        bind(c, name="YamlGetStringArrayFromIterator")
       use iso_c_binding
       import :: string_array_t_c
       implicit none
@@ -282,7 +282,7 @@ module musica_yaml_util
     end function yaml_get_string_array_from_iterator_c    
 
     !> Adds a YAML node to a YAML node
-    subroutine yaml_add_node_c(node, key, value) bind(c, name="yaml_add_node")
+    subroutine yaml_add_node_c(node, key, value) bind(c, name="YamlAddNode")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -292,7 +292,7 @@ module musica_yaml_util
 
     !> Adds a string to a YAML node
     subroutine yaml_add_string_c(node, key, value)                            &
-        bind(c, name="yaml_add_string")
+        bind(c, name="YamlAddString")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -301,7 +301,7 @@ module musica_yaml_util
     end subroutine yaml_add_string_c
 
     !> Adds an int to a YAML node
-    subroutine yaml_add_int_c(node, key, value) bind(c, name="yaml_add_int")
+    subroutine yaml_add_int_c(node, key, value) bind(c, name="YamlAddInt")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -311,7 +311,7 @@ module musica_yaml_util
 
     !> Adds a float to a YAML node
     subroutine yaml_add_float_c(node, key, value)                             &
-        bind(c, name="yaml_add_float")
+        bind(c, name="YamlAddFloat")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -321,7 +321,7 @@ module musica_yaml_util
 
     !> Adds a double to a YAML node
     subroutine yaml_add_double_c(node, key, value)                            &
-        bind(c, name="yaml_add_double")
+        bind(c, name="YamlAddDouble")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -330,7 +330,7 @@ module musica_yaml_util
     end subroutine yaml_add_double_c
 
     !> Adds a boolean to a YAML node
-    subroutine yaml_add_bool_c(node, key, value) bind(c, name="yaml_add_bool")
+    subroutine yaml_add_bool_c(node, key, value) bind(c, name="YamlAddBool")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
@@ -340,7 +340,7 @@ module musica_yaml_util
 
     !> Adds a string array to a YAML node
     subroutine yaml_add_string_array_c(node, key, value)                      &
-        bind(c, name="yaml_add_string_array")
+        bind(c, name="YamlAddStringArray")
       use iso_c_binding
       import :: string_array_t_c
       implicit none
@@ -351,7 +351,7 @@ module musica_yaml_util
 
     !> Adds a double array to a YAML node
     subroutine yaml_add_double_array_c(node, key, value)                      &
-        bind(c, name="yaml_add_double_array")
+        bind(c, name="YamlAddDoubleArray")
       use iso_c_binding
       import :: double_array_t_c
       implicit none
@@ -362,7 +362,7 @@ module musica_yaml_util
 
     !> Adds a node array to a YAML node
     subroutine yaml_add_node_array_c(node, key, value)                        &
-        bind(c, name="yaml_add_node_array")
+        bind(c, name="YamlAddNodeArray")
       use iso_c_binding
       import :: node_array_t_c
       implicit none
@@ -372,7 +372,7 @@ module musica_yaml_util
     end subroutine yaml_add_node_array_c
 
     !> Copy node
-    function yaml_copy_node_c(node) bind(c, name="yaml_copy_node")
+    function yaml_copy_node_c(node) bind(c, name="YamlCopyNode")
       use iso_c_binding
       implicit none
       type(c_ptr) :: yaml_copy_node_c
@@ -380,7 +380,7 @@ module musica_yaml_util
     end function yaml_copy_node_c
 
     !> Copy node to string
-    function yaml_to_string_c(node) bind(c, name="yaml_to_string")
+    function yaml_to_string_c(node) bind(c, name="YamlToString")
       use iso_c_binding
       import :: string_t_c
       implicit none
@@ -389,7 +389,7 @@ module musica_yaml_util
     end function yaml_to_string_c
 
     !> Merges one node into another
-    function yaml_merge_node_c(dest, src) bind(c, name="yaml_merge_node")
+    function yaml_merge_node_c(dest, src) bind(c, name="YamlMergeNode")
       use iso_c_binding
       implicit none
       logical(kind=c_bool) :: yaml_merge_node_c
@@ -398,14 +398,14 @@ module musica_yaml_util
     end function yaml_merge_node_c
 
     !> Node destructor
-    subroutine yaml_delete_node_c(node) bind(c, name="yaml_delete_node")
+    subroutine yaml_delete_node_c(node) bind(c, name="YamlDeleteNode")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: node
     end subroutine yaml_delete_node_c
 
     !> String destructor
-    subroutine yaml_delete_string_c(string) bind(c, name="yaml_delete_string")
+    subroutine yaml_delete_string_c(string) bind(c, name="YamlDeleteString")
       use iso_c_binding
       import :: string_t_c
       implicit none
@@ -414,7 +414,7 @@ module musica_yaml_util
 
     !> String array destructor
     subroutine yaml_delete_string_array_c(array)                              &
-        bind(c, name="yaml_delete_string_array")
+        bind(c, name="YamlDeleteStringArray")
       use iso_c_binding
       import :: string_array_t_c
       implicit none
@@ -423,7 +423,7 @@ module musica_yaml_util
 
     !> Double array destructor
     subroutine yaml_delete_double_array_c(array)                              &
-        bind(c, name="yaml_delete_double_array")
+        bind(c, name="YamlDeleteDoubleArray")
       use iso_c_binding
       import :: double_array_t_c
       implicit none
@@ -432,7 +432,7 @@ module musica_yaml_util
 
     !> Node array destructor
     subroutine yaml_delete_node_array_c(array)                                &
-        bind(c, name="yaml_delete_node_array")
+        bind(c, name="YamlDeleteNodeArray")
       use iso_c_binding
       import :: node_array_t_c
       implicit none
@@ -441,7 +441,7 @@ module musica_yaml_util
 
     !> Iterator destructor
     subroutine yaml_delete_iterator_c(iter)                                   &
-        bind(c, name="yaml_delete_iterator")
+        bind(c, name="YamlDeleteIterator")
       use iso_c_binding
       implicit none
       type(c_ptr), value :: iter
