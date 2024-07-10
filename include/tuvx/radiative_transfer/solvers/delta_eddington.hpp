@@ -4,6 +4,9 @@
 // Delta-Eddington solver for radiative transfer
 #pragma once
 
+#include "tuvx/linear_algebra/linear_algebra.hpp"
+#include "tuvx/util/array2d.hpp"
+
 #include <tuvx/grid.hpp>
 #include <tuvx/profile.hpp>
 #include <tuvx/radiative_transfer/radiation_field.hpp>
@@ -19,6 +22,7 @@ namespace tuvx
   /// @brief Radiative flux calculator that applies the delta-Eddington Approximation.
   ///
   /// [DEV NOTES] We can determine whether this should be a class or a set of functions
+  template<typename ArrayPolicy = Array2D<double>>
   class DeltaEddington
   {
    public:
@@ -52,8 +56,65 @@ namespace tuvx
         const std::map<std::string, ProfilePolicy>& profiles,
         const RadiatorStatePolicy& accumulated_radiator_states,
         RadiationFieldPolicy& radiation_field) const;
+
+    /// @brief Initilize the variables required for the delta eddington approximation
+    /// @param solar zenith angles Solar zenith angles for each column [radians]
+    /// @param grids Grids available for the radiative transfer calculation
+    /// @param profiles Profiles available for the radiative transfer calculation
+    /// @param radiation_field The calculated radiation field
+    ///
+    /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux
+    template<
+        typename T,
+        typename GridPolicy,
+        typename ProfilePolicy,
+        typename RadiatorStatePolicy,
+        typename RadiationFieldPolicy>
+    void InitializeVariables(
+        const std::vector<T>& solar_zenith_angles,
+        const std::map<std::string, GridPolicy>& grids,
+        const std::map<std::string, ProfilePolicy>& profiles,
+        const RadiatorStatePolicy& accumulated_radiator_states);
+
+    /// @brief Initilize the variables required for the delta eddington approximation
+    /// @param solar zenith angles Solar zenith angles for each column [radians]
+    /// @param grids Grids available for the radiative transfer calculation
+    /// @param profiles Profiles available for the radiative transfer calculation
+    /// @param radiation_field The calculated radiation field
+    ///
+    /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux and
+    /// delta eddington coeffcients.
+    template<typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy>
+    void AssembleTridiagonalSystem(
+        const std::vector<T>& solar_zenith_angles,
+        const std::map<std::string, GridPolicy>& grids,
+        const std::map<std::string, ProfilePolicy>& profiles,
+        const Array2D<T> solution_parameters,
+        const TridiagonalMatrix<T>& coeffcient_matrix,
+        const std::vector<T>& coeffcient_vector);
+
+    /// @brief Initilize the variables required for the delta eddington approximation
+    /// @param solar zenith angles Solar zenith angles for each column [radians]
+    /// @param grids Grids available for the radiative transfer calculation
+    /// @param profiles Profiles available for the radiative transfer calculation
+    /// @param radiation_field The calculated radiation field
+    ///
+    /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux and
+    /// delta eddington coeffcients.
+    template<
+        typename T,
+        typename GridPolicy,
+        typename ProfilePolicy,
+        typename RadiatorStatePolicytypename,
+        typename RadiationFieldPolicy>
+    void ComputeRadiationField(
+        const std::vector<T>& solar_zenith_angles,
+        const std::map<std::string, GridPolicy>& grids,
+        const std::map<std::string, ProfilePolicy>& profiles,
+        const Array2D<T> solution_parameters,
+        const TridiagonalMatrix<T>& coeffcient_matrix,
+        const std::vector<T>& coeffcient_vector,
+        const RadiationFieldPolicy& radiation_field);
   };
 
 }  // namespace tuvx
-
-#include "delta_eddington.inl"
