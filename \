@@ -211,7 +211,7 @@ namespace tuvx
       for (std::size_t n = 1; n < matrix_size - 1; n += 2)
       {
         coeffcient_vector[n] =
-            e3[n] * (C_upwelling.start() - C_upwelling[n]) + e1[n] * (C_downwelling[n] - C_downwelling.start());
+            e3[n] * (C_upwelling.start() - C_upwelling[n]) + e1[n] * (C_downwelling[n] - C_downwelling[0]);
       }
 
       // even rows
