@@ -1,0 +1,24 @@
+#PBS -A NTDD0005
+#PBS -N hybrid_job
+#PBS -q main
+#PBS -l walltime=00:05:00
+#PBS -l select=1:ncpus=128:mpiprocs=1:ompthreads=1
+
+# Load modules to match compile-time environment
+module purge
+module load ncarenv/23.09 intel-oneapi/2023.2.1 craype/2.7.23 cray-mpich/8.1.27
+
+# move to the build directory 
+cd ../../
+rm -rf build 
+mkdir build 
+cd build
+
+# cmake command to generate build scrips
+cmake -D CMAKE_BUILD_TYPE=release -D TUVX_ENABLE_MEMCHECK=OFF -D TUVX_ENABLE_REGRESSION_TESTS=OFF -D CMAKE_EXPORT_COMPILE_COMMANDS=1 -D TUVX_ENABLE_BENCHMARK=ON -D TUVX_ENABLE_TESTS=ON ..
+
+# build the benchmarking code target
+make benchmark_tridiagonal_solver -j 8 
+
+# run the executable
+./benchmark_tridiagonal_solver
