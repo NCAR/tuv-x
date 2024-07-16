@@ -2,19 +2,19 @@ FROM fedora:37
 
 RUN dnf -y update \
     && dnf -y install \
-        gcc-fortran \
-        gcc-c++ \
+        cmake \
         gcc \
+        gcc-c++ \
+        gcc-fortran \
         gdb \
         git \
-        netcdf-fortran-devel \
-        cmake \
-        make \
+        lapack-devel \
         lcov \
-        valgrind \
+        make \
+        netcdf-fortran-devel \
         python3 \
         python3-pip \
-        lapack-devel \
+        valgrind \
         yaml-cpp-devel \
     && dnf clean all
 
@@ -23,13 +23,14 @@ RUN pip3 install numpy scipy
 ENV LD_LIBRARY_PATH=/usr/local/lib64
 
 # build the tuv-x tool
-COPY . /tuv-x/
-RUN mkdir /build \
-      && cd /build \
+COPY . /tuv-x
+RUN cd /tuv-x \
+      && mkdir build \
+      && cd build \
       && cmake -D CMAKE_BUILD_TYPE=release \
                -D TUVX_INSTALL_INCLUDE_DIR=/usr/local/include \
                -D TUVX_INSTALL_MOD_DIR=/usr/local/include \
-               /tuv-x \
+               .. \
       && make install -j 8
 
-WORKDIR /build
+WORKDIR /tuv-x/build

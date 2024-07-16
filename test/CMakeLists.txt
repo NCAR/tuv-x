@@ -2,7 +2,7 @@
 # Test utilities
 
 add_library(tuvx_test_utils unit/test_utils.F90)
-target_link_libraries(tuvx_test_utils musica::tuvx)
+target_link_libraries(tuvx_test_utils PUBLIC LAPACK::LAPACK musica::tuvx)
 
 set_target_properties(tuvx_test_utils PROPERTIES
   Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/test_include
