@@ -53,13 +53,6 @@ namespace tuvx
       const std::function<void(const RadiatorStatePolicy&, const ArrayPolicy&)> approximation_function,
       RadiationFieldPolicy& radiation_field);
 
-  /// @brief Initilize the variables required for the delta eddington approximation
-  /// @param solar zenith angles Solar zenith angles for each column [radians]
-  /// @param grids Grids available for the radiative transfer calculation
-  /// @param profiles Profiles available for the radiative transfer calculation
-  /// @param radiation_field The calculated radiation field
-  ///
-  /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux
   template<
       typename T,
       typename GridPolicy,
@@ -72,31 +65,21 @@ namespace tuvx
       const std::map<std::string, ProfilePolicy>& profiles,
       const RadiatorStatePolicy& accumulated_radiator_states);
 
-  /// @brief Initilize the variables required for the delta eddington approximation
-  /// @param solar zenith angles Solar zenith angles for each column [radians]
-  /// @param grids Grids available for the radiative transfer calculation
-  /// @param profiles Profiles available for the radiative transfer calculation
-  /// @param radiation_field The calculated radiation field
-  ///
-  /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux and
-  /// delta eddington coeffcients.
-  template<typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy>
-  void AssembleTridiagonalSystem(
-      const std::vector<T>& solar_zenith_angles,
-      const std::map<std::string, GridPolicy>& grids,
-      const std::map<std::string, ProfilePolicy>& profiles,
-      const Array2D<T> solution_parameters,
-      const TridiagonalMatrix<T>& coeffcient_matrix,
-      const std::vector<T>& coeffcient_vector);
+  template<typename T>
+  void AssembleTridiagonalMatrix(
+      std::size_t number_of_layers,
+      const std::map<std::string, std::vector<T>> solution_parameters,
+      const std::map<std::string, T> solver_parameters,
+      const TridiagonalMatrix<T>& coeffcient_matrix);
 
-  /// @brief Initilize the variables required for the delta eddington approximation
-  /// @param solar zenith angles Solar zenith angles for each column [radians]
-  /// @param grids Grids available for the radiative transfer calculation
-  /// @param profiles Profiles available for the radiative transfer calculation
-  /// @param radiation_field The calculated radiation field
-  ///
-  /// Delta scaling of the inputs, compuation of reflectivity, diffuse flux and
-  /// delta eddington coeffcients.
+  template<typename T>
+  void AssembleCoeffcientVector(
+      std::size_t number_of_layers,
+      const std::map<std::string, std::vector<T>> solution_parameters,
+      const std::map<std::string, std::vector<T>> source_terms,
+      const std::map<std::string, T> solver_parameters,
+      std::vector<T>& coeffcient_vector);
+
   template<
       typename T,
       typename GridPolicy,
@@ -114,5 +97,8 @@ namespace tuvx
 
   /// @brief Compute the Eddington parameters
   template<typename T, typename RadiatorStatePolicy, typename ArrayPolicy>
-  void DeltaEddingtonApproximation(const RadiatorStatePolicy& radiator_state, const ArrayPolicy& parameters);
+  void DeltaEddingtonApproximation(const RadiatorStatePolicy& radiator_state, const ArrayPolicy& parotherameters);
+
+  /// @brief Load system
+
 };  // namespace tuvx
