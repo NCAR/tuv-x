@@ -11,9 +11,8 @@ namespace tuvx
   template<typename T>
   void AssembleTridiagonalMatrix(
       std::size_t number_of_layers,
-      const std::map<std::string, std::vector<T>> solution_parameters,
-      const std::map<std::string, T> solver_parameters,
-      const TridiagonalMatrix<T>& coeffcient_matrix)
+      const std::map<std::string, std::vector<T>> solver_variables,
+      TridiagonalMatrix<T>& coeffcient_matrix)
   {
     // get linear system size
     std::size_t matrix_size = 2 * number_of_layers;
@@ -24,13 +23,13 @@ namespace tuvx
       std::vector<T>& lower_diagonal = coeffcient_matrix.lower_diagonal_;
 
       // extract internal variables to build the matrix
-      const std::vector<T>& e1 = solution_parameters.at("e1");
-      const std::vector<T>& e2 = solution_parameters.at("e2");
-      const std::vector<T>& e3 = solution_parameters.at("e3");
-      const std::vector<T>& e4 = solution_parameters.at("e4");
+      const std::vector<T>& e1 = solver_variables.at("e1");
+      const std::vector<T>& e2 = solver_variables.at("e2");
+      const std::vector<T>& e3 = solver_variables.at("e3");
+      const std::vector<T>& e4 = solver_variables.at("e4");
 
-      // extract surface reflectivity
-      const T& R_sfc = solver_parameters.at("Surface Reflectivity");
+      //  surface reflectivity
+      const T& R_sfc = solver_variables.at("Surface Reflectivity");
 
       // first row
       upper_diagonal.front() = 0;
@@ -63,33 +62,32 @@ namespace tuvx
   template<typename T>
   void AssembleCoeffcientVector(
       std::size_t number_of_layers,
-      const std::map<std::string, std::vector<T>> solution_parameters,
+      const std::map<std::string, std::vector<T>> solver_variables,
       const std::map<std::string, std::vector<T>> source_terms,
-      const std::map<std::string, T> solver_parameters,
       std::vector<T>& coeffcient_vector)
   {
     // set up tridiagonal matrix
     std::size_t matrix_size = 2 * number_of_layers;
     {
-      // extract internal variables to build the matrix
-      const std::vector<T>& e1 = solution_parameters.at("e1");
-      const std::vector<T>& e2 = solution_parameters.at("e2");
-      const std::vector<T>& e3 = solution_parameters.at("e3");
-      const std::vector<T>& e4 = solution_parameters.at("e4");
+      //  internal variables to build the matrix
+      const std::vector<T>& e1 = solver_variables.at("e1");
+      const std::vector<T>& e2 = solver_variables.at("e2");
+      const std::vector<T>& e3 = solver_variables.at("e3");
+      const std::vector<T>& e4 = solver_variables.at("e4");
 
-      // extract surface reflectivity and flux source
-      const std::vector<T>& R_sfc = solver_parameters.at("Surface Reflectivity");
-      const std::vector<T>& f_0 = solver_parameters.at("Initial Source Flux");
-      const std::vector<T>& tau = solver_parameters.at("Optical Depth");
-      const std::vector<T>& S_sfc = solver_parameters.at("Solar Reflectivity");
+      //  surface reflectivity and flux source
+      const std::vector<T>& R_sfc = solver_variables.at("Surface Reflectivity");
+      const std::vector<T>& f_0 = solver_variables.at("Initial Source Flux");
+      const std::vector<T>& tau = solver_variables.at("Optical Depth");
+      const std::vector<T>& S_sfc = solver_variables.at("Source Reflectivity");
 
-      // extract source functions
-      // this is a list of std::functions
+      //  source functions
+      // this is a vector of std::functions
       const auto& C_upwelling = source_terms.at("C_upwelling");
       const auto& C_downwelling = source_terms.at("C_downwelling");
 
       // first row
-      coeffcient_vector.front() = f_0 - C_downwelling[0](tau[0]);
+      coeffcient_vector[0] = f_0 - C_downwelling[0](tau[0]);
 
       // odd rows
       for (std::size_t n = 1; n < matrix_size - 1; n += 2)
@@ -102,7 +100,7 @@ namespace tuvx
       for (std::size_t n = 2; n < matrix_size - 2; n += 2)
       {
         coeffcient_vector[n] = e2[n + 1] * (C_upwelling[n + 1](0) - C_upwelling[n](tau[n])) +
-                               e1[4 * n + 1] * (C_downwelling[n + 1](0) - C_downwelling[n + 1](tau[n]));
+                               e4[n + 1] * (C_downwelling[n + 1](0) - C_downwelling[n + 1](tau[n]));
       }
 
       // last row

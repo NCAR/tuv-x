@@ -21,11 +21,11 @@ namespace tuvx
       typename SourceFunctionPolicy,
       typename ArrayPolicy>
   inline void InitializeVariables(
+      const std::size_t& column,
       const std::vector<T>& solar_zenith_angles,
       const std::map<std::string, GridPolicy>& grids,
       const std::map<std::string, ProfilePolicy>& profiles,
-      const std::map<std::string, ArrayPolicy>& solver_parameters,
-      const std::map<std::string, ArrayPolicy>& solution_parameters,
+      const std::map<std::string, ArrayPolicy>& solver_variables,
       std::map<std::string, ArrayPolicy>& source_functions,
       const RadiatorStatePolicy& accumulated_radiator_states)
   {
@@ -37,21 +37,16 @@ namespace tuvx
     // Check for consistency between the grids and profiles.
     assert(vertical_grid.NumberOfColumns() == number_of_columns);
     assert(wavelength_grid.NumberOfColumns() == 1);
-
-    // Radiator state variables
-    ArrayPolicy& tau = accumulated_radiator_states.optical_depth_;
-    ArrayPolicy& omega = accumulated_radiator_states.single_scattering_albedo_;
-    ArrayPolicy& g = accumulated_radiator_states.assymetry_parameter_;
   }
 
   template<typename T>
-  void ScaleVariables(std::map<std::string, std::vector<T>>& solver_parameters)
+  void ScaleVariables(std::map<std::string, std::vector<T>>& solver_variables)
   {
     // solver parameters (environment related variables)
-    std::vector<T>& solar_zenith_angles = solver_parameters.at("Solar Zenith Angles");
-    std::vector<T>& tau = solver_parameters.at("Optical Depth");
-    std::vector<T>& g = solver_parameters.at("Assymetry Parameter");
-    std::vector<T>& omega = solver_parameters.at("Single Scattering Albedo");
+    std::vector<T>& solar_zenith_angles = solver_variables.at("Solar Zenith Angles");
+    std::vector<T>& tau = solver_variables.at("Optical Depth");
+    std::vector<T>& g = solver_variables.at("Assymetry Parameter");
+    std::vector<T>& omega = solver_variables.at("Single Scattering Albedo");
     std::size_t number_of_columns = solar_zenith_angles.size();
 
     // Delta scaling
@@ -73,8 +68,7 @@ namespace tuvx
 
   template<typename T>
   void BuildSourceFunctions(
-      std::map<std::string, std::vector<T>> solver_parameters,
-      std::map<std::string, std::vector<T>> solution_parameters,
+      std::map<std::string, std::vector<T>> solver_variables,
       std::map<std::string, std::function<T(T)>> source_functions)
   {
     // Source terms (C1 and C2 from the paper)
@@ -82,23 +76,23 @@ namespace tuvx
     auto& C_downwelling = source_functions.at("C_downwelling");
 
     // solver parameters (environment related variables)
-    std::vector<T>& solar_zenith_angles = solver_parameters.at("Solar Zenith Angles");
-    std::vector<T>& tau = solver_parameters.at("Optical Depth");
-    std::vector<T>& omega = solver_parameters.at("Assymetry Parameter");
+    std::vector<T>& solar_zenith_angles = solver_variables.at("Solar Zenith Angles");
+    std::vector<T>& tau = solver_variables.at("Optical Depth");
+    std::vector<T>& omega = solver_variables.at("Assymetry Parameter");
     std::size_t number_of_columns = solar_zenith_angles.size();
 
     // parameters used to compute the soulution
-    std::vector<T>& lambda = solution_parameters.at("lambda");
-    std::vector<T>& gamma1 = solution_parameters.at("gamma1");
-    std::vector<T>& gamma2 = solution_parameters.at("gamma2");
-    std::vector<T>& gamma3 = solution_parameters.at("gamma3");
-    std::vector<T>& gamma4 = solution_parameters.at("gamma4");
-    std::vector<T>& mu = solution_parameters.at("mu");
+    std::vector<T>& lambda = solver_variables.at("lambda");
+    std::vector<T>& gamma1 = solver_variables.at("gamma1");
+    std::vector<T>& gamma2 = solver_variables.at("gamma2");
+    std::vector<T>& gamma3 = solver_variables.at("gamma3");
+    std::vector<T>& gamma4 = solver_variables.at("gamma4");
+    std::vector<T>& mu = solver_variables.at("mu");
 
     // solution parameters
-    auto& S_sfc_i = solution_parameters.at("Infrared Source Flux");
-    auto& S_sfc_s = solution_parameters.at("Solar Source Flux");
-    auto& R_sfc = solution_parameters.at("source flux");
+    auto& S_sfc_i = solver_variables.at("Infrared Source Flux");
+    auto& S_sfc_s = solver_variables.at("Solar Source Flux");
+    auto& R_sfc = solver_variables.at("source flux");
 
     // temporary variables
     T tau_cumulative = 0;
@@ -114,11 +108,13 @@ namespace tuvx
       S_sfc_i[i] = R_sfc * mu_0 * std::exp(-tau_cumulative / mu_0);
       S_sfc_s[i] = M_PI * R_sfc;
 
+      // Source function defined for each layer
       C_downwelling[i] = [&i, &mu_0](T tau) -> T
       {
         T exponential_term = omega * M_PI * R_sfc * std::exp(-(tau_cumulative - tau) / mu_0);
         return exponential_term * (((gamma1[i] + 1) / mu_0) * gamma4[i] + gamma2[i] * gamma3[i]);
       };
+
       C_upwelling[i] = [&i, &mu_0](T tau) -> T
       {
         T exponential_term = omega * M_PI * R_sfc * std::exp(-(tau_cumulative - tau) / mu_0);

@@ -34,6 +34,10 @@ namespace tuvx
     // 2. We will be solving for collections of columns. The original solver
     //    was for a single column.
     // 3. The variable naming and source-code documentation will be improved.
+    //
+    //
+    // for each layer -
+    //
     const std::size_t number_of_columns = solar_zenith_angles.size();
     const auto& vertical_grid = grids.at("altitude [m]");
     const auto& wavelength_grid = grids.at("wavelength [m]");
@@ -47,28 +51,23 @@ namespace tuvx
     std::vector<T> coeffcient_vector(number_of_columns, 0);
 
     // internal solver variables
-    std::map<std::string, std::vector<T>> solution_parameters;
-    std::map<std::string, std::vector<T>> simulation_parameters;
+    std::map<std::string, std::vector<T>> solver_variables;
     std::map<std::string, std::function<T(T)>> source_functions;
-    for (std::size_t i = 0; i < wavelength_grid.NumberOfColumns(); i++)
-    {
-      solution_parameters.at("Single Scattering Albedo") = accumulated_radiator_state.single_scattering_albedo_[0][i];
-      solution_parameters.at("Optical Depth") = accumulated_radiator_state.optical_depth_[0][i];
-      solution_parameters.at("Assymetry Parameter") = accumulated_radiator_state.assymetry_parameter_[0][i];
-    }
 
     tuvx::InitializeVariables<T, GridPolicy, ProfilePolicy, RadiatorStatePolicy, RadiationFieldPolicy>(
         solar_zenith_angles, grids, profiles, accumulated_radiator_state);
 
-    // delta eddington approximation or quadrature
-    ApproximationFunction(accumulated_radiator_state, solar_zenith_angles, simulation_parameters);
+    ApproximationFunction(accumulated_radiator_state, solar_zenith_angles, solver_variables);
 
     tuvx::AssembleTridiagonalMatrix<T>(
-        solar_zenith_angles, grids, profiles, solution_parameters, coeffcient_matrix, coeffcient_vector);
+        solar_zenith_angles, grids, profiles, solver_variables, coeffcient_matrix, coeffcient_vector);
+
+    tuvx::AssembleCoeffcientVector<T>(
+        solar_zenith_angles, grids, profiles, solver_variables, coeffcient_matrix, coeffcient_vector);
 
     tuvx::Solve<T>(coeffcient_matrix, coeffcient_vector);
 
     tuvx::ComputeRadiationField<T, GridPolicy, ProfilePolicy, RadiatorStatePolicy>(
-        solar_zenith_angles, grids, profiles, solution_parameters, coeffcient_matrix, coeffcient_vector, radiation_field);
+        solar_zenith_angles, grids, profiles, solver_variables, coeffcient_matrix, coeffcient_vector, radiation_field);
   }
 }  // namespace tuvx

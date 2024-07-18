@@ -22,8 +22,8 @@ namespace tuvx
       const std::vector<T>& solar_zenith_angles,
       const std::map<std::string, GridPolicy>& grids,
       const std::map<std::string, ProfilePolicy>& profiles,
-      const Array2D<T> solution_parameters,
-      const RadiationFieldPolicy& radiation_field)
+      const std::map<std::string, std::vector<T>> solution_parameters,
+      RadiationFieldPolicy& radiation_field)
   {
     // [DEV NOTES] Temporarily return predictable values for the radiation field.
     // This will be replaced with the actual results once the solver is implemented.

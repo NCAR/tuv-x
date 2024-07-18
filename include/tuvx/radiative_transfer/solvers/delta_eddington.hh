@@ -38,6 +38,7 @@ namespace tuvx
       gamma1[i] = 7 - omega[i] * (4 + 3 * g[i]);
       gamma2[i] = -(1 - omega[i] * (4 - 3 * g[i])) / 4;
       gamma3[i] = (2 - 3 * g[i] * mu_0) / 4;
+      gamma4[i] = 1 - gamma3[i];
       lambda[i] = std::sqrt(gamma1[i] * gamma1[i] - gamma2[i] * gamma2[i]);
       gamma[i] = (gamma1[i] - lambda[i]) / gamma2[i];
       mu = (T)0.5;
