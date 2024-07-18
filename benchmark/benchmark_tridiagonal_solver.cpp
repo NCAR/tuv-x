@@ -12,7 +12,7 @@
   #include <lapacke.h>
 #endif
 
-const std::size_t SYSTEM_SIZE = 1e6;
+// const std::size_t SYSTEM_SIZE = 1e6;
 
 const bool MAKE_DIAGONALLY_DOMINANT = true;
 
@@ -22,6 +22,7 @@ const unsigned RANDOM_NUMBER_SEED = 1;
 /// @param state Benchmarking argument
 static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<float> x(SYSTEM_SIZE);
   std::vector<float> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
@@ -50,6 +51,7 @@ static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<double> x(SYSTEM_SIZE);
   std::vector<double> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
@@ -80,6 +82,7 @@ static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<double> x(SYSTEM_SIZE);
   std::vector<double> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
@@ -99,6 +102,7 @@ static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<float> x(SYSTEM_SIZE);
   std::vector<float> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
@@ -117,10 +121,10 @@ static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
 }
 
 /// @brief Register the functions defined above as a benchmark
-BENCHMARK(BM_LAPACKE_DOUBLE_PRECISISON);
-BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON);
-BENCHMARK(BM_TUVX_DOUBLE_PRECISISON);
-BENCHMARK(BM_TUVX_SINGLE_PRECISISON);
+BENCHMARK(BM_LAPACKE_DOUBLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_TUVX_DOUBLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_TUVX_SINGLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
 
 /// @brief Run all benchmarks
 BENCHMARK_MAIN();
