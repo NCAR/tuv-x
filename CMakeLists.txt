@@ -37,6 +37,7 @@ include(CMakeDependentOption)
 option(TUVX_ENABLE_MPI "Enable MPI parallel support" OFF)
 cmake_dependent_option(TUVX_ENABLE_OPENMP "Enable OpenMP support" OFF "TUVX_ENABLE_MPI" OFF)
 option(TUVX_ENABLE_TESTS "Build tests" ON)
+option(TUVX_ENABLE_BENCHMARK "Build benchmark examples" OFF)
 option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
@@ -105,6 +106,9 @@ endif()
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
+    yaml-cpp::yaml-cpp
+    ${BLAS_LIBRARIES}
+    ${LAPACK_LIBRARIES}
 )
 
 target_include_directories(tuv-x
@@ -149,6 +153,13 @@ endif()
 # only include packaging if we are the top level project being built
 if(PROJECT_IS_TOP_LEVEL)
   add_subdirectory(packaging)
+endif()
+
+################################################################################
+# benchmarking
+
+if(TUVX_ENABLE_BENCHMARK)
+  add_subdirectory(benchmark)
 endif()
 
 ################################################################################

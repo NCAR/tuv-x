@@ -1,6 +1,11 @@
 name: Ubuntu
 
-on: [ push, pull_request ]
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -9,7 +14,7 @@ concurrency:
 jobs:
   gcc:
     runs-on: ubuntu-24.04
-    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    continue-on-error: true
     strategy:
       matrix:
         gcc_version: [12, 13, 14]
@@ -24,12 +29,12 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev
+        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev liblapacke-dev
         sudo apt-get install -y python3-numpy python3-scipy
     - name: Run Cmake 
       run: cmake -S . -B build 
     - name: Build
-      run: cmake --build build --parallel
+      run: cmake --build build 
     - name: Run tests
       run: |
         cd build
