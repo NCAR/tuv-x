@@ -12,8 +12,6 @@
   #include <lapacke.h>
 #endif
 
-// const std::size_t SYSTEM_SIZE = 1e6;
-
 const bool MAKE_DIAGONALLY_DOMINANT = true;
 
 const unsigned RANDOM_NUMBER_SEED = 1;
