@@ -26,6 +26,7 @@ jobs:
           - Dockerfile.memcheck
           - Dockerfile.mpi
           - Dockerfile.mpi.memcheck
+          - Dockerfile.intel
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
