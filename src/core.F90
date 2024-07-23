@@ -383,7 +383,7 @@ contains
 
     call assert_msg( 285057977, associated( this%radiator_warehouse_ ),           &
                     "Radiators not available" )
-    radiator => this%radiator_warehouse_%get_radiator( radiator_name, units )
+    radiator => this%radiator_warehouse_%get_radiator( radiator_name )
 
   end function get_radiator
 
