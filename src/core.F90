@@ -371,7 +371,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function get_radiator( this, radiator_name, units ) result( radiator )
+  function get_radiator( this, radiator_name ) result( radiator )
     ! Returns a copy of a radiator from the warehouse
 
     use musica_assert,                 only : assert_msg
