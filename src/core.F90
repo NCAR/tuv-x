@@ -7,7 +7,6 @@ module tuvx_core
   use musica_config,                   only : config_t
   use musica_string,                   only : string_t
   use musica_constants,                only : dk => musica_dk
-  use tuvx_cross_section_warehouse,    only : cross_section_warehouse_t
   use tuvx_dose_rates,                 only : dose_rates_t
   use tuvx_grid_warehouse,             only : grid_warehouse_t
   use tuvx_heating_rates,              only : heating_rates_t
@@ -28,7 +27,6 @@ module tuvx_core
     private
     ! The TUV-x core_t class defines the API for interactions
     ! with a host application
-    type(cross_section_warehouse_t),      pointer :: cross_section_warehouse_ => null()
     type(grid_warehouse_t),      pointer :: grid_warehouse_ => null()
     type(profile_warehouse_t),   pointer :: profile_warehouse_ => null()
     type(radiator_warehouse_t),  pointer :: radiator_warehouse_ => null()
@@ -147,18 +145,6 @@ contains
     new_core%profile_warehouse_ =>                                            &
        profile_warehouse_t( child_config, new_core%grid_warehouse_ )
      if( present( profiles ) ) call new_core%profile_warehouse_%add( profiles )
-    
-    ! TODO(jiwon) - How to get cross section warehouse?
-    ! function constructor( config, grid_warehouse, profile_warehouse,            &
-    !  cross_section_warehouse ) result( radiator_warehouse )
-    !
-    ! Instantiate and initialize radiator warehouse
-    call core_config%get( "radiators", child_config, Iam )
-    new_core%radiator_warehouse_ => radiator_warehouse_t( child_config, &
-                                        new_core%grid_warehouse_, &
-                                        new_core%profile_warehouse_, &
-                                        new_core%cross_section_warehouse_ )
-    if( present( radiators ) ) call new_core%radiator_warehouse_%add( radiators )
 
     aprofile => new_core%profile_warehouse_%get_profile( "temperature", "K" )
     call diagout( 'vptmp.new', aprofile%edge_val_,                            &
