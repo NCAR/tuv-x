@@ -105,7 +105,7 @@ contains
     type(string_t),                        intent(in) :: config    ! Full TUV-x configuration data
     class(grid_warehouse_t),     optional, intent(in) :: grids     ! Set of grids to include in the configuration
     class(profile_warehouse_t),  optional, intent(in) :: profiles  ! Set of profiles to include in the configuration
-    class(radiator_warehouse_t), optional, intent(in) :: radiators ! Set of radiators to include in the configuration
+    ! class(radiator_warehouse_t), optional, intent(in) :: radiators ! Set of radiators to include in the configuration
     class(core_t),                         pointer    :: new_core
 
     ! Local variables
@@ -172,6 +172,15 @@ contains
                               new_core%grid_warehouse_,                       &
                               new_core%profile_warehouse_,                    &
                               radiators )
+    !
+    ! TODO(JIWON)
+    !
+    ! Instantiate and initialize radiator warehouse
+    ! call core_config%get( "radiator", child_config, Iam )
+    ! new_core%radiator_warehouse_ => radiator_warehouse_ radiator_warehouse_t( child_config )
+
+    
+    if( present( grids ) ) call new_core%grid_warehouse_%add( grids )
 
     ! photolysis rate constants
     call core_config%get( "photolysis", child_config, Iam,          &
@@ -381,9 +390,9 @@ contains
     character(len=*), intent(in) :: radiator_name
     class(radiator_t), pointer   :: radiator
 
-    call assert_msg( 285057977, associated( this%radiator_warehouse_ ),      &
+    call assert_msg( 285057977, associated( this%radiative_transfer_%radiator_warehouse_ ),      &
                     "Radiators not available" )
-    radiator => this%radiator_warehouse_%get_radiator( radiator_name )
+    radiator => this%radiative_transfer_%radiator_warehouse_%get_radiator( radiator_name )
 
   end function get_radiator
 
@@ -398,7 +407,7 @@ contains
     class(core_t), intent(in)            :: this
     class(radiator_warehouse_t), pointer :: radiator_warehouse
 
-    call assert_msg( 423051914, associated( this%radiator_warehouse_ ),      &
+    call assert_msg( 423051914, associated( this%radiative_transfer_%radiator_warehouse_ ),      &
                     "Radiators not available" )
     radiator_warehouse => this%radiator_warehouse_
 
