@@ -399,7 +399,7 @@ contains
     class(radiator_warehouse_t), pointer :: radiator_warehouse
 
     call assert_msg( 423051914, associated( this%radiator_warehouse_ ),           &
-                    "Grids not available" )
+                    "Radiators not available" )
     radiator_warehouse => this%radiator_warehouse_
 
   end function get_radiator_warehouse
