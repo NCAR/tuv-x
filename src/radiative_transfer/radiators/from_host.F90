@@ -57,12 +57,7 @@ contains
     this%handle_                 = name
     this%type_                   = "from host"
     this%enable_diagnostics_     = .false.
-    !
-    ! TODO(jiwon) test memory allocation failure
-    !
-    write(*,*) "   [-------] Test ---------"
-    write(*,*) "height_grid%size( ): ", height_grid%size( )
-    write(*,*) "wavelength_grid%size( ): ", wavelength_grid%size( )
+
     allocate( this%state_%layer_OD_(  height_grid%size( ),                    &
                                       wavelength_grid%size( ) ) )
     allocate( this%state_%layer_SSA_( height_grid%size( ),                    &

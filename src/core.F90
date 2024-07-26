@@ -172,15 +172,6 @@ contains
                               new_core%grid_warehouse_,                       &
                               new_core%profile_warehouse_,                    &
                               radiators )
-    !
-    ! TODO(JIWON)
-    !
-    ! Instantiate and initialize radiator warehouse
-    ! call core_config%get( "radiator", child_config, Iam )
-    ! new_core%radiator_warehouse_ => radiator_warehouse_ radiator_warehouse_t( child_config )
-
-    
-    if( present( grids ) ) call new_core%grid_warehouse_%add( grids )
 
     ! photolysis rate constants
     call core_config%get( "photolysis", child_config, Iam,          &
