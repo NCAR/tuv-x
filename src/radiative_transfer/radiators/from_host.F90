@@ -63,16 +63,16 @@ contains
     write(*,*) "   [-------] Test ---------"
     write(*,*) "height_grid%size( ): ", height_grid%size( )
     write(*,*) "wavelength_grid%size( ): ", wavelength_grid%size( )
-    ! allocate( this%state_%layer_OD_(  height_grid%size( ),                    &
-    !                                   wavelength_grid%size( ) ) )
-    ! allocate( this%state_%layer_SSA_( height_grid%size( ),                    &
-    !                                   wavelength_grid%size( ) ) )
-    ! allocate( this%state_%layer_G_(   height_grid%size( ),                    &
-    !                                   wavelength_grid%size( ), 1 ) )
+    allocate( this%state_%layer_OD_(  height_grid%size( ),                    &
+                                      wavelength_grid%size( ) ) )
+    allocate( this%state_%layer_SSA_( height_grid%size( ),                    &
+                                      wavelength_grid%size( ) ) )
+    allocate( this%state_%layer_G_(   height_grid%size( ),                    &
+                                      wavelength_grid%size( ), 1 ) )
 
-    ! this%state_%layer_OD_( :,:) = 0.0_dk
-    ! this%state_%layer_SSA_(:,:) = 0.0_dk
-    ! this%state_%layer_G_(:,:,:) = 0.0_dk
+    this%state_%layer_OD_( :,:) = 0.0_dk
+    this%state_%layer_SSA_(:,:) = 0.0_dk
+    this%state_%layer_G_(:,:,:) = 0.0_dk
 
   end function constructor_char
 

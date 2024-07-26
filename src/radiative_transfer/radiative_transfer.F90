@@ -23,8 +23,6 @@ module tuvx_radiative_transfer
   use tuvx_solver_factory,           only : solver_allocate, solver_builder, solver_type_name
   use tuvx_spherical_geometry,       only : spherical_geometry_t
 
-
-
   implicit none
   private
 
