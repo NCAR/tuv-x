@@ -400,7 +400,7 @@ contains
 
     call assert_msg( 423051914, associated( this%radiative_transfer_%radiator_warehouse_ ),      &
                     "Radiators not available" )
-    radiator_warehouse => this%radiator_warehouse_
+    radiator_warehouse => this%radiative_transfer_%radiator_warehouse_
 
   end function get_radiator_warehouse
 
