@@ -11,7 +11,6 @@ module tuvx_radiative_transfer
   use musica_string,                 only : string_t
   use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
   use tuvx_grid_warehouse,           only : grid_warehouse_t
-  use tuvx_grid_warehouse,           only : grid_warehouse_t
   use tuvx_la_sr_bands,              only : la_sr_bands_t
   use tuvx_profile,                  only : profile_t
   use tuvx_profile_warehouse,        only : profile_warehouse_ptr, profile_warehouse_t
