@@ -175,9 +175,11 @@ contains
 
     type(radiator_warehouse_ptr) :: ptr
 
+    write(*,*) "   [tuvx] before get_radiator_char( this, name )"
     ptr = this%get_ptr_char( name )
+    write(*,*) "   [tuvx] mid get_radiator_char( this, name )"
     radiator => this%radiators_( ptr%index_ )%val_
-
+    write(*,*) "   [tuvx] after get_radiator_char( this, name )"
   end function get_radiator_char
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -251,7 +253,6 @@ contains
     ! debug
     ! 
     write(*,*) "  [jiwon] get_ptr_char / name: ", name
-    ! write(*,*) "  [jiwon] name", this%radiators_( ndx )%val_%handle_
     do ndx = 1, size( this%radiators_ )
       write(*,*) this%radiators_( ndx )%val_%handle_%val_
       if( name .eq. this%radiators_( ndx )%val_%handle_ ) then
