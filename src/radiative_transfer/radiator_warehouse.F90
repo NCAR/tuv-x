@@ -254,7 +254,7 @@ contains
     ! write(*,*) "  [jiwon] name", this%radiators_( ndx )%val_%handle_
     do ndx = 1, size( this%radiators_ )
       if( name .eq. this%radiators_( ndx )%val_%handle_ ) then
-        write(*,*) "  [jiwon] name", this%radiators_( ndx )%val_%handle_
+        ! write(*,*) "  [jiwon] name", this%radiators_( ndx )%val_%handle_
         found = .true.
         exit
       endif
