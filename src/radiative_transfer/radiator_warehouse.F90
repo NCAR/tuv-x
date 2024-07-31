@@ -253,6 +253,7 @@ contains
     write(*,*) "  [jiwon] get_ptr_char / name: ", name
     ! write(*,*) "  [jiwon] name", this%radiators_( ndx )%val_%handle_
     do ndx = 1, size( this%radiators_ )
+      write(*,*) this%radiators_( ndx )%val_%handle_%val_
       if( name .eq. this%radiators_( ndx )%val_%handle_ ) then
         found = .true.
         exit
