@@ -38,7 +38,8 @@ endif()
 if(LAPACK_LIBRARIES)
   target_link_libraries(tuvx_object PRIVATE ${LAPACK_LIBRARIES} LAPACK::LAPACK)
 else()
-  message(FATAL_ERROR "LAPACK libraries not found.")
+  # message(FATAL_ERROR "LAPACK libraries not found.")
+  message(STATUS "LAPACK libraries not found.")
 endif()
 
 # tuvx library
