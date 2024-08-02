@@ -103,12 +103,13 @@ target_sources(
           spherical_geometry.F90
           util.F90)
 
+add_subdirectory(linear_algebras)
 add_subdirectory(cross_sections)
 add_subdirectory(grids)
-add_subdirectory(linear_algebras)
 add_subdirectory(profiles)
 add_subdirectory(quantum_yields)
 add_subdirectory(radiative_transfer)
 add_subdirectory(spectral_weights)
 add_subdirectory(util)
+
 ################################################################################
