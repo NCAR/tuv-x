@@ -122,9 +122,9 @@ endif()
 
 if(TUVX_ENABLE_LAPACK)
   target_link_libraries(tuv-x PUBLIC ${LAPACK_LIBRARIES})
-else()
-  set(${LAPACK_LIBRARIES} "")
 endif()
+#   set(${LAPACK_LIBRARIES} "")
+# endif()
 
 ################################################################################
 # TUV-x docs
