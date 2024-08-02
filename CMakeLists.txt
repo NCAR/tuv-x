@@ -90,8 +90,9 @@ add_subdirectory(src)
 # add tuv-x standalone executable
 configure_file(src/version.F90.in version.F90 @ONLY)
 
+message(STATUS "BEFORE add_executable(tuv-x src/tuvx.F90 version.F90)")
 add_executable(tuv-x src/tuvx.F90 version.F90)
-
+message(STATUS "AFTER add_executable(tuv-x src/tuvx.F90 version.F90)")
 set_target_properties(tuv-x
   PROPERTIES
   LINKER_LANGUAGE Fortran
@@ -103,14 +104,14 @@ if(NOT BUILD_SHARED_LIBS)
     POSITION_INDEPENDENT_CODE ON
   )
 endif()
-
+message(STATUS "BEFORE target_link_libraries(tuv-x ")
 target_link_libraries(tuv-x 
   PUBLIC 
     musica::tuvx
     yaml-cpp::yaml-cpp
-    ${BLAS_LIBRARIES}
+    # ${BLAS_LIBRARIES}
 )
-
+message(STATUS "AFTER target_link_libraries(tuv-x ")
 target_include_directories(tuv-x
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
