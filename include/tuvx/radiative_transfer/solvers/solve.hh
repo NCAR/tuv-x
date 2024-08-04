@@ -2,12 +2,6 @@
 
 // Copyright (C) 2023-2024 National Center for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
-#include "tuvx/linear_algebra/linear_algebra.hpp"
-#include "tuvx/radiative_transfer/radiator.hpp"
-
-#include <tuvx/radiative_transfer/solvers/delta_eddington.hpp>
-
-#include <cmath>
 
 namespace tuvx
 {
@@ -34,9 +28,6 @@ namespace tuvx
     // 2. We will be solving for collections of columns. The original solver
     //    was for a single column.
     // 3. The variable naming and source-code documentation will be improved.
-    //
-    //
-    // for each layer -
     //
     const std::size_t number_of_columns = solar_zenith_angles.size();
     const auto& vertical_grid = grids.at("altitude [m]");

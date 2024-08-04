@@ -1,9 +1,6 @@
 
-#include "tuvx/linear_algebra/linear_algebra.hpp"
-
-#include <tuvx/radiative_transfer/solvers/delta_eddington.hpp>
-
-#include <cmath>
+// Copyright (C) 2023-2024 National Center for Atmospheric Research
+// SPDX-License-Identifier: Apache-2.0
 
 namespace tuvx
 {

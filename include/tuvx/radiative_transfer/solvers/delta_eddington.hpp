@@ -13,9 +13,10 @@
 #include <tuvx/radiative_transfer/radiator.hpp>
 
 #include <cassert>
+#include <cmath>
+#include <functional>
 #include <map>
 #include <vector>
-
 namespace tuvx
 {
 
@@ -91,4 +92,24 @@ namespace tuvx
       const std::vector<T>& coeffcient_vector,
       const RadiationFieldPolicy& radiation_field);
 
+  template<
+      typename T,
+      typename ArrayPolicy,
+      typename GridPolicy,
+      typename ProfilePolicy,
+      typename RadiatorStatePolicy,
+      typename RadiationFieldPolicy>
+  inline void Solve(
+      const std::vector<T>& solar_zenith_angles,
+      const std::map<std::string, GridPolicy>& grids,
+      const std::map<std::string, ProfilePolicy>& profiles,
+      const std::function<void(const RadiatorStatePolicy&, const ArrayPolicy&, const std::vector<T>)> ApproximationFunction,
+      const RadiatorStatePolicy& accumulated_radiator_state,
+      RadiationFieldPolicy& radiation_field)
+
 };  // namespace tuvx
+include "delta_eddington.inl";
+include "initialize_solver.inl";
+include "assemble_tridiagonal_system.inl";
+include "compute_radiation_field.inl";
+include "solve.inl"
