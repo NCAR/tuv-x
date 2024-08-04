@@ -48,6 +48,9 @@ namespace tuvx
     tuvx::InitializeVariables<T, GridPolicy, ProfilePolicy, RadiatorStatePolicy, RadiationFieldPolicy>(
         solar_zenith_angles, grids, profiles, accumulated_radiator_state);
 
+    // Currently only the Delta Approximation is implemented in delta_eddington.inl
+    // There are other approximations defined in Table 1 of the paper
+    // TODO : Move this comment to the docstring in the header. 
     ApproximationFunction(accumulated_radiator_state, solar_zenith_angles, solver_variables);
 
     tuvx::AssembleTridiagonalMatrix<T>(
