@@ -30,6 +30,12 @@ namespace tuvx
     // Check for consistency between the grids and profiles.
     assert(vertical_grid.NumberOfColumns() == number_of_columns);
     assert(wavelength_grid.NumberOfColumns() == 1);
+
+    // Scale variables for the Delta-Eddington approximation
+    ScaleVariables(solver_variables);
+
+    // Generate functions that define the source variables (C functions from the paper)
+    BuildSourceFunctions(solver_variables, source_functions); 
   }
 
   template<typename T>
