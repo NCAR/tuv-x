@@ -30,8 +30,9 @@ if(TUVX_ENABLE_LAPACK)
   target_link_libraries(tuvx_object
     PRIVATE 
       ${LAPACK_LIBRARIES} 
-      LAPACK::LAPACK)
+      LAPACK::LAPACK
       ${BLAS_LIBRARIES}
+  )
 endif()
 
 # tuvx library
