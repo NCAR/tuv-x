@@ -363,7 +363,7 @@ contains
     class(core_t),    intent(in) :: this
     class(profile_warehouse_t),    pointer    :: profile_warehouse
 
-    call assert_msg( 423051914, associated( this%profile_warehouse_ ),        &
+    call assert_msg( 573031914, associated( this%profile_warehouse_ ),        &
                      "Profiles not available" )
     profile_warehouse => this%profile_warehouse_
 
@@ -381,7 +381,7 @@ contains
     character(len=*), intent(in) :: radiator_name
     class(radiator_t), pointer   :: radiator
 
-    call assert_msg( 285057977, associated( &
+    call assert_msg( 685097977, associated( &
      this%radiative_transfer_ ), "Radiators not available" )
     radiator => this%radiative_transfer_%radiator_warehouse_%get_radiator( radiator_name )
 
@@ -398,7 +398,7 @@ contains
     class(core_t), intent(in)            :: this
     class(radiator_warehouse_t), pointer :: radiator_warehouse
 
-    call assert_msg( 423051914, associated( &
+    call assert_msg( 923051934, associated( &
       this%radiative_transfer_ ), "Radiators not available" )
     radiator_warehouse => this%radiative_transfer_%radiator_warehouse_
 
