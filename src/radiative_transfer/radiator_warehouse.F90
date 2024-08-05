@@ -247,7 +247,6 @@ contains
     logical :: found
 
     found = .false.
-
     do ndx = 1, size( this%radiators_ )
       if( name .eq. this%radiators_( ndx )%val_%handle_ ) then
         found = .true.
