@@ -11,6 +11,7 @@ if(TUVX_ENABLE_LAPACK)
   find_package(LAPACKE)
   find_package(BLAS)
 endif()
+
 # ##############################################################################
 # Memory check
 

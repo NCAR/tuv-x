@@ -381,14 +381,9 @@ contains
     character(len=*), intent(in) :: radiator_name
     class(radiator_t), pointer   :: radiator
 
-
     call assert_msg( 285057977, associated( &
      this%radiative_transfer_ ), "Radiators not available" )
     radiator => this%radiative_transfer_%radiator_warehouse_%get_radiator( radiator_name )
-    ! call assert_msg( 285057977, associated( &
-    !  this%radiative_transfer_%radiator_warehouse_ ), "Radiators not available" )
-    ! radiator => this%radiative_transfer_%radiator_warehouse_ &
-    !             %get_radiator( radiator_name )
 
   end function get_radiator
 
@@ -404,12 +399,8 @@ contains
     class(radiator_warehouse_t), pointer :: radiator_warehouse
 
     call assert_msg( 423051914, associated( &
-    this%radiative_transfer_ ), "Radiators not available" )
+      this%radiative_transfer_ ), "Radiators not available" )
     radiator_warehouse => this%radiative_transfer_%radiator_warehouse_
-
-    ! call assert_msg( 423051914, associated( &
-    !   this%radiative_transfer_%radiator_warehouse_ ), "Radiators not available" )
-    ! radiator_warehouse => this%radiative_transfer_%radiator_warehouse_
 
   end function get_radiator_warehouse
 

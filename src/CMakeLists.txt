@@ -9,6 +9,12 @@ target_compile_features(tuvx_object PUBLIC cxx_std_11)
 set_target_properties(tuvx_object PROPERTIES Fortran_MODULE_DIRECTORY
                                              ${TUVX_MOD_DIR})
 
+if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "IntelLLVM")
+  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_INTEL)
+elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_GCC)
+endif()
+
 target_include_directories(
   tuvx_object
   PUBLIC $<BUILD_INTERFACE:${TUVX_MOD_DIR}>
@@ -16,32 +22,17 @@ target_include_directories(
          $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
          $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
 
-message(STATUS "blas libraries: ${BLAS_LIBRARIES}")
-message(STATUS "lapack libraries: ${LAPACK_LIBRARIES}")
-
 target_link_libraries(tuvx_object PRIVATE PkgConfig::netcdff
                                           PkgConfig::netcdfc
                                           yaml-cpp::yaml-cpp)
 
-if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "IntelLLVM")
-  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_INTEL)
-elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-  target_compile_definitions(tuvx_object PUBLIC TUVX_COMPILE_WITH_GCC)
+if(TUVX_ENABLE_LAPACK)
+  target_link_libraries(tuvx_object
+    PRIVATE 
+      ${LAPACK_LIBRARIES} 
+      LAPACK::LAPACK)
+      ${BLAS_LIBRARIES}
 endif()
-
-# if(BLAS_LIBRARIES)
-#   target_link_libraries(tuvx_object PRIVATE ${BLAS_LIBRARIES})
-# else()
-#   # message(FATAL_ERROR "BLAS Libraries not found.")
-#   message(STATUS "BLAS Libraries not found.")
-#   endif()
-
-# if(LAPACK_LIBRARIES)
-#   target_link_libraries(tuvx_object PRIVATE ${LAPACK_LIBRARIES} LAPACK::LAPACK)
-# else()
-#   # message(FATAL_ERROR "LAPACK libraries not found.")
-#   message(STATUS "LAPACK libraries not found.")
-# endif()
 
 # tuvx library
 add_library(tuvx $<TARGET_OBJECTS:tuvx_object>)
