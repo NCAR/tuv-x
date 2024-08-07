@@ -4,8 +4,6 @@ include(FetchContent)
 # ##############################################################################
 # LAPACK
 
-# find_package(BLAS)
-
 if(TUVX_ENABLE_LAPACK)
   find_package(LAPACK)
   find_package(LAPACKE)
