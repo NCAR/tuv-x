@@ -14,6 +14,7 @@ module tuvx_core
   use tuvx_photolysis_rates,           only : photolysis_rates_t
   use tuvx_profile_warehouse,          only : profile_warehouse_t
   use tuvx_radiative_transfer,         only : radiative_transfer_t
+  use tuvx_radiator_warehouse,         only : radiator_warehouse_t
   use tuvx_solver,                     only : radiation_field_t
   use tuvx_spherical_geometry,         only : spherical_geometry_t
 
@@ -28,6 +29,7 @@ module tuvx_core
     ! with a host application
     type(grid_warehouse_t),      pointer :: grid_warehouse_ => null()
     type(profile_warehouse_t),   pointer :: profile_warehouse_ => null()
+    type(radiator_warehouse_t),  pointer :: radiator_warehouse_ => null()
     type(spherical_geometry_t),  pointer :: spherical_geometry_ => null()
     type(la_sr_bands_t),         pointer :: la_sr_bands_ => null()
     type(radiative_transfer_t),  pointer, public :: radiative_transfer_ => null()
@@ -47,6 +49,10 @@ module tuvx_core
     procedure :: get_profile
     ! Returns the profile warehouse
     procedure :: get_profile_warehouse
+    ! Returns a radiator from the warehouse
+    procedure :: get_radiator
+    ! Returns the radiator warehouse
+    procedure :: get_radiator_warehouse
     ! Returns an updater for use TUV-x data
     procedure, private :: get_grid_updater, get_profile_updater,              &
                           get_radiator_updater
@@ -357,11 +363,46 @@ contains
     class(core_t),    intent(in) :: this
     class(profile_warehouse_t),    pointer    :: profile_warehouse
 
-    call assert_msg( 423051914, associated( this%profile_warehouse_ ),        &
+    call assert_msg( 573031914, associated( this%profile_warehouse_ ),        &
                      "Profiles not available" )
     profile_warehouse => this%profile_warehouse_
 
   end function get_profile_warehouse
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_radiator( this, radiator_name ) result( radiator )
+    ! Returns a copy of a radiator from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_radiator,                 only : radiator_t
+
+    class(core_t),    intent(in) :: this
+    character(len=*), intent(in) :: radiator_name
+    class(radiator_t), pointer   :: radiator
+
+    call assert_msg( 685097977, associated( &
+     this%radiative_transfer_ ), "Radiators not available" )
+    radiator => this%radiative_transfer_%radiator_warehouse_%get_radiator( radiator_name )
+
+  end function get_radiator
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_radiator_warehouse( this ) result( radiator_warehouse )
+    ! Returns a copy of a radiator from the warehouse
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_radiator,                 only : radiator_t
+
+    class(core_t), intent(in)            :: this
+    class(radiator_warehouse_t), pointer :: radiator_warehouse
+
+    call assert_msg( 923051934, associated( &
+      this%radiative_transfer_ ), "Radiators not available" )
+    radiator_warehouse => this%radiative_transfer_%radiator_warehouse_
+
+  end function get_radiator_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

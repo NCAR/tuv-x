@@ -4,9 +4,11 @@ include(FetchContent)
 # ##############################################################################
 # LAPACK
 
-find_package(BLAS)
-find_package(LAPACK)
-find_package(LAPACKE)
+if(TUVX_ENABLE_LAPACK)
+  find_package(LAPACK)
+  find_package(LAPACKE)
+  find_package(BLAS)
+endif()
 
 # ##############################################################################
 # Memory check
