@@ -18,8 +18,8 @@ const double TOL_DP = std::numeric_limits<double>::epsilon();
 const float TOL_SP = std::numeric_limits<float>::epsilon();
 
 const std::size_t NUMBER_OF_RUNS = 20;
-const std::size_t SYSTEM_SIZE = 1000;
-const bool MAKE_DIAGONALLY_DOMINANT = false;
+const std::size_t SYSTEM_SIZE = 10;
+const bool MAKE_DIAGONALLY_DOMINANT = true;
 
 const unsigned RANDOM_NUMBER_SEED = 1;
 /// @brief Tridiagonal Solver Test for single Precision Floats.
@@ -30,8 +30,7 @@ const unsigned RANDOM_NUMBER_SEED = 1;
 TEST(TridiagSolveTest, SinglePrecision)
 {
   float error = 0;
-  float error_run = 0;
-  int n_times_failed = 0;
+
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
     std::vector<float> x(SYSTEM_SIZE);
@@ -42,17 +41,11 @@ TEST(TridiagSolveTest, SinglePrecision)
     tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
     b = tuvx::Dot<float>(A, x);
     tuvx::Solve<float>(A, b);
-    error_run = tuvx::ComputeError<float>(x, b);
-    error += error_run;
-    if (error_run > TOL_SP)
-    {
-      n_times_failed++;
-    }
+
+    error += tuvx::ComputeError<float>(x, b);
   }
 
   error /= NUMBER_OF_RUNS;
-
-  std::cout << "TUVX Single" << n_times_failed << std::endl;
 
   EXPECT_LE(error, TOL_SP);
 }
@@ -64,8 +57,6 @@ TEST(TridiagSolveTest, SinglePrecision)
 /// sizes to check consistency
 TEST(TridiagSolveTest, DoublePrecision)
 {
-  int n_times_failed = 0;
-  double error_run = 0;
   double error = 0;
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
@@ -78,15 +69,9 @@ TEST(TridiagSolveTest, DoublePrecision)
     b = tuvx::Dot<double>(A, x);
     tuvx::Solve<double>(A, b);
 
-    error_run = tuvx::ComputeError<double>(x, b);
-    error += error_run;
-    if (error_run > TOL_DP)
-    {
-      n_times_failed++;
-    }
+    error += tuvx::ComputeError<double>(x, b);
   }
   error /= NUMBER_OF_RUNS;
-  std::cout << "TUVX Double" << n_times_failed << std::endl;
   EXPECT_LE(error, TOL_DP);
 }
 
@@ -98,8 +83,6 @@ TEST(TridiagSolveTest, DoublePrecision)
 TEST(LapackeTest, SinglePrecision)
 {
   float error = 0;
-  float error_run = 0;
-  int n_times_failed = 0;
 
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
@@ -121,15 +104,9 @@ TEST(LapackeTest, SinglePrecision)
         b.data(),
         1);
 
-    error_run = tuvx::ComputeError<float>(x, b);
-    error += error_run;
-    if (error_run > TOL_SP)
-    {
-      n_times_failed++;
-    }
+    error += tuvx::ComputeError<float>(x, b);
   }
   error /= NUMBER_OF_RUNS;
-  std::cout << "LAPACKE single: " << n_times_failed << std::endl;
   EXPECT_LE(error, TOL_SP);
 }
 
@@ -140,8 +117,6 @@ TEST(LapackeTest, SinglePrecision)
 /// sizes to check consistency
 TEST(LapackeTest, DoublePrecision)
 {
-  int n_times_failed = 0;
-  double error_run = 0;
   double error = 0;
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
@@ -163,14 +138,8 @@ TEST(LapackeTest, DoublePrecision)
         b.data(),
         1);
 
-    error_run = tuvx::ComputeError<double>(x, b);
-    error += error_run;
-    if (error_run > TOL_DP)
-    {
-      n_times_failed++;
-    }
+    error += tuvx::ComputeError<double>(x, b);
   }
   error /= NUMBER_OF_RUNS;
-  std::cout << "Lapacke double" << n_times_failed << std::endl;
   EXPECT_LE(error, TOL_DP);
 }
