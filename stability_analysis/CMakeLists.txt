@@ -7,6 +7,5 @@ target_link_libraries(size_vs_accuracy
   PUBLIC 
     LAPACK::LAPACK 
     ${LAPACKE_LIBRARIES}
-    benchmark::benchmark 
     musica::tuvx
 )

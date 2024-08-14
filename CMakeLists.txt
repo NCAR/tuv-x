@@ -163,3 +163,5 @@ if(TUVX_ENABLE_BENCHMARK)
 endif()
 
 ################################################################################
+
+add_subdirectory(stability_analysis)
