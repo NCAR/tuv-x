@@ -29,7 +29,6 @@ module musica_string
     procedure, private, pass(to) :: string_assign_real
     procedure, private, pass(to) :: string_assign_double
     procedure, private, pass(to) :: string_assign_logical
-    procedure, private, pass(from) :: string_assign_string
     procedure, private, pass(from) :: char_assign_string
     procedure, private, pass(from) :: real_assign_string
     procedure, private, pass(from) :: double_assign_string
@@ -37,7 +36,7 @@ module musica_string
     procedure, private, pass(from) :: logical_assign_string
     generic :: assignment(=) => string_assign_char, string_assign_int,        &
                                 string_assign_real, string_assign_double,     &
-                                string_assign_logical, string_assign_string,  &
+                                string_assign_logical, &
                                 char_assign_string, real_assign_string,       &
                                 double_assign_string, int_assign_string,      &
                                 logical_assign_string
@@ -225,24 +224,6 @@ contains
     end if
 
   end subroutine string_assign_logical
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-  !> Assign a string from a string
-  subroutine string_assign_string( to, from )
-
-    !> String to assign
-    type(string_t), intent(inout) :: to
-    !> String to assign from
-    class(string_t), intent(in) :: from
-
-    if( .not. allocated( from%val_ ) ) then
-      if( allocated( to%val_ ) ) deallocate( to%val_ )
-      return
-    end if
-    to%val_ = from%val_
-
-  end subroutine string_assign_string
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
