@@ -9,6 +9,7 @@ namespace tuvx
       const std::map<std::string, std::vector<T>> solution_parameters,
       const std::vector<T> solar_zenith_angles)
   {
+
     const std::size_t number_of_columns = solar_zenith_angles.size();
     ArrayPolicy& omega = accumulated_radiator_states.optical_depth_;
     ArrayPolicy& g = accumulated_radiator_states.single_scattering_albedo_;
@@ -37,5 +38,6 @@ namespace tuvx
       gamma[i] = (gamma1[i] - lambda[i]) / gamma2[i];
       mu = (T)0.5;
     }
+
   }
 }  // namespace tuvx
