@@ -5,18 +5,11 @@
 namespace tuvx
 {
 
-  template<
-      typename T,
-      typename GridPolicy,
-      typename RadiatorStatePolicy,
-      typename RadiationFieldPolicy,
-      typename SourceFunctionPolicy,
-      typename ArrayPolicy>
-  inline void InitializeVariables(
+  template<typename T, typename GridPolicy, typename RadiatorStatePolicy, typename SourceFunctionPolicy>
+  inline void InitializeSolver(
       const std::vector<T>& solar_zenith_angles,
       const std::map<std::string, GridPolicy>& grids,
-      const RadiatorStatePolicy& accumulated_radiator_states,
-      std::map<std::string, ArrayPolicy>& solver_variables,
+      RadiatorStatePolicy& accumulated_radiator_states,
       std::map<std::string, SourceFunctionPolicy>& source_functions)
   {
     // determine number of layers
@@ -26,34 +19,33 @@ namespace tuvx
 
     // Check for consistency between the grids and profiles.
     assert(vertical_grid.NumberOfColumns() == number_of_columns);
-    assert(wavelength_grid.NumberOfColumns() == 1);
 
     // Scale variables for the Delta-Eddington approximation
-    ScaleVariables(grids, solar_zenith_angles, solver_variables);
+    ScaleVariables(grids, solar_zenith_angles, accumulated_radiator_states);
 
     // Generate functions that define the source variables (C functions from the paper)
-    BuildSourceFunctions(grids, solar_zenith_angles, solver_variables, source_functions);
+    // BuildSourceFunctions(grids, solar_zenith_angles, solver_variables, source_functions);
   }
 
-  template<typename T, typename ArrayPolicy, typename GridPolicy>
+  template<typename T, typename GridPolicy, typename RadiatorStatePolicy>
   inline void ScaleVariables(
-      GridPolicy grids,
-      std::vector<T> solar_zenith_angles,
-      std::map<std::string, std::vector<T>>& solver_variables)
+      const std::map<std::string, GridPolicy>& grids,
+      const std::vector<T>& solar_zenith_angles,
+      RadiatorStatePolicy& radiator_state)
   {
     // solver parameters (environment related variables)
-    std::vector<T>& tau = solver_variables.at("Optical Depth");
-    std::vector<T>& g = solver_variables.at("Assymetry Parameter");
-    std::vector<T>& omega = solver_variables.at("Single Scattering Albedo");
+    auto& tau = radiator_state.optical_depth_;
+    auto& g = radiator_state.asymmetry_parameter_;
+    auto& omega = radiator_state.single_scattering_albedo_;
 
-    // grid and dimensions
+    // grids
     const auto& vertical_grid = grids.at("altitude [m]");
     const auto& wavelength_grid = grids.at("wavelength [m]");
 
     // dimensions
-    const std::size_t number_of_columns = solar_zenith_angles.size();
-    const std::size_t number_of_wavelengths = wavelength_grid.NumberOfColumns();
-    const std::size_t number_of_layers = vertical_grid.NumberOfColumns();
+    const std::size_t& number_of_columns = solar_zenith_angles.size();
+    const std::size_t& number_of_wavelengths = wavelength_grid.NumberOfColumns();
+    const std::size_t& number_of_layers = vertical_grid.NumberOfColumns();
 
     // Delta scaling
     T f;
@@ -63,10 +55,10 @@ namespace tuvx
       {
         for (std::size_t k = 0; k < number_of_columns; k++)
         {
-          f = omega[i][j][j] * omega[i][j][k];
-          g[i][j][k] = (g[i][j][k] - f) / (1 - f);
-          omega[i][j][k] = (1 - f) * omega[i][j][k] / (1 - omega[i][j][k] * f);
-          tau[i][j][k] = (1 - omega[i][j][k] * f) * tau[i][j][k];
+          f = omega(i, j, k) * omega(i, j, k);
+          g(i, j, k) = (g(i, j, k) - f) / (1 - f);
+          omega(i, j, k) = (1 - f) * omega(i, j, k) / (1 - omega(i, j, k) * f);
+          tau(i, j, k) = (1 - omega(i, j, k) * f) * tau(i, j, k);
         }
       }
     }
@@ -78,39 +70,29 @@ namespace tuvx
     //}
   }
 
-  template<typename T, typename GridPolicy, typename ArrayPolicy, typename SourceFunctionPolicy>
+  template<typename T, typename ArrayPolicy, typename RadiatorStatePolicy, typename SourceFunctionPolicy>
   inline void BuildSourceFunctions(
-      GridPolicy grids,
-      std::vector<T> solar_zenith_angles,
-      std::map<std::string, std::vector<T>> solver_variables,
+      const std::size_t& number_of_columns,
+      const std::size_t& number_of_wavelengths,
+      const std::size_t& number_of_layers,
+      const std::vector<T>& solar_zenith_angles,
+      const RadiatorStatePolicy& accumulated_radiator_states,
+      const ApproximationVariables<ArrayPolicy> approximation_variables,
+      const ArrayPolicy& surface_reflectivity,
       std::map<std::string, SourceFunctionPolicy> source_functions)
   {
-
-    // grid and dimensions
-    const auto& vertical_grid = grids.at("altitude [m]");
-    const auto& wavelength_grid = grids.at("wavelength [m]");
-
-    // dimensions
-    const std::size_t& number_of_columns = solar_zenith_angles.size();
-    const std::size_t& number_of_wavelengths = wavelength_grid.NumberOfColumns();
-    const std::size_t& number_of_layers = vertical_grid.NumberOfColumns();
-
     // solver parameters (environment related variables)
-    const auto& tau = solver_variables.at("Optical Depth");
-    const auto& omega = solver_variables.at("Assymetry Parameter");
+    const auto& tau = accumulated_radiator_states.optical_depth_;
+    const auto& omega = accumulated_radiator_states.asymmetry_parameter_;
 
     // parameters used to compute the soulution
-    const auto& lambda = solver_variables.at("lambda");
-    const auto& gamma1 = solver_variables.at("gamma1");
-    const auto& gamma2 = solver_variables.at("gamma2");
-    const auto& gamma3 = solver_variables.at("gamma3");
-    const auto& gamma4 = solver_variables.at("gamma4");
-    const auto& mu = solver_variables.at("mu");
-
-    // solution parameters
-    auto& S_sfc_i = solver_variables.at("Infrared Source Flux");
-    auto& S_sfc_s = solver_variables.at("Solar Source Flux");
-    auto& R_sfc = solver_variables.at("source flux");
+    const auto& mu = approximation_variables.mu_;
+    const auto& lambda = approximation_variables.lambda_;
+    const auto& gamma1 = approximation_variables.gamma1_;
+    const auto& gamma2 = approximation_variables.gamma2_;
+    const auto& gamma3 = approximation_variables.gamma3_;
+    const auto& gamma4 = approximation_variables.gamma4_;
+    const auto& R_sfc = surface_reflectivity;
 
     // temporary variables
     T tau_cumulative = 0;
@@ -120,38 +102,35 @@ namespace tuvx
     auto& C_upwelling = source_functions.at("C_upwelling");
     auto& C_downwelling = source_functions.at("C_downwelling");
 
-    // source terms (C equations from 16, 290; eqns 23, 24)
-    for (std::size_t i = 0; i < number_of_layers; i++)
+    for (std::size_t i = 0; i < number_of_columns; i++)
     {
+      mu_0 = std::acos(solar_zenith_angles[i]);
       for (std::size_t j = 0; j < number_of_wavelengths; j++)
       {
-        for (std::size_t k = 0; k < number_of_columns; k++)
+        for (std::size_t k = 0; k < number_of_layers; k++)
         {
-
-          mu_0 = std::acos(solar_zenith_angles[i][j][k]);
-          denominator_term = (lambda[i][j][k] * lambda[i][j][k] - 1 / (mu_0 * mu_0));
-          tau_cumulative += tau[i][j][k];
-
-          S_sfc_i[i][j][k] = R_sfc[i][j][k] * mu_0 * std::exp(-tau_cumulative / mu_0);
-          S_sfc_s[i][j][k] = M_PI * R_sfc[i][j][k];
+          denominator_term = (lambda(i, j, k) * lambda(i, j, k) - 1 / (mu_0 * mu_0));
+          tau_cumulative += tau(i, j, k);
 
           // Source function defined for each grid point
-          C_downwelling[i][j][k] = [&i, &j, &k, &mu_0](T tau) -> T
+          C_downwelling(i, j, k) =
+              [&i, &j, &k, &mu_0, &R_sfc, &gamma1, &gamma2, &gamma3, &gamma4, &lambda, &mu, &omega, &tau_cumulative](
+                  T tau) -> T
           {
-            T exponential_term = omega[i][j][k] * M_PI * R_sfc[i][j][k] * std::exp(-(tau_cumulative - tau) / mu_0);
-            return exponential_term * (((gamma1[i][j][k] + 1) / mu_0) * gamma4[i][j][k] + gamma2[i][j][k] * gamma3[i][j][k]);
+            T exponential_term = omega(i, j, k) * M_PI * R_sfc(i, j, k) * std::exp(-(tau_cumulative - tau) / mu_0);
+            return exponential_term * (((gamma1(i, j, k) + 1) / mu_0) * gamma4(i, j, k) + gamma2(i, j, k) * gamma3(i, j, k));
           };
 
-          C_upwelling[i][j][k] = [&i, &j, &k, &mu_0](T tau) -> T
+          C_upwelling(i, j, k) =
+              [&i, &j, &k, &mu_0, &R_sfc, &gamma1, &gamma2, &gamma3, &gamma4, &lambda, &mu, &omega, &tau_cumulative](
+                  T tau) -> T
           {
-            T exponential_term = omega[i][j][k] * M_PI * R_sfc[i][j][k] * std::exp(-(tau_cumulative - tau) / mu_0);
-            return exponential_term * (((gamma1[i][j][k] - 1) / mu_0) * gamma3[i][j][k] + gamma4[i][j][j] * gamma2[i][j][k]);
+            T exponential_term = omega(i, j, k) * M_PI * R_sfc(i, j, k) * std::exp(-(tau_cumulative - tau) / mu_0);
+            return exponential_term * (((gamma1(i, j, k) - 1) / mu_0) * gamma3(i, j, k) + gamma4(i, j, k) * gamma2(i, j, k));
           };
-
         }
       }
     }
-
   }
 
 }  // namespace tuvx

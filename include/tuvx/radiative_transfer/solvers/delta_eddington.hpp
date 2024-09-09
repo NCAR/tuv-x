@@ -20,6 +20,28 @@
 namespace tuvx
 {
 
+  /// @brief Data structure holding approximation variables for the two stream approximation. These variables are used for
+  /// computing the source functions and assembling the tridiagonal system. The different types of approximations can be
+  /// found in Table 1 of the paper. For now, only the Eddington approximation is implemented see
+  template<typename ArrayPolicy>
+  struct ApproximationVariables
+  {
+    // Two stream approximation coeffcients
+    ArrayPolicy gamma1_;
+    ArrayPolicy gamma2_;
+    ArrayPolicy gamma3_;
+    ArrayPolicy gamma4_;
+    ArrayPolicy mu_;
+    ArrayPolicy lambda_;
+    ArrayPolicy gamma_;
+  };
+
+  /// @brief Solve Function that solves the radiative transfer equation using two stream approximation
+  /// The function first initializes the solver variables (delta scaling, source function definitions), assembles and solves
+  /// the tridiagonal linear system and computes the radiation field.
+  ///
+  /// @param solar_zenith_angles Zenith angles for each column
+  /// @param grids Domain grids - wavelength and altitude
   template<
       typename T,
       typename ArrayPolicy,
@@ -34,56 +56,49 @@ namespace tuvx
       const RadiatorStatePolicy& accumulated_radiator_states,
       RadiationFieldPolicy& radiation_field);
 
-  /// @brief Compute the Eddington parameters
-  template<typename T, typename RadiatorStatePolicy, typename ArrayPolicy>
-  void DeltaEddingtonApproximation(const RadiatorStatePolicy& radiator_state, const ArrayPolicy& parameters);
-
-  template<typename T, typename GridPolicy, typename ArrayPolicy, typename RadiatorStatePolicy>
+  /// @brief Initialize the solver variables
+  template<typename T, typename GridPolicy, typename RadiatorStatePolicy, typename SourceFunctionPolicy>
   void InitializeSolver(
       const std::vector<T>& solar_zenith_angles,
       const std::map<std::string, GridPolicy>& grids,
-      const std::map<std::string, std::vector<T>>& solver_variables,
-      const RadiatorStatePolicy& accumulated_radiator_states);
+      RadiatorStatePolicy& accumulated_radiator_states,
+      SourceFunctionPolicy& source_functions);
 
-  template<typename T, typename GridPolicy, typename ArrayPolicy, typename SourceFunctionPolicy>
-  void BuildSourceFunctions(
-      GridPolicy grids,
+  /// @brief Compute the Eddington parameters
+  template<typename T, typename ArrayPolicy, typename RadiatorStatePolicy>
+  void EddingtonApproximation(
+      const RadiatorStatePolicy& accumulated_radiator_states,
       const std::vector<T>& solar_zenith_angles,
-      const std::map<std::string, ArrayPolicy>& solver_variables,
+      ApproximationVariables<ArrayPolicy>& approximation_variables);
+
+  template<typename T, typename GridPolicy, typename RadiatorStatePolicy>
+  void ScaleVariables(
+      const std::map<std::string, GridPolicy>& grids,
+      const std::vector<T>& solar_zenith_angles,
+      RadiatorStatePolicy& radiator_state);
+
+  /// @brief BuildSourceFunctions Source functions $C_1$ and $C_2$ functions from the paper
+  template<
+      typename T,
+      typename ArrayPolicy,
+      typename GridPolicy,
+      typename RadiatorStatePolicy,
+      typename SourceFunctionPolicy>
+  void BuildSourceFunctions(
+      const std::size_t& number_of_columns,
+      const std::size_t& number_of_wavelengths,
+      const std::size_t& number_of_layers,
+      const std::vector<T>& solar_zenith_angles,
+      const RadiatorStatePolicy& accumulated_radiator_states,
+      const ApproximationVariables<ArrayPolicy> approximation_variables,
+      const ArrayPolicy& surface_reflectivity,
       std::map<std::string, SourceFunctionPolicy> source_functions);
 
-  template<typename T, typename ArrayPolicy, typename GridPolicy>
-  void
-  ScaleVariables(GridPolicy grids, std::vector<T> solar_zenith_angles, std::map<std::string, ArrayPolicy>& solver_variables);
-
-  /*
-  template<typename T>
-  void AssembleTridiagonalMatrix(
-      std::size_t number_of_layers,
-      const std::map<std::string, T> solver_variables,
-      TridiagonalMatrix<T>& coeffcient_matrix);
-
-  template<typename T>
-  void AssembleCoeffcientVector(
-      std::size_t number_of_layers,
-      const std::map<std::string, std::vector<T>> solver_variables,
-      std::map<std::string, std::function<T(T)>> source_functions,
-      std::vector<T>& coeffcient_vector);
-
-  template<typename T, typename RadiationFieldPolicy>
-  void ComputeRadiationField(
-      const std::vector<T>& solar_zenith_angles,
-      std::map<std::string, std::vector<T>> solver_variables,
-      const TridiagonalMatrix<T>& coeffcient_matrix,
-      const std::vector<T>& coeffcient_vector,
-      const RadiationFieldPolicy& radiation_field);
-  */
-
 };  // namespace tuvx
-#include "delta_eddington.inl";
-#include "initialize_solver.inl";
+
+#include "delta_eddington.inl"
+#include "initialize_solver.inl"
 /*
-include "delta_eddington.inl";
 include "initialize_solver.inl";
 include "assemble_tridiagonal_system.inl";
 include "compute_radiation_field.inl";
