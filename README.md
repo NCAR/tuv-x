@@ -47,7 +47,9 @@ cd build/
 # to run the tests
 make test
 # to use the standalone tool
-./tuv-x examples/full_config.json
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 ### Sharing data between your computer and the docker container
@@ -70,7 +72,10 @@ The full example uses data files from the `data` directory, which is why you nee
 ```
 cd /output
 cp -r /build/data .
-tuv-x /build/examples/full_config.json
+# to use the standalone tool
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
 ```
 
 Now, in your downloads folder, you should have to nc files, `photolysis_rate_constants.nc` and `dose_rates.nc`.
@@ -91,8 +96,12 @@ make -j 8
 
 You will now have a runnable exectubable for `tuv-x` and the tests in the build directory.
 
-`./tuv-x examples/full_config.json`.
-
+```
+# to use the standalone tool
+./tuv-x examples/tuv_5_4.json
+# or 
+./tuv-x examples/ts1_tsmlt.json
+```
 Inspect the output file `photolysis_rate_constants.nc` to see the results!
 
 ## Install
@@ -136,27 +145,6 @@ you prefer.
 	pages = {1--26},
 }
 ```
-
-The TUV-x software can be cited with
-
-```
-@software{acom.software.tuvx,
-  author       = {Matt Dawson and
-                  Kyle Shores and
-                  Stacy Walters},
-  title        = {NCAR/tuv-x: Version 0.5.0},
-  month        = dec,
-  year         = 2023,
-  publisher    = {Zenodo},
-  version      = {v0.2.0},
-  doi          = {10.5281/zenodo.8110063},
-  url          = {https://doi.org/10.5281/zenodo.8110063}
-}
-```
-
-and the specific verstion of TUV-x that you are using can be found by
-clicking on the zenodo banner above. Choose the appropraite version there
-and use the citation provided by Zenodo.
 
 # Community and contributions
 We welcome contributions and feedback from anyone, everything from updating

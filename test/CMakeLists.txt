@@ -2,7 +2,11 @@
 # Test utilities
 
 add_library(tuvx_test_utils unit/test_utils.F90)
-target_link_libraries(tuvx_test_utils musica::tuvx)
+target_link_libraries(tuvx_test_utils PUBLIC musica::tuvx)
+
+if(TUVX_ENABLE_LAPACK)
+  target_link_libraries(tuvx_test_utils PUBLIC LAPACK::LAPACK)
+endif()
 
 set_target_properties(tuvx_test_utils PROPERTIES
   Fortran_MODULE_DIRECTORY ${PROJECT_BINARY_DIR}/test_include
@@ -27,8 +31,8 @@ add_custom_target(copy_test_data ALL ${CMAKE_COMMAND} -E copy_directory
 string(REGEX MATCH "^[0-9]+" CMAKE_Fortran_COMPILER_MAJOR_VERSION ${CMAKE_Fortran_COMPILER_VERSION})
 
 add_subdirectory(unit)
-if(NOT ${CMAKE_Fortran_COMPILER_ID} MATCHES "NAG" AND NOT (${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU" AND ${CMAKE_Fortran_COMPILER_MAJOR_VERSION} VERSION_EQUAL 13))
-  # oldtuv doesn't build with NAG, so bypass the regression tests
+if(NOT ${CMAKE_Fortran_COMPILER_ID} MATCHES "NAG" AND NOT (${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU" AND ${CMAKE_Fortran_COMPILER_MAJOR_VERSION} VERSION_EQUAL 13) AND TUVX_ENABLE_REGRESSION_TESTS)
+  # oldtuv doesn't build with NAG and GCC/13, so bypass the regression tests
   add_subdirectory(oldtuv)
   add_subdirectory(regression)
 endif()

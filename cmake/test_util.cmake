@@ -26,15 +26,50 @@ function(create_standard_test)
   cmake_parse_arguments(${prefix} " " "${singleValues}" "${multiValues}" ${ARGN})
   add_executable(test_${TEST_NAME} ${TEST_SOURCES})
   set_target_properties(test_${TEST_NAME} PROPERTIES LINKER_LANGUAGE Fortran)
-  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils ${BLAS_LIBRARIES} ${LAPACK_LIBRARIES})
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx tuvx_test_utils GTest::gtest_main)
   if(TUVX_ENABLE_OPENMP)
     target_link_libraries(test_${TEST_NAME} PUBLIC OpenMP::OpenMP_Fortran)
   endif()
   if(NOT DEFINED TEST_WORKING_DIRECTORY)
     set(TEST_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
   endif()
+  if(TUVX_ENABLE_LAPACK)
+    target_link_libraries(test_${TEST_NAME} PUBLIC ${LAPACK_LIBRARIES} ${BLAS_LIBRARIES})
+  endif()
   add_tuvx_test(${TEST_NAME} test_${TEST_NAME} "" ${TEST_WORKING_DIRECTORY})
 endfunction(create_standard_test)
+
+################################################################################
+# build and add a standard test (one linked to the tuvx library)
+
+function(create_standard_cxx_test)
+  set(prefix TEST)
+  set(optionalValues SKIP_MEMCHECK)
+  set(singleValues NAME WORKING_DIRECTORY)
+  set(multiValues SOURCES LIBRARIES)
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(${prefix} "${optionalValues}" "${singleValues}" "${multiValues}" ${ARGN})
+
+  add_executable(test_${TEST_NAME} ${TEST_SOURCES})
+  target_link_libraries(test_${TEST_NAME} PUBLIC musica::tuvx GTest::gtest_main)
+
+  if(TUVX_ENABLE_LAPACK)
+    target_include_directories(test_${TEST_NAME} PUBLIC ${LAPACK_INCLUDE_DIRS})
+    target_link_libraries(test_${TEST_NAME} PUBLIC LAPACK::LAPACK ${LAPACKE_LIBRARIES})
+  endif()
+
+  # link additional libraries
+  foreach(library ${TEST_LIBRARIES})
+    target_link_libraries(test_${TEST_NAME} PUBLIC ${library})
+  endforeach()
+
+  if(NOT DEFINED TEST_WORKING_DIRECTORY)
+    set(TEST_WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
+  endif()
+
+  add_tuvx_test(${TEST_NAME} test_${TEST_NAME} "" ${TEST_WORKING_DIRECTORY} ${TEST_SKIP_MEMCHECK})
+endfunction(create_standard_cxx_test)
 
 ################################################################################
 # Add a test
