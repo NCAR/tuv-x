@@ -11,7 +11,6 @@ module tuvx_radiative_transfer
   use musica_string,                 only : string_t
   use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
   use tuvx_grid_warehouse,           only : grid_warehouse_t
-  use tuvx_grid_warehouse,           only : grid_warehouse_t
   use tuvx_la_sr_bands,              only : la_sr_bands_t
   use tuvx_profile,                  only : profile_t
   use tuvx_profile_warehouse,        only : profile_warehouse_ptr, profile_warehouse_t
@@ -22,8 +21,6 @@ module tuvx_radiative_transfer
   use tuvx_solver,                   only : solver_t, radiation_field_t
   use tuvx_solver_factory,           only : solver_allocate, solver_builder, solver_type_name
   use tuvx_spherical_geometry,       only : spherical_geometry_t
-
-
 
   implicit none
   private

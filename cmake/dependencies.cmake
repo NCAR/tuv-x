@@ -4,8 +4,11 @@ include(FetchContent)
 # ##############################################################################
 # LAPACK
 
-find_package(BLAS)
-find_package(LAPACK)
+if(TUVX_ENABLE_LAPACK)
+  find_package(LAPACK)
+  find_package(LAPACKE)
+  find_package(BLAS)
+endif()
 
 # ##############################################################################
 # Memory check
@@ -68,7 +71,20 @@ if(TUVX_BUILD_DOCS)
 endif()
 
 # ##############################################################################
-# google test
+# google test and benchmark
+
+if(TUVX_ENABLE_BENCHMARK)
+  FetchContent_Declare(
+    googlebenchmark
+    GIT_REPOSITORY https://github.com/google/benchmark.git
+    GIT_TAG v1.8.3)
+
+  set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
+  set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
+  set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF)
+  set(BENCHMARK_ENABLE_TESTING OFF)
+  FetchContent_MakeAvailable(googlebenchmark)
+endif()
 
 if(TUVX_ENABLE_TESTS)
   FetchContent_Declare(
@@ -89,3 +105,5 @@ if(TUVX_ENABLE_TESTS)
   set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
   set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
 endif()
+
+# ##############################################################################
