@@ -31,7 +31,7 @@ jobs:
             base-devel
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-pkg-config   # Add pkg-config here
+            mingw-w64-x86_64-pkgconf  # Corrected package name (pkgconf instead of pkg-config)
           msystem: MINGW64
 
       - name: Add MSYS2 mingw64 to PATH
@@ -45,4 +45,4 @@ jobs:
 
       - name: Run tests
         run: ctest -C ${{ matrix.build_type }} --rerun-failed --output-on-failure . --verbose
-        working-directory: build 
+        working-directory: build
