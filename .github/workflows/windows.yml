@@ -1,0 +1,47 @@
+name: Windows
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  gnu:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            base-devel
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+          msystem: MINGW64
+
+      - name: Add MSYS2 mingw64 to PATH
+        run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+
+      - name: Configure with CMake
+        run: cmake -G "MinGW Makefiles" -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+
+      - name: Build the project
+        run: cmake --build build  --verbose
+
+      - name: Run tests
+        run: ctest -C ${{ matrix.build_type }} --rerun-failed --output-on-failure . --verbose
+        working-directory: build
