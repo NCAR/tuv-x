@@ -31,7 +31,7 @@ jobs:
             base-devel
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-pkgconf  # Corrected package name (pkgconf instead of pkg-config)
+            mingw-w64-x86_64-pkgconf
           msystem: MINGW64
 
       - name: Add MSYS2 mingw64 to PATH
