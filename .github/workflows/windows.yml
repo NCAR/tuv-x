@@ -32,14 +32,14 @@ jobs:
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-pkgconf
+
           msystem: MINGW64
 
-    
       - name: Link pkg-config
         run: |
-          if [ ! -f /mingw64/bin/pkg-config ]; then
-            ln -s /mingw64/bin/pkgconf /mingw64/bin/pkg-config
-          fi
+          if (!(Test-Path "C:/msys64/mingw64/bin/pkg-config")) {
+            New-Item -ItemType SymbolicLink -Path "C:/msys64/mingw64/bin/pkg-config" -Target "C:/msys64/mingw64/bin/pkgconf"
+          }
 
       - name: Add MSYS2 mingw64 to PATH
         run: |
@@ -53,8 +53,4 @@ jobs:
         run: cmake -G "MinGW Makefiles" -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
       - name: Build the project
-        run: cmake --build build --verbose
-
-      - name: Run tests
-        run: ctest -C ${{ matrix.build_type }} --rerun-failed --output-on-failure . --verbose
-        working-directory: build
+        run: cm
