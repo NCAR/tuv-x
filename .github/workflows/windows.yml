@@ -32,7 +32,9 @@ jobs:
         echo "C:/msys64/mingw64/bin" >> $GITHUB_ENV
         echo "C:/msys64/usr/bin" >> $GITHUB_ENV
 
-
+    - name: Verify PkgConfig installation
+      run: pkg-config --version
+      
     - name: Configure with CMake
       run: cmake -G "MinGW Makefiles" -B build
 
