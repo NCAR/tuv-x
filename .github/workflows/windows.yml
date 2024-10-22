@@ -33,7 +33,7 @@ jobs:
         echo "C:/msys64/usr/bin" >> $GITHUB_ENV
     
     - name: List MSYS2 binaries
-      run: ls -al C:/msys64/mingw64/bin
+      run: Get-ChildItem C:/msys64/mingw64/bin
 
     - name: Verify PkgConfig installation
       run: pkg-config --version
