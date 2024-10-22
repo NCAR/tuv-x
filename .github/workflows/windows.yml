@@ -31,11 +31,23 @@ jobs:
             base-devel
             mingw-w64-x86_64-toolchain
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-pkg-config
+            mingw-w64-x86_64-pkgconf
           msystem: MINGW64
 
+    
+      - name: Link pkg-config
+        run: |
+          if [ ! -f /mingw64/bin/pkg-config ]; then
+            ln -s /mingw64/bin/pkgconf /mingw64/bin/pkg-config
+          fi
+
       - name: Add MSYS2 mingw64 to PATH
-        run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+        run: |
+          echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+          echo "C:/msys64/usr/bin" >> $GITHUB_PATH
+
+      - name: Verify PkgConfig installation
+        run: pkg-config --version
 
       - name: Configure with CMake
         run: cmake -G "MinGW Makefiles" -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
