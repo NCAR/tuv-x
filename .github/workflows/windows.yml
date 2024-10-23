@@ -32,9 +32,12 @@ jobs:
       run: |
         echo "PATH=C:/msys64/mingw64/bin:C:/msys64/usr/bin:$PATH" >> $GITHUB_ENV
 
-
     - name: Check PATH
       run: echo $PATH
+
+    - name: Check pkg-config location
+      shell: bash
+      run: which pkg-config
 
     - name: Verify pkg-config
       shell: bash
