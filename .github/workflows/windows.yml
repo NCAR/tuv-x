@@ -43,7 +43,7 @@ jobs:
 
     - name: Verify pkg-config
       shell: bash
-      run: pkg-config --version
+      run: /c/msys64/mingw64/bin/pkg-config --version
 
     - name: Configure with CMake
       shell: bash
