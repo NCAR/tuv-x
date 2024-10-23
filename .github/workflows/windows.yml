@@ -26,12 +26,12 @@ jobs:
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
         msystem: MINGW64
-
-    - name: Add MSYS2 to Path
+    
+    - name: Add MSYS2 to PATH
       shell: bash
       run: |
-        echo "C:/msys64/mingw64/bin" >> $GITHUB_ENV
-        echo "C:/msys64/usr/bin" >> $GITHUB_ENV
+        echo "PATH=C:/msys64/mingw64/bin:$PATH" >> $GITHUB_ENV
+        echo "PATH=C:/msys64/usr/bin:$PATH" >> $GITHUB_ENV
 
     - name: Verify pkg-config
       run: pkg-config --version
