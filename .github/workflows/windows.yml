@@ -33,7 +33,9 @@ jobs:
         echo "C:/msys64/usr/bin" >> $GITHUB_ENV
 
     - name: Configure with CMake
-      run: cmake -G "MinGW Makefiles" -B build -D PKG_CONFIG_EXECUTABLE=C:/msys64/mingw64/bin/pkg-config
+      shell: bash
+      run: cmake -G "MinGW Makefiles" -B build -D PKG_CONFIG_EXECUTABLE=/mingw64/bin/pkg-config
+
 
     - name: Build the project
       run: cmake --build build
