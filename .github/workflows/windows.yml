@@ -33,8 +33,10 @@ jobs:
         echo "PATH=C:/msys64/mingw64/bin:$PATH" >> $GITHUB_ENV
         echo "PATH=C:/msys64/usr/bin:$PATH" >> $GITHUB_ENV
 
-    - name: Verify pkg-config
-      run: pkg-config --version
+    - name: Check PATH
+      run: echo $PATH
+
+   
 
     - name: Configure with CMake
       run: cmake -G "MinGW Makefiles" -B build -D PKG_CONFIG_EXECUTABLE=C:/msys64/mingw64/bin/pkg-config
