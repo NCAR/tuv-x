@@ -37,6 +37,7 @@ jobs:
       run: echo $PATH
 
     - name: Verify pkg-config
+      shell: bash
       run: pkg-config --version
 
     - name: Configure with CMake
