@@ -28,6 +28,7 @@ jobs:
         msystem: MINGW64
 
     - name: Add MSYS2 to Path
+      shell: bash
       run: |
         echo "C:/msys64/mingw64/bin" >> $GITHUB_ENV
         echo "C:/msys64/usr/bin" >> $GITHUB_ENV
