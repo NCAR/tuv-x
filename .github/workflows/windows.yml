@@ -30,8 +30,8 @@ jobs:
     - name: Add MSYS2 to PATH
       shell: bash
       run: |
-        echo "PATH=C:/msys64/mingw64/bin:$PATH" >> $GITHUB_ENV
-        echo "PATH=C:/msys64/usr/bin:$PATH" >> $GITHUB_ENV
+        echo "PATH=C:/msys64/mingw64/bin:C:/msys64/usr/bin:$PATH" >> $GITHUB_ENV
+
 
     - name: Check PATH
       run: echo $PATH
