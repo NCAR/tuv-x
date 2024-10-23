@@ -25,7 +25,6 @@ jobs:
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
-          mingw-w64-x86_64-pkgconf
         msystem: MINGW64
     
     - name: Add MSYS2 to PATH
