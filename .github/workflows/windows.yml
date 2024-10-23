@@ -25,6 +25,7 @@ jobs:
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
+          mingw-w64-x86_64-pkgconf
         msystem: MINGW64
     
     - name: Add MSYS2 to PATH
@@ -42,9 +43,10 @@ jobs:
 
     - name: Verify pkg-config
       shell: bash
-      run: /mingw64/bin/pkg-config --version
+      run: pkg-config --version
 
     - name: Configure with CMake
+      shell: bash
       run: cmake -G "MinGW Makefiles" -B build -D PKG_CONFIG_EXECUTABLE=C:/msys64/mingw64/bin/pkg-config
 
     - name: Build the project
