@@ -47,7 +47,16 @@ jobs:
 
     - name: Configure with CMake
       shell: bash
-      run: cmake -G "MinGW Makefiles" -B build
+      env:
+        CC: /c/mingw64/bin/gcc
+        CXX: /c/mingw64/bin/g++
+        FC: /c/mingw64/bin/gfortran
+      run: |
+        cmake -G "MinGW Makefiles" -B build \
+        -DCMAKE_MAKE_PROGRAM=/c/mingw64/bin/make \
+        -DCMAKE_C_COMPILER=/c/mingw64/bin/gcc \
+        -DCMAKE_CXX_COMPILER=/c/mingw64/bin/g++ \
+        -DCMAKE_Fortran_COMPILER=/c/mingw64/bin/gfortran
 
     - name: Build the project
       shell: bash
