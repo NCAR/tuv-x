@@ -32,6 +32,9 @@ jobs:
       run: |
         export PATH="/c/msys64/mingw64/bin:/c/msys64/usr/bin:$PATH"
         echo "PATH=$PATH" >> $GITHUB_ENV
+    
+    - name: Check CMake installation
+      run: cmake --version
 
     - name: Configure with CMake
       run: cmake -G "MinGW Makefiles" -B build
