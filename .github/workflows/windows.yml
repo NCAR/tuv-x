@@ -32,16 +32,6 @@ jobs:
       run: |
         export PATH="/c/msys64/mingw64/bin:/c/msys64/usr/bin:$PATH"
         echo "PATH=$PATH" >> $GITHUB_ENV
-    
-    - name: Install CMake with pacman
-      shell: bash
-      run: |
-        pacman -S --noconfirm mingw-w64-x86_64-cmake
-
-    - name: Install Toolchain (C, C++, Fortran Compilers)
-      shell: bash
-      run: |
-        pacman -S --noconfirm mingw-w64-x86_64-toolchain
 
     - name: Check if CMake exists in the expected path
       shell: bash
@@ -57,13 +47,7 @@ jobs:
 
     - name: Configure with CMake
       shell: bash
-      env:
-        CC: /c/msys64/mingw64/bin/gcc
-        CXX: /c/msys64/mingw64/bin/g++
-        FC: /c/mingw64/bin/gfortran
-      run: |
-        cmake -G "MinGW Makefiles" -B build \
-        -DCMAKE_MAKE_PROGRAM=/c/mingw64/bin/make
+      run: cmake -G "MinGW Makefiles" -B build
 
     - name: Build the project
       shell: bash
