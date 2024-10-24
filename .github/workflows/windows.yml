@@ -42,7 +42,9 @@ jobs:
       run: ls /c/msys64/mingw64/bin/cmake
 
     - name: Configure with CMake
+      shell: bash
       run: cmake -G "MinGW Makefiles" -B build
 
     - name: Build the project
+      shell: bash
       run: cmake --build build
