@@ -60,9 +60,10 @@ jobs:
       env:
         CC: /c/msys64/mingw64/bin/gcc
         CXX: /c/msys64/mingw64/bin/g++
-        FC: /c/msys64/mingw64/bin/gfortran
+        FC: /c/mingw64/bin/gfortran
       run: |
-        cmake -G "MinGW Makefiles" -B build
+        cmake -G "MinGW Makefiles" -B build \
+        -DCMAKE_MAKE_PROGRAM=/c/mingw64/bin/make
 
     - name: Build the project
       shell: bash
