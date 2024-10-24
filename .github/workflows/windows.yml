@@ -33,10 +33,6 @@ jobs:
         export PATH="/c/msys64/mingw64/bin:/c/msys64/usr/bin:$PATH"
         echo "PATH=$PATH" >> $GITHUB_ENV
     
-    - name: Check CMake installation in MSYS2
-      run: |
-        pacman -Q mingw-w64-x86_64-cmake
-    
     - name: Check if CMake exists in the expected path
       run: ls /c/msys64/mingw64/bin/cmake
 
