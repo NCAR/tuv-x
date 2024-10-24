@@ -47,14 +47,22 @@ jobs:
       shell: bash
       run: ls /c/msys64/mingw64/bin/cmake
 
-    - name: Configure with CMake
+    - name: Check if compilers are available
       shell: bash
       run: |
-        cmake -G "MinGW Makefiles" -B build \
-        -DCMAKE_MAKE_PROGRAM=/c/msys64/mingw64/bin/make \
-        -DCMAKE_C_COMPILER=/c/msys64/mingw64/bin/gcc \
-        -DCMAKE_CXX_COMPILER=/c/msys64/mingw64/bin/g++ \
-        -DCMAKE_Fortran_COMPILER=/c/msys64/mingw64/bin/gfortran
+        which gcc
+        which g++
+        which gfortran
+        which make
+
+    - name: Configure with CMake
+      shell: bash
+      env:
+        CC: /c/msys64/mingw64/bin/gcc
+        CXX: /c/msys64/mingw64/bin/g++
+        FC: /c/msys64/mingw64/bin/gfortran
+      run: |
+        cmake -G "MinGW Makefiles" -B build
 
     - name: Build the project
       shell: bash
