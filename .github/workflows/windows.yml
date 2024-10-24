@@ -37,6 +37,9 @@ jobs:
       shell: bash
       run: cmake --version
 
+    - name: Add MinGW to PATH
+      run: echo "C:/mingw64/bin" >> $GITHUB_PATH
+
     - name: Check if compilers are available
       shell: bash
       run: |
