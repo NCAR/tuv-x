@@ -49,7 +49,12 @@ jobs:
 
     - name: Configure with CMake
       shell: bash
-      run: cmake -G "MinGW Makefiles" -B build
+      run: |
+        cmake -G "MinGW Makefiles" -B build \
+        -DCMAKE_MAKE_PROGRAM=/c/msys64/mingw64/bin/make \
+        -DCMAKE_C_COMPILER=/c/msys64/mingw64/bin/gcc \
+        -DCMAKE_CXX_COMPILER=/c/msys64/mingw64/bin/g++ \
+        -DCMAKE_Fortran_COMPILER=/c/msys64/mingw64/bin/gfortran
 
     - name: Build the project
       shell: bash
