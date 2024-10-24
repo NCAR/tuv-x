@@ -35,7 +35,7 @@ jobs:
 
     - name: Check if CMake exists in the expected path
       shell: bash
-      run: ls /c/msys64/mingw64/bin/cmake
+      run: cmake --version
 
     - name: Check if compilers are available
       shell: bash
