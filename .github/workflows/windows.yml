@@ -30,7 +30,7 @@ jobs:
     - name: Add MSYS2 to PATH
       shell: bash
       run: |
-        export PATH="/c/msys64/mingw64/bin:/c/msys64/usr/bin:$PATH"
+        export PATH="/c/msys64/mingw64/bin:$PATH"
         echo "PATH=$PATH" >> $GITHUB_ENV
 
     - name: Check if CMake exists in the expected path
