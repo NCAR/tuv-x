@@ -55,6 +55,7 @@ jobs:
         CXX: /c/mingw64/bin/g++
         FC: /c/mingw64/bin/gfortran
       run: |
+        gfortran --version
         cmake -G "MinGW Makefiles" -B build \
         -DCMAKE_MAKE_PROGRAM=/c/mingw64/bin/make \
         -DCMAKE_C_COMPILER=/c/mingw64/bin/gcc \
