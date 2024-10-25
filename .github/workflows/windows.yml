@@ -26,9 +26,6 @@ jobs:
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
         msystem: MINGW64
-    
-    - name: Add MSYS2 to Path
-      run: echo "::add-path::C:\msys64\mingw64\bin"
 
     - name: Check if CMake exists in the expected path
       run: cmake --version
@@ -41,17 +38,7 @@ jobs:
         make --version
 
     - name: Configure with CMake
-      env:
-        CC: /c/mingw64/bin/gcc
-        CXX: /c/mingw64/bin/g++
-        FC: /c/mingw64/bin/gfortran
-      run: |
-        gfortran --version
-        cmake -G "MinGW Makefiles" -B build \
-        -DCMAKE_MAKE_PROGRAM=/c/mingw64/bin/make \
-        -DCMAKE_C_COMPILER=/c/mingw64/bin/gcc \
-        -DCMAKE_CXX_COMPILER=/c/mingw64/bin/g++ \
-        -DCMAKE_Fortran_COMPILER=/c/mingw64/bin/gfortran
+      run: cmake -G "MinGW Makefiles" -B build
 
     - name: Build the project
       run: cmake --build build
