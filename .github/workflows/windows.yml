@@ -27,29 +27,20 @@ jobs:
           mingw-w64-x86_64-netcdf-fortran
         msystem: MINGW64
     
-    - name: Add MSYS2 to PATH
-      shell: bash
-      run: |
-        export PATH="/c/msys64/mingw64/bin:$PATH"
-        echo "PATH=$PATH" >> $GITHUB_ENV
+    - name: Add MSYS2 to Path
+      run: echo "::add-path::C:\msys64\mingw64\bin"
 
     - name: Check if CMake exists in the expected path
-      shell: bash
       run: cmake --version
 
-    - name: Add MinGW to PATH
-      run: echo "C:/mingw64/bin" >> $GITHUB_PATH
-
     - name: Check if compilers are available
-      shell: bash
       run: |
-        which gcc
-        which g++
-        which gfortran
-        which make
+        gcc --version
+        g++ --version
+        gfortran --version
+        make --version
 
     - name: Configure with CMake
-      shell: bash
       env:
         CC: /c/mingw64/bin/gcc
         CXX: /c/mingw64/bin/g++
@@ -63,5 +54,4 @@ jobs:
         -DCMAKE_Fortran_COMPILER=/c/mingw64/bin/gfortran
 
     - name: Build the project
-      shell: bash
       run: cmake --build build
