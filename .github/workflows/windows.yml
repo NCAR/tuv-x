@@ -38,7 +38,7 @@ jobs:
         pkg-config --version
 
     - name: Add MSYS2 mingw64 to PATH
-        run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
+      run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
         
     - name: Configure with CMake
       run: |
