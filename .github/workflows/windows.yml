@@ -10,12 +10,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  gnu:
+    runs-on: windows-latest
     strategy:
       matrix:
         build_type: [Debug, Release]
-
-  gnu:
-    runs-on: windows-latest
 
     steps:
     - name: Checkout code
