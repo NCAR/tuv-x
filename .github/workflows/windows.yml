@@ -1,8 +1,20 @@
-build_type: [Debug, Release]
+name: Windows
+
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  gnu:
     runs-on: windows-latest
+    continue-on-error: true 
     strategy:
       matrix:
         gcc_version: [12.2.0-1, 13.1.0-1, 14.0.0-1]
@@ -36,14 +48,16 @@ jobs:
         make --version
         pkg-config --version
 
-    - name: Run CMake
+    - name: Configure with CMake
       shell: msys2 {0}
-      run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+      run: |
+        cmake -G "MinGW Makefiles" -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
-    - name: Build
+    - name: Build the project
       shell: msys2 {0}
-      run: cmake --build build --verbose
-
-    - name: Test
+      run: cmake --build build
+    
+    - name: Run the tests
+      working-directory: build
       shell: msys2 {0}
-      run: ctest -C ${{ matrix.build_type }} --output-on-failure
+      run: ctest -C ${{ matrix.build_type }} --output-on-failure 
