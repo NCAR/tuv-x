@@ -10,6 +10,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
+
   gnu:
     runs-on: windows-latest
 
@@ -29,31 +33,26 @@ jobs:
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
         msystem: MINGW64
-
-    - name: Check if CMake exists in the expected path
-      run: cmake --version
     
-    - name: List everything installed with mingw64
-      shell: msys2 {0}
-      run: ls /c/msys64/mingw64/bin
-
-    - name: Check if compilers are available
+    - name: Check package versions
       shell: msys2 {0}
       run: |
+        cmake --version
         gcc --version
         g++ --version
         gfortran --version
         make --version
         pkg-config --version
 
-    - name: Add MSYS2 mingw64 to PATH
-      run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
-        
     - name: Configure with CMake
       shell: msys2 {0}
       run: |
-        cmake -G "MinGW Makefiles" -B build -S .
+        cmake -G "MinGW Makefiles" -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
     - name: Build the project
       shell: msys2 {0}
       run: cmake --build build
+    
+    - name: Run the tests
+      shell: msys2 {0}
+      run: ctest -C ${{ matrix.build_type }}
