@@ -17,7 +17,7 @@ jobs:
     continue-on-error: true 
     strategy:
       matrix:
-        gcc_version: [12.2.0-1, 13.1.0-1, 14.0.0-1]
+        gcc_version: [12.2.0-1, 13.1.0-1, 14.1.0-1]
         build_type: [Debug, Release]
 
     steps:
@@ -31,8 +31,8 @@ jobs:
         install: >-
           base-devel
           mingw-w64-x86_64-toolchain
-          mingw-w64-x86_64-gcc=${{ matrix.gcc_version }}
-          mingw-w64-x86_64-gcc-fortran=${{ matrix.gcc_version }}
+          mingw-w64-x86_64-gcc-${{ matrix.gcc_version }}
+          mingw-w64-x86_64-gcc-fortran-${{ matrix.gcc_version }}
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
