@@ -6,6 +6,7 @@ include(test_util)
 ################################################################################
 # Utility tests
 
+# windows doesn't run .sh files
 if(NOT WIN32)
   create_standard_test(NAME util_array SOURCES array.F90)
 
