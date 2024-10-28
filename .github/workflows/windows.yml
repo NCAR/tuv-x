@@ -27,7 +27,6 @@ jobs:
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
-          mingw-w64-x86_64-pkg-config
         msystem: MINGW64
 
     - name: Check if CMake exists in the expected path
@@ -39,14 +38,14 @@ jobs:
         g++ --version
         gfortran --version
         make --version
-        pkg-config --version
+        pkgconf --version
 
     - name: Add MSYS2 mingw64 to PATH
       run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
         
     - name: Configure with CMake
       run: |
-        cmake -G "MinGW Makefiles" -B build -S . -D PKG_CONFIG_EXECUTABLE="C:/msys64/mingw64/bin/pkg-config.exe"
+        cmake -G "MinGW Makefiles" -B build -S . -D PKG_CONFIG_EXECUTABLE="C:/msys64/mingw64/bin/pkgconf.exe"
 
 
     - name: Build the project
