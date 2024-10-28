@@ -37,6 +37,9 @@ jobs:
         make --version
         pkg-config --version
 
+    - name: Print pkg-config Path
+      run: where pkg-config
+
     - name: Configure with CMake
       run: cmake -G "MinGW Makefiles" -B build
 
