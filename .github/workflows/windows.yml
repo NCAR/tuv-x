@@ -31,6 +31,18 @@ jobs:
 
     - name: Check if CMake exists in the expected path
       run: cmake --version
+    
+    - name: List everything installed with mingw64
+      shell: msys2 {0}
+      run: ls /c/msys64/mingw64/bin
+
+    - name: Check if compilers are available
+      run: |
+        gcc --version
+        g++ --version
+        gfortran --version
+        make --version
+        pkg-config --version
 
     - name: Add MSYS2 mingw64 to PATH
       run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
@@ -38,7 +50,6 @@ jobs:
     - name: Configure with CMake
       run: |
         cmake -G "MinGW Makefiles" -B build -S . -D PKG_CONFIG_EXECUTABLE="C:/msys64/mingw64/bin/pkgconf.exe"
-
 
     - name: Build the project
       run: cmake --build build
