@@ -52,7 +52,7 @@ jobs:
     - name: Configure with CMake
       shell: msys2 {0}
       run: |
-        cmake -G "MinGW Makefiles" -B build -S . -D PKG_CONFIG_EXECUTABLE="C:/msys64/mingw64/bin/pkgconf.exe"
+        cmake -G "MinGW Makefiles" -B build -S .
 
     - name: Build the project
       shell: msys2 {0}
