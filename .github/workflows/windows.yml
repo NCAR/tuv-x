@@ -41,7 +41,9 @@ jobs:
       run: where pkg-config
 
     - name: Configure with CMake
-      run: cmake -G "MinGW Makefiles" -B build
+      shell: msys2 {0}
+      run: |
+        cmake -G "MinGW Makefiles" -B build -S .
 
     - name: Build the project
       run: cmake --build build
