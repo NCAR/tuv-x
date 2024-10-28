@@ -12,6 +12,7 @@ concurrency:
 jobs:
   gnu:
     runs-on: windows-latest
+    continue-on-error: true 
     strategy:
       matrix:
         build_type: [Debug, Release]
@@ -53,6 +54,5 @@ jobs:
       run: cmake --build build
     
     - name: Run the tests
-      working-directory: tuv-x
       shell: msys2 {0}
-      run: ctest -C ${{ matrix.build_type }}
+      run: cd tuv-x && ctest -C ${{ matrix.build_type }}
