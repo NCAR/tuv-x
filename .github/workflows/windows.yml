@@ -32,14 +32,6 @@ jobs:
     - name: Check if CMake exists in the expected path
       run: cmake --version
 
-    - name: Check if compilers are available
-      run: |
-        gcc --version
-        g++ --version
-        gfortran --version
-        make --version
-        pkgconf --version
-
     - name: Add MSYS2 mingw64 to PATH
       run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
         
