@@ -54,5 +54,6 @@ jobs:
       run: cmake --build build
     
     - name: Run the tests
+      working-directory: build
       shell: msys2 {0}
-      run: cd tuv-x && ctest -C ${{ matrix.build_type }}
+      run: ctest -C ${{ matrix.build_type }}
