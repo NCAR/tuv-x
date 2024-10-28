@@ -33,3 +33,6 @@ jobs:
 
       - name: Build
         run: cmake --build build  --verbose
+      
+      - name: Test
+        run: ctest -C ${{ matrix.build_type }} --output-on-failure
