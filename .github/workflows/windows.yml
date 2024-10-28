@@ -35,6 +35,7 @@ jobs:
         g++ --version
         gfortran --version
         make --version
+        pkg-config --version
 
     - name: Configure with CMake
       run: cmake -G "MinGW Makefiles" -B build
