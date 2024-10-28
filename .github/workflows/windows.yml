@@ -2,8 +2,6 @@ name: Windows
 
 on: 
   push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
@@ -25,6 +23,7 @@ jobs:
           mingw-w64-x86_64-cmake
           mingw-w64-x86_64-netcdf
           mingw-w64-x86_64-netcdf-fortran
+          mingw-w64-x86_64-pkg-config
         msystem: MINGW64
 
     - name: Check if CMake exists in the expected path
