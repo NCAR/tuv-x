@@ -37,6 +37,7 @@ jobs:
       run: ls /c/msys64/mingw64/bin
 
     - name: Check if compilers are available
+      shell: msys2 {0}
       run: |
         gcc --version
         g++ --version
@@ -48,8 +49,10 @@ jobs:
       run: echo "C:/msys64/mingw64/bin" >> $GITHUB_PATH
         
     - name: Configure with CMake
+      shell: msys2 {0}
       run: |
         cmake -G "MinGW Makefiles" -B build -S . -D PKG_CONFIG_EXECUTABLE="C:/msys64/mingw64/bin/pkgconf.exe"
 
     - name: Build the project
+      shell: msys2 {0}
       run: cmake --build build
