@@ -1,6 +1,6 @@
 [
     {
-        "name": "v0.10 (stable)",
+        "name": "v0.11 (stable)",
         "version": "stable",
         "url": "https://ncar.github.io/tuv-x/versions/stable/"
     },
@@ -33,5 +33,10 @@
         "name": "v0.10",
         "version": "0.10",
         "url": "https://ncar.github.io/tuv-x/versions/0.10/"
+    },
+    {
+        "name": "v0.11",
+        "version": "0.11",
+        "url": "https://ncar.github.io/tuv-x/versions/0.11/"
     }
 ]
