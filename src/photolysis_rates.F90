@@ -380,10 +380,13 @@ rate_loop:                                                                    &
       if( allocated( quantum_yield ) ) deallocate( quantum_yield )
     end do rate_loop
 
-    call diagout( 'annotatedjlabels.new', this%handles_,                      &
-      this%enable_diagnostics_ )
-    call diagout( 'xsqy.'//file_tag//'.new', xsqyWrk, this%enable_diagnostics_ )
-
+    if (this%enable_diagnostics_) then
+    associate( enable => this%enable_diagnostics_ )
+      call diagout( 'annotatedjlabels.new', this%handles_, enable )
+      call diagout( 'xsqy.'//file_tag//'.new', xsqyWrk, enable )
+    end associate
+    end if
+    
     deallocate( zGrid )
     deallocate( lambdaGrid )
     deallocate( etfl )
