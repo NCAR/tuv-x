@@ -2,8 +2,6 @@ name: Ubuntu
 
 on: 
   push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
@@ -17,7 +15,7 @@ jobs:
     continue-on-error: true
     strategy:
       matrix:
-        gcc_version: [12, 14]
+        gcc_version: [12, 13, 14]
     env:
       CXX: g++-${{ matrix.gcc_version }}
       CC: gcc-${{ matrix.gcc_version }}
