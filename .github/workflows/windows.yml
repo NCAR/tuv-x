@@ -50,7 +50,7 @@ jobs:
     - name: Configure with CMake
       shell: msys2 {0}
       run: |
-        cmake -G "MinGW Makefiles" -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
+        cmake -G "MinGW Makefiles" -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D CMAKE_POLICY_VERSION_MINIMUM=3.5
 
     - name: Build the project
       shell: msys2 {0}
