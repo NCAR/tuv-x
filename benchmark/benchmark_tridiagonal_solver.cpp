@@ -1,8 +1,11 @@
 
+#include "magma_auxiliary.h"
+
 #include <tuvx/linear_algebra/linear_algebra.hpp>
 
 #include <benchmark/benchmark.h>
 
+#include <magma.h>
 #include <random>
 #include <vector>
 
@@ -12,8 +15,6 @@
   #include <lapacke.h>
 #endif
 
-const std::size_t SYSTEM_SIZE = 1e6;
-
 const bool MAKE_DIAGONALLY_DOMINANT = true;
 
 const unsigned RANDOM_NUMBER_SEED = 1;
@@ -22,6 +23,7 @@ const unsigned RANDOM_NUMBER_SEED = 1;
 /// @param state Benchmarking argument
 static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<float> x(SYSTEM_SIZE);
   std::vector<float> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
@@ -50,6 +52,7 @@ static void BM_LAPACKE_SINGLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<double> x(SYSTEM_SIZE);
   std::vector<double> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
@@ -80,6 +83,7 @@ static void BM_LAPACKE_DOUBLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<double> x(SYSTEM_SIZE);
   std::vector<double> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
@@ -99,6 +103,7 @@ static void BM_TUVX_DOUBLE_PRECISISON(benchmark::State& state)
 /// @param state Benchmarking argument
 static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
 {
+  std::size_t SYSTEM_SIZE = state.range(0);
   std::vector<float> x(SYSTEM_SIZE);
   std::vector<float> b(SYSTEM_SIZE);
   tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
@@ -116,11 +121,81 @@ static void BM_TUVX_SINGLE_PRECISISON(benchmark::State& state)
   }
 }
 
+/// @brief This function benchmarks the lapacke tridiagonal matrix solver for double precision
+/// @param state Benchmarking argument
+static void BM_MAGMA_DOUBLE_PRECISISON(benchmark::State& state)
+{
+  std::size_t SYSTEM_SIZE = state.range(0);
+  std::vector<double> x(SYSTEM_SIZE);
+  std::vector<double> b(SYSTEM_SIZE);
+  tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
+
+  std::mt19937 random_device(RANDOM_NUMBER_SEED);
+
+  // magma variables
+  int kl = 1;                  // number of subdiagonals
+  int ku = 1;                  // number of superdiagonals
+  int ldab = 2 * kl + ku + 1;  // leading dimension of above
+
+  magmaDouble_ptr A_magma;
+  magmaDouble_ptr b_magma;
+  magma_int_t* ipiv;
+  magma_int_t info;
+  magma_int_t N = SYSTEM_SIZE;
+  magma_int_t n_rhs = 1;
+
+  // Perform setup here
+  for (auto _ : state)
+  {
+    state.PauseTiming();
+    tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
+    b = tuvx::Dot<double>(A, x);
+
+    // allocate magma pointers and copy data in them
+    magma_imalloc(&ipiv, N);
+    magma_dmalloc(&A_magma, ldab * N);
+    magma_dmalloc(&b_magma, N);
+
+    // copy main diagonal
+    for (int i = 0; i < N; ++i)
+    {
+      A_magma[i] = A.main_diagonal_[i];
+    }
+    // copy lower diagonal
+    for (int i = 1; i < N; ++i)
+    {
+      A_magma[i - 1 + ldab] = A.lower_diagonal_[i];
+    }
+    // copy upper diagonal
+    for (int i = 0; i < N - 1; ++i)
+    {
+      A_magma[i + 1] = A.upper_diagonal_[i];
+    }
+    // copy RHS vector
+    for (int i = 0; i < N; ++i)
+    {
+      b_magma[i] = b[i];
+    }
+    state.ResumeTiming();
+
+    // Solve the linear system using magma_dgbsv
+    magma_dgbsv_native(N, kl, ku, n_rhs, A_magma, ldab, ipiv, b_magma, N, &info);
+
+    // free pointers
+    state.PauseTiming();
+    magma_free(A_magma);
+    magma_free(b_magma);
+    delete[] ipiv;
+    state.ResumeTiming();
+  }
+}
+
 /// @brief Register the functions defined above as a benchmark
-BENCHMARK(BM_LAPACKE_DOUBLE_PRECISISON);
-BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON);
-BENCHMARK(BM_TUVX_DOUBLE_PRECISISON);
-BENCHMARK(BM_TUVX_SINGLE_PRECISISON);
+BENCHMARK(BM_LAPACKE_DOUBLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_LAPACKE_SINGLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_TUVX_DOUBLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
+BENCHMARK(BM_TUVX_SINGLE_PRECISISON)->Arg(1e3)->Arg(1e4)->Arg(1e5)->Arg(1e6);
 
 /// @brief Run all benchmarks
 BENCHMARK_MAIN();
