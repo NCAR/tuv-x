@@ -60,6 +60,9 @@ FetchContent_Declare(
   GIT_TAG 0.8.0
   GIT_PROGRESS NOT
   ${FETCHCONTENT_QUIET})
+
+set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+
 FetchContent_MakeAvailable(yaml-cpp)
 
 # ##############################################################################
