@@ -1,6 +1,10 @@
 [
     {
+<<<<<<< HEAD
         "name": "v0.10.1 (stable)",
+=======
+        "name": "v0.11.0 (stable)",
+>>>>>>> main
         "version": "stable",
         "url": "https://ncar.github.io/tuv-x/versions/stable/"
     },
@@ -38,5 +42,10 @@
         "name": "v0.10.1",
         "version": "0.10.1",
         "url": "https://ncar.github.io/tuv-x/versions/0.10.1/"
+    },
+    {
+        "name": "v0.11.0",
+        "version": "0.11.0",
+        "url": "https://ncar.github.io/tuv-x/versions/0.11.0/"
     }
 ]

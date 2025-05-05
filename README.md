@@ -162,9 +162,6 @@ or email us at musica-info@ucar.edu.
   - Anyone interested in scientific collaboration
 which would add new software functionality should read the [MUSICA software development plan](https://github.com/NCAR/musica/blob/main/docs/Software%20Development%20Plan.pdf).
 
-- [Code of conduct](https://ncar.github.io/tuv-x/contributing/code_of_conduct.html)
-  - Please read this through to you understand the expectations with how to interact with this project.
-
 - [Contributor's guide](https://ncar.github.io/tuv-x/contributing/contributors_guide.html)
   - Before submiitting a PR, please thouroughly read this to you understand our expectations. We reserve the right to reject any PR not meeting our guidelines.
 
