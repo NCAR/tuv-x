@@ -3,7 +3,7 @@ Code of Conduct
 ===============
 
 We welcome your contributions! However, the MUSICA software development team,
-the folks responsible for developing TUV-x at NCAR, enforce certain software standards
+the folks responsible for developing TUV-x at NSF NCAR, enforce certain software standards
 which can be found in our `software development plan <https://github.com/NCAR/musica/blob/main/docs/Software%20Development%20Plan.pdf>`_.
 
 In particular, we reserve the right to reject pull requests if the new additions

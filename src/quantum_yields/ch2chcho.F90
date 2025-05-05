@@ -1,4 +1,4 @@
-! Copyright (C) 2020 National Center for Atmospheric Research
+! Copyright (C) 2020 National Science Foundation-National Center for Atmospheric Research
 ! SPDX-License-Identifier: Apache-2.0
 module tuvx_quantum_yield_ch2chcho
   ! The ch2chcho+hv->prodcuts quantum yield type and related functions

@@ -2,7 +2,7 @@
              TROPOSPHERIC ULTRAVIOLET VISIBLE (TUV) MODEL            
                            (version 5.0)                               
           S. Madronich et al., Atmospheric Chemistry Division         
-               National Center for Atmospheric Research              
+          National Science Foundation-National Center for Atmospheric Research              
                   P. O. Box 3000, Boulder, Colorado                   
                           tuv@acd.ucar.edu                             
 
@@ -239,7 +239,7 @@ LOGICAL laflux
 ?lmmech
 3
 LOGICAL lmmech
- Switch on standard output for use with NCAR Master Mechanism
+ Switch on standard output for use with NSF NCAR Master Mechanism
  Toggles between true and false.
 ?lrates
 3
