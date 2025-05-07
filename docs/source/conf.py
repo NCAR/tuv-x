@@ -28,6 +28,7 @@ suffix = os.getenv("SWITCHER_SUFFIX", "")
 # The full version, including alpha/beta/rc tags
 release = f'v0.11.0{suffix}'
 
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
