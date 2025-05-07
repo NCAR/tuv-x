@@ -2,7 +2,7 @@
 ! Licensed under the GNU General Public License version 2 or (at your
 ! option) any later version. See the file COPYING for details.
 !
-! Portions Copyright (C) 2020 National Science Foundation-National Center for Atmospheric Research
+! Portions Copyright (C) 2020-2025 University Corporation for Atmospheric Research-National Center for Atmospheric Research
 ! SPDX-License-Identifier: Apache-2.0
 !
 !> \file

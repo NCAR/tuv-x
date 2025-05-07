@@ -1,4 +1,4 @@
-! Copyright (C) 2020 National Science Foundation-National Center for Atmospheric Research
+! Copyright (C) 2020-2025 University Corporation for Atmospheric Research-National Center for Atmospheric Research
 ! SPDX-License-Identifier: GPL-2.0-or-later
 !
 !1d grid specified in json config file
