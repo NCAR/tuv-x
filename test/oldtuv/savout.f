@@ -645,7 +645,7 @@
      $     t, nj, jlabel, savjvl)
 
 * Output of actinic fluxes and J-values in format used by 
-*   the NCAR Master Mechanism
+*   the NSF NCAR Master Mechanism
 
       IMPLICIT NONE
 

@@ -2024,7 +2024,7 @@ C      ENDIF
 *=                 4) Cantrell et al. (2.5 nm res.) for > 301 nm,            =*
 *=                    IUPAC 92, 97 elsewhere                                 =*
 *=                 5) Rogers et al., 1990                                    =*
-*=                 6) new NCAR recommendation, based on averages of          =*
+*=                 6) new NSF NCAR recommendation, based on averages of          =*
 *=                    Cantrell et al., Moortgat and Schneider, and Rogers    =*
 *=                    et al.                                                 =*
 *=  Quantum yield: Choice between                                            =*
@@ -2148,7 +2148,7 @@ C      ENDIF
 * 5:  odat/DATAJ1/CH2O/CH2O_rog.abs'
 *     from Rogers et al., J. Phys. Chem. 94, 4011, 1990.
 * 6:  DATAJ2/CH2O_ncar.abs
-*     new NCAR recommendation, based on averages of Moortgat and Schneider, Cantrell et al.,
+*     new NSF NCAR recommendation, based on averages of Moortgat and Schneider, Cantrell et al.,
 *     and Rogers.
 * mopt2 for quantum yields:
 * 1:  odat/DATAJ1/CH2O/CH2O_i_mad.yld and 
@@ -2593,7 +2593,7 @@ c         ENDDO
 *=  Quantum yields: Choice between                                           =*
 *=                   (1) IUPAC 97, pressure correction using Horowith and    =*
 *=                                 Calvert, 1982                             =*
-*=                   (2) NCAR data file, from Moortgat, 1986                 =*
+*=                   (2) NSF NCAR data file, from Moortgat, 1986                 =*
 *-----------------------------------------------------------------------------*
 *=  PARAMETERS:                                                              =*
 *=  NW     - INTEGER, number of specified intervals + 1 in working        (I)=*
@@ -2687,7 +2687,7 @@ c      real qsav(kw,kz)
 * pressure correction using Horowitz and Calvert 1982, based on slope/intercept
 * of Stern-Volmer plots
 
-* 2:  ncar data file, from Moortgat 1986.
+* 2:  NSF ncar data file, from Moortgat 1986.
 *     odat/DATAJ1/CH3CHO/d021_i.yld
 *     odat/DATAJ1/CH3CHO/d021_i.yld
 *     odat/DATAJ1/CH3CHO/d021_i.yld

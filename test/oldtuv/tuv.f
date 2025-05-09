@@ -462,7 +462,7 @@
 * Output options, logical switches:
 *   lirrad = output spectral irradiance
 *   laflux = output spectral actinic flux
-*   lmmech = output for NCAR Master Mechanism use
+*   lmmech = output for NSF NCAR Master Mechanism use
 *   lrates = output dose rates (UVB, UVA, CIE/erythema, etc.)
 * Output options, integer selections:
 *   isfix:  if > 0, output dose rate for action spectrum is=isfix, tabulated

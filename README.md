@@ -13,7 +13,7 @@ Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 [![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
 [![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/NCAR/tuv-x)
 
-Copyright (C) 2020-4 National Center for Atmospheric Research
+Copyright (C) 2020-2025 University Corporation for Atmospheric Research
 
 # Try it out!
 
@@ -173,4 +173,4 @@ installation and usage instructions.
 # License
 
 - [Apache 2.0](/LICENSE)
-- Copyright (C) 2020-4 National Center for Atmospheric Research
+- Copyright (C) 2020-2025 University Corporation for Atmospheric Research
