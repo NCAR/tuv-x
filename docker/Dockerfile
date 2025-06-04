@@ -18,7 +18,7 @@ RUN dnf -y update \
         yaml-cpp-devel \
     && dnf clean all
 
-RUN pip3 install numpy scipy
+RUN pip3 install numpy scipy netCDF4
 
 ENV LD_LIBRARY_PATH=/usr/local/lib64
 
