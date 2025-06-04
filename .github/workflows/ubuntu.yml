@@ -30,7 +30,7 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev liblapacke-dev
-        sudo apt-get install -y python3-numpy python3-scipy
+        sudo apt-get install -y python3-numpy python3-scipy python3-netCDF4
     - name: Run Cmake 
       run: cmake -S . -B build -D CMAKE_POLICY_VERSION_MINIMUM=3.5
     - name: Build
