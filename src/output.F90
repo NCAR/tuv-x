@@ -210,7 +210,7 @@ contains
       call assert_msg( 981693955, this%do_dose_, "Dose rates are not "        &
                        //"configured to be output" )
       dim_names(1) = "vertical_level"
-      units = "various"
+      units = "W m-2"
       do i_rate = 1, size( this%dose_labels_ )
         var_name = clean_string( this%dose_labels_( i_rate ) )
         call this%file_%append( var_name, units, append_dim, step,            &
