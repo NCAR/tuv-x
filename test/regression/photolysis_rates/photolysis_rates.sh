@@ -26,6 +26,7 @@ exec_newtuv() {
 }
 exec_analysis() {
   python3 $basedir/test/regression/photolysis_rates/xsqy.compare.py $basedir/test/regression/photolysis_rates odat/OUTPUTS output
+  python3 $basedir/test/regression/photolysis_rates/photo_rate.compare.py $basedir/test/regression/photolysis_rates/photo_rates.nc photolysis_rate_constants.nc
 }
 
 if ! exec_oldtuv; then

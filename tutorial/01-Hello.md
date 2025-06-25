@@ -2,7 +2,7 @@
 ## a photlysis rate calculator
 
 Howdy! TUV-x stands for tropospheric ultraviolet-extended. It is a tool developed
-by NCAR to calculate photolysis rates across many wavelength ranges.
+by NSF NCAR to calculate photolysis rates across many wavelength ranges.
 
 You are currently in a gitpod environement; an online, interactive visual studio
 code editor. This allows you to inspect the code of TUV-x as well as run the standalone

@@ -30,7 +30,7 @@ RUN sudo dnf -y install \
 ENV PATH="${PATH}:/usr/lib64/openmpi/bin/"
 ENV OMP_NUM_THREADS=5
 
-RUN pip3 install numpy scipy
+RUN pip3 install numpy scipy netCDF4
 
 # build the tuv-x tool
 COPY . tuv-x/

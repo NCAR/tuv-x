@@ -59,6 +59,8 @@
       use musica_constants, only : musica_dk, musica_rk
       use musica_config,    only : config_t
       use musica_string,    only : string_t
+      use output_to_netcdf, only : output_dose_rates,
+     $                             output_photolysis_rates
       use debug,            only : diagout
 
       IMPLICIT NONE
@@ -284,7 +286,10 @@
      $       spectral_wght_warehouse
 
 * radiators to include in calculations
-      logical :: do_rayleigh, do_o2, do_o3, do_aerosols, do_clouds
+      logical :: do_rayleigh, do_o2, do_o3, do_aerosols, do_clouds,
+     $           do_output_dose_rates, do_output_photo_rates
+
+      real, allocatable :: dose_rates(:,:,:), photo_rates(:,:,:)
 
 * --- END OF DECLARATIONS ---------------------------------------------
 
@@ -300,6 +305,8 @@
       do_o3              = .false.
       do_aerosols        = .false.
       do_clouds          = .false.
+      do_output_dose_rates = .false.
+      do_output_photo_rates = .false.
       delim = '='
       do is = 1, COMMAND_ARGUMENT_COUNT( )
         CALL GET_COMMAND_ARGUMENT( is, command_option )
@@ -333,6 +340,10 @@
             do_aerosols = .true.
           case( 'DO_CLOUDS' )
             do_clouds   = .true.
+          case( 'DO_OUTPUT_DOSE_RATES')
+            do_output_dose_rates = .true.
+          case( 'DO_OUTPUT_PHOTO_RATES' )
+            do_output_photo_rates = .true.
           case default
             write(*,*) 'tuv: ',trim(command_tokens(1)%to_char())
             write(*,*) '       is not a valid keyword'
@@ -378,6 +389,10 @@
       nlyr = nz - 1                                    ! number of layers
       allocate( nid(0:nlyr) )
       allocate( dsdh(0:nlyr,nlyr) )
+
+* Override output of photo and does rates
+      lrates = do_output_dose_rates
+      ljvals = do_output_photo_rates
 
 ************* Can overwrite basic inputs here manually:
 * Input and output files:
@@ -462,7 +477,7 @@
 * Output options, logical switches:
 *   lirrad = output spectral irradiance
 *   laflux = output spectral actinic flux
-*   lmmech = output for NCAR Master Mechanism use
+*   lmmech = output for NSF NCAR Master Mechanism use
 *   lrates = output dose rates (UVB, UVA, CIE/erythema, etc.)
 * Output options, integer selections:
 *   isfix:  if > 0, output dose rate for action spectrum is=isfix, tabulated
@@ -874,6 +889,14 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
       allocate( saflux(nz,nbins) )
       allocate( radField(nz,nbins) )
 
+      if ( do_output_dose_rates ) then
+        allocate( dose_rates(nt,ns,nz) )
+        dose_rates = rZERO
+      end if
+      if ( do_output_photo_rates ) then
+        allocate( photo_rates(nt,nj,nz) )
+        photo_rates = rZERO
+      end if
 
 * Loop over time or solar zenith angle (zen):
       sza_loop: DO it = 1, nt
@@ -983,7 +1006,7 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
      $           sirrad, saflux,
      $           svi_zw, svf_zw, svi_zt, svf_zt, svi_tw, svf_tw)
 
-            CYCLE wave_loop
+C            CYCLE wave_loop
 
 *** Accumulate weighted integrals over wavelength, at all altitudes:
             DO iz = 1, nz
@@ -1052,7 +1075,7 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
 
          write(number,'(i2.2)') it
          call diagout( 'radField.' // number // '.old',radField )
-         CYCLE sza_loop
+C         CYCLE sza_loop
 
 **** integrate doses over time: 
 * adose = dose in air just above surface
@@ -1069,6 +1092,13 @@ C      CALL setany(nz,z,nw,wl,aircol, dt_any,om_any, g_any)
          CALL saver2(it,itfix, nz,izout, ns,isfix,ims, nj,ijfix,imj,
      $        rate, valj,
      $        svr_zs, svj_zj, svr_zt, svj_zt, svr_ts, svj_tj)
+
+         if ( do_output_dose_rates ) then
+           dose_rates(it,1:ns,1:nz) = rate(1:ns,1:nz)
+         end if
+         if ( do_output_photo_rates ) then
+            photo_rates(it,1:nj,1:nz) = valj(1:nj,1:nz)
+         end if
 
       ENDDO sza_loop
 
@@ -1102,6 +1132,15 @@ c 444  format(1pe11.4,1x,a50)
      $     svr_zs, svr_ts, svr_zt,
      $     svf_zw, svf_tw, svf_zt,
      $     svi_zw, svi_tw, svi_zt )
+
+      if (do_output_dose_rates) then
+           call output_dose_rates("odat/OUTPUTS/dose_rates.nc",
+     $ slabel, dose_rates, nt, ns, kz)
+      endif
+      if (do_output_photo_rates) then
+           call output_photolysis_rates("odat/OUTPUTS/photo_rates.nc",
+     $ jlabel, photo_rates, nt, nj, kz)
+      endif
 
 *_______________________________________________________________________
 

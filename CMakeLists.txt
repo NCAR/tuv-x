@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.17)
 
 project(
   tuv-x
-  VERSION 0.11.0
+  VERSION 0.12.0
   LANGUAGES Fortran CXX C
 )
 

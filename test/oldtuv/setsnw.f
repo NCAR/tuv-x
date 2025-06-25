@@ -38,7 +38,7 @@
 *=  rsct    - scattering coefficient of snow, assume wavelength-independent  =*
 *-----------------------------------------------------------------------------*
 *=  EDIT HISTORY:                                                            =*
-*=  10/00  adapted from setcld.f, Julia Lee-Taylor, ACD, NCAR                =*
+*=  10/00  adapted from setcld.f, Julia Lee-Taylor, ACD, NSF NCAR                =*
 *-----------------------------------------------------------------------------*
 *= This program is free software;  you can redistribute it and/or modify     =*
 *= it under the terms of the GNU General Public License as published by the  =*

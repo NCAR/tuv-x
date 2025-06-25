@@ -1,4 +1,4 @@
-! Copyright (C) 2020 National Center for Atmospheric Research
+! Copyright (C) 2020-2025 University Corporation for Atmospheric Research
 ! SPDX-License-Identifier: Apache-2.0
 !
 module tuvx_dose_rates
@@ -153,6 +153,7 @@ contains
     ! calculates dose rate constants
 
     use musica_assert,                 only : assert_msg
+    use tuvx_constants,                only : hc
     use tuvx_diagnostic_util,          only : diagout
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_solver,                   only : radiation_field_t
@@ -196,8 +197,12 @@ contains
 
     !> spectral irradiance
     sirrad = radiation_field%edr_ + radiation_field%eup_ + radiation_field%edn_
+
+    ! Convert extraterrestrial flux from units of photon cm-2 s-1 to
+    ! W m-2
     do wavNdx = 1, lambdaGrid%ncells_
-      sirrad( :, wavNdx ) = sirrad( :, wavNdx ) * etfl%mid_val_( wavNdx )
+      sirrad( :, wavNdx ) = sirrad( :, wavNdx ) * etfl%mid_val_( wavNdx ) * &
+                            hc / ( lambdaGrid%mid_( wavNdx ) * 1.0e-13_dk )
     enddo
     where( sirrad < 0.0_dk )
       sirrad = 0.0_dk
