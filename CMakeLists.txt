@@ -88,9 +88,7 @@ include(cmake/dependencies.cmake)
 add_subdirectory(src)
 
 # add tuv-x standalone executable
-configure_file(src/version.F90.in version.F90 @ONLY)
-
-add_executable(tuv-x src/tuvx.F90 version.F90)
+add_executable(tuv-x src/tuvx.F90)
 
 set_target_properties(tuv-x
   PROPERTIES

@@ -66,6 +66,8 @@ target_include_directories(
          $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
          $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
 
+configure_file(version.F90.in ${CMAKE_CURRENT_BINARY_DIR}/version.F90 @ONLY)
+
 target_sources(
   tuvx_object
   PRIVATE constants.F90
@@ -93,7 +95,9 @@ target_sources(
           spectral_weight.F90
           spectral_weight_factory.F90
           spherical_geometry.F90
-          util.F90)
+          util.F90
+          ${CMAKE_CURRENT_BINARY_DIR}/version.F90
+          )
 
 add_subdirectory(linear_algebras)
 add_subdirectory(cross_sections)
