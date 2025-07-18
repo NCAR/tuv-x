@@ -1,0 +1,31 @@
+-- The Fortran compiler identification is GNU 13.3.0
+-- The CXX compiler identification is GNU 13.3.0
+-- The C compiler identification is GNU 13.3.0
+-- Detecting Fortran compiler ABI info
+-- Detecting Fortran compiler ABI info - done
+-- Check for working Fortran compiler: /usr/bin/f95 - skipped
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /usr/bin/cc - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- CMake build configuration for tuv-x(Release) 0.12.0
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.8.1")
+-- Checking for module 'netcdf-fortran'
+--   Found netcdf-fortran, version 4.5.4
+-- Checking for module 'netcdf'
+--   Found netcdf, version 4.9.2
+-- Found Python3: /usr/bin/python3.12 (found version "3.12.3") found components: Interpreter
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE
+-- TUV-x build include directories: /home/runner/work/tuv-x/tuv-x/build_test1/include;/home/runner/work/tuv-x/tuv-x/src/../include
+-- TUV-x install include directories: /;/
+-- Configuring done (5.7s)
+-- Generating done (0.2s)
+-- Build files have been written to: /home/runner/work/tuv-x/tuv-x/build_test1

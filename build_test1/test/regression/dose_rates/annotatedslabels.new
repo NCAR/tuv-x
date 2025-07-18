@@ -1,0 +1,28 @@
+RB Meter, model 501
+Eppley UV Photometer
+UV-A, 315-400 nm
+UV-B, 280-315 nm
+UV-B*, 280-320 nm
+vis+, > 400 nm
+Gaussian, 305 nm, 10 nm FWHM
+Gaussian, 320 nm, 10 nm FWHM
+Gaussian, 340 nm, 10 nm FWHM
+Gaussian, 380 nm, 10 nm FWHM
+SCUP-human (de Gruijl and van der Leun, 1994)
+PAR, 400-700 nm, umol m-2 s-1
+Exponential decay, 14 nm/10
+SCUP-mice (de Gruijl et al., 1993)
+Standard human erythema (Webb et al., 2011)
+UV index (WMO, 1994; Webb et al., 2011)
+Phytoplankton (Boucher et al., 1994)
+Plant damage (Caldwell, 1971)
+Plant damage,Flint&Caldwell,2003,orig.
+Plant damage,Flint&Caldwell,2003,ext390
+Occupational TLV (ACGIH, 1992)
+Phytoplankton, phaeo (Cullen et al., 1992)
+Phytoplankton, proro (Cullen et al., 1992)
+Cataract, pig (Oriowo et al., 2001)
+Previtamin-D3 (CIE 2006)
+NMSC (CIE 2006)
+DNA damage, in vitro (Setlow, 1974)
+Erythema, humans (Anders et al., 1995)

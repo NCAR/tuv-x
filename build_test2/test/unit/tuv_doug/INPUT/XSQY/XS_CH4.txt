@@ -1,0 +1,62 @@
+23  39	# first data record, number of data records 
+		Created by Douglas E. Kinnison, 8/1/01
+Reference:  Huebner, Keady and Lyon, Solar Photo Rates for Planetary Atmospheres
+            and Atmospheric Pollutants, Kluwer Academic Publishers, Reprinted
+            from Astrophysics and Space Science, Volume 195, No. 1, 1992.
+           	
+CH4 + hv -> Products
+
+Recommended absorption cross sections in the wavelength range 77.3-137.0 nm taken
+from Ditchburn, R. W., Proc. Roy. Soc. London, 229a, 44, 1955. Between 95.19-130.60
+nm taken from Sun, H. and Weissler, G. L., J. chem. Phys. 23, 1160, 1955. Between
+138.0-160.0 nm data taken from Mount, G. H. and Moos, H. W., Astrophys., J. (letters)
+224, 135, 1978. 
+
+The following table was taken from the Southwest Research Institute (SwRI) web site.
+This web site listed the same references as the Huebner et al., reference. NOTE: there
+has not been any cross referencing of the below wavelength dependent cross sections 
+of CH4 with the original journal references.
+
+-------------------------------------------------------------------
+lambda (nm)	 sigma (cm^2)
+-------------------------------------------------------------------
+ 120.07   1.75E-17 
+ 120.08   1.90E-17 
+ 120.69   1.80E-17 
+ 121.55   1.75E-17 
+ 121.57   1.60E-17 
+ 121.76   1.90E-17 
+ 124.33   1.80E-17 
+ 127.51   1.60E-17 
+ 130.22   1.40E-17 
+ 130.49   1.40E-17 
+ 130.60   1.40E-17 
+ 132.40   1.30E-17 
+ 133.00   1.10E-17 
+ 133.60   1.00E-17 
+ 136.20   6.85E-18 
+ 137.00   3.20E-18 
+ 138.00   2.20E-18 
+ 139.00   1.20E-18 
+ 140.00   6.80E-19 
+ 141.00   3.60E-19 
+ 142.00   1.60E-19 
+ 143.00   7.80E-20 
+ 144.00   2.20E-20 
+ 145.00   8.00E-21 
+ 146.00   2.80E-21 
+ 147.00   7.90E-22 
+ 148.00   2.80E-22 
+ 149.00   8.60E-23 
+ 150.00   3.80E-23 
+ 151.00   2.30E-23 
+ 152.00   1.60E-23 
+ 153.00   1.20E-23 
+ 154.00   9.20E-24 
+ 155.00   8.10E-24 
+ 156.00   7.40E-24 
+ 157.00   7.10E-24 
+ 158.00   6.80E-24 
+ 159.00   6.40E-24 
+ 160.00   6.00E-24 
+ .

@@ -1,0 +1,60 @@
+27 34           # first data record, number of data records
+Structure:	ClONO
+Name:	        chlorine nitrite
+Author(Year):	JPL-97(1997),JPL-2002(2002),JPL-2006(2006)
+Temperature:	231K
+Wavelength range:	235-400nm(rec)
+
+Bibliography:
+
+W.B. DeMore, S.P. Sander, D.M. Golden, R.F. Hampson, M.J. Kurylo, C.J. Howard, A.R. Ravishankara, C.E. Kolb, and M.J. Molina, "Chemical Kinetics and Photochemical Data for Use in Stratospheric Modeling. Evaluation Number 12", JPL Publication 97-4, 1997.
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-97, JPL-2002, and JPL-2006 recommendations:
+
+235-400 nm, data of
+
+L.T. Molina and M.J. Molina, "Ultraviolet absorption spectrum of chlorine nitrite, ClONO," Geophys. Res. Lett. 4, 83-86 (1977).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+235   2.15e-18
+240   1.76e-18
+245   1.32e-18
+250   1.06e-18
+255   6.50e-19
+260   6.46e-19
+265   6.93e-19
+270   9.03e-19
+275   1.10e-18
+280   1.32e-18
+285   1.44e-18
+290   1.44e-18
+295   1.42e-18
+300   1.29e-18
+305   1.14e-18
+310   1.05e-18
+315   9.81e-19
+320   8.03e-19
+325   7.54e-19
+330   5.87e-19
+335   5.77e-19
+340   4.37e-19
+345   3.57e-19
+350   2.69e-19
+355   2.29e-19
+360   1.61e-19
+365   1.13e-19
+370   9.00e-20
+375   6.90e-20
+380   4.10e-20
+385   3.30e-20
+390   2.20e-20
+395   1.50e-20
+400   6.00e-21

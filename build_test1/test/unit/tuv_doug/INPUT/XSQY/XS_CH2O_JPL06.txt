@@ -1,0 +1,175 @@
+26 150          # first data record, number of data records
+Structure:	CH2O
+Name:	        formaldehyde, methanal
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:226-375nm(rec,1nm)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+Comments:
+
+JPL-2006 recommendation:
+
+226-356 nm, data (averages over 1-nm intervals of the high-resolution spectrum centered at the wavelength given in the first column) of
+
+R. Meller and G.K. Moortgat, "Temperature dependence of the absorption cross sections of formaldehyde between 223 and 323 K in the wavelength range 225-375 nm," J. Geophys. Res. D 105, 7089-7101 (2000),
+
+and empirical fit of the temperature dependence (223-323 K):
+
+?(?, T) = ?(298 K)  + ? (T - 298 K) with the temperature coefficients
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+226    1.79e-22
+227    1.69e-22
+228    1.77e-22
+229    1.90e-22
+230    2.05e-22
+231    3.30e-22
+232    3.35e-22
+233    2.62e-22
+234    3.25e-22
+235    3.63e-22
+236    5.39e-22
+237    7.71e-22
+238    5.69e-22
+239    6.82e-22
+240    7.82e-22
+241    7.75e-22
+242    1.23e-21
+243    1.59e-21
+244    1.09e-21
+245    1.31e-21
+246    1.63e-21
+247    1.51e-21
+248    2.34e-21
+249    3.18e-21
+250    2.57e-21
+251    2.04e-21
+252    3.37e-21
+253    2.89e-21
+254    3.42e-21
+255    4.50e-21
+256    6.29e-21
+257    4.43e-21
+258    3.07e-21
+259    6.18e-21
+260    6.04e-21
+261    6.60e-21
+262    6.02e-21
+263    1.08e-20
+264    9.47e-21
+265    5.30e-21
+266    5.38e-21
+267    1.36e-20
+268    1.24e-20
+269    9.90e-21
+270    9.60e-21
+271    1.94e-20
+272    1.43e-20
+273    8.10e-21
+274    6.57e-21
+275    2.15e-20
+276    2.59e-20
+277    1.57e-20
+278    1.03e-20
+279    2.45e-20
+280    2.34e-20
+281    1.56e-20
+282    9.72e-21
+283    7.20e-21
+284    4.27e-20
+285    4.05e-20
+286    2.09e-20
+287    1.15e-20
+288    3.17e-20
+289    3.22e-20
+290    1.17e-20
+291    1.84e-20
+292    7.96e-21
+293    3.11e-20
+294    7.15e-20
+295    4.06e-20
+296    2.48e-20
+297    1.36e-20
+298    4.22e-20
+299    3.17e-20
+300    9.63e-21
+301    1.63e-20
+302    8.52e-21
+303    3.02e-20
+304    7.23e-20
+305    4.74e-20
+306    4.29e-20
+307    1.78e-20
+308    1.38e-20
+309    3.26e-20
+310    1.74e-20
+311    4.61e-21
+312    1.19e-20
+313    9.02e-21
+314    5.65e-20
+315    5.56e-20
+316    2.54e-20
+317    5.79e-20
+318    3.15e-20
+319    9.75e-21
+320    1.19e-20
+321    1.60e-20
+322    7.21e-21
+323    3.27e-21
+324    8.61e-21
+325    1.54e-20
+326    6.87e-20
+327    4.37e-20
+328    1.22e-20
+329    3.12e-20
+330    3.86e-20
+331    1.41e-20
+332    3.46e-21
+333    2.14e-21
+334    1.59e-21
+335    9.66e-22
+336    1.26e-21
+337    3.83e-21
+338    1.92e-20
+339    5.50e-20
+340    3.15e-20
+341    9.78e-21
+342    5.04e-21
+343    1.92e-20
+344    1.27e-20
+345    4.36e-21
+346    1.19e-21
+347    4.41e-22
+348    7.57e-22
+349    3.78e-22
+350    3.60e-22
+351    8.94e-22
+352    7.31e-21
+353    2.28e-20
+354    1.65e-20
+355    6.96e-21
+356    1.48e-21
+357    3.44e-22
+358    1.86e-22
+359    1.11e-22
+360    8.70e-23
+361    1.00e-22
+362    2.11e-22
+363    1.41e-22
+364    9.40e-23
+365    8.80e-23
+366    8.50e-23
+367    9.10e-23
+368    1.43e-22
+369    2.97e-22
+370    6.36e-22
+371    5.72e-22
+372    1.97e-22
+373    1.13e-22
+374    9.10e-23
+375    8.70e-23

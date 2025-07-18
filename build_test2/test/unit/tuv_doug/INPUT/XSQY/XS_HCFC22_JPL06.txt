@@ -1,0 +1,55 @@
+30 26           # first data record, number of data records
+Structure:	CHF2Cl(HCFC-22)
+Name:	        difluorochloromethane (HCFC-22)
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:	170-220nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+170-172 nm, data of
+
+C. Hubrich, C. Zetzsch, and F. Stuhl, "Absorptionsspektren von halogenierten Methanen im Bereich von 275 bis 160 nm bei Temperaturen von 298 und 208 K," Ber. Bunsenges. Phys. Chem. 81, 437-442 (1977),
+174-204 nm, data of
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+
+206-220 nm, extrapolation of the Simon et al. (1988) data.
+
+---------------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+---------------------------------------------------------
+170    1.29e-19
+172    9.79e-20
+174    5.72e-20
+176    4.04e-20
+178    2.76e-20
+180    1.91e-20
+182    1.28e-20
+184    8.42e-21
+186    5.76e-21
+188    3.72e-21
+190    2.45e-21
+192    1.56e-21
+194    1.03e-21
+196    7.20e-22
+198    4.80e-22
+200    3.20e-22
+202    2.20e-22
+204    1.42e-22
+206    8.42e-23
+208    6.36e-23
+210    4.26e-23
+212    2.85e-23
+214    1.91e-23
+216    1.28e-23
+218    8.6e-24
+220    5.7e-24

@@ -1,0 +1,124 @@
+{
+  "photoreactions": [
+    {
+      "molecule": "CF2CL2_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_CF2CL2_JPL06.txt",
+          "nPreSkip": 45,
+          "nRead": 36
+        }
+      ]
+    },
+    {
+      "molecule": "CFCL3_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_CFCL3_JPL06.txt",
+          "nPreSkip": 24,
+          "nRead": 35
+        }
+      ]
+    },
+    {
+      "molecule": "CH3BR_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_CH3BR_JPL06.txt",
+          "nPreSkip": 87,
+          "nRead": 56
+        }
+      ]
+    },
+    {
+      "molecule": "CHBR3_JPL10",
+      "cross-sections": [
+        {
+          "filespec": "XS_CHBR3_JPL10.txt",
+          "nPreSkip": 35,
+          "nRead": 97
+        }
+      ]
+    },
+    {
+      "molecule": "H1301_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_H1301_JPL06.txt",
+          "nPreSkip": 45,
+          "nRead": 61
+        }
+      ]
+    },
+    {
+      "molecule": "H2402_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_H2402_JPL06.txt",
+          "nPreSkip": 50,
+          "nRead": 76
+        }
+      ]
+    },
+    {
+      "molecule": "HCFC22_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_HCFC22_JPL06.txt",
+          "nPreSkip": 29,
+          "nRead": 26
+        }
+      ]
+    },
+    {
+      "molecule": "HCFC141b_JPL10",
+      "cross-sections": [
+        {
+          "filespec": "XS_HCFC141b_JPL10.txt",
+          "nPreSkip": 35,
+          "nRead": 36
+        }
+      ]
+    },
+    {
+      "molecule": "HCFC142b_JPL10",
+      "cross-sections": [
+        {
+          "filespec": "XS_HCFC142b_JPL10.txt",
+          "nPreSkip": 49,
+          "nRead": 25
+        }
+      ]
+    },
+    {
+      "molecule": "CFC113_JPL06",
+      "cross-sections": [
+        {
+          "filespec": "XS_CFC113_JPL06.txt",
+          "nPreSkip": 38,
+          "nRead": 36
+        }
+      ]
+    },
+    {
+      "molecule": "CFC114_JPL10",
+      "cross-sections": [
+        {
+          "filespec": "XS_CFC114_JPL10.txt",
+          "nPreSkip": 20,
+          "nRead": 33
+        }
+      ]
+    },
+    {
+      "molecule": "CFC115_JPL10",
+      "cross-sections": [
+        {
+          "filespec": "XS_CFC115_JPL10.txt",
+          "nPreSkip": 31,
+          "nRead": 23
+        }
+      ]
+    }
+  ]
+}

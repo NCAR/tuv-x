@@ -1,0 +1,53 @@
+23 31         # first data record, number of data records
+Structure:	HCl
+Name:	hydrogen chloride
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	135-230nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+135-230 nm, data of
+
+M. Bahou, C.-Y. Chung, Y.-P. Lee, B.-M. Cheng, Y.L. Yung, and L.C. Lee, "Absorption cross sections for HCl and DCl at 135-232 nm: implications for photodissociation on Venus," Astrophys. J. 559, L179-L182 (2001).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+135.0    1.23e-18
+137.5    1.52e-18
+140.0    2.05e-18
+142.5    2.38e-18
+145.0    2.79e-18
+147.5    3.11e-18
+150.0    3.34e-18
+152.5    3.42e-18
+155.0    3.43e-18
+157.5    3.27e-18
+160.0    3.06e-18
+162.5    2.73e-18
+165.0    2.40e-18
+167.5    1.99e-18
+170.0    1.63e-18
+172.5    1.36e-18
+175.0    1.06e-18
+177.5    7.96e-19
+180.0    5.89e-19
+182.5    4.23e-19
+185.0    2.94e-19
+187.5    2.03e-19
+190.0    1.38e-19
+195.0    5.96e-20
+200.0    2.39e-20
+205.0    9.03e-21
+210.0    3.10e-21
+215.0    1.01e-21
+220.0    3.00e-22
+225.0    1.00e-22
+230.0    3.40e-23

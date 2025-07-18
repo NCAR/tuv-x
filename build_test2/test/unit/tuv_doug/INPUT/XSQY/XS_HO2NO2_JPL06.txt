@@ -1,0 +1,123 @@
+31 54           # first data record, number of data records
+Structure:	HO2NO2
+Name:	        peroxynitric acid
+Author(Year):	JPL-2006(2006)
+Temperature:	296-298K
+Wavelength range:	190-350nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+190-205 nm, data of
+
+L.T. Molina and M.J. Molina, "UV absorption cross sections of HO2NO2 acid vapor," J. Photochem. 15, 97-108 (1981),
+
+210-275 nm, mean of the data of
+
+L.T. Molina and M.J. Molina, "UV absorption cross sections of HO2NO2 acid vapor," J. Photochem. 15, 97-108 (1981), and
+
+R.J. Singer, J.N. Crowley, J.P. Burrows, W. Schneider, and G.K. Moortgat, "Measurement of the absorption cross-section of peroxynitric acid between 210 and 330 nm in the range 253 -298 K," J. Photochem. Photobiol. 48, 17-32 (1989),
+
+280-350 nm, data of
+
+G. Knight, A.R. Ravishankara, and J.B. Burkholder, "UV absorption cross sections of HO2NO2 between 343 and 273 K," Phys. Chem. Chem. Phys. 4, 1432-1437 (2002).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+190    1.01e-17
+195    8.16e-18
+200    5.63e-18
+205    3.67e-18
+210    2.39e-18
+215    1.61e-18
+220    1.18e-18
+225    9.35e-19
+230    7.92e-19
+235    6.83e-19
+240    5.81e-19
+245    4.90e-19
+250    4.13e-19
+255    3.50e-19
+260    2.85e-19
+265    2.30e-19
+270    1.81e-19
+275    1.34e-19
+280    9.29e-20
+282    8.11e-20
+284    6.93e-20
+286    5.86e-20
+288    4.91e-20
+290    3.95e-20
+292    3.37e-20
+294    2.78e-20
+296    2.30e-20
+298    1.91e-20
+300    1.52e-20
+302    1.28e-20
+304    1.05e-20
+306    8.53e-21
+308    7.02e-21
+310    5.51e-21
+312    4.65e-21
+314    3.80e-21
+316    3.13e-21
+318    2.65e-21
+320    2.16e-21
+322    1.84e-21
+324    1.52e-21
+326    1.28e-21
+328    1.10e-21
+330    9.26e-22
+332    7.88e-22
+334    6.50e-22
+336    5.40e-22
+338    4.56e-22
+340    3.72e-22
+342    3.20e-22
+344    2.68e-22
+346    2.28e-22
+348    1.98e-22
+350    1.68e-22
+wc  XSo  XS1 XS(298)
+87 36   # first data record, number of data records
+280 8.73 80.316 9.29 
+282 7.5672 76.9384 8.11 
+284 6.4044 73.5608 6.93 
+286 5.3508 70.6176 5.86 
+288 4.4064 68.1088 4.91 
+290 3.462 65.6 3.95 
+292 2.906 61.5964 3.37 
+294 2.35 57.5928 2.78 
+296 1.8924 53.564 2.30 
+298 1.5332 49.51 1.91 
+300 1.174 45.456 1.52 
+302 0.9688 41.13 1.28 
+304 0.7636 36.804 1.05 
+306 0.6002 32.7128 0.853 
+308 0.4786 28.8564 0.702 
+310 0.357 25 0.551 
+312 0.2946 22.002 0.465 
+314 0.2322 19.004 0.380 
+316 0.1832 16.68 0.313 
+318 0.1476 15.03 0.265 
+320 0.112 13.38 0.216 
+322 0.09576 11.3568 0.184 
+324 0.07952 9.33352 0.152 
+326 0.0643 8.10646 0.128 
+328 0.0501 7.67558 0.110 
+330 0.0359 7.2447 0.0926 
+332 0.02846 6.43138 0.0788 
+334 0.02102 5.61806 0.0650 
+336 0.01514 4.95092 0.0540 
+338 0.01082 4.42996 0.0456 
+340 0.0065 3.909 0.0372 
+342 0.00542 3.3866 0.0320 
+344 0.00434 2.8642 0.0268 
+346 0.0033 2.4781 0.0228 
+348 0.0023 2.2283 0.0198 
+350 0.0013 1.9785 0.0168 
+

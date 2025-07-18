@@ -1,0 +1,65 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "type": "base",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.base.nc" }
+      ]
+    },
+    {
+      "name": "override bands",
+      "type": "base",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.base.nc" }
+      ],
+      "override bands": [
+        {
+          "band": "schumann-runge",
+          "value": 12.2
+        },
+        {
+          "band": "lyman-alpha",
+          "value": 42.3
+        },
+        {
+          "band": "schumann-runge continuum",
+          "value": 93.2
+        }
+      ]
+    },
+    {
+      "name": "fix-zero",
+      "type": "base",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.base.nc",
+          "lower extrapolation": { "type": "constant", "value" : 12.5 }
+        }
+      ]
+    },
+    {
+      "name": "extend-fix",
+      "type": "base",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.base.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 32.3 }
+        }
+      ]
+    },
+    {
+      "name": "from config",
+      "type": "base",
+      "data": {
+        "default value": 12.3,
+        "point values": [
+          { "wavelength":  102.5, "value": 92.3 },
+          { "wavelength": 103.75, "value": 53.2 }
+        ]
+      }
+
+    }
+  ]
+}

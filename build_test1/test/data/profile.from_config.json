@@ -1,0 +1,66 @@
+{
+  "grids" : [
+    {
+      "name": "height",
+      "type": "equal interval",
+      "units": "km",
+      "begins at": 0.0,
+      "ends at": 5.0,
+      "cell delta": 1.0
+    },
+    {
+      "name": "not height",
+      "type": "equal interval",
+      "units": "m",
+      "begins at": 6.0,
+      "ends at": 10.0,
+      "cell delta": 2.0
+    },
+    {
+      "name": "time",
+      "type": "from config file",
+      "units": "hours",
+      "values": [ 6.0 ]
+    }
+  ],
+  "profiles" : [
+    {
+      "name": "by height",
+      "type": "from config file",
+      "units": "mol cm-3",
+      "grid": {
+        "name": "height",
+        "units": "km"
+      },
+      "values": [
+        0.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0,
+        50.0
+      ]
+    },
+    {
+      "name": "by not height",
+      "type": "from config file",
+      "units": "foos",
+      "uniform value": 12.5,
+      "scale height": 10.0,
+      "grid": {
+        "name": "not height",
+        "units": "m"
+      }
+    },
+    {
+      "name": "single value",
+      "type": "from config file",
+      "units": "foos",
+      "grid": {
+        "name": "time",
+        "units": "hours"
+      },
+      "values": [ 12.0 ]
+    }
+  ]
+}

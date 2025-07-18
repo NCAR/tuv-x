@@ -1,0 +1,74 @@
+21 54         # first data record, number of data records
+Structure:	BrNO2
+Name:	        nitryl bromide
+Author(Year):	IUPAC(2007)
+Temperature:	296K
+Wavelength range:	185-450nm(rec)
+Bibliography:
+
+R. Atkinson, D.L. Baulch, R.A. Cox, J.N. Crowley, R.F. Hampson, R.G. Hynes, M.E. Jenkin, M.J. Rossi, and J. Troe, "Evaluated kinetic and photochemical data for atmospheric chemistry: Volume III - gas phase reactions of inorganic halogens", Atmos. Chem. Phys. 7, 981-1191 (2007).
+Comments:
+
+IUPAC(2007) recommendation:
+
+Data of
+
+D. Scheffler, H. Grothe, H. Willner, A. Frenzel, and C. Zetzsch, "Properties of pure nitryl bromide. Thermal behavior, UV/Vis and FTIR spectra, and photoisomerization to trans-BrONO in an Argon matrix", Inorg. Chem. 36, 335-338 (1997).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+185    2.048e-17
+190    3.601e-17
+195    5.013e-17
+200    5.386e-17
+205    4.499e-17
+210    2.521e-17
+215    1.170e-17
+220    5.54e-18
+225    3.73e-18
+230    3.43e-18
+235    3.62e-18
+240    3.87e-18
+245    3.90e-18
+250    3.63e-18
+255    3.10e-18
+260    2.51e-18
+265    1.97e-18
+270    1.54e-18
+275    1.16e-18
+280    8.8e-19
+285    6.3e-19
+290    4.4e-19
+295    3.0e-19
+300    2.0e-19
+305    1.5e-19
+310    1.1e-19
+315    1.1e-19
+320    1.0e-19
+325    1.2e-19
+330    1.3e-19
+335    1.4e-19
+340    1.6e-19
+345    1.5e-19
+350    1.6e-19
+355    1.6e-19
+360    1.8e-19
+365    1.9e-19
+370    1.7e-19
+375    1.8e-19
+380    1.7e-19
+385    1.7e-19
+390    1.6e-19
+395    1.5e-19
+400    1.4e-19
+405    1.4e-19
+410    1.3e-19
+415    1.2e-19
+420    1.1e-19
+425    1.0e-19
+430    9.0e-20
+435    8.0e-20
+440    7.0e-20
+445    7.0e-20
+450    6.0e-20

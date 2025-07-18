@@ -1,0 +1,8 @@
+my int: 12
+other props:
+  an int: 45
+real props:
+  foo: 14.2
+  bar: 64.2
+  foobar: 920.4
+a string: foo

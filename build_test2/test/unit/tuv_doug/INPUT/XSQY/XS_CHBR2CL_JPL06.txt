@@ -1,0 +1,83 @@
+22 62         # first data record, number of data records
+Structure:	CHClBr2(Halon-1012)
+Name:	chlorodibromomethane (Halon-1012)
+Author(Year):	JPL-2002(2002)
+Temperature:	296K
+Wavelength range:	200-310nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+200-310nm, data of
+
+M. Bilde, T.J. Wallington, C. Ferronato, J.J. Orlando, G.S. Tyndall, E. Estupian, and S. Haberkorn, "Atmospheric chemistry of CH2BrCl, CHBrCl2, CHBr2Cl, CF3CHBrCl, and CBr2Cl2," J. Phys. Chem. A 102, 1976-1986 (1998).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+200    2.746e-18
+201    2.828e-18
+202    2.939e-18
+203    3.067e-18
+204    3.142e-18
+205    3.206e-18
+206    3.249e-18
+207    3.237e-18
+208    3.229e-18
+209    3.246e-18
+210    3.178e-18
+211    3.062e-18
+212    2.974e-18
+214    2.794e-18
+216    2.617e-18
+218    2.349e-18
+220    2.151e-18
+222    1.991e-18
+224    1.845e-18
+226    1.653e-18
+228    1.517e-18
+230    1.414e-18
+232    1.364e-18
+234    1.314e-18
+236    1.268e-18
+238    1.222e-18
+240    1.160e-18
+242    1.092e-18
+244    1.012e-18
+246    9.270e-19
+248    8.352e-19
+250    7.404e-19
+252    6.483e-19
+254    5.595e-19
+256    4.767e-19
+258    3.990e-19
+260    3.335e-19
+262    2.750e-19
+264    2.250e-19
+266    1.828e-19
+268    1.478e-19
+270    1.182e-19
+272    9.415e-20
+274    7.552e-20
+276    5.950e-20
+278    4.687e-20
+280    3.691e-20
+282    2.884e-20
+284    2.261e-20
+286    1.734e-20
+288    1.331e-20
+290    1.016e-20
+292    7.907e-21
+294    6.116e-21
+296    4.583e-21
+298    3.489e-21
+300    2.692e-21
+302    2.076e-21
+304    1.588e-21
+306    1.208e-21
+308    9.45e-22
+310    7.42e-22

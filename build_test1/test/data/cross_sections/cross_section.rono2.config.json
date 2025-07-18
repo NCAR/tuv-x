@@ -1,0 +1,28 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.rono2.nc" }
+      ],
+      "type": "RONO2"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "RONO2",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.rono2.nc" }
+      ],
+      "lower extrapolation": { "type": "constant", "value" : 300 }
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "RONO2",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.rono2.nc" }
+      ],
+      "lower extrapolation": { "type": "boundary" },
+      "upper extrapolation": { "type": "constant", "value": 310 }
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.hno3.nc" }
+      ],
+      "type": "HNO3+hv->OH+NO2"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.hno3.nc" }
+      ],
+      "lower extrapolation": { "type": "constant", "value" : 188 }
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.hno3.nc" }
+      ],
+      "lower extrapolation": { "type": "boundary" },
+      "upper extrapolation": { "type": "constant", "value": 212 }
+    }
+  ]
+}

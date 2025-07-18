@@ -1,0 +1,64 @@
+38 27         # first data record, number of data records
+Structure:	INO
+Name:	nitrosyl iodide
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	223-460nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+223-290 nm, mean of the data of
+
+N. Basco and J.E. Hunt, "The recombination of iodine atoms in the presence of nitric oxide," Int. J. Chem. Kinet. 10, 733-743 (1978), and
+
+E. Forte, H. Hippler, and H. Van den Bergh, "INO thermodynamic properties and ultraviolet spectrum," Int. J. Chem. Kinet. 13, 1227-1233 (1981),
+
+300, 310 nm, data of
+
+N. Basco and J.E. Hunt, "The recombination of iodine atoms in the presence of nitric oxide," Int. J. Chem. Kinet. 10, 733-743 (1978),
+
+360-460 nm, IUPAC(1982-200) recommendations (corrected data at 400 and 410 nm),
+
+D.L. Baulch, R.A. Cox, P.J. Crutzen, R.F. Hampson, Jr., J.A. Kerr, J. Troe, and R.T. Watson, "Evaluated kinetic and photochemical data for atmospheric chemistry: Supplement I," J. Phys. Chem. Ref. Data 11, 327-496 (1982),
+
+R. Atkinson, D.L. Baulch, R.A. Cox, R.F. Hampson, J.A. Kerr, and J. Troe, "Evaluated kinetic and photochemical data for atmospheric chemistry: Supplement IV," J. Phys. Chem. Ref. Data 21, 1125-1568 (1992),
+
+R. Atkinson, D.L. Baulch, R.A. Cox, R.F. Hampson, Jr., J.A. Kerr, M.J. Rossi, and J. Troe, "Evaluated kinetic, photochemical and heterogeneous data for atmospheric chemistry: Supplement V," J. Phys. Chem. Ref. Data 26, 521-1011 (1997),
+
+R. Atkinson, D.L. Baulch, R.A. Cox, R.F. Hampson, Jr., J.A. Kerr, M.J. Rossi, and J. Troe, "Evaluated kinetic and photochemical data for atmospheric chemistry: Supplement VIII, Halogen species. IUPAC subcommittee on gas kinetic data evaluation for atmospheric chemistry," J. Phys. Chem. Ref. Data 29, 167-266 (2000).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+223    2.25e-18
+230    1.690e-17
+235    5.640e-17
+238    6.850e-17
+245    6.000e-17
+251    4.880e-17
+260    2.270e-17
+270    1.040e-17
+280    5.00e-18
+290    1.87e-18
+300    9.2e-19
+310    4.1e-19
+320    0.0
+330    0.0
+340    0.0
+350    0.0
+360    4.5e-19
+370    5.9e-19
+380    6.5e-19
+390    7.8e-19
+400    9.2e-19
+410    1.10e-18
+420    1.00e-18
+430    9.4e-19
+440    8.0e-19
+450    6.0e-19
+460    4.0e-19

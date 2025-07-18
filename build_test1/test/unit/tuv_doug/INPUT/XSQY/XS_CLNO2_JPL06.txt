@@ -1,0 +1,48 @@
+23 26           # first data record, number of data records
+Structure:	ClNO2
+Name:	        nitryl chloride
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	195-400nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+190-400 nm, mean of the data of
+
+A.J. Illies and G.A. Takacs, "Gas phase ultra-violet photoabsorption cross-sections for nitrosyl chloride and nitryl chloride," J. Photochem. 6, 35-42 (1976/77) (as listed in the paper), and
+
+ A. Furlan, M.A. Haeberli, and R.J. Huber, "The 248 nm photodissiciation of ClNO2 studies by photofragment translational energy spectroscopy," J. Phys. Chem. A 104, 10392-10397 (2000) (5-nm averages of the high-resolution data).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+195    1.060e-17
+200    4.45e-18
+205    3.10e-18
+210    3.21e-18
+215    3.39e-18
+220    3.25e-18
+225    2.79e-18
+230    2.21e-18
+235    1.69e-18
+240    1.32e-18
+250    9.09e-19
+260    5.87e-19
+270    3.37e-19
+280    2.07e-19
+290    1.63e-19
+300    1.41e-19
+310    1.21e-19
+320    9.40e-20
+330    6.79e-20
+340    4.62e-20
+350    3.05e-20
+360    1.85e-20
+370    1.12e-20
+380    7.72e-21
+390    4.75e-21
+400    3.27e-21

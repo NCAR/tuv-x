@@ -1,0 +1,87 @@
+54 34           # first data record, number of data records
+Structure:	CH2Br2
+Name:	        dibromomethane
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:	174-300nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+174-198 nm, data of
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Gttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons", Aeronomica Acta A 356, 1-173 (1990),
+
+200-210 nm, mean of the data of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+and
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Gttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988).
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons", Aeronomica Acta A 356, 1-173 (1990),
+
+215-290 nm, mean of the data of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+D. Gillotay, P.C. Simon, and L. Dierickx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," presented at the Quadrennial Ozone Symposium, Gttingen, RFA, 1988; Aeronomica Acta A 335, 1-25 (1988),
+D. Gillotay and P.C. Simon, "Ultraviolet absorption cross-sections of photoactive species of stratospheric interest. Part 1 : The Halocarbons", Aeronomica Acta A 356, 1-173 (1990), and
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998),
+
+295-300 nm, data of
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998).
+
+Temperature coefficients B:
+
+273-348 K,
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998).
+
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+174    1.1709e-17
+176    6.624e-18
+178    3.772e-18
+180    2.410e-18
+182    1.784e-18
+184    1.544e-18
+186    1.535e-18
+188    1.661e-18
+190    1.870e-18
+192    2.093e-18
+194    2.225e-18
+196    2.283e-18
+198    2.260e-18
+200    2.255e-18
+205    2.153e-18
+210    2.345e-18
+215    2.632e-18
+220    2.720e-18
+225    2.474e-18
+230    1.958e-18
+235    1.389e-18
+240    8.860e-19
+245    5.190e-19
+250    2.803e-19
+255    1.410e-19
+260    6.607e-20
+265    3.037e-20
+270    1.347e-20
+275    5.90e-21
+280    2.55e-21
+285    1.14e-21
+290    4.99e-22
+295    2.10e-22
+300    9.00e-23

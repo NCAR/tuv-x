@@ -1,0 +1,42 @@
+15 27         # first data record, number of data records
+Structure:	CH3I
+Name:	iodomethane, methyl iodide
+Author(Year):	JPL-2002(2002)
+Temperature:	210-365K
+Wavelength range:	210-365nm(rec)
+Bibliography:
+
+ln ?(?, T) = ln ?(? , 298 K) + B(T-298) with 
+
+------------
+wavel. 103B
+(nm)   (K-1)
+------------
+235    0.67
+240    0.61
+245    0.34
+250    0.08
+255   -0.10
+260   -0.12
+265    0.10
+270    0.54
+275    1.33
+280    2.43
+285    3.74
+290    4.98
+295    6.38
+300    6.97
+305    6.84
+310    6.78
+315    6.75
+320    6.53
+325    6.79
+330    7.82
+335    9.34
+340   10.95
+345   13.58
+350   16.83
+355   18.91
+360   17.28
+365   23.63
+

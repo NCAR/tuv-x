@@ -1,0 +1,70 @@
+{
+  "grids" : [
+    {
+    "name": "height",
+        "type": "equal interval",
+        "units": "km",
+        "begins at" : 0.0,
+        "ends at" : 120.0,
+        "cell delta" : 1.0
+    },
+    {
+    "name": "wavelength",
+        "type": "from csv file",
+        "units": "nm",
+        "file path": "data/grids/wavelength/combined.grid"
+    }
+  ],
+  "profiles" : [
+    {
+      "name": "surface albedo",
+        "type": "from config file",
+        "units": "none",
+        "uniform value": 0.10,
+        "grid": {
+          "name": "wavelength",
+          "units": "nm"
+        }
+    },
+    {
+      "name": "temperature",
+        "type": "from csv file",
+        "units": "K",
+        "file path": "data/profiles/atmosphere/ussa.temp",
+        "grid": {
+          "name": "height",
+          "units": "km"
+        }
+    },
+    {
+      "name": "air",
+      "type": "from config file",
+      "units": "molecule cm-3",
+      "uniform value": 2.54e19,
+      "grid": {
+        "name": "height",
+        "units": "km"
+      }
+    }
+  ],
+  "radiative transfer": {
+    "solver" : {
+      "type" : "delta eddington"
+    },
+    "cross sections": [
+        {
+          "name": "air",
+          "type": "air"
+        }
+    ],
+    "radiators": [
+      {
+        "name": "air",
+        "type": "base",
+        "cross section": "air",
+        "vertical profile": "air",
+        "vertical profile units": "molecule cm-3"
+      }
+    ]
+  }
+}

@@ -1,0 +1,62 @@
+33 30           # first data record, number of data records
+Structure:	Cl2
+Name:	        chlorine
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	260-550nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+Absorption cross sections calculated at 5-nm intervals using the semiempirical function (eqn. 12)
+
+?(?,T) = 2.73x10-19 cm2 x tanh0.5
+                             x exp{-99.0 x tanh x [ln(329.5 nm/?)]2}
+
+           + 9.32x10-21 cm2 x tanh0.5
+                            x exp{-91.5 x tanh x [ln(406.5 nm/?)]2}
+
+with tanh = tanh(hcX559.751 cm-1/2KT) = tanh(402.7/T);
+
+? in nm, 250 < ? < 550 nm, and T in K; 300 K > T > 195 K,
+
+derived by
+
+D. Maric, J.P. Burrows, and G.K. Moortgat, "A study of the UV-visible absorption spectra of Br2 and BrCl," J. Photochem. Photobiol. A: Chem. 83, 179-192 (1994).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+260    1.98e-21
+270    8.24e-21
+280    2.58e-20
+290    6.22e-20
+300    1.19e-19
+310    1.85e-19
+320    2.37e-19
+330    2.55e-19
+340    2.35e-19
+350    1.88e-19
+360    1.32e-19
+370    8.41e-20
+380    5.00e-20
+390    2.94e-20
+400    1.84e-20
+410    1.27e-20
+420    9.56e-21
+430    7.32e-21
+440    5.46e-21
+450    3.87e-21
+460    2.58e-21
+470    1.62e-21
+480    9.57e-22
+490    5.34e-22
+500    2.83e-22
+510    1.42e-22
+520    6.81e-23
+530    3.13e-23
+540    1.37e-23
+550    5.81e-24

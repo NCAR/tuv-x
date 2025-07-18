@@ -1,0 +1,77 @@
+40 38           # first data record, number of data records
+Structure:	CH2ICl
+Name:	        chloroiodomethane
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	205-390nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+Absorption cross sections ?:
+
+205-230 nm, data of
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997),
+
+235-355 nm, mean of the data of
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997),
+and
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997),
+
+360-390 nm, data of
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997).
+Temperature coefficients a1 and a2:
+
+223-298 K,
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+205    1.32e-18
+210    4.21e-19
+215    1.11e-19
+220    7.50e-20
+225    9.76e-20
+230    1.49e-19
+235    2.12e-19
+240    3.21e-19
+245    4.59e-19
+250    6.33e-19
+255    8.45e-19
+260    1.06e-18
+265    1.22e-18
+270    1.28e-18
+275    1.21e-18
+280    1.04e-18
+285    8.11e-19
+290    5.85e-19
+295    3.99e-19
+300    2.59e-19
+305    1.67e-19
+310    1.09e-19
+315    7.16e-20
+320    4.79e-20
+325    3.23e-20
+330    2.14e-20
+335    1.40e-20
+340    9.06e-21
+345    5.69e-21
+350    3.50e-21
+355    2.25e-21
+360    1.33e-21
+365    8.1e-22
+370    4.8e-22
+375    2.7e-22
+380    1.7e-22
+385    8.0e-23
+390    6.0e-23
