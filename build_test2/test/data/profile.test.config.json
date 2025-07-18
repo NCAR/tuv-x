@@ -1,0 +1,124 @@
+{
+   "grids": [
+      {
+      "name": "height",
+         "type": "equal interval",
+         "units": "km",
+         "begins at" : 0.0,
+         "ends at" : 120.0,
+         "cell delta" : 1.0
+      },
+      {
+         "name": "coarse height",
+         "type": "equal interval",
+         "units": "km",
+         "begins at" : 0.0,
+         "ends at" : 80.0,
+         "cell delta" : 40.0
+      },
+      {
+      "name": "wavelength",
+         "type": "from csv file",
+         "units": "nm",
+         "file path": "data/grids/wavelength/combined.grid"
+      },
+      {
+      "name": "time",
+         "type": "from config file",
+         "units": "hours",
+         "values": [ 16.0, 18.0 ]
+      }
+   ],
+   "profiles": [
+      {
+         "name": "FromConfigValues",
+         "type": "from config file",
+         "units": "bars",
+         "values": [ 12.3, 32.4, 103.2 ],
+         "grid": {
+           "name": "coarse height",
+           "units": "km"
+         }
+      },
+      {
+         "name": "FromConfigUniformValue",
+         "type": "from config file",
+         "units": "bars",
+         "uniform value": 12.3,
+         "grid": {
+           "name": "wavelength",
+           "units": "nm"
+         }
+      },
+      {
+         "name": "Earth-Sun distance",
+         "type": "Earth-Sun distance",
+         "units": "AU",
+         "year" : 2002,
+         "month": 3,
+         "day": 21
+       },
+       {
+         "name": "solar zenith angle",
+         "type": "solar zenith angle",
+         "units": "degrees",
+         "year" : 1988,
+         "month": 6,
+         "day": 23,
+         "longitude": -77.0369,
+         "latitude": 38.9072
+       },
+      {
+         "name": "O3",
+         "__legacy": "Legacy type that will eventually be dropped",
+         "type": "O3",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.ozone"
+      },
+      {
+         "name": "air",
+         "__legacy": "Legacy type that will eventually be dropped",
+         "type": "air",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.dens"
+      },
+      {
+         "name": "O2",
+         "__legacy": "Legacy type that will eventually be dropped",
+         "type": "O2",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.dens"
+      },
+      {
+         "name": "temperature",
+         "type": "from csv file",
+         "units": "K",
+         "file path": "data/profiles/atmosphere/ussa.temp",
+         "grid": {
+           "name": "height",
+           "units": "km"
+         }
+      },
+      {
+         "name": "UnitTest",
+         "type": "from csv file",
+         "units": "foos",
+         "file path": "test/data/test.ozone",
+         "grid": {
+           "name": "height",
+           "units": "km"
+         }
+      },
+      {
+         "name": "extraterrestrial flux",
+         "__legacy": "Legacy type that will eventually be dropped",
+         "type": "extraterrestrial flux",
+         "units": "photon cm-2 s-1",
+         "file path": ["data/profiles/solar/susim_hi.flx",
+                      "data/profiles/solar/atlas3_1994_317_a.dat",
+                      "data/profiles/solar/sao2010.solref.converted",
+                      "data/profiles/solar/neckel.flx"],
+         "interpolator": ["","","","fractional target"]
+      }
+   ]
+}

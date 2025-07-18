@@ -1,0 +1,84 @@
+45  40          line of first data point, total data points
+Structure:	HBr
+Name:	hydrogen bromide
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	152-230nm(rec)
+Bibliography:
+
+ 
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+The spectra of
+
+C.F. Goodeve and A.W.C. Taylor, "The continuous absorption spectrum of hydrogen bromide," Proc. Roy. Soc. London A 152, 221-230 (1935),
+
+J. Romand, "Absorption ultraviolette dans la région de Schumann. Étude de: ClH, BrH et IH gazeux," Ann. Phys. (Paris) 4, 529-590 (1949),
+
+B.J. Huebert and R.M. Martin, "Gas-phase far-ultraviolet absorption spectrum of hydrogen bromide and hydrogen iodide," J. Phys. Chem. 72, 3046-3048 (1968), and
+
+J.B. Nee, M. Suto, and L.Cl Lee, "Quantitative spectroscopy study of HBr in the 105 - 235 nm region," J. Chem. Phys. 85, 4919-4924 (1986),
+
+have been normalized to the value
+s = 2.21x10-18 cm2 molecule-1 at 184.9 nm, which is the mean of the values reported by
+
+A.R. Ravishankara, P.H. Wine, and A.O. Langford, "Absolute rate constant for the reaction OH + HBr → H2O + Br," Chem. Phys. Lett. 63, 479-484 (1979),
+
+H. Okabe, "Photochemistry of acetylene at 1849 Å," J. Chem. Phys. 78, 1312-1317 (1983), and
+
+S.B. Barone, A.A. Turnipseed, T. Gierczak, and A. Ravishankara, "Quantum yields of H(2S) and CH3S(2E) from the photolysis of simple organosulfur compounds at 193, 222, and 248 nm," J. Phys. Chem. 98, 11969-11977 (1994);
+
+the normalized spectra have then been averaged:
+
+152-168 nm mean of Romand (1949) and Nee et al. (1986),
+
+170-180 nm mean of Romand (1949), Huebert and Martin (1968), and Nee et al. (1986),
+
+182-230 nm mean of Goodeve and Taylor (1935), Romand (1949), Huebert and Martin (1968), and Nee et al. (1986).
+
+
+wave   cm-2
+152    1.39e-18
+154    1.24e-18
+156    1.38e-18
+158    1.48e-18
+160    1.61e-18
+162    1.76e-18
+164    1.89e-18
+166    2.01e-18
+168    2.11e-18
+170    2.25e-18
+172    2.33e-18
+174    2.40e-18
+176    2.44e-18
+178    2.44e-18
+180    2.42e-18
+182    2.33e-18
+184    2.25e-18
+186    2.17e-18
+188    2.06e-18
+190    1.94e-18
+192    1.81e-18
+194    1.68e-18
+196    1.54e-18
+198    1.40e-18
+200    1.25e-18
+202    1.11e-18
+204    9.81e-19
+206    8.55e-19
+208    7.47e-19
+210    6.44e-19
+212    5.48e-19
+214    4.57e-19
+216    3.88e-19
+218    3.30e-19
+220    2.80e-19
+222    2.29e-19
+224    1.82e-19
+226    1.44e-19
+228    1.17e-19
+230    9.32e-20

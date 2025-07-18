@@ -1,0 +1,39 @@
+24 16         # first data record, number of data records
+Structure:	t-C4H9I,(CH3)3CI
+Name:	1,1-dimethylethyl iodide, tert-butyl iodide
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	235-310nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+
+Comments:
+
+JPL-2002-recommendation:
+
+235-310 nm, data of
+
+D.L. Phillips, A.B. Myers, and J.J. Valentini, "Investigation of solvation effects in short-time photodissociation dynamics of alkyl iodides, J. Phys. Chem. 96, 2039-2044 (1992).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+235    2.85e-19
+240    4.25e-19
+245    6.48e-19
+250    9.80e-19
+255    1.40e-18
+260    1.80e-18
+265    2.09e-18
+270    2.11e-18
+275    1.86e-18
+280    1.50e-18
+285    1.16e-18
+290    8.30e-19
+295    5.40e-19
+300    3.40e-19
+305    2.15e-19
+310    1.40e-19

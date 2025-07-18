@@ -1,0 +1,136 @@
+24 113          # first data record, number of data records
+Structure:	I2
+Name:	        iodine
+Author(Year):	JPL-2006(2006)
+Temperature:	295K
+Wavelength range:	185-745nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+Averages over 5-nm intervals of the spectrum reported by
+
+A. Saiz-Lopez, R.W. Saunders, D.M. Joseph, S.H. Ashworth, and J.M.C. Plane, "Absolute absorption cross-section and photolysis rate of I2," Atmos. Chem. Phys. 4, 1443-1450 (2004), and
+
+calculated by Karl-Heinz Mbus, Max-Planck-Institut fr Chemie, Mainz, Germany.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+185    1.853e-17
+190    2.012e-17
+195    1.226e-17
+200    7.318e-18
+205    5.194e-18
+210    4.180e-18
+215    3.516e-18
+220    3.018e-18
+225    2.598e-18
+230    2.247e-18
+235    1.965e-18
+240    1.691e-18
+245    1.468e-18
+250    1.278e-18
+255    1.101e-18
+260    9.712e-19
+265    8.417e-19
+270    7.289e-19
+275    6.314e-19
+280    5.436e-19
+285    4.587e-19
+290    3.893e-19
+295    3.243e-19
+300    2.735e-19
+305    2.305e-19
+310    1.813e-19
+315    1.509e-19
+320    1.217e-19
+325    1.046e-19
+330    7.787e-20
+335    6.178e-20
+340    4.709e-20
+345    4.084e-20
+350    2.583e-20
+355    1.944e-20
+360    1.244e-20
+365    1.023e-20
+370    6.594e-21
+375    8.227e-21
+380    1.144e-20
+385    1.014e-20
+390    9.252e-21
+395    1.105e-20
+400    2.934e-20
+405    3.887e-20
+410    4.426e-20
+415    5.437e-20
+420    5.959e-20
+425    8.316e-20
+430    1.347e-19
+435    1.565e-19
+440    2.025e-19
+445    2.577e-19
+450    3.334e-19
+455    4.398e-19
+460    5.712e-19
+465    7.222e-19
+470    8.973e-19
+475    1.091e-18
+480    1.312e-18
+485    1.547e-18
+490    1.788e-18
+495    2.036e-18
+500    2.281e-18
+505    2.542e-18
+510    2.767e-18
+515    2.974e-18
+520    3.093e-18
+525    3.193e-18
+530    3.258e-18
+535    3.198e-18
+540    3.062e-18
+545    2.814e-18
+550    2.650e-18
+555    2.366e-18
+560    1.910e-18
+565    1.550e-18
+570    1.300e-18
+575    9.655e-19
+580    9.266e-19
+585    7.407e-19
+590    6.578e-19
+595    5.936e-19
+600    4.736e-19
+605    4.326e-19
+610    4.081e-19
+615    3.437e-19
+620    3.051e-19
+625    2.817e-19
+630    2.795e-19
+635    2.260e-19
+640    2.364e-19
+645    2.284e-19
+650    2.157e-19
+655    2.068e-19
+660    1.900e-19
+665    1.725e-19
+670    1.771e-19
+675    1.589e-19
+680    1.493e-19
+685    1.391e-19
+690    1.282e-19
+695    1.090e-19
+700    1.030e-19
+705    7.499e-20
+710    6.410e-20
+715    6.010e-20
+720    5.445e-20
+725    3.210e-20
+730    2.548e-20
+735    1.530e-20
+740    9.223e-21
+745    1.657e-20

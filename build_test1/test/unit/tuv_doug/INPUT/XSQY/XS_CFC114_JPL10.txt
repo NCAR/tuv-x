@@ -1,0 +1,53 @@
+21 33           # first data record, number of data records
+Structure:	CF2ClCF2Cl(CFC-114)
+Name:	1,1,2,2-tetrafluoro-1,2-dichloroethane (CFC-114)
+Author(Year):	JPL-2002(2002),JPL-2006(2006),JPL-2010(2011)
+Temperature:	295K
+Wavelength range:	172-235nm(rerc)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14“, Report No. JPL Publication 02-25, 2002.
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+ 
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+172    6.90e-19
+174    5.50e-19
+176    4.30e-19
+178    3.40e-19
+180    2.62e-19
+182    1.98e-19
+184    1.50e-19
+186    1.10e-19
+188    7.80e-20
+190    5.35e-20
+192    3.70e-20
+194    2.56e-20
+196    1.75e-20
+198    1.20e-20
+200    8.00e-21
+202    5.40e-21
+204    3.70e-21
+206    2.45e-21
+208    1.60e-21
+210    1.04e-21
+212    6.80e-22
+214    4.40e-22
+216    2.90e-22
+218    1.90e-22
+220    1.22e-22
+222    8.09e-23
+224    5.31e-23
+226    3.49e-23
+228    2.29e-23
+230    1.51e-23
+232    9.9e-24
+234    6.5e-24
+235    5.3e-24

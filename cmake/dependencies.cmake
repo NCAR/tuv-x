@@ -59,6 +59,7 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
   GIT_TAG 28f93bdec6387d42332220afa9558060c8016795
   GIT_PROGRESS NOT
+  FIND_PACKAGE_ARGS NAMES yaml-cpp
   ${FETCHCONTENT_QUIET})
 
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
@@ -80,7 +81,8 @@ if(TUVX_ENABLE_BENCHMARK)
   FetchContent_Declare(
     googlebenchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG v1.8.3)
+    GIT_TAG v1.8.3
+    FIND_PACKAGE_ARGS NAMES benchmark)
 
   set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
   set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
@@ -93,7 +95,8 @@ if(TUVX_ENABLE_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG be03d00f5f0cc3a997d1a368bee8a1fe93651f48)
+    GIT_TAG be03d00f5f0cc3a997d1a368bee8a1fe93651f48
+    FIND_PACKAGE_ARGS NAMES GTest)
 
   set(INSTALL_GTEST
       OFF
@@ -104,9 +107,13 @@ if(TUVX_ENABLE_TESTS)
 
   FetchContent_MakeAvailable(googletest)
 
-  # don't run clang-tidy on google test
-  set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
-  set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
+  # don't run clang-tidy on google test (only when built from source)
+  if(TARGET gtest)
+    set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
+  endif()
+  if(TARGET gtest_main)
+    set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
+  endif()
 endif()
 
 # ##############################################################################

@@ -1,0 +1,74 @@
+50 25           # first data record, number of data records
+Structure:	CH3CF2Cl(HCFC-142b)
+Name:	1,1,1-difluorochloroethane (HCFC-142b)
+Author(Year):	JPL-2002(2002),JPL-2006(2006),JPL-2010(2011)
+Temperature:	298K
+Wavelength range:	170-230nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14“, Report No. JPL Publication 02-25, 2002.
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+ 
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+Comments:
+
+JPL-2002, JPL-2006, and JPL-2010 recommendations:
+
+170-185 nm, mean of the data of
+
+D. Gillotay and P.C. Simon, "Temperature-dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," J. Atmos. Chem. 12, 269-285 (1991),
+
+D. Gillotay and P.C. Simon, "Temperature dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," Aeronomica Acta A 358, 1-27 (1991),
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980), and
+
+A.K. Nayak, T.J. Buckley, M.J. Kurylo, and A. Fahr, "Temperature dependence of the gas and liquid phase ultraviolet absorption cross sections of HCFC-123 (CF3CHCl2) and HCFC-142b (CH3CF2Cl)," J. Geophys. Res. 101, 9055-9062 (1996),
+
+190-210 nm, mean of the data of
+
+D. Gillotay and P.C. Simon, "Temperature-dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," J. Atmos. Chem. 12, 269-285 (1991),
+
+D. Gillotay and P.C. Simon, "Temperature dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," Aeronomica Acta A 358, 1-27 (1991),
+
+J.J. Orlando, J.B. Burkholder, S.A. McKeen, and A.R. Ravishankara, "Atmospheric fate of several hydrofluoroethanes and hydrochloroethanes. 2. UV absorption cross sections and atmospheric lifetimes, J. Geophys. Res. 96, 5013-5023 (1991), , and
+
+A.K. Nayak, T.J. Buckley, M.J. Kurylo, and A. Fahr, "Temperature dependence of the gas and liquid phase ultraviolet absorption cross sections of HCFC-123 (CF3CHCl2) and HCFC-142b (CH3CF2Cl)," J. Geophys. Res. 101, 9055-9062 (1996),
+
+212-230 nm, data of
+
+D. Gillotay and P.C. Simon, "Temperature-dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," J. Atmos. Chem. 12, 269-285 (1991),
+
+D. Gillotay and P.C. Simon, "Temperature dependence of ultraviolet absorption cross-sections of alternative chlorofluoroethanes," Aeronomica Acta A 358, 1-27 (1991).
+
+---------------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+---------------------------------------------------------
+170    2.71e-19
+175    1.40e-19
+180    6.38e-20
+185    2.73e-20
+190    1.02e-20
+192    7.06e-21
+194    4.82e-21
+196    3.24e-21
+198    2.18e-21
+200    1.45e-21
+202    9.49e-22
+204    6.22e-22
+206    3.99e-22
+208    2.56e-22
+210    1.61e-22
+212    1.05e-22
+214    6.52e-23
+216    4.01e-23
+218    2.43e-23
+220    1.45e-23
+222    8.45e-24
+224    4.84e-24
+226    2.71e-24
+228    1.48e-24
+230    7.83e-25

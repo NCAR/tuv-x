@@ -1,0 +1,28 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.no2_tint.nc" }
+      ],
+      "type": "NO2 tint"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "NO2 tint",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.no2_tint.nc" }
+      ],
+      "lower extrapolation": { "type": "constant", "value" : 300 }
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "NO2 tint",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.no2_tint.nc" }
+      ],
+      "lower extrapolation": { "type": "boundary" },
+      "upper extrapolation": { "type": "constant", "value": 310 }
+    }
+  ]
+}

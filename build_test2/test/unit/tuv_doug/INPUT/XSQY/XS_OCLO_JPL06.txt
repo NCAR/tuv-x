@@ -1,0 +1,104 @@
+23 82           # first data record, number of data records
+Structure:	OClO
+Name:	        chlorine dioxide
+Author(Year):	JPL-2006(2006)
+Temperature:	293K
+Wavelength range:	292-454nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+
+JPL-2006 recommendation:
+
+292-456 nm, averages over 2-nm intervals of the spectrum measured at medium resolution (0.24-0.44 nm) by
+
+K. Bogumil, J. Orphal, T. Homann, S. Voigt, P. Spietz, O.C. Fleischmann, A. Vogel, M. Hartmann, H. Bovensmann, J. Frerick, and J.P. Burrows, "Measurements of molecular absorption spectra with the SCIAMACHY pre-flight model: Instrument characterization and reference data for atmospheric remote sensing in the 230-2380 nm region," J. Photochem. Photobiol. A.: Chem. 157, 167-184 (2003).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+292    5.787e-19
+294    3.240e-19
+296    9.026e-19
+298    5.361e-19
+300    9.332e-19
+302    1.169e-18
+304    4.419e-19
+306    2.090e-18
+308    9.664e-19
+310    8.310e-19
+312    2.882e-18
+314    8.916e-19
+316    1.557e-18
+318    3.539e-18
+320    9.969e-19
+322    1.626e-18
+324    4.841e-18
+326    1.276e-18
+328    1.071e-18
+330    6.460e-18
+332    1.984e-18
+334    1.114e-18
+336    5.330e-18
+338    4.600e-18
+340    1.323e-18
+342    2.184e-18
+344    7.909e-18
+346    2.741e-18
+348    1.488e-18
+350    3.166e-18
+352    8.354e-18
+354    2.331e-18
+356    1.717e-18
+358    3.585e-18
+360    8.191e-18
+362    2.612e-18
+364    1.554e-18
+366    3.152e-18
+368    6.608e-18
+370    4.410e-18
+372    1.512e-18
+374    2.200e-18
+376    3.886e-18
+378    6.743e-18
+380    1.980e-18
+382    1.289e-18
+384    2.349e-18
+386    3.308e-18
+388    5.695e-18
+390    1.339e-18
+392    1.037e-18
+394    2.009e-18
+396    2.438e-18
+398    4.281e-18
+400    1.383e-18
+402    7.571e-19
+404    1.212e-18
+406    1.577e-18
+408    1.956e-18
+410    2.252e-18
+412    5.315e-19
+414    4.225e-19
+416    1.065e-18
+418    8.280e-19
+420    1.410e-18
+422    1.081e-18
+424    2.882e-19
+426    1.830e-19
+428    5.520e-19
+430    3.870e-19
+432    4.448e-19
+434    7.611e-19
+436    1.743e-19
+438    1.014e-19
+440    8.506e-20
+442    2.066e-19
+444    7.163e-20
+446    2.934e-19
+448    1.622e-19
+450    2.644e-20
+452    1.585e-20
+454    9.664e-21

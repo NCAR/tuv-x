@@ -1,0 +1,35 @@
+{
+  "cross sections" : [
+    {
+      "name": "base-extend-fix",
+      "type": "base",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.base.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 32.3 }
+        }
+      ]
+    },
+    {
+      "name": "acetone-fix-zero",
+      "type": "CH3COCH3+hv->CH3CO+CH3",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.acetone.nc",
+          "lower extrapolation": { "type": "constant", "value" : 12.5 }
+        }
+      ]
+    },
+    {
+      "name": "o3",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_1.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_2.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_3.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_4.nc" }
+      ],
+      "type": "O3"
+    }
+  ]
+}

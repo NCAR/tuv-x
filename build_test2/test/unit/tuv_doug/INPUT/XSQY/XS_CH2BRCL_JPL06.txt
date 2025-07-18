@@ -1,0 +1,73 @@
+21 53           # first data record, number of data records
+Structure:	CH2ClBr(Halon-1011)
+Name:	        chlorobromomethane (Halon-1011)
+Author(Year):	JPL-2002(2002)
+Temperature:	295K
+Wavelength range:	187-290nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+187-290 nm, data of
+
+V.L. Orkin, V.G. Khamaganov, A.G. Guschin, R.E. Huie, and M.J. Kurylo, "Atmospheric fate of chlorobromomethane: Rate constant for the reaction with OH, UV spectrum, and water solubility," J. Phys. Chem. A 101, 174-178 (1997).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+187    1.511e-18
+188    1.264e-18
+190    1.046e-18
+192    1.005e-18
+194    1.047e-18
+196    1.118e-18
+198    1.194e-18
+200    1.247e-18
+202    1.271e-18
+204    1.263e-18
+206    1.225e-18
+208    1.163e-18
+210    1.084e-18
+212    9.96e-19
+214    9.05e-19
+216    8.15e-19
+218    7.29e-19
+220    6.48e-19
+222    5.74e-19
+224    5.05e-19
+226    4.41e-19
+228    3.82e-19
+230    3.28e-19
+232    2.80e-19
+234    2.36e-19
+236    1.97e-19
+238    1.63e-19
+240    1.34e-19
+242    1.08e-19
+244    8.73e-20
+246    6.94e-20
+248    5.46e-20
+250    4.24e-20
+252    3.29e-20
+254    2.52e-20
+256    1.92e-20
+258    1.45e-20
+260    1.09e-20
+262    8.07e-21
+264    5.96e-21
+266    4.40e-21
+268    3.22e-21
+270    2.35e-21
+272    1.70e-21
+274    1.23e-21
+276    8.90e-22
+278    6.40e-22
+280    4.60e-22
+282    3.30e-22
+284    2.40e-22
+286    1.78e-22
+288    1.29e-22
+290    9.80e-23

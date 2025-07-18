@@ -1,0 +1,8 @@
+{
+  "cross sections" : [
+    {
+      "name": "cl2",
+      "type": "Cl2+hv->Cl+Cl"
+    }
+  ]
+}

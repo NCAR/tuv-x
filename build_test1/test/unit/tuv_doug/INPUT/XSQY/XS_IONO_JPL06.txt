@@ -1,0 +1,62 @@
+26 37         # first data record, number of data records
+Structure:	IONO
+Name:       	iodine nitrite
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	210-390nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15Ò, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recomendation:
+
+210-390 nm, data of
+
+R. Brske and F. Zabel, "Photochemistry and thermochemistry of INO2 and IONO2," presented at the Conference "Laboratory experiments of iodine chemistry in the stratosphere - LEXIS", Brussels, 1998, EC Grant Reference: ENV4-CT95-0013 (Ed. A. Cox, G. Poulet, J. Crowley, M.J. Rossi, R.P. Wayne, and F. Zabel), and
+
+R. Brske, Ph. D. thesis, University of Wuppertal, Germany, 1999, adopted from
+
+R. Atkinson, D.L. Baulch, R.A. Cox, R.F. Hampson, Jr., J.A. Kerr, M.J. Rossi, and J. Troe, "Evaluated kinetic and photochemical data for atmospheric chemistry: Supplement VIII, Halogen species. IUPAC subcommittee on gas kinetic data evaluation for atmospheric chemistry," J. Phys. Chem. Ref. Data 29, 167-266 (2000).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+210    2.36e-18
+215    1.87e-18
+220    1.96e-18
+225    2.79e-18
+230    3.47e-18
+235    3.99e-18
+240    4.22e-18
+245    4.00e-18
+250    3.30e-18
+255    2.34e-18
+260    1.62e-18
+265    9.96e-19
+270    8.71e-19
+275    8.98e-19
+280    9.96e-19
+285    9.22e-19
+290    8.10e-19
+295    6.20e-19
+300    3.73e-19
+305    3.08e-19
+310    2.47e-19
+315    2.51e-19
+320    2.75e-19
+325    3.25e-19
+330    3.12e-19
+335    3.49e-19
+340    3.73e-19
+345    3.73e-19
+350    2.98e-19
+355    2.95e-19
+360    2.71e-19
+365    2.07e-19
+370    1.49e-19
+375    7.40e-20
+380    2.40e-20
+385    0.00
+390    0.00

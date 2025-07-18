@@ -1,0 +1,133 @@
+48 86           # first data record, number of data records
+Structure:	CF2Br2(Halon-1202)
+Name:	difluorodibromomethane (Halon-1202)
+Author(Year):	JPL-2002(2002),JPL-2006(2006),JPL-2010(2011)
+Temperature:	296K
+Wavelength range:	170-340nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14“, Report No. JPL Publication 02-25, 2002.
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+Comments:
+
+JPL-2002, JPL-2006, and JPL-2010 recommendations:
+
+170 188 nm, data of
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," J. Atmos. Chem. 8, 41-62 (1989),
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," Aeronomica Acta A 343, 1-40 (1989),
+
+190-304 nm, mean of the data of
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," J. Atmos. Chem. 8, 41-62 (1989),
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," Aeronomica Acta A 343, 1-40 (1989),
+
+L. Orkin and E.E. Kasimovskaya, "Ultraviolet absorption spectra of some Br-containing haloalkanes," J. Atmos. Chem. 21, 1-11 (1995), and
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991),
+
+306-320 nm, mean of the data  of
+
+L. Orkin and E.E. Kasimovskaya, "Ultraviolet absorption spectra of some Br-containing haloalkanes," J. Atmos. Chem. 21, 1-11 (1995), and
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991),
+
+322-340 nm,
+
+extrapolation of the mean of the Orkin and Kasimovskaya (1995) and Burkholder et al.(1991) data, log σ(λ) = -1.85109 - 0.07755 λ.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+170    1.245e-18
+172    7.81e-19
+174    5.53e-19
+176    4.95e-19
+178    6.03e-19
+180    7.50e-19
+182    8.66e-19
+184    1.009e-18
+186    1.118e-18
+188    1.180e-18
+190    1.159e-18
+192    1.103e-18
+194    1.016e-18
+196    9.14e-19
+198    8.21e-19
+200    7.49e-19
+202    7.17e-19
+204    7.34e-19
+206    8.07e-19
+208    9.30e-19
+210    1.100e-18
+212    1.310e-18
+214    1.549e-18
+216    1.804e-18
+218    2.047e-18
+220    2.260e-18
+222    2.442e-18
+224    2.533e-18
+226    2.568e-18
+228    2.534e-18
+230    2.447e-18
+232    2.302e-18
+234    2.119e-18
+236    1.916e-18
+238    1.693e-18
+240    1.473e-18
+242    1.258e-18
+244    1.060e-18
+246    8.78e-19
+248    7.20e-19
+250    5.83e-19
+252    4.65e-19
+254    3.68e-19
+256    2.89e-19
+258    2.24e-19
+260    1.73e-19
+262    1.31e-19
+264    9.90e-20
+266    7.47e-20
+268    5.59e-20
+270    4.17e-20
+272    3.08e-20
+274    2.27e-20
+276    1.66e-20
+278    1.21e-20
+280    8.88e-21
+282    6.47e-21
+284    4.70e-21
+286    3.36e-21
+288    2.45e-21
+290    1.78e-21
+292    1.28e-21
+294    9.26e-22
+296    6.72e-22
+298    4.87e-22
+300    3.52e-22
+302    2.53e-22
+304    1.83e-22
+306    1.30e-22
+308    9.19e-23
+310    6.50e-23
+312    4.56e-23
+314    3.19e-23
+316    2.22e-23
+318    1.57e-23
+320    1.05e-23
+322    7.59e-24
+324    5.31e-24
+326    3.71e-24
+328    2.60e-24
+330    1.82e-24
+332    1.27e-24
+334    8.9e-25
+336    6.2e-25
+338    4.4e-25
+340    3.0e-25

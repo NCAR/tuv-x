@@ -1,0 +1,132 @@
+36 97           # first data record, number of data records
+Structure:	CHBr3
+Name:	        tribromomethane, bromoform
+Author(Year):	JPL-2002(2002)
+Temperature:	295-296K
+Wavelength range:	170-362nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+170-284 nm, data of
+
+ D. Gillotay, A. Jenouvrier, B. Coquart, M.F. Mrienne, and P.C. Simon, "Ultraviolet absorption cross-section of bromoform in the temperature range 295-240 K," Planet. Space Sci. 37, 1127-1140 (1989),
+
+D. Gillotay, A. Jenouvrier, B. Coquart, M.F. Mrienne, and P.C. Simon, "Ultraviolet absorption cross-section of bromoform in the temperature range 295-240 K," Aeronomica Acta A 348, 1-22 (1989),
+286-310 nm, mean of the data of
+
+ D. Gillotay, A. Jenouvrier, B. Coquart, M.F. Mrienne, and P.C. Simon, "Ultraviolet absorption cross-section of bromoform in the temperature range 295-240 K," Planet. Space Sci. 37, 1127-1140 (1989),
+
+D. Gillotay, A. Jenouvrier, B. Coquart, M.F. Mrienne, and P.C. Simon, "Ultraviolet absorption cross-section of bromoform in the temperature range 295-240 K," Aeronomica Acta A 348, 1-22 (1989), and
+
+G.K. Moortgat, R. Meller, and W. Schneider, "Temperature dependence (256 - 296 K) of the absorption cross-sections of bromoform in the wavelength range 285 - 360 nm", in The Tropospheric Chemistry of Ozone in the Polar Regions, edited by H. Niki and K.H. Becker (Springer-Verlag, Berlin, 1993), pp. 359-369.
+
+312-362 nm, data of
+
+G.K. Moortgat, R. Meller, and W. Schneider, "Temperature dependence (256 - 296 K) of the absorption cross-sections of bromoform in the wavelength range 285 - 360 nm", in The Tropospheric Chemistry of Ozone in the Polar Regions, edited by H. Niki and K.H. Becker (Springer-Verlag, Berlin, 1993), pp. 359-369.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+170    1.6038e-17
+172    1.1732e-17
+174    9.696e-18
+176    8.720e-18
+178    8.576e-18
+180    8.313e-18
+182    7.703e-18
+184    6.833e-18
+186    5.704e-18
+188    4.708e-18
+190    3.991e-18
+192    3.602e-18
+194    3.513e-18
+196    3.661e-18
+198    3.936e-18
+200    4.164e-18
+202    4.336e-18
+204    4.406e-18
+206    4.450e-18
+208    4.514e-18
+210    4.685e-18
+212    4.934e-18
+214    5.242e-18
+216    5.535e-18
+218    5.739e-18
+220    5.826e-18
+222    5.780e-18
+224    5.578e-18
+226    5.272e-18
+228    4.868e-18
+230    4.412e-18
+232    3.974e-18
+234    3.618e-18
+236    3.239e-18
+238    2.947e-18
+240    2.728e-18
+242    2.533e-18
+244    2.337e-18
+246    2.144e-18
+248    1.939e-18
+250    1.741e-18
+252    1.577e-18
+254    1.361e-18
+256    1.164e-18
+258    9.86e-19
+260    8.28e-19
+262    6.89e-19
+264    5.69e-19
+266    4.67e-19
+268    3.80e-19
+270    3.08e-19
+272    2.48e-19
+274    1.98e-19
+276    1.58e-19
+278    1.25e-19
+280    9.88e-20
+282    7.77e-20
+284    6.10e-20
+286    4.79e-20
+288    3.74e-20
+290    2.89e-20
+292    2.20e-20
+294    1.69e-20
+296    1.28e-20
+298    9.56e-21
+300    7.19e-21
+302    5.34e-21
+304    3.97e-21
+306    2.97e-21
+308    2.22e-21
+310    1.65e-21
+312    1.27e-21
+314    9.52e-22
+316    7.12e-22
+318    5.29e-22
+320    3.90e-22
+322    2.89e-22
+324    2.15e-22
+326    1.62e-22
+328    1.21e-22
+330    9.16e-23
+332    6.90e-23
+334    5.25e-23
+336    3.96e-23
+338    3.07e-23
+340    2.40e-23
+342    1.76e-23
+344    1.35e-23
+346    1.02e-23
+348    8.00e-24
+350    6.40e-24
+352    5.40e-24
+354    4.60e-24
+356    3.20e-24
+358    2.40e-24
+360    1.70e-24
+362    1.30e-24

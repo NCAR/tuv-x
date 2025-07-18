@@ -1,0 +1,121 @@
+31 91           line of first data point, total data points
+Structure:	Br2
+Name:	bromine
+Author(Year):	JPL-2006(2006)
+Temperature:	298K
+Wavelength range:	200-650nm(rec)
+Bibliography:
+
+ 
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2006 recommendation:
+
+Absorption cross sections calculated at 5-nm intervals using the Gaussian fit (eqn. 11):
+
+σ(298 K) = 1.06x10-20 cm2 x exp{-52.3[ln(223.3 nm/λ)]2}
+
+           + 6.19x10-19 cm2 x exp{-108.5x[ln(411.9 nm/λ)]2}
+
+           + 3.39x10-19 cm2 x exp{-106.8[ln(480.2 nm/λ )]2}
+
+           + 3.78x10-20 cm2 x exp{-112.0[ln(549.3 nm/λ)]2}
+
+derived by
+
+D. Maric, J.P. Burrows, and G.K. Moortgat, "A study of the UV-visible absorption spectra of Br2 and BrCl," J. Photochem. Photobiol. A: Chem. 83, 179-192 (1994).
+
+wave   cm-2
+200    5.62e-21
+205    7.23e-21
+210    8.70e-21
+215    9.83e-21
+220    1.05e-20
+225    1.06e-20
+230    1.01e-20
+235    9.25e-21
+240    8.08e-21
+245    6.76e-21
+250    5.44e-21
+255    4.22e-21
+260    3.16e-21
+265    2.29e-21
+270    1.61e-21
+275    1.10e-21
+280    7.28e-22
+285    4.72e-22
+290    2.99e-22
+295    1.87e-22
+300    1.22e-22
+305    1.00e-22
+310    1.35e-22
+315    2.74e-22
+320    6.26e-22
+325    1.41e-21
+330    3.00e-21
+335    6.02e-21
+340    1.14e-20
+345    2.05e-20
+350    3.48e-20
+355    5.63e-20
+360    8.66e-20
+365    1.27e-19
+370    1.78e-19
+375    2.39e-19
+380    3.07e-19
+385    3.79e-19
+390    4.51e-19
+395    5.18e-19
+400    5.74e-19
+405    6.16e-19
+410    6.42e-19
+415    6.51e-19
+420    6.45e-19
+425    6.28e-19
+430    6.01e-19
+435    5.71e-19
+440    5.40e-19
+445    5.12e-19
+450    4.88e-19
+455    4.68e-19
+460    4.52e-19
+465    4.40e-19
+470    4.28e-19
+475    4.16e-19
+480    4.03e-19
+485    3.86e-19
+490    3.66e-19
+495    3.43e-19
+500    3.18e-19
+505    2.90e-19
+510    2.62e-19
+515    2.33e-19
+520    2.06e-19
+525    1.80e-19
+530    1.57e-19
+535    1.36e-19
+540    1.17e-19
+545    1.01e-19
+550    8.68e-20
+555    7.47e-20
+560    6.43e-20
+565    5.54e-20
+570    4.76e-20
+575    4.09e-20
+580    3.50e-20
+585    2.97e-20
+590    2.52e-20
+595    2.11e-20
+600    1.76e-20
+605    1.45e-20
+610    1.18e-20
+615    9.58e-21
+620    7.67e-21
+625    6.07e-21
+630    4.75e-21
+635    3.68e-21
+640    2.82e-21
+645    2.14e-21
+650    1.61e-21

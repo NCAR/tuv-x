@@ -1,0 +1,127 @@
+{
+   "enable diagnostics": true,
+   "O2 absorption" : {
+     "cross section parameters file": "data/cross_sections/O2_parameters.txt"
+   },
+   "grids": [
+      {
+         "name": "height",
+         "type": "equal interval",
+         "units": "km",
+         "begins at" : 0.0,
+         "ends at" : 120.0,
+         "cell delta" : 1.0
+      },
+      {
+         "name": "wavelength",
+         "type": "from csv file",
+         "units": "nm",
+         "file path": "data/grids/wavelength/combined.grid"
+      },
+      {
+         "name": "time",
+         "type": "from config file",
+         "units": "hours",
+         "values": [ 12.0, 14.0, 16.0, 18.0, 20.0 ]
+      }
+   ],
+   "profiles": [
+      {
+         "name": "O3",
+         "type": "O3",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.ozone"
+      },
+      {
+         "name": "air",
+         "type": "air",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.dens"
+      },
+      {
+         "name": "O2",
+         "type": "O2",
+         "units": "molecule cm-3",
+         "file path": "data/profiles/atmosphere/ussa.dens"
+      },
+      {
+      "name": "temperature",
+         "type": "from csv file",
+         "units": "K",
+         "file path": "data/profiles/atmosphere/ussa.temp",
+         "grid": {
+           "name": "height",
+           "units": "km"
+         }
+      },
+      {
+         "name": "solar zenith angle",
+         "type": "solar zenith angle",
+         "units": "degrees",
+         "year" : 2002,
+         "month": 3,
+         "day": 21,
+         "longitude": 0.0,
+         "latitude": 0.0
+      },
+      {
+         "name": "Earth-Sun distance",
+         "type": "Earth-Sun distance",
+         "units": "AU",
+         "year" : 2002,
+         "month": 3,
+         "day": 21
+      },
+      {
+         "name": "surface albedo",
+         "type": "from config file",
+         "units": "none",
+         "uniform value": 0.10,
+         "grid": {
+           "name": "wavelength",
+           "units": "nm"
+         }
+      }
+   ],
+   "radiative transfer": {
+      "solver" : {
+         "type" : "discrete ordinate",
+         "number of streams" : 4
+      },
+      "cross sections": [
+         {
+            "name": "air",
+            "type": "air"
+         },
+         {
+            "name": "O3",
+            "netcdf files": [
+              { "file path": "data/cross_sections/O3_1.nc" },
+              { "file path": "data/cross_sections/O3_2.nc" },
+              { "file path": "data/cross_sections/O3_3.nc" },
+              { "file path": "data/cross_sections/O3_4.nc" }
+            ],
+            "type": "O3"
+         },
+         {
+            "name": "O2",
+            "netcdf files": [
+              {
+                "file path": "data/cross_sections/O2_1.nc",
+                "lower extrapolation": { "type": "boundary" }
+              }
+            ],
+            "type": "base"
+         }
+      ],
+      "radiators": [
+         {
+            "name": "O3",
+            "type": "base",
+            "cross section": "O3",
+            "vertical profile": "O3",
+            "vertical profile units": "molecule cm-3"
+         }
+      ]
+   }
+}

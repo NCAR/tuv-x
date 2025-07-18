@@ -1,0 +1,32 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.h2o2-oh_oh.nc" }
+      ],
+      "type": "H2O2+hv->OH+OH"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "H2O2+hv->OH+OH",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.h2o2-oh_oh.nc",
+          "lower extrapolation": { "type": "constant", "value" : 188 }
+        }
+      ]
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "H2O2+hv->OH+OH",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.h2o2-oh_oh.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 212 }
+        }
+      ]
+    }
+  ]
+}

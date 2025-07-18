@@ -1,0 +1,442 @@
+{
+  "HNO4+hv->HO2+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "O2+hv->O+O" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "O3+hv->O2+O(1D)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "O3+hv->O2+O(3P)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NO3-(aq)+hv->NO2(aq)+O-" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NO3-(aq)+hv->NO2-(aq)+O(3P)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NOCl+hv->NO+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3Cl+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3OOH+hv->CH3O+OH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOCH2OOH+hv->CH2(OH)O+OH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3(OONO2)+hv->CH3OO+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "C2H5ONO2+hv->C2H5O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "nC3H7ONO2+hv->C3H7O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "1-C4H9ONO2+hv->1-C4H9O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "2-C4H9ONO2+hv->2-C4H9O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HO2+hv->OH+O" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "H2O2+hv->OH+OH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NO3+hv->NO+O2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NO3+hv->NO2+O(3P)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HNO3+hv->OH+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "N2O+hv->N2+O(1D)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "N2O5+hv->NO2+NO3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "NO2+hv->NO+O(3P)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2O+hv->H+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2O+hv->H2+CO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "C2H5CHO+hv->C2H5+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2CHCHO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3CHO+hv->CH3+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HNO2+hv->OH+NO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CCl4+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CHBr3+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF2Br2+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF2BrCl+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF3Br+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF2BrCF2Br+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "I2+hv->I+I" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "IO+hv->I+O" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "IOH+hv->I+OH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "perfluoro-1-iodopropane+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3OCl+hv->CH3O+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CHCl3+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3CCl3+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CCl2O+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CClFO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Cl2+hv->Cl+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClO+hv->Cl+O(1D)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClO+hv->Cl+O(3P)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClOO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClOOCl+hv->Cl+ClOO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCl+hv->H+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOCl+hv->HO+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClNO2+hv->Cl+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClONO+hv->Cl+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClONO2+hv->Cl+NO3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "ClONO2+hv->ClO+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "OClO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "Br2+hv->Br+Br" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrO+hv->Br+O" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOBr+hv->OH+Br" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrNO+hv->Br+NO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrONO+hv->Br+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrONO+hv->BrO+NO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrNO2+hv->Br+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrONO2+hv->BrO+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrONO2+hv->Br+NO3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "BrCl+hv->Br+Cl" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3Br+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3ONO2+hv->CH3O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "nitro_acetone+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "nitro_ethanol+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3CH2ONO2+hv->CH3CH2O+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3CHONO2CH3+hv->CH3CHOCH3+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COCH3+hv->CH3CO+CH3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CCl3F+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CCl2F2+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CFC-113+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CFC-114+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CFC-115+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-22+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF3CHCl2+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF3CHFCl+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-22+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-141b+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-142b+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-225ca+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HCFC-225cb+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "C(CH3)3(ONO2)+hv->C(CH3)(O.)+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "C(CH3)3(ONO)+hv->C(CH3)3(O)+NO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "PAN+hv->CH3CO(OO)+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "PAN+hv->CH3CO(O)+NO3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "PPN+hv->CH3CH2CO(OO)+NO2" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "PPN+hv->CH3CH2CO(O)+NO3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2=C(CH3)CHO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "MVK+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOCH2CHO+hv->CH2OH+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOCH2CHO+hv->CH3OH+CO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "HOCH2CHO+hv->CH2CHO+OH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2(OH)COCH3+hv->CH3CO+CH2(OH)" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH2(OH)COCH3+hv->CH2(OH)CO+CH3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CHOCHO+hv->HCO+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CHOCHO+hv->H2+CO+CO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CHOCHO+hv->CH2O+CO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COCH2CH3+hv->CH3CO+CH2CH3" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COCHO+hv->CH3CO+HCO" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COCOCH3+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COOH+hv->CH3+COOH" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COOOH+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3COCOOH+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CH3CH3NNO+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  },
+  "CF2O+hv->Products" : {
+    "RMS difference" : 1.0e-6,
+    "maximum difference" : 1.0e-5
+  }
+}

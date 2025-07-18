@@ -1,0 +1,25 @@
+{
+   "grids": [
+      {
+         "name": "height",
+         "type": "equal interval",
+         "units": "km",
+         "begins at" : 0.0,
+         "ends at" : 120.0,
+         "cell delta" : 1.0
+      },
+      {
+         "name": "wavelength",
+         "type": "from csv file",
+         "units": "nm",
+         "file path": "../data/grids/wavelength/combined.grid"
+      },
+      {
+         "name": "time",
+         "type": "from config file",
+         "units": "hours",
+         "values": [ 12.0, 14.0, 16.0,
+                     18.0, 20.0 ]
+      }
+   ]
+}

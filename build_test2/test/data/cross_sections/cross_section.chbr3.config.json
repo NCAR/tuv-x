@@ -1,0 +1,32 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.chbr3.nc" }
+      ],
+      "type": "CHBr3+hv->Products"
+    },
+    {
+      "name": "fix-zero",
+      "type": "CHBr3+hv->Products",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.chbr3.nc",
+          "lower extrapolation": { "type": "constant", "value" : 180 }
+        }
+      ]
+    },
+    {
+      "name": "extend-fix",
+      "type": "CHBr3+hv->Products",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.chbr3.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 220 }
+        }
+      ]
+    }
+  ]
+}

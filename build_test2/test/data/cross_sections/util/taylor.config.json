@@ -1,0 +1,23 @@
+{
+  "type": "TAYLOR_SERIES",
+  "netcdf file": {
+    "file path": "test/data/cross_sections/util/taylor.nc"
+  },
+  "base temperature": 295.2,
+  "minimum wavelength": 280.5,
+  "maximum wavelength": 540.2,
+  "temperature ranges": [
+    {
+      "maximum": 209.999999999999,
+      "fixed value": 210.0
+    },
+    {
+      "minimum": 210.0,
+      "maximum": 300.0
+    },
+    {
+      "minimum": 300.00000000001,
+      "fixed value": 300.0
+    }
+  ]  
+}

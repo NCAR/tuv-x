@@ -1,0 +1,79 @@
+36 44         # first data record, number of data records
+
+Structure:	CCl4
+Name:	carbon tetrachloride, tetrachloromethane
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:	174-275nm(rec)
+Bibliography:
+
+ 
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+174-192 nm, mean of the data of
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980), and
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+194-250 nm, data of
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+
+255-275 nm, data of
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980).
+-------------------------------------------------------------------
+ lambda (nm)		sigma (cm^2)
+-------------------------------------------------------------------
+174    9.56e-18
+176    1.010e-17
+178    9.825e-18
+180    8.06e-18
+182    6.47e-18
+184    4.785e-18
+186    3.385e-18
+188    2.27e-18
+190    1.455e-18
+192    9.96e-19
+194    7.67e-19
+196    6.95e-19
+198    6.80e-19
+200    6.60e-19
+202    6.38e-19
+204    6.10e-19
+206    5.70e-19
+208    5.25e-19
+210    4.69e-19
+212    4.10e-19
+214    3.45e-19
+216    2.78e-19
+218    2.21e-19
+220    1.75e-19
+222    1.36e-19
+224    1.02e-19
+226    7.60e-20
+228    5.65e-20
+230    4.28e-20
+232    3.04e-20
+234    2.20e-20
+236    1.60e-20
+238    1.16e-20
+240    8.30e-21
+242    5.90e-21
+244    4.13e-21
+246    2.90e-21
+248    2.10e-21
+250    1.48e-21
+255    6.61e-22
+260    2.53e-22
+265    1.26e-22
+270    6.10e-23
+275    2.39e-23

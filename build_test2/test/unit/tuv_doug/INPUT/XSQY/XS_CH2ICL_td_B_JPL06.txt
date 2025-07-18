@@ -1,0 +1,61 @@
+21 38           # first data record, number of data records
+Structure:	CH2ICl
+Name:	        chloroiodomethane
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	205-390nm(rec)
+Bibliography:
+
+Temperature coefficients B:
+
+243-333 K,
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997).
+
+ln ?(?, T) = ln ?(?, 298 K) + B(T-298) with
+
+---------------
+ ?     103B
+(nm)   (K-1)
+---------------
+205    0.0
+210    0.0
+215    0.0
+220    0.0
+225    0.0
+230    0.0
+235    0.24
+240    0.12
+245   -0.02
+250   -0.11
+255   -0.28
+260   -0.44
+265   -0.55
+270   -0.59
+275   -0.47
+280   -0.18
+285    0.32
+290    0.99
+295    1.73
+300    2.56
+305    3.08
+310    3.50
+315    3.56
+320    3.46
+325    3.44
+330    3.72
+335    4.09
+340    4.87
+345    5.69
+350    6.88
+355    8.16
+360    9.01
+365   11.06
+370   11.47
+375   12.77
+380   15.14
+385   19.12
+390   20.48
+
+
+ 

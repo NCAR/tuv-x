@@ -1,0 +1,32 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.cfc-11.nc" }
+      ],
+      "type": "CCl3F+hv->Products"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "CCl3F+hv->Products",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.cfc-11.nc",
+          "lower extrapolation": { "type": "constant", "value" : 180 }
+        }
+      ]
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "CCl3F+hv->Products",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.cfc-11.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 220 }
+        }
+      ]
+    }
+  ]
+}

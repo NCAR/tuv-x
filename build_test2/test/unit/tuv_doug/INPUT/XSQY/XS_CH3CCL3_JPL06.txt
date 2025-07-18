@@ -1,0 +1,57 @@
+40 18          # first data record, number of data records
+Structure:	CH3CCl3
+Name:	        1,1,1-trichloroethane, methylchloroform
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:170-255nm(rec)
+Bibliography:
+
+ 
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+170-180 nm, mean of the data of
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980), and
+
+A.K. Nayak, M.J. Kurylo, and A. Fahr, "UV absorption cross sections of methylchloroform: Temperature-dependent gas and liquid phase measurements," J. Geophys. Res. 100, 11185-11189 (1995),
+
+185-205 nm, mean of the data of
+
+N. Vanlaethem-Meure, J. Wisemberg, and P.C. Simon, "Ultraviolet absorption spectrum of methylchloroform in the vapor phase," Geophys. Res. Lett. 6, 451-454 (1979),
+
+C. Hubrich and F. Stuhl, "Ultraviolet absorption of some halogenated methanes and ethanes of atmospheric interest," J. Photochem. 12, 93-107 (1980), and
+
+A.K. Nayak, M.J. Kurylo, and A. Fahr, "UV absorption cross sections of methylchloroform: Temperature-dependent gas and liquid phase measurements," J. Geophys. Res. 100, 11185-11189 (1995),
+
+210-240 nm, mean of the data
+
+N. Vanlaethem-Meure, J. Wisemberg, and P.C. Simon, "Ultraviolet absorption spectrum of methylchloroform in the vapor phase," Geophys. Res. Lett. 6, 451-454 (1979), and
+
+A.K. Nayak, M.J. Kurylo, and A. Fahr, "UV absorption cross sections of methylchloroform: Temperature-dependent gas and liquid phase measurements," J. Geophys. Res. 100, 11185-11189 (1995),
+
+245-255 nm, extrapolation of the 210-240-nm data.
+-----------------------------------------------------------------------
+lambda        sigma (cm^2)
+ (nm)		295K	250K		210K
+-----------------------------------------------------------------------
+170    4.06e-18
+175    4.24e-18
+180    4.04e-18
+185    3.01e-18
+190    2.12e-18
+195    1.47e-18
+200    9.21e-19
+205    5.20e-19
+210    2.55e-19
+215    1.09e-19
+220    4.47e-20
+225    1.82e-20
+230    7.17e-21
+235    2.76e-21
+240    1.11e-21
+245    4.37e-22
+250    1.73e-22
+255    6.82e-23

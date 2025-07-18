@@ -1,0 +1,12 @@
+{
+   "grids": [
+      {
+         "name": "height",
+         "type": "equal interval",
+         "units": "km",
+         "begins at" : 0.0,
+         "ends at" : 120.0,
+         "cell delta" : 1.0
+      }
+   ]
+}

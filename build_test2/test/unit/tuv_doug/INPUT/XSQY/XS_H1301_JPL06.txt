@@ -1,0 +1,106 @@
+46 61           # first data record, number of data records
+Structure:	CF3Br(Halon-1301)
+Name:	        trifluorobromomethane (Halon-1301)
+Author(Year):	JPL-2002(2002)
+Temperature:	295K
+Wavelength range:	168-300nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+168-188 nm, data of
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," J. Atmos. Chem. 8, 41-62 (1989),
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," Aeronomica Acta A 343, 1-40 (1989),
+
+190-270 nm, mean of the data of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," J. Atmos. Chem. 8, 41-62 (1989),
+
+D. Gillotay and P.C. Simon, "Ultraviolet absorption spectrum of trifluoro-bromo-methane, difluoro-dibromo-methane and difluoro-bromo-chloro-methane in the vapor phase," Aeronomica Acta A 343, 1-40 (1989),
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991), and
+
+L. Orkin and E.E. Kasimovskaya, "Ultraviolet absorption spectra of some Br-containing haloalkanes," J. Atmos. Chem. 21, 1-11 (1995).
+
+272-280 nm, mean of the data of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982), and
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991),
+
+285-300 nm, data of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+168    5.17e-21
+170    6.96e-21
+172    9.28e-21
+174    1.22e-20
+176    1.60e-20
+178    2.05e-20
+180    2.61e-20
+182    3.26e-20
+184    4.02e-20
+186    4.88e-20
+188    5.82e-20
+190    6.56e-20
+192    7.58e-20
+194    8.63e-20
+196    9.61e-20
+198    1.05e-19
+200    1.13e-19
+202    1.19e-19
+204    1.24e-19
+206    1.25e-19
+208    1.24e-19
+210    1.21e-19
+212    1.14e-19
+214    1.06e-19
+216    9.71e-20
+218    8.65e-20
+220    7.56e-20
+222    6.50e-20
+224    5.47e-20
+226    4.52e-20
+228    3.69e-20
+230    2.91e-20
+232    2.32e-20
+234    1.80e-20
+236    1.39e-20
+238    1.04e-20
+240    7.66e-21
+242    5.63e-21
+244    4.14e-21
+246    2.96e-21
+248    2.12e-21
+250    1.49e-21
+252    1.07e-21
+254    7.43e-22
+256    5.16e-22
+258    3.57e-22
+260    2.48e-22
+262    1.71e-22
+264    1.18e-22
+266    8.27e-23
+268    5.80e-23
+270    3.99e-23
+272    2.71e-23
+274    1.88e-23
+276    1.29e-23
+278    9.2e-24
+280    6.4e-24
+285    2.2e-24
+290    8.0e-25
+295    3.0e-25
+300    1.0e-25

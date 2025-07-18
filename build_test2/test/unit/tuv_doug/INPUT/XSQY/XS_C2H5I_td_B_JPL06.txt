@@ -1,0 +1,54 @@
+21 31           # first data record, number of data records
+Structure:	C2H5I
+Name:	        iodoethane, ethyl iodide
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	205-365nm(rec)
+Bibliography:
+
+Temperature coefficients B:
+
+243-333 K,
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997).
+
+ln ?(?, T) = ln ? (?, 298 K) + B(T-298) with
+
+-----------------
+ ?     103B
+(nm)   (K-1)
+-----------------
+205    0.0
+210    0.0
+215    0.0
+220    0.0
+225    0.0
+230    0.0
+235   -0.27
+240   -0.40
+245   -0.62
+250   -0.79
+255   -0.82
+260   -0.75
+265   -0.44
+270    0.36
+275    1.23
+280    2.36
+285    3.61
+290    4.83
+295    6.33
+300    7.48
+305    8.08
+310    7.55
+315    7.92
+320    8.27
+325    8.81
+330    9.30
+335   10.20
+340   11.16
+345   12.41
+350   11.28
+355   12.20
+
+ 
+

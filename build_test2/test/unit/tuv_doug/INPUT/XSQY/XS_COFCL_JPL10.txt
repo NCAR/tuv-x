@@ -1,0 +1,65 @@
+33 32           # first data record, number of data records
+Structure:	COFCl
+Name:	fluorochlorophosgene, carbonyl chloro-fluoride
+Author(Year):	JPL-2006(2006),JPL-2010(2011)
+Temperature:	296-298K
+Wavelength range:	186.0-261.4nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+Comments:
+
+JPL-2006 and JPL-2010 recommendations:
+
+186.0-199.0 nm, data of
+
+C.C. Chou, G. Crescentini, H. Vera-Ruiz, W.S. Smith, and F.S. Rowland, "Stratospheric photochemistry of CF2O, CClFO, and CCl2O," presented at the 173rd American Chemical Meeting, New Orleans, LA, 1977,
+
+201.0-203.1 nm, mean of the data of
+
+C.C. Chou, G. Crescentini, H. Vera-Ruiz, W.S. Smith, and F.S. Rowland, "Stratospheric photochemistry of CF2O, CClFO, and CCl2O," presented at the 173rd American Chemical Meeting, New Orleans, LA, 1977, and
+
+A. Nölle, H. Heydtmann, R. Meller, and G.K. Moortgat, "Temperature dependent UV absorption spectra of carbonyl chloro-fluoride," Geophys. Res. Lett. 20, 707-710 (1993),
+
+205.1-261.4 nm, data of
+
+A. Nölle, H. Heydtmann, R. Meller, and G.K. Moortgat, "Temperature dependent UV absorption spectra of carbonyl chloro-fluoride," Geophys. Res. Lett. 20, 707-710 (1993).
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+186.0    1.56e-19
+187.8    1.40e-19
+189.6    1.34e-19
+191.4    1.29e-19
+193.2    1.27e-19
+195.1    1.25e-19
+197.0    1.24e-19
+199.0    1.23e-19
+201.0    1.22e-19
+203.1    1.19e-19
+205.1    1.15e-19
+207.3    1.08e-19
+209.4    9.91e-20
+211.6    8.96e-20
+213.9    7.90e-20
+216.2    6.84e-20
+218.6    5.79e-20
+221.0    4.77e-20
+223.5    3.81e-20
+226.0    2.93e-20
+228.6    2.19e-20
+231.2    1.57e-20
+233.9    1.09e-20
+236.7    7.24e-21
+239.5    4.59e-21
+242.4    2.92e-21
+245.4    1.78e-21
+248.5    1.03e-21
+251.6    6.35e-22
+254.8    4.09e-22
+258.1    2.79e-22
+261.4    2.14e-22
+

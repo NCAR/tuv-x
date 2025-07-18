@@ -1,0 +1,37 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_1.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_2.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_3.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_4.nc" }
+      ],
+      "type": "O3 tint"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "O3 tint",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_1.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_2.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_3.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_4.nc" }
+      ],
+      "lower extrapolation": { "type": "constant", "value" : 0.1 }
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "O3 tint",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_1.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_2.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_3.nc" },
+        { "file path": "test/data/cross_sections/cross_section.o3_tint_4.nc" }
+      ],
+      "lower extrapolation": { "type": "boundary" },
+      "upper extrapolation": { "type": "constant", "value": 1 }
+    }
+  ]
+}

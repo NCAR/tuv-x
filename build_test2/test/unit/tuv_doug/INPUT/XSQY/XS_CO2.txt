@@ -1,0 +1,76 @@
+21  55	# first data record, number of data records 
+		Created by Douglas E. Kinnison, 8/1/01
+Reference:  Huebner, Keady and Lyon, Solar Photo Rates for Planetary Atmospheres
+            and Atmospheric Pollutants, Kluwer Academic Publishers, Reprinted
+            from Astrophysics and Space Science, Volume 195, No. 1, 1992.
+           	
+CO2 + hv -> Products
+
+Recommended absorption cross sections in the wavelength range 58.0-167.0 nm taken
+from Nakata, R. S., K. Watanabe, F. M. Matsunaga, Sci. Light, 14, 54, 1965.
+Between 166.0-199.0nm the compiled cross section from Huffman, 1971.
+
+The following table was taken from the Southwest Research Institute (SwRI) web site.
+This web site listed the same references as the Huebner et al., reference. NOTE: there
+has not been any cross referencing of the below wavelength dependent cross sections 
+of CO2 with the original journal references.
+
+-------------------------------------------------------------------
+lambda (nm)	 sigma (cm^2)
+-------------------------------------------------------------------
+ 120.0   5.00E-20 
+ 121.0   6.30E-20 
+ 121.5   8.19E-20 
+ 122.0   7.40E-20 
+ 123.0   1.00E-19 
+ 124.0   1.40E-19 
+ 125.0   2.20E-19 
+ 126.0   2.90E-19 
+ 127.0   3.70E-19 
+ 128.0   5.20E-19 
+ 129.0   6.30E-19 
+ 130.0   4.80E-19 
+ 130.5   8.00E-19 
+ 131.0   4.80E-19 
+ 131.5   1.10E-18 
+ 132.0   6.20E-19 
+ 132.5   1.10E-18 
+ 133.0   6.20E-19 
+ 133.5   1.10E-18 
+ 134.0   7.40E-19 
+ 134.5   6.00E-19 
+ 135.0   1.10E-18 
+ 135.5   5.20E-19 
+ 136.0   9.70E-19 
+ 136.5   5.60E-19 
+ 137.0   7.10E-19 
+ 137.5   5.20E-19 
+ 138.0   6.70E-19 
+ 140.0   5.30E-19 
+ 142.0   5.40E-19 
+ 144.0   6.00E-19 
+ 146.0   6.00E-19 
+ 148.0   6.00E-19 
+ 149.0   6.00E-19 
+ 150.0   5.20E-19 
+ 151.0   4.80E-19 
+ 152.0   4.50E-19 
+ 153.0   4.80E-19 
+ 154.0   4.50E-19 
+ 155.0   3.50E-19 
+ 156.0   3.00E-19 
+ 157.0   3.00E-19 
+ 158.0   2.60E-19 
+ 159.0   1.90E-19 
+ 160.0   1.90E-19 
+ 162.0   1.10E-19 
+ 164.0   8.90E-20 
+ 166.0   6.30E-20 
+ 168.0   3.20E-20 
+ 170.0   2.30E-20 
+ 175.0   5.80E-21 
+ 180.0   1.80E-21 
+ 185.0   5.00E-22 
+ 190.0   1.20E-22 
+ 195.0   1.00E-23 
+

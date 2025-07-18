@@ -1,0 +1,52 @@
+32 21           # first data record, number of data records
+Structure:	COF2
+Name:	difluorophosgene, carbonyl difluoride
+Author(Year):	JPL-2006(2006),JPL-2010(2011)
+Temperature:	298K
+Wavelength range:	186.0-228.6nm(rec)
+Bibliography:
+
+ 
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+
+ 
+
+Sander, S. P., J. Abbatt, J. R. Barker, J. B. Burkholder, R. R. Friedl, D. M. Golden, R. E. Huie, C. E. Kolb, M. J. Kurylo, G. K. Moortgat, V. L. Orkin and P. H. Wine "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies, Evaluation No. 17," JPL Publication 10-6, Jet Propulsion Laboratory, Pasadena, 2011. http://jpldataeval.jpl.nasa.gov.
+Comments:
+
+JPL-2006 and JPL-2010 recommendations:
+
+186.0-199.0 nm, data of
+
+L.T Molina and M.J. Molina, "Chemistry of fluorine in the stratosphere," presented at the 182nd American Chemical Society Meeting, 1982 (unpublished); from E.-P. Röth, R. Ruhnke, G. Moortgat, R. Meller, and W. Schneider, Berichte des Forschungszentums Jülich, jül-3341 (1997),
+
+201.0-228.6 nm, data of
+
+A. Nölle, H. Heydtmann, R. Meller, W. Schneider, and G.K. Moortgat, "UV absorption spectra and absorption cross sections of COF2 at 296 K in the range 200 - 230 nm," Geophys. Res. Lett. 19, 281-284 (1992).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+186.0    5.5e-20
+187.8    4.8e-20
+189.6    4.2e-20
+191.4    3.7e-20
+193.2    3.1e-20
+195.1    2.6e-20
+197.0    2.1e-20
+199.0    1.6e-20
+201.0    1.32e-20
+203.1    9.87e-21
+205.1    7.54e-21
+207.3    5.08e-21
+209.4    3.92e-21
+211.6    2.72e-21
+213.9    1.88e-21
+216.2    1.20e-21
+218.6    7.7e-22
+221.0    4.6e-22
+223.5    3.2e-22
+226.0    2.1e-22
+228.6    1.5e-22

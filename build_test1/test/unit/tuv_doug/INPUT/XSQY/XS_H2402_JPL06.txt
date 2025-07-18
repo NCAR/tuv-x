@@ -1,0 +1,126 @@
+51 76           # first data record, number of data records
+Structure:	CF2BrCF2Br(Halon-2402)
+Name:	        1,1,2,2-tetrafluoro-1,2-dibromoethane (Halon-2402)
+Author(Year):	JPL-2002(2002)
+Temperature:	296K
+Wavelength range:	170-320nm(rec)
+Bibliography:
+
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+170-186 nm, data of
+
+D. Gillotay, P.C. Simon, and L. Dierckx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," Aeronomica Acta A 335, 1-25 (1988),
+
+188-194nm,
+
+values estimated by smoothing the absorption curve,
+
+196-280 nm, mean of the values of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+D. Gillotay, P.C. Simon, and L. Dierckx, "Temperature dependence of ultraviolet absorption cross-sections of brominated methanes and ethanes," Aeronomica Acta A 335, 1-25 (1988),
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991),  and
+
+L. Orkin and E.E. Kasimovskaya, "Ultraviolet absorption spectra of some Br-containing haloalkanes," J. Atmos. Chem. 21, 1-11 (1995),
+
+282-300 nm, mean of the values of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982),
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991),  and
+
+L. Orkin and E.E. Kasimovskaya, "Ultraviolet absorption spectra of some Br-containing haloalkanes," J. Atmos. Chem. 21, 1-11 (1995),
+
+302-320 nm, mean of the values of
+
+L.T. Molina, M.J. Molina, and F.S. Rowland, "Ultraviolet absorption cross sections of several brominated methanes and ethanes of atmospheric interest," J. Phys. Chem. 86, 2672-2676 (1982), and
+
+J.B. Burkholder, R.R. Wilson, T. Gierczak, R. Talukdar, S.A. McKeen, J.J. Orlando, G.L. Vaghjiani, and A.R. Ravishankara, "Atmospheric fate of CF3Br, CF2Br2, CF2ClBr, and CF2BrCF2Br," J. Geophys. Res. 96, 5025-5043 (1991).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+170    5.09e-19
+172    5.64e-19
+174    6.23e-19
+176    6.85e-19
+178    7.51e-19
+180    8.18e-19
+182    8.86e-19
+184    9.53e-19
+186    1.018e-18
+188    1.070e-18
+190    1.120e-18
+192    1.165e-18
+194    1.200e-18
+196    1.223e-18
+198    1.237e-18
+200    1.243e-18
+202    1.236e-18
+204    1.203e-18
+206    1.159e-18
+208    1.104e-18
+210    1.042e-18
+212    9.74e-19
+214    9.01e-19
+216    8.24e-19
+218    7.48e-19
+220    6.70e-19
+222    5.96e-19
+224    5.26e-19
+226    4.59e-19
+228    3.97e-19
+230    3.39e-19
+232    2.88e-19
+234    2.41e-19
+236    1.99e-19
+238    1.64e-19
+240    1.32e-19
+242    1.06e-19
+244    8.45e-20
+246    6.68e-20
+248    5.25e-20
+250    4.03e-20
+252    3.12e-20
+254    2.37e-20
+256    1.78e-20
+258    1.34e-20
+260    9.73e-21
+262    7.18e-21
+264    5.29e-21
+266    3.90e-21
+268    2.87e-21
+270    2.11e-21
+272    1.54e-21
+274    1.12e-21
+276    8.13e-22
+278    5.92e-22
+280    4.28e-22
+282    3.00e-22
+284    2.16e-22
+286    1.52e-22
+288    1.09e-22
+290    7.84e-23
+292    5.69e-23
+294    4.10e-23
+296    3.01e-23
+298    2.19e-23
+300    1.61e-23
+302    1.24e-23
+304    9.4e-24
+306    7.1e-24
+308    5.4e-24
+310    4.2e-24
+312    3.3e-24
+314    2.6e-24
+316    2.0e-24
+318    1.6e-24
+320    1.4e-24

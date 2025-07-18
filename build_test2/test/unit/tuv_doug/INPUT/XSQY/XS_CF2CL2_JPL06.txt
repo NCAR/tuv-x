@@ -1,0 +1,81 @@
+46 36           # first data record, number of data records
+Structure:	CF2Cl2(CFC-12)
+Name:	        difluorodichloromethane (CFC-12)
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:	170-240nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+170-172 nm, data of
+
+C. Hubrich, C. Zetzsch, and F. Stuhl, "Absorptionsspektren von halogenierten Methanen im Bereich von 275 bis 160 nm bei Temperaturen von 298 und 208 K," Ber. Bunsenges. Phys. Chem. 81, 437-442 (1977),
+
+174-178 nm, mean of
+
+C. Hubrich, C. Zetzsch, and F. Stuhl, "Absorptionsspektren von halogenierten Methanen im Bereich von 275 bis 160 nm bei Temperaturen von 298 und 208 K," Ber. Bunsenges. Phys. Chem. 81, 437-442 (1977), and
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+
+180-198 nm, data of
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988),
+
+200-230 nm, mean of the data of
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988), and
+
+M.F. Mrienne, B. Coquart, and A. Jenouvrier, "Temperature effect on the ultraviolet absorption of CFCl3, CF2Cl2, and N2O," Planet. Space Sci. 38, 617-625 (1990),
+
+232-240 nm, extrapolation of the Mrienne et al. (1990) data.
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+170    1.240e-18
+172    1.510e-18
+174    1.680e-18
+176    1.855e-18
+178    1.895e-18
+180    1.790e-18
+182    1.600e-18
+184    1.340e-18
+186    1.070e-18
+188    8.28e-19
+190    6.32e-19
+192    4.55e-19
+194    3.15e-19
+196    2.11e-19
+198    1.39e-19
+200    8.71e-20
+202    5.42e-20
+204    3.37e-20
+206    2.06e-20
+208    1.26e-20
+210    7.62e-21
+212    4.58e-21
+214    2.74e-21
+216    1.63e-21
+218    1.03e-21
+220    6.24e-22
+222    3.81e-22
+224    2.33e-22
+226    1.40e-22
+228    9.0e-23
+230    5.7e-23
+232    3.4e-23
+234    2.1e-23
+236    1.3e-23
+238    8.0e-24
+240    5.0e-24

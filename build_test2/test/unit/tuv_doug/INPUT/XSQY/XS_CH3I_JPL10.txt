@@ -1,0 +1,90 @@
+59 32         # first data record, number of data records
+Structure:	CH3I
+Name:	iodomethane, methyl iodide
+Author(Year):	JPL-2002(2002)
+Temperature:	210-365K
+Wavelength range:	210-365nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+Absorption cross sections ?:
+
+210-230 nm, mean of the data of
+
+M.E. Jenkin, T.P. Murrells, S.J. Shalliker, and G.D, Hayman, "Kinetics and product study of the self-reactions of allyl and allyl peroxy radicals," J. Chem. Soc. Faraday Trans. 89, 433-446 (1993),
+
+A. Fahr, A.K. Nayak, and M.J. Kurylo, "The ultraviolet absorption cross sections of CH3I temperature dependent gas and liquid phase measurements," Chem. Phys. 197, 195-203 (1995), and
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997).
+
+235-330 nm, mean of the data of
+
+M.E. Jenkin, T.P. Murrells, S.J. Shalliker, and G.D, Hayman, "Kinetics and product study of the self-reactions of allyl and allyl peroxy radicals," J. Chem. Soc. Faraday Trans. 89, 433-446 (1993),
+
+A. Fahr, A.K. Nayak, and M.J. Kurylo, "The ultraviolet absorption cross sections of CH3I temperature dependent gas and liquid phase measurements," Chem. Phys. 197, 195-203 (1995),
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997), and
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997).
+
+335-350 nm, mean of the data of 
+
+A. Fahr, A.K. Nayak, and M.J. Kurylo, "The ultraviolet absorption cross sections of CH3I temperature dependent gas and liquid phase measurements," Chem. Phys. 197, 195-203 (1995),
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997), and
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997).
+
+355-365 nm, data of
+
+O.V. Rattigan, D.E. Shallcross, and R.A. Cox, "UV absorption cross-sections and atmospheric photolysis rates of CF3I, CH3I, C2H5I and CH2ICl," J. Chem. Soc. Faraday Trans. 93, 2839-2846 (1997).
+
+
+Temperature coefficients a1 and a2:
+
+210-298 K,
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997),
+
+?(?, T) = ?(298 K) [1 + a1(T-298) + a2(T-298)2] with 
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+210    3.62e-20
+215    5.08e-20
+220    6.90e-20
+225    9.11e-20
+230    1.26e-19
+235    2.05e-19
+240    3.81e-19
+245    6.56e-19
+250    9.63e-19
+255    1.177e-18
+260    1.197e-18
+265    1.029e-18
+270    7.59e-19
+275    4.96e-19
+280    2.92e-19
+285    1.56e-19
+290    8.04e-20
+295    4.00e-20
+300    2.06e-20
+305    1.10e-20
+310    6.21e-21
+315    3.59e-21
+320    2.21e-21
+325    1.26e-21
+330    6.84e-22
+335    3.88e-22
+340    2.12e-22
+345    1.14e-22
+350    6.09e-23
+355    3.20e-23
+360    1.90e-23
+365    9.0e-24

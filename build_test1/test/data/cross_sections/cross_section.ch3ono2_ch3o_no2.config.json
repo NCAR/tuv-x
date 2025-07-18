@@ -1,0 +1,31 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.ch3ono2_ch3o_no2.nc" }
+      ],
+      "type": "CCl4+hv->Products"
+    },
+    {
+      "name": "lower extrapolation",
+      "type": "CH3ONO2+hv->CH3O+NO2",
+      "netcdf files": [
+        {
+          "file path": "test/data/cross_sections/cross_section.ch3ono2_ch3o_no2.nc",
+          "lower extrapolation": { "type": "constant", "value" : 300 }
+        }
+      ]
+    },
+    {
+      "name": "upper extrapolation",
+      "type": "CH3ONO2+hv->CH3O+NO2",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.ch3ono2_ch3o_no2.nc",
+          "lower extrapolation": { "type": "boundary" },
+          "upper extrapolation": { "type": "constant", "value": 310 }
+        }
+      ]
+    }
+  ]
+}

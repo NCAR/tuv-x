@@ -1,0 +1,78 @@
+42 37         # first data record, number of data records
+Structure:	CH2I2
+Name:	        diiodomethane
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	205-385nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+Absorption cross sections ?:
+
+205-215 nm, data of
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997),
+
+220-380 nm, mean of  the data of
+
+C.M. Roehl, J.B. Burkholder, G.K. Moortgat, A.R. Ravishankara, and P.J. Crutzen, "Temperature dependence of UV absorption cross sections and atmospheric implications of several alkyl iodides," J. Geophys. Res. 102, 12819-12829 (1997), and
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998),
+
+385 nm, data of
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998).
+
+Temperature coefficients B:
+
+273-348 K,
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998),
+
+ln ?(?, T) = ln ?(?, 298 K) + B(T-298) with
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+205    4.070e-18
+210    4.040e-18
+215    3.660e-18
+220    2.600e-18
+225    1.975e-18
+230    1.330e-18
+235    1.090e-18
+240    1.225e-18
+245    1.500e-18
+250    1.570e-18
+255    1.395e-18
+260    1.205e-18
+265    1.300e-18
+270    1.785e-18
+275    2.550e-18
+280    3.285e-18
+285    3.715e-18
+290    3.805e-18
+295    3.715e-18
+300    3.570e-18
+305    3.385e-18
+310    3.135e-18
+315    2.800e-18
+320    2.440e-18
+325    2.030e-18
+330    1.615e-18
+335    1.205e-18
+340    8.33e-19
+345    5.37e-19
+350    3.26e-19
+355    1.92e-19
+360    1.09e-19
+365    6.05e-20
+370    3.45e-20
+375    1.93e-20
+380    1.17e-20
+385    7.69e-21

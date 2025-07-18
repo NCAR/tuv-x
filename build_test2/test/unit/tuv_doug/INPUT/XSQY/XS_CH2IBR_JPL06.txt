@@ -1,0 +1,67 @@
+32 36           # first data record, number of data records
+Structure:	CH2BrI
+Name:	        bromoiodomethane
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	215-390nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+215-390 nm,
+
+absorption cross sections of
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998).
+
+Temperature coefficients B:
+
+273-348 K,
+
+J.C. Mssinger, D.E. Shallcross, and R.A. Cox, "UV-VIS absorption cross-sections and atmospheric lifetimes of CH2Br2, CH2I2, and CH2BrI," J. Chem. Soc. Faraday Trans. 94, 1391-1396 (1998).
+
+ln ?(?, T) = ln ?(?, 298 K) + B(T-298) with
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+215    5.67e-18
+220    4.23e-18
+225    2.69e-18
+230    1.55e-18
+235    9.79e-19
+240    8.09e-19
+245    9.37e-19
+250    1.25e-18
+255    1.70e-18
+260    2.07e-18
+265    2.28e-18
+270    2.29e-18
+275    2.14e-18
+280    1.84e-18
+285    1.50e-18
+290    1.10e-18
+295    8.25e-19
+300    6.06e-19
+305    4.29e-19
+310    3.14e-19
+315    2.31e-19
+320    1.68e-19
+325    1.15e-19
+330    8.02e-20
+335    5.52e-20
+340    3.50e-20
+345    2.24e-20
+350    1.41e-20
+355    8.17e-21
+360    4.98e-21
+365    3.03e-21
+370    1.65e-21
+375    9.8e-22
+380    7.0e-22
+385    3.9e-22
+390    2.5e-22

@@ -1,0 +1,59 @@
+25 35         # first data record, number of data records
+Structure:	CFCl3(CFC-11)
+Name:	fluorotrichloromethane (CFC-11)
+Author(Year):	JPL-2002(2002)
+Temperature:	295-298K
+Wavelength range:	174-260nm(rec)
+Bibliography:
+
+ 
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+172-200 nm, data of
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoro-methanes at stratospheric temperatures," J. Atmos. Chem. 7, 107-135 (1988),
+
+P.C. Simon, D. Gillotay, N. Vanlaethem-Meure, and J. Wisemberg, "Ultraviolet absorption cross-sections of chloro- and chlorofluoromethanes at stratospheric temperatures," Aeronomica Acta A 324, 1-55 (1988)
+
+202-220 nm, extrapolation of the Simon et al. (1988) data.
+
+ lambda (nm)	   sigma (cm^2)
+-------------------------------------------------------------------
+174    3.130e-18
+176    3.240e-18
+178    3.235e-18
+180    3.140e-18
+182    2.960e-18
+184    2.720e-18
+186    2.430e-18
+188    2.130e-18
+190    1.790e-18
+192    1.540e-18
+194    1.243e-18
+196    9.91e-19
+198    7.80e-19
+200    6.32e-19
+202    4.91e-19
+204    3.73e-19
+206    2.81e-19
+208    2.04e-19
+210    1.51e-19
+212    1.07e-19
+214    7.54e-20
+216    5.25e-20
+218    3.65e-20
+220    2.51e-20
+222    1.72e-20
+224    1.17e-20
+226    7.90e-21
+228    5.32e-21
+230    3.54e-21
+235    1.32e-21
+240    4.70e-22
+245    1.74e-22
+250    6.6e-23
+255    2.9e-23
+260    1.5e-23

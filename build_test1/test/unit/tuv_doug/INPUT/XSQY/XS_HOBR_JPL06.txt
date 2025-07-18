@@ -1,0 +1,79 @@
+19 61           line of first data point, total data points
+Structure:	HOBr
+Name:	        hypobromous acid
+Author(Year):	JPL-2002(2002),JPL-2006(2006)
+Temperature:	295K
+Wavelength range: 250-550nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, and M.J. Molina, "Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14", JPL Publication 02-25, 2002.
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, G.K. Moortgat, H. Keller-Rudek, P.H. Wine, A.R. Ravishankara, C.E. Kolb, M.J. Molina, B.J. Finlayson-Pitts, R.E. Huie, V.L. Orkin, “Chemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 15“, JPL Publication 06-2, Jet Propulsion Laboratory, Pasadena, 2006.
+Comments:
+
+JPL-2002 and JPL-2006 recommendations:
+
+-------------------------------------------------------------------
+lambda (nm)  sigma (cm^2)
+-------------------------------------------------------------------
+250    4.15e-20
+255    6.19e-20
+260    1.05e-19
+265    1.46e-19
+270    1.87e-19
+275    2.21e-19
+280    2.44e-19
+285    2.50e-19
+290    2.40e-19
+295    2.19e-19
+300    1.91e-19
+305    1.62e-19
+310    1.36e-19
+315    1.18e-19
+320    1.08e-19
+325    1.05e-19
+330    1.08e-19
+335    1.13e-19
+340    1.19e-19
+345    1.23e-19
+350    1.24e-19
+355    1.21e-19
+360    1.15e-19
+365    1.05e-19
+370    9.32e-20
+375    7.99e-20
+380    6.65e-20
+385    5.38e-20
+390    4.22e-20
+395    3.24e-20
+400    2.43e-20
+405    1.80e-20
+410    1.36e-20
+415    1.08e-20
+420    9.67e-21
+425    9.98e-21
+430    1.15e-20
+435    1.40e-20
+440    1.68e-20
+445    1.96e-20
+450    2.18e-20
+455    2.29e-20
+460    2.28e-20
+465    2.14e-20
+470    1.91e-20
+475    1.62e-20
+480    1.30e-20
+485    9.93e-21
+490    7.23e-21
+495    5.02e-21
+500    3.33e-21
+505    2.12e-21
+510    1.29e-21
+515    7.6e-22
+520    4.2e-22
+525    2.3e-22
+530    1.2e-22
+535    5.9e-23
+540    2.9e-23
+545    1.3e-23
+550    6.0e-24

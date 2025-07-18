@@ -1,0 +1,90 @@
+22 69           # first data record, number of data records
+Structure:	CHCl2Br(Halon-1021)
+Name:	        dichlorobromomethane (Halon-1021)
+Author(Year):	JPL-2002(2002)
+Temperature:	298K
+Wavelength range:	200-320nm(rec)
+Bibliography:
+
+S.P. Sander, R.R. Friedl, D.M. Golden, M.J. Kurylo, R.E. Huie, V.L. Orkin, G.K. Moortgat, A.R. Ravishankara, C.E. Kolb, M.J. Molina, and B.J. Finlayson-Pitts, ÒChemical Kinetics and Photochemical Data for Use in Atmospheric Studies. Evaluation Number 14Ò, Report No. JPL Publication 02-25, 2002.
+Comments:
+
+JPL-2002 recommendation:
+
+200-320 nm, data of
+
+M. Bilde, T.J. Wallington, C. Ferronato, J.J. Orlando, G.S. Tyndall, E. Estupian, and S. Haberkorn, "Atmospheric chemistry of CH2BrCl, CHBrCl2, CHBr2Cl, CF3CHBrCl, and CBr2Cl2," J. Phys. Chem. A 102, 1976-1986 (1998).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+200    1.15e-18
+202    9.38e-19
+204    8.11e-19
+206    7.36e-19
+208    6.90e-19
+209    6.98e-19
+210    6.88e-19
+211    6.74e-19
+212    6.84e-19
+213    7.00e-19
+214    7.01e-19
+215    7.02e-19
+216    7.11e-19
+217    7.10e-19
+218    7.07e-19
+219    7.13e-19
+220    7.16e-19
+221    7.06e-19
+222    6.93e-19
+223    6.87e-19
+224    6.82e-19
+226    6.52e-19
+228    6.22e-19
+230    5.81e-19
+232    5.46e-19
+234    5.00e-19
+236    4.58e-19
+238    4.16e-19
+240    3.73e-19
+242    3.30e-19
+244    2.93e-19
+246    2.58e-19
+248    2.22e-19
+250    1.92e-19
+252    1.65e-19
+254    1.36e-19
+256    1.15e-19
+258    9.75e-20
+260    8.19e-20
+262    6.82e-20
+264    5.61e-20
+266    4.68e-20
+268    3.74e-20
+270    3.01e-20
+272    2.48e-20
+274    2.02e-20
+276    1.63e-20
+278    1.32e-20
+280    1.07e-20
+282    8.65e-21
+284    6.94e-21
+286    5.73e-21
+288    4.54e-21
+290    3.84e-21
+292    3.17e-21
+294    2.65e-21
+296    2.17e-21
+298    1.76e-21
+300    1.46e-21
+302    1.18e-21
+304    9.62e-22
+306    7.61e-22
+308    6.17e-22
+310    4.96e-22
+312    3.95e-22
+314    3.17e-22
+316    2.59e-22
+318    2.10e-22
+320    1.71e-22

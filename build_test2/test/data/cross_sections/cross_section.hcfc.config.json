@@ -1,0 +1,11 @@
+{
+  "cross sections" : [
+    {
+      "name": "no extrapolation",
+      "netcdf files": [
+        { "file path": "test/data/cross_sections/cross_section.hcfc.nc" }
+      ],
+      "type": "HCFC-22+hv->Products"
+    }
+  ]
+}

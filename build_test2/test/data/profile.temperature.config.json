@@ -1,0 +1,12 @@
+[
+   {
+      "name": "temperature",
+      "type": "from csv file",
+      "units": "K",
+      "file path": "data/profiles/atmosphere/ussa.temp",
+      "grid": {
+        "name": "height",
+        "units": "km"
+      }
+   }
+]

@@ -1,0 +1,28 @@
+15 14         # first data record, number of data records
+Structure:	SF6
+Name:    	sulfur hexafluoride
+Author(Year):	Pradayrol(1996)
+Temperature:	298K
+Wavelength range" 116-180nm
+Bibliography:
+
+C. Pradayrol, A.M. Casanovas, I. Deharo, J.P. Guelfucci, and J. Casanovas, "Absorption coefficients of SF6, SF4, SOF2, and SO2F2 in the vacuum ultraviolet", J. Phys. III France 6, 603-612 (1996).
+
+------------------------------------------------
+lambda     sigma (cm^2)
+ (nm)		
+------------------------------------------------
+116    5.43e-18
+120    2.36e-18
+125    1.07e-18
+130    7.78e-19
+135    4.11e-19
+140    1.41e-19
+145    4.11e-20
+150    8.06e-21
+155    1.73e-21
+160    7.41e-22
+165    6.58e-22
+170    6.17e-22
+175    4.11e-22
+180    4.94e-23

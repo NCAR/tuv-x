@@ -1,0 +1,15 @@
+# this is a unit test for reading and mapping a constant value
+ 0 7.7e11
+10 7.7e11
+20 7.7e11
+30 7.7e11
+40 7.7e11
+50 7.7e11
+60 7.7e11
+70 7.7e11
+80 7.7e11
+90 7.7e11
+100 7.7e11
+110 7.7e11
+120 7.7e11
+121 0.0

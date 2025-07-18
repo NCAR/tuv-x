@@ -1,0 +1,36 @@
+{
+  "grids": [
+    {
+      "name": "height",
+      "type": "equal interval",
+      "units": "km",
+      "begins at": 0.0,
+      "ends at": 120.0,
+      "cell delta": 1.0
+    },
+    {
+      "name": "wavelength",
+      "type": "from csv file",
+      "units": "nm",
+      "file path": "data/grids/wavelength/combined.grid"
+    }
+  ],
+  "cross section parameters file": "data/cross_sections/O2_parameters.txt",
+  "profiles": [
+    {
+      "name": "temperature",
+      "type": "from csv file",
+      "units": "K",
+      "file path": "data/profiles/atmosphere/ussa.temp",
+      "grid": {
+        "name": "height",
+        "units": "km"
+      }
+    }
+  ],
+  "weights": {
+    "type": "Notch Filter",
+    "notch filter begin": 400.0,
+    "notch filter end": 700.0
+  }
+}

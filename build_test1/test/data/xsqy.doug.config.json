@@ -1,0 +1,1338 @@
+[
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_H_OH.nc" ]
+    },
+    "label": "H2O + hv -> H + OH"
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_H2_O1D.nc" ]
+    },
+    "label": "H2O + hv -> H2 + O(1D)"
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "merge data": true,
+      "netcdf files": [
+        {
+          "file path": "data/cross_sections/H2O_1.nc",
+          "zero above": 183.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_2.nc",
+          "zero below": 183.00000000001,
+          "zero above": 190.0
+        },
+        {
+          "file path": "data/cross_sections/H2O_3.nc",
+          "zero below": 190.00000000001
+        }
+      ]
+    },
+    "quantum yield" : {
+      "type": "base",
+      "netcdf files": [ "data/quantum_yields/H2O_2H_O3P.nc" ]
+    },
+    "label": "H2O + hv -> 2H + O(3P)"
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CH2BR2_1.nc",
+      "parameterization": {
+        "AA": [ -70.211776,  1.940326e-1, 2.726152e-3, -1.695472e-5, 2.500066e-8  ],
+        "BB": [   2.899280, -4.327724e-2, 2.391599e-4, -5.807506e-7, 5.244883e-10 ],
+        "lp": [        0.0,          1.0,          2.0,         3.0,          4.0 ],
+        "minimum wavelength": 210.0,
+        "maximum wavelength": 290.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CH2Br2 + hv -> 2Br",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/BRO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "BRO + hv -> Br + O",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask" : [ { "index": 62 }, { "index": 86 }]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/BRO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "BRO + hv -> Br + O",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CL2O2_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "Cl2O2 + hv -> Cl + ClOO",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask" : [ { "index": 34 }, { "index": 97 } ]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CL2O2_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "Cl2O2 + hv -> Cl + ClOO",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CLO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "ClO + hv -> Cl + O",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask": [ { "index": 51 }, { "index": 71 }]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CLO_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "ClO + hv -> Cl + O",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "data/cross_sections/HNO3_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HNO3 + hv -> OH + NO2",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask": [ { "index": 30 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "HNO3+hv->OH+NO2",
+      "netcdf files": [
+        { "file path": "data/cross_sections/HNO3_JPL06.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HNO3 + hv -> OH + NO2",
+    "__note": "second test: including lower edge of interpolation with relaxed tolerance (upper edge is a very small value with large relative difference)",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CF2CL2_JPL06.nc",
+      "parameterization": {
+        "AA": [ -43.8954569, -2.403597e-1, -4.2619e-4, 9.8743e-6, 0.0 ],
+        "BB": [   4.8438e-3,   4.96145e-4, -5.6953e-6,       0.0, 0.0 ],
+        "lp": [         0.0,          1.0,        2.0,       3.0, 4.0 ],
+        "minimum wavelength": 200.0,
+        "maximum wavelength": 231.0,
+        "base temperature": 296.0,
+        "base wavelength": 200.0,
+        "logarithm": "natural",
+        "temperature ranges": [
+          {
+            "maximum": 219.999999999999,
+            "fixed value": 220.0
+          },
+          {
+            "minimum": 220,
+            "maximum": 296
+          },
+          {
+            "minimum": 296.00000000001,
+            "fixed value": 296.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CF2Cl2 + hv -> 2Cl",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CFC113_JPL06.nc",
+      "parameterization": {
+        "AA": [ -1087.9,     20.004, -1.3920e-1,  4.2828e-4, -4.9384e-7 ],
+        "BB": [  12.493, -2.3937e-1,  1.7142e-3, -5.4393e-6,  6.4548e-9 ],
+        "lp": [     0.0,        1.0,        2.0,        3.0,        4.0 ],
+        "minimum wavelength": 182.0,
+        "maximum wavelength": 230.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CFC113 + hv -> 3Cl",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CFC114_JPL10.nc",
+      "parameterization": {
+        "AA": [ -160.50,     2.4807, -1.5202e-2,  3.8412e-5, -3.4373e-8 ],
+        "BB": [  -1.5296, 3.5248e-2, -2.9951e-4,  1.1129e-6, -1.5259e-9 ],
+        "lp": [     0.0,        1.0,        2.0,        3.0,        4.0 ],
+        "minimum wavelength": 172.0,
+        "maximum wavelength": 220.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CFC114 + hv -> 2Cl",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CFC115_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CFC115 + hv -> Cl",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask": [ { "index": 19 }, { "index": 46 } ]
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/CFC115_JPL10.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CFC115 + hv -> Cl",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-4
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CFCL3_JPL06.nc",
+      "parameterization": {
+        "AA": [ -84.611, 7.9551e-1, -2.0550e-3, -4.4812e-6,  1.5838e-8 ],
+        "BB": [ -5.7912, 1.1689e-1, -8.8069e-4,  2.9335e-6, -3.6421e-9 ],
+        "lp": [     0.0,       1.0,        2.0,        3.0,        4.0 ],
+        "minimum wavelength": 174.1,
+        "maximum wavelength": 230.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CFCl3 + hv -> 3Cl",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CH3BR_JPL06.nc",
+      "parameterization": {
+        "AA": [    46.520,    -1.4580, 1.1469e-2, -3.7627e-5,  4.3264e-8 ],
+        "BB": [ 9.3408e-1, -1.6887e-2, 1.1487e-4, -3.4881e-7, 3.9945e-10 ],
+        "lp": [       0.0,        1.0,       2.0,        3.0,        4.0 ],
+        "minimum wavelength": 200.0,
+        "maximum wavelength": 280.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CH3Br + hv -> Br",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CHBR3_JPL10.nc",
+      "parameterization": {
+        "AA": [ -32.6067,    0.10308,   6.39e-5, -7.7392e-7,  -2.2513e-9, 6.1376e-12 ],
+        "BB": [   0.1582, -0.0014758, 3.8058e-6,  9.187e-10, -1.0772e-11,        0.0 ],
+        "lp": [      0.0,        1.0,       2.0,        3.0,         4.0,        5.0 ],
+        "minimum wavelength": 260.0,
+        "maximum wavelength": 362.0,
+        "base temperature": 296.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "invert temperature offset": true,
+        "temperature ranges": [
+          {
+            "maximum": 259.999999999999,
+            "fixed value": 260.0
+          },
+          {
+            "minimum": 260.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CHBr3 + hv -> 3Br",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/H1301_JPL06.nc",
+      "parameterization": {
+        "AA": [     62.563,   -2.0068,  1.6592e-2, -5.6465e-5,   6.7459e-8 ],
+        "BB": [ -9.1755e-1, 1.8575e-2, -1.3857e-4,  4.5066e-7, -5.3803e-10 ],
+        "lp": [        0.0,       1.0,        2.0,        3.0,         4.0 ],
+        "minimum wavelength": 178.0,
+        "maximum wavelength": 280.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210.0,
+            "maximum": 300.0
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "H1301 + hv -> Br",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/H2402_JPL06.nc",
+      "parameterization": {
+        "AA": [      34.026,    -1.152616, 8.959798e-3,   -2.9089e-5,  3.307212e-8 ],
+        "BB": [ 4.010664e-1, -8.358968e-3, 6.415741e-5, -2.157554e-7, 2.691871e-10 ],
+        "lp": [         0.0,          1.0,         2.0,          3.0,          4.0 ],
+        "minimum wavelength": 190.0,
+        "maximum wavelength": 290.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210.0,
+            "maximum": 300.0
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "H2402 + hv -> 2Br",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HCFC22_JPL06.nc",
+      "parameterization wavelength grid": {
+        "name": "custom wavelengths",
+        "type": "from config file",
+        "units": "nm",
+        "values": [
+          169.0, 171.0, 173.0, 175.0, 177.0, 179.0, 181.0, 183.0, 185.0,
+          187.0, 189.0, 191.0, 193.0, 195.0, 197.0, 199.0, 201.0, 203.0,
+          205.0, 207.0, 209.0, 211.0, 213.0, 215.0, 217.0, 219.0, 221.0
+        ]
+      },
+      "parameterization": {
+        "AA": [   -106.029,    1.5038, -8.2476e-3, 1.4206e-5 ],
+        "BB": [ -1.3399e-1, 2.7405e-3, -1.8028e-5, 3.8504e-8 ],
+        "lp": [        0.0,       1.0,        2.0,       3.0 ],
+        "minimum wavelength": 174.0,
+        "maximum wavelength": 204.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210.0,
+            "maximum": 300.0
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HCFC22 + hv -> Cl",
+    "tolerance": 1.0e-3,
+    "__note": "excluding upper edge of interpolation, which has a small value",
+    "mask": [ { "index": 43 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HCFC141b_JPL10.nc",
+      "parameterization": {
+        "AA": [ -682.913042,    12.122290, -8.187699e-2,  2.437244e-4, -2.719103e-7 ],
+        "BB": [    4.074747, -8.053899e-2,  5.946552e-4, -1.945048e-6,  2.380143e-9 ],
+        "lp": [         0.0,          1.0,          2.0,          3.0,          4.0 ],
+        "minimum wavelength": 172.0,
+        "maximum wavelength": 240.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210.0,
+            "maximum": 300.0
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HCFC141b + hv -> 2Cl",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HCFC142b_JPL10.nc",
+      "parameterization": {
+        "AA": [ -328.092008,     6.342799, -4.810362e-2,  1.611991e-4, -2.042613e-7 ],
+        "BB": [ 4.289533e-1, -9.042817e-3,  7.018009e-5, -2.389064e-7, 3.039799e-10 ],
+        "lp": [         0.0,          1.0,          2.0,          3.0,          4.0 ],
+        "minimum wavelength": 172.0,
+        "maximum wavelength": 230.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210.0,
+            "maximum": 300.0
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "HCFC142b + hv -> Cl",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/BRONO2_JPL06.nc"
+        },
+        "base temperature": 296.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200.0
+          },
+          {
+            "minimum": 200.0,
+            "maximum": 296.0
+          },
+          {
+            "minimum": 296.00000000001,
+            "fixed value": 296.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.85
+    },
+    "label": "BrONO2 + hv -> Br + NO3",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask": [{ "index": 97 }, { "index": 34 }]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/BRONO2_JPL06.nc"
+        },
+        "base temperature": 296.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200.0
+          },
+          {
+            "minimum": 200.0,
+            "maximum": 296.0
+          },
+          {
+            "minimum": 296.00000000001,
+            "fixed value": 296.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.85
+    },
+    "label": "BrONO2 + hv -> Br + NO3",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/BRONO2_JPL06.nc"
+        },
+        "base temperature": 296.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200.0
+          },
+          {
+            "minimum": 200.0,
+            "maximum": 296.0
+          },
+          {
+            "minimum": 296.00000000001,
+            "fixed value": 296.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.15
+    },
+    "label": "BrONO2 + hv -> BrO + NO2",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "mask": [{ "index": 97 }, { "index": 34 }]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/BRONO2_JPL06.nc"
+        },
+        "base temperature": 296.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200.0
+          },
+          {
+            "minimum": 200.0,
+            "maximum": 296.0
+          },
+          {
+            "minimum": 296.00000000001,
+            "fixed value": 296.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.15
+    },
+    "label": "BrONO2 + hv -> BrO + NO2",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.30,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.20
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> OH + NO3",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "tolerance": 1.0e-5,
+    "mask": [ { "index": 29 }, { "index": 78 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.30,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.20
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> OH + NO3",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.70,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.80
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> HO2 + NO2",
+    "__note": "first test: excluding edges of interpolation because of double vs float algorithms",
+    "tolerance": 1.0e-5,
+    "mask": [ { "index": 29 }, { "index": 78 }, { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/HO2NO2_JPL06.nc",
+      "parameterization": {
+        "type": "BURKHOLDER",
+        "netcdf file": {
+          "file path": "data/cross_sections/HO2NO2_temp_JPL06.nc"
+        },
+        "A": -988.0,
+        "B": 0.69,
+        "temperature ranges": [
+          {
+            "maximum": 279.999999999999,
+            "fixed value": 280.0
+          },
+          {
+            "minimum": 280.0,
+            "maximum": 350.0
+          },
+          {
+            "minimum": 350.00000000001,
+            "fixed value": 350.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 0.70,
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 200.0,
+          "value": 0.80
+        }
+      ]
+    },
+    "label": "HO2NO2 + hv -> HO2 + NO2",
+    "__note": "second test: including edges of interpolation with relaxed tolerance",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 79 } ]
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "netcdf file": "data/cross_sections/CH3CL_JPL06.nc",
+      "parameterization": {
+        "AA": [ -299.80,    5.1047, -3.3630e-2, 9.5805e-5, -1.0135e-7 ],
+        "BB": [ -7.1727, 1.4837e-1, -1.1463e-3, 3.9188e-6, -4.9994e-9 ],
+        "lp": [     0.0,       1.0,        2.0,       3.0,        4.0 ],
+        "minimum wavelength": 174.1,
+        "maximum wavelength": 216.0,
+        "base temperature": 273.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "temperature ranges": [
+          {
+            "maximum": 209.999999999999,
+            "fixed value": 210.0
+          },
+          {
+            "minimum": 210,
+            "maximum": 300
+          },
+          {
+            "minimum": 300.00000000001,
+            "fixed value": 300.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "CH3Cl + hv -> Cl",
+    "tolerance": 5.0e-3
+  },
+  {
+    "cross section": {
+      "type": "base",
+      "netcdf files": [
+        { "file path": "data/cross_sections/SO2_Mills.nc" }
+      ]
+    },
+    "quantum yield": {
+      "type": "base",
+      "constant value": 1.0
+    },
+    "label": "SO2 + hv -> SO + O",
+    "tolerance": 1.0e-4
+  },
+  {
+    "cross section": {
+      "type":"temperature based",
+      "netcdf file": "data/cross_sections/N2O5_JPL06.nc",
+      "parameterization": {
+        "type": "HARWOOD",
+        "aa": [ -18.27,  -18.42,  -18.59,   -18.72,  -18.84,
+                -18.90,  -18.93,  -18.87,   -18.77,  -18.71,
+                -18.31,  -18.14,  -18.01,   -18.42,  -18.59,
+                -18.13 ],
+        "bb": [   -91.0,  -104.0,  -112.0,   -135.0,  -170.0, 
+                 -226.0,  -294.0,  -388.0,   -492.0,  -583.0, 
+                 -770.0,  -885.0,  -992.0,   -949.0,  -966.0,
+                -1160.0 ],
+        "base temperature": 0.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "minimum wavelength": 260.0,
+        "maximum wavelength": 410.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200
+          },
+          {
+            "minimum": 200,
+            "maximum": 295
+          },
+          {
+            "minimum": 295.00000000001,
+            "fixed value": 295.0
+          }
+        ]
+      },
+      "parameterization wavelength grid": {
+        "name": "custom wavelengths",
+        "type": "from config file",
+        "units": "nm",
+        "values": [
+          255.0,   265.0,   275.0,   285.0,   295.0,   305.0,  
+          315.0,   325.0,   335.0,   345.0,   355.0,   365.0,
+          375.0,   385.0,   395.0,   405.0,   415.0
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "Taylor series",
+      "constant value": 0.0,
+      "coefficients": [ -2.832441, 0.012809638 ],
+      "override bands": [
+        {
+          "band": "range",
+          "minimum wavelength": 300.0,
+          "value": 1.0
+        }
+      ]
+    },
+    "label": "N2O5 + hv -> NO3 + NO2",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 93 } ]
+ },
+ {
+  "cross section": {
+    "type":"temperature based",
+    "netcdf file": "data/cross_sections/N2O5_JPL06.nc",
+    "parameterization": {
+      "type": "HARWOOD",
+      "aa": [ -18.27,  -18.42,  -18.59,   -18.72,  -18.84,
+              -18.90,  -18.93,  -18.87,   -18.77,  -18.71,
+              -18.31,  -18.14,  -18.01,   -18.42,  -18.59,
+              -18.13 ],
+      "bb": [   -91.0,  -104.0,  -112.0,   -135.0,  -170.0, 
+               -226.0,  -294.0,  -388.0,   -492.0,  -583.0, 
+               -770.0,  -885.0,  -992.0,   -949.0,  -966.0,
+              -1160.0 ],
+      "base temperature": 0.0,
+      "base wavelength": 0.0,
+      "logarithm": "base 10",
+      "minimum wavelength": 260.0,
+      "maximum wavelength": 410.0,
+      "temperature ranges": [
+        {
+          "maximum": 199.999999999999,
+          "fixed value": 200
+        },
+        {
+          "minimum": 200,
+          "maximum": 295
+        },
+        {
+          "minimum": 295.00000000001,
+          "fixed value": 295.0
+        }
+      ]
+    },
+    "parameterization wavelength grid": {
+      "name": "custom wavelengths",
+      "type": "from config file",
+      "units": "nm",
+      "values": [
+        255.0,   265.0,   275.0,   285.0,   295.0,   305.0,  
+        315.0,   325.0,   335.0,   345.0,   355.0,   365.0,
+        375.0,   385.0,   395.0,   405.0,   415.0
+      ]
+    }
+  },
+  "quantum yield": {
+    "type": "Taylor series",
+    "constant value": 0.0,
+    "coefficients": [ -2.832441, 0.012809638 ],
+    "override bands": [
+      {
+        "band": "range",
+        "minimum wavelength": 300.0,
+        "value": 1.0
+      }
+    ]
+  },
+  "label": "N2O5 + hv -> NO3 + NO2",
+  "tolerance": 1.0e-2
+ },
+ {
+    "cross section": {
+      "type":"temperature based",
+      "netcdf file": "data/cross_sections/N2O5_JPL06.nc",
+      "parameterization": {
+        "type": "HARWOOD",
+        "aa": [ -18.27,  -18.42,  -18.59,   -18.72,  -18.84,
+                -18.90,  -18.93,  -18.87,   -18.77,  -18.71,
+                -18.31,  -18.14,  -18.01,   -18.42,  -18.59,
+                -18.13 ],
+        "bb": [   -91.0,  -104.0,  -112.0,   -135.0,  -170.0, 
+                 -226.0,  -294.0,  -388.0,   -492.0,  -583.0, 
+                 -770.0,  -885.0,  -992.0,   -949.0,  -966.0,
+                -1160.0 ],
+        "base temperature": 0.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "minimum wavelength": 260.0,
+        "maximum wavelength": 410.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200
+          },
+          {
+            "minimum": 200,
+            "maximum": 295
+          },
+          {
+            "minimum": 295.00000000001,
+            "fixed value": 295.0
+          }
+        ]
+      },
+      "parameterization wavelength grid": {
+        "name": "custom wavelengths",
+        "type": "from config file",
+        "units": "nm",
+        "values": [
+          255.0,   265.0,   275.0,   285.0,   295.0,   305.0,  
+          315.0,   325.0,   335.0,   345.0,   355.0,   365.0,
+          375.0,   385.0,   395.0,   405.0,   415.0
+        ]
+      }
+    },
+    "quantum yield": {
+       "type": "Taylor series",
+       "constant value": 0.0,
+       "coefficients": [ 3.832441, -0.012809638 ],
+       "override bands": [
+         {
+           "band": "range",
+           "minimum wavelength": 300.0,
+           "value": 0.0
+         }
+       ]
+    },
+    "label": "N2O5 + hv -> NO3 + NO + O",
+    "tolerance": 1.0e-3,
+    "mask": [ { "index": 93 } ]
+  },
+  {
+    "cross section": {
+      "type":"temperature based",
+      "netcdf file": "data/cross_sections/N2O5_JPL06.nc",
+      "parameterization": {
+        "type": "HARWOOD",
+        "aa": [ -18.27,  -18.42,  -18.59,   -18.72,  -18.84,
+                -18.90,  -18.93,  -18.87,   -18.77,  -18.71,
+                -18.31,  -18.14,  -18.01,   -18.42,  -18.59,
+                -18.13 ],
+        "bb": [   -91.0,  -104.0,  -112.0,   -135.0,  -170.0, 
+                 -226.0,  -294.0,  -388.0,   -492.0,  -583.0, 
+                 -770.0,  -885.0,  -992.0,   -949.0,  -966.0,
+                -1160.0 ],
+        "base temperature": 0.0,
+        "base wavelength": 0.0,
+        "logarithm": "base 10",
+        "minimum wavelength": 260.0,
+        "maximum wavelength": 410.0,
+        "temperature ranges": [
+          {
+            "maximum": 199.999999999999,
+            "fixed value": 200
+          },
+          {
+            "minimum": 200,
+            "maximum": 295
+          },
+          {
+            "minimum": 295.00000000001,
+            "fixed value": 295.0
+          }
+        ]
+      },
+      "parameterization wavelength grid": {
+        "name": "custom wavelengths",
+        "type": "from config file",
+        "units": "nm",
+        "values": [
+          255.0,   265.0,   275.0,   285.0,   295.0,   305.0,  
+          315.0,   325.0,   335.0,   345.0,   355.0,   365.0,
+          375.0,   385.0,   395.0,   405.0,   415.0
+        ]
+      }
+    },
+    "quantum yield": {
+       "type": "Taylor series",
+       "constant value": 0.0,
+       "coefficients": [ 3.832441, -0.012809638 ],
+       "override bands": [
+         {
+           "band": "range",
+           "minimum wavelength": 300.0,
+           "value": 0.0
+         }
+       ]
+    },
+    "label": "N2O5 + hv -> NO3 + NO + O",
+    "tolerance": 1.0e-2
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/ACETONE_JPL06.nc"
+        },
+        "base temperature": 0.0,
+        "temperature ranges": [
+          {
+            "maximum": 234.999999999999,
+            "fixed value": 235.0
+          },
+          {
+            "minimum": 235.0,
+            "maximum": 298.0
+          },
+          {
+            "minimum": 298.00000000001,
+            "fixed value": 298.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "CH3COCH3+hv->CH3CO+CH3",
+      "low wavelength value": 1,
+      "minimum temperature": 218,
+      "maximum temperature": 295
+    },
+    "label": "CH3COCH3 + hv -> CH3CO3 + CH3O2",
+    "__note": "quantum yield parameterization includes multiple chained exponentials and single vs double precision seems to be quite different",
+    "tolerance": 2
+  },
+  {
+    "cross section": {
+      "type": "temperature based",
+      "parameterization": {
+        "type": "TAYLOR_SERIES",
+        "netcdf file": {
+          "file path": "data/cross_sections/ACETONE_JPL06.nc"
+        },
+        "base temperature": 0.0,
+        "temperature ranges": [
+          {
+            "maximum": 234.999999999999,
+            "fixed value": 235.0
+          },
+          {
+            "minimum": 235.0,
+            "maximum": 298.0
+          },
+          {
+            "minimum": 298.00000000001,
+            "fixed value": 298.0
+          }
+        ]
+      }
+    },
+    "quantum yield": {
+      "type": "CH3COCH3+hv->CH3CO+CH3",
+      "branch": "CO+CH3CO",
+      "low wavelength value": 1,
+      "minimum temperature": 218,
+      "maximum temperature": 295
+    },
+    "label": "CH3COCH3 + hv -> CH3CO3 + CH3O2",
+    "__note": "quantum yield parameterization includes multiple chained exponentials and single vs double precision seems to be quite different",
+    "tolerance": 1.0e-3
+  }
+]
