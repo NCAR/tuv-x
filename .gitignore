@@ -2,7 +2,6 @@
 **/*.DS_Store
 **/*.swp
 build/
-build_*/
 CMakeCache.txt
 CMakeFiles/
 docs/_build/
