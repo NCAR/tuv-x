@@ -66,6 +66,14 @@ set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(yaml-cpp)
 
+# Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
+if(NOT TARGET yaml-cpp::yaml-cpp)
+  if(TARGET yaml-cpp)
+    # Create alias for system-installed yaml-cpp that provides 'yaml-cpp' target
+    add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+  endif()
+endif()
+
 # ##############################################################################
 # Docs
 
@@ -89,6 +97,14 @@ if(TUVX_ENABLE_BENCHMARK)
   set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF)
   set(BENCHMARK_ENABLE_TESTING OFF)
   FetchContent_MakeAvailable(googlebenchmark)
+  
+  # Ensure benchmark::benchmark target exists (handle both system and FetchContent scenarios)
+  if(NOT TARGET benchmark::benchmark)
+    if(TARGET benchmark)
+      # Create alias for system-installed benchmark that provides 'benchmark' target
+      add_library(benchmark::benchmark ALIAS benchmark)
+    endif()
+  endif()
 endif()
 
 if(TUVX_ENABLE_TESTS)
@@ -106,6 +122,14 @@ if(TUVX_ENABLE_TESTS)
       CACHE BOOL "" FORCE)
 
   FetchContent_MakeAvailable(googletest)
+
+  # Ensure GTest::gtest_main target exists (handle both system and FetchContent scenarios)
+  if(NOT TARGET GTest::gtest_main)
+    if(TARGET gtest_main)
+      # Create alias for system-installed gtest that provides 'gtest_main' target
+      add_library(GTest::gtest_main ALIAS gtest_main)
+    endif()
+  endif()
 
   # don't run clang-tidy on google test (only when built from source)
   if(TARGET gtest)
