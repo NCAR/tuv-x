@@ -59,11 +59,20 @@ FetchContent_Declare(
   GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
   GIT_TAG 28f93bdec6387d42332220afa9558060c8016795
   GIT_PROGRESS NOT
+  FIND_PACKAGE_ARGS NAMES yaml-cpp
   ${FETCHCONTENT_QUIET})
 
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(yaml-cpp)
+
+# Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
+if(NOT TARGET yaml-cpp::yaml-cpp)
+  if(TARGET yaml-cpp)
+    # Create alias for system-installed yaml-cpp that provides 'yaml-cpp' target
+    add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+  endif()
+endif()
 
 # ##############################################################################
 # Docs
@@ -80,20 +89,30 @@ if(TUVX_ENABLE_BENCHMARK)
   FetchContent_Declare(
     googlebenchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
-    GIT_TAG v1.8.3)
+    GIT_TAG v1.8.3
+    FIND_PACKAGE_ARGS NAMES benchmark)
 
   set(BENCHMARK_DOWNLOAD_DEPENDENCIES ON)
   set(BENCHMARK_ENABLE_GTEST_TESTS OFF)
   set(BENCHMARK_ENABLE_ASSEMBLY_TESTS OFF)
   set(BENCHMARK_ENABLE_TESTING OFF)
   FetchContent_MakeAvailable(googlebenchmark)
+  
+  # Ensure benchmark::benchmark target exists (handle both system and FetchContent scenarios)
+  if(NOT TARGET benchmark::benchmark)
+    if(TARGET benchmark)
+      # Create alias for system-installed benchmark that provides 'benchmark' target
+      add_library(benchmark::benchmark ALIAS benchmark)
+    endif()
+  endif()
 endif()
 
 if(TUVX_ENABLE_TESTS)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG be03d00f5f0cc3a997d1a368bee8a1fe93651f48)
+    GIT_TAG be03d00f5f0cc3a997d1a368bee8a1fe93651f48
+    FIND_PACKAGE_ARGS NAMES GTest)
 
   set(INSTALL_GTEST
       OFF
@@ -104,9 +123,21 @@ if(TUVX_ENABLE_TESTS)
 
   FetchContent_MakeAvailable(googletest)
 
-  # don't run clang-tidy on google test
-  set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
-  set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
+  # Ensure GTest::gtest_main target exists (handle both system and FetchContent scenarios)
+  if(NOT TARGET GTest::gtest_main)
+    if(TARGET gtest_main)
+      # Create alias for system-installed gtest that provides 'gtest_main' target
+      add_library(GTest::gtest_main ALIAS gtest_main)
+    endif()
+  endif()
+
+  # don't run clang-tidy on google test (only when built from source)
+  if(TARGET gtest)
+    set_target_properties(gtest PROPERTIES CXX_CLANG_TIDY "")
+  endif()
+  if(TARGET gtest_main)
+    set_target_properties(gtest_main PROPERTIES CXX_CLANG_TIDY "")
+  endif()
 endif()
 
 # ##############################################################################
