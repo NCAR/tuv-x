@@ -88,6 +88,8 @@ jobs:
           id=$(docker create tuvx)
           docker cp $id:/build/docs/sphinx tmpdocs
           docker rm -v $id
+          # Copy switcher.json to enable version switcher on branch docs
+          cp docs/switcher.json tmpdocs/
           brname="${{github.ref}}"
           brname="${brname##refs/heads/}"
           brdir=${brname//\//--}   # replace '/' with '--'
