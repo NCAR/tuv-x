@@ -6,12 +6,14 @@ Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 
 [![License](https://img.shields.io/github/license/NCAR/tuv-x.svg)](https://github.com/NCAR/tuv-x/blob/main/LICENSE)
 [![Ubuntu](https://github.com/NCAR/tuv-x/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/ubuntu.yml)
+[![Mac](https://github.com/NCAR/tuv-x/actions/workflows/mac.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/mac.yml)
+[![Windows](https://github.com/NCAR/tuv-x/actions/workflows/windows.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/windows.yml)
 [![Docker](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/NCAR/tuv-x/branch/main/graph/badge.svg?token=H46AAEAQF9)](https://codecov.io/gh/NCAR/tuv-x)
 [![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
 [![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/NCAR/tuv-x)
 
-Copyright (C) 2020-4 National Center for Atmospheric Research
+Copyright (C) 2020-2025 University Corporation for Atmospheric Research
 
 # Try it out!
 
@@ -160,9 +162,6 @@ or email us at musica-info@ucar.edu.
   - Anyone interested in scientific collaboration
 which would add new software functionality should read the [MUSICA software development plan](https://github.com/NCAR/musica/blob/main/docs/Software%20Development%20Plan.pdf).
 
-- [Code of conduct](https://ncar.github.io/tuv-x/contributing/code_of_conduct.html)
-  - Please read this through to you understand the expectations with how to interact with this project.
-
 - [Contributor's guide](https://ncar.github.io/tuv-x/contributing/contributors_guide.html)
   - Before submiitting a PR, please thouroughly read this to you understand our expectations. We reserve the right to reject any PR not meeting our guidelines.
 
@@ -174,4 +173,4 @@ installation and usage instructions.
 # License
 
 - [Apache 2.0](/LICENSE)
-- Copyright (C) 2020-4 National Center for Atmospheric Research
+- Copyright (C) 2020-2025 University Corporation for Atmospheric Research

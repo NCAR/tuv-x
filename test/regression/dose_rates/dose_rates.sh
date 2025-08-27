@@ -26,6 +26,7 @@ exec_newtuv() {
 }
 exec_analysis() {
   python3 $basedir/test/regression/dose_rates/sw.compare.py $basedir/test/regression/dose_rates odat/OUTPUTS output
+  python3 $basedir/test/regression/dose_rates/dose_rate.compare.py $basedir/test/regression/dose_rates/dose_rates.nc dose_rates.nc
 }
 
 if ! exec_oldtuv; then

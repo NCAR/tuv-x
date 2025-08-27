@@ -13,6 +13,7 @@
 import os
 import sys
 import datetime
+import re
 sys.path.insert(0, os.path.abspath('.'))
 
 from generate_logo import make_logo
@@ -25,8 +26,16 @@ author = 'NCAR/UCAR'
 
 suffix = os.getenv("SWITCHER_SUFFIX", "")
 
-# The full version, including alpha/beta/rc tags
-release = f'v0.9{suffix}'
+# the suffix is required. This is controlled by the dockerfile that builds the docs
+regex = r'project\(.*VERSION\s+(\d+\.\d+\.\d+)'
+version = '0.0.0'
+# read the version from the cmake files
+with open(f'../../CMakeLists.txt', 'r') as f:
+    for line in f:
+        match = re.match(regex, line)
+        if match:
+            version = match.group(1)
+release = f'v{version}{suffix}'
 
 
 # -- General configuration ---------------------------------------------------

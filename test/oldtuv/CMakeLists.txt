@@ -25,6 +25,7 @@ set(PHOTO_SRC abs_linalgebra.f90
               odo3.f
               odrl.f
               orbit.f
+              output_to_netcdf.F90
               photo_kinetics.F90
               photo_utils.F90
               psndo.f

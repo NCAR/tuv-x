@@ -9,7 +9,7 @@ and J. J. Orlando, J. Atmos. Chem., 39 (2001) 171-189.
 Geoff
 Geoffrey S. Tyndall, Laboratory Kinetics Project
 Atmospheric Chemistry Division
-National Center for Atmospheric Research
+University Corporation for Atmospheric Research
 P.O. Box 3000, Boulder, CO 80307, USA
 wavelength(nm)
           cross section (cm2)

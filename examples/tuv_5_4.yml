@@ -164,7 +164,7 @@ grids:
   - 12.0
   - 14.0
 photolysis:
-  enable diagnostics: true
+  enable diagnostics: false
   reactions:
   - cross section:
       apply O2 bands: true
