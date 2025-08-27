@@ -18,13 +18,13 @@ module tuvx_la_sr_bands
   real(dk), parameter :: kUpperLimit = 56.0_dk ! Upper bound of Chebyshev polynomial
   integer,  parameter :: kla = 2         ! dimension of the Lymann-Alpha wavelength grid
   integer,  parameter :: nla = kla - 1   ! number of Lymann-Alpha wavelength bins
-  real(dk), parameter :: wlla(kla) = (/ 121.0_dk, 122.0_dk /) ! Lymann-Alpha wavelength grid [nm]
+  real(dk), parameter :: wlla(kla) = (/ 121.4_dk, 121.9_dk /) ! Lymann-Alpha wavelength grid [nm]
   integer,  parameter :: ksrb = 18       ! dimension of the Schumann-Runge wavelength grid
   integer,  parameter :: nsrb = ksrb - 1 ! number of Schumann-Runge wavelength bins
   real(dk), parameter :: wlsrb(ksrb) =                                        &
-  (/ 174.4_dk, 177.0_dk, 178.6_dk, 180.2_dk, 181.8_dk, 183.5_dk, 185.2_dk,    &
+  (/ 175.4_dk, 177.0_dk, 178.6_dk, 180.2_dk, 181.8_dk, 183.5_dk, 185.2_dk,    &
      186.9_dk, 188.7_dk, 190.5_dk, 192.3_dk, 194.2_dk, 196.1_dk, 198.0_dk,    &
-     200.0_dk, 202.0_dk, 204.1_dk, 205.8_dk/) ! Schumann-Runge wavelength grid [nm]
+     200.0_dk, 202.0_dk, 204.1_dk, 206.2_dk/) ! Schumann-Runge wavelength grid [nm]
 
   integer,  parameter :: iONE = 1
   real(dk), parameter :: rZERO = 0.0_dk
@@ -911,8 +911,8 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine calc_params( this, X, A, B )
-    ! Calculates coefficients (A,B), used in calculating the effective
-    ! cross section, for 17 wavelength intervals as a function of log O2
+    ! Calculates coefficients (A,B), used in calculating the effective 
+    ! cross section, for 17 wavelength intervals as a function of log O2 
     ! column density (X), Wavelength intervals are defined in WMO1985
 
     class(la_sr_bands_t), intent(inout)  :: this
