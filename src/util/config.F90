@@ -295,7 +295,7 @@ contains
   subroutine to_file( this, file_name )
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> File name to save configuration with
     character(len=*), intent(in) :: file_name
 
@@ -316,7 +316,7 @@ contains
     !> Number of child objects
     integer(kind=musica_ik) :: number_of_children
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
 
     number_of_children = yaml_size_c( this%node_ )
 
@@ -356,7 +356,7 @@ contains
     !> Key name
     type(string_t) :: key
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Configuration iterator
     class(iterator_t), intent(in) :: iterator
 
@@ -382,7 +382,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -418,7 +418,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -444,7 +444,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -484,7 +484,7 @@ contains
     use musica_assert,                 only : die_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -519,7 +519,7 @@ contains
     use musica_assert,                 only : die_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -554,7 +554,7 @@ contains
     use musica_assert,                 only : die_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -589,7 +589,7 @@ contains
     use musica_assert,                 only : die_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -625,7 +625,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -672,7 +672,7 @@ contains
     use musica_assert,                 only : assert, assert_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -717,7 +717,7 @@ contains
     use musica_assert,                 only : assert, assert_msg
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Key used to find value
     character(len=*), intent(in) :: key
     !> Returned value
@@ -762,7 +762,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Iterator to use to find value
     class(iterator_t), intent(in) :: iterator
     !> Returned value
@@ -808,7 +808,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Iterator to use to find value
     class(iterator_t), intent(in) :: iterator
     !> Returned value
@@ -1295,7 +1295,7 @@ contains
     use musica_string,                 only : string_t
 
     !> Configuration
-    class(config_t), intent(inout) :: this
+    class(config_t), intent(in) :: this
     !> Required keys
     type(string_t),  intent(in) :: required_keys(:)
     !> Optional keys

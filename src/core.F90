@@ -86,15 +86,37 @@ module tuvx_core
   end type core_t
 
   interface core_t
-    module procedure constructor
+    module procedure constructor_file_path, constructor_config
   end interface core_t
 
 contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  function constructor( config, grids, profiles, radiators ) result( new_core )
-    ! Constructor of TUV-x core objects
+  function constructor_file_path( config_file_path, grids, profiles, &
+      radiators ) result( new_core )
+    ! Constructor of TUV-x core objects from a configuration file
+
+    use musica_string,                 only : string_t
+
+    type(string_t),                        intent(in) :: config_file_path ! Path to TUV-x configuration file
+    class(grid_warehouse_t),     optional, intent(in) :: grids            ! Set of grids to include in the configuration
+    class(profile_warehouse_t),  optional, intent(in) :: profiles         ! Set of profiles to include in the configuration
+    class(radiator_warehouse_t), optional, intent(in) :: radiators        ! Set of radiators to include in the configuration
+    class(core_t),                         pointer    :: new_core
+
+    type(config_t) :: config
+
+    call config%from_file( config_file_path%to_char() )
+    new_core => constructor_config( config, grids, profiles, radiators )
+
+  end function constructor_file_path
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function constructor_config( config, grids, profiles, radiators ) &
+      result( new_core )
+    ! Constructor of TUV-x core objects from a configuration object
 
     use musica_assert,                 only : assert_msg
     use musica_string,                 only : string_t
@@ -102,7 +124,7 @@ contains
     use tuvx_profile,                  only : profile_t
     use tuvx_radiator_warehouse,       only : radiator_warehouse_t
 
-    type(string_t),                        intent(in) :: config    ! Full TUV-x configuration data
+    type(config_t),                        intent(in) :: config    ! Full TUV-x configuration data
     class(grid_warehouse_t),     optional, intent(in) :: grids     ! Set of grids to include in the configuration
     class(profile_warehouse_t),  optional, intent(in) :: profiles  ! Set of profiles to include in the configuration
     class(radiator_warehouse_t), optional, intent(in) :: radiators ! Set of radiators to include in the configuration
@@ -111,11 +133,9 @@ contains
     ! Local variables
     character(len=*), parameter :: Iam = 'Photolysis core constructor: '
     logical                     :: found
-    type(config_t)              :: core_config, child_config
+    type(config_t)              :: child_config
     class(profile_t),  pointer  :: aprofile
     type(string_t)              :: required_keys(4), optional_keys(3)
-
-    call core_config%from_file( config%to_char() )
 
     ! Check json configuration file for basic structure, integrity
     required_keys(1) = "radiative transfer"
@@ -126,22 +146,22 @@ contains
     optional_keys(2) = "dose rates"
     optional_keys(3) = "enable diagnostics"
     call assert_msg( 255400232,                                               &
-                     core_config%validate( required_keys, optional_keys ),    &
+                     config%validate( required_keys, optional_keys ),    &
                      "Bad configuration data format for tuv-x core." )
 
     ! Instantiate photolysis core
     allocate( new_core )
 
-    call core_config%get( 'enable diagnostics', new_core%enable_diagnostics_,  &
+    call config%get( 'enable diagnostics', new_core%enable_diagnostics_,  &
       Iam, default=.false. )
 
     ! Instantiate and initialize grid warehouse
-    call core_config%get( "grids", child_config, Iam )
+    call config%get( "grids", child_config, Iam )
     new_core%grid_warehouse_ => grid_warehouse_t( child_config )
     if( present( grids ) ) call new_core%grid_warehouse_%add( grids )
 
     ! Instantiate and initialize profile warehouse
-    call core_config%get( "profiles", child_config, Iam )
+    call config%get( "profiles", child_config, Iam )
     new_core%profile_warehouse_ =>                                            &
        profile_warehouse_t( child_config, new_core%grid_warehouse_ )
      if( present( profiles ) ) call new_core%profile_warehouse_%add( profiles )
@@ -166,7 +186,7 @@ contains
     end if
 
     ! Set up radiative transfer calculator
-    call core_config%get( "radiative transfer", child_config, Iam )
+    call config%get( "radiative transfer", child_config, Iam )
     new_core%radiative_transfer_ => &
         radiative_transfer_t( child_config,                                   &
                               new_core%grid_warehouse_,                       &
@@ -174,8 +194,7 @@ contains
                               radiators )
 
     ! photolysis rate constants
-    call core_config%get( "photolysis", child_config, Iam,          &
-                          found = found )
+    call config%get( "photolysis", child_config, Iam, found = found )
     if( found ) then
       new_core%photolysis_rates_ => &
           photolysis_rates_t( child_config,                                   &
@@ -187,7 +206,7 @@ contains
     end if
 
     ! dose rates
-    call core_config%get( "dose rates", child_config, Iam, found = found )
+    call config%get( "dose rates", child_config, Iam, found = found )
     if( found ) then
       new_core%dose_rates_ => &
           dose_rates_t( child_config, new_core%grid_warehouse_,               &
@@ -199,13 +218,13 @@ contains
         spherical_geometry_t( new_core%grid_warehouse_ )
 
     ! instantiate and initialize lyman alpha, srb type
-    call core_config%get( "O2 absorption", child_config, Iam )
+    call config%get( "O2 absorption", child_config, Iam )
     new_core%la_sr_bands_ => la_sr_bands_t( child_config,                     &
                                             new_core%grid_warehouse_,         &
                                             new_core%profile_warehouse_ )
 
 
-  end function constructor
+  end function constructor_config
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
