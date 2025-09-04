@@ -124,11 +124,11 @@ contains
     use tuvx_profile,                  only : profile_t
     use tuvx_radiator_warehouse,       only : radiator_warehouse_t
 
-    type(config_t),                        intent(in) :: config    ! Full TUV-x configuration data
-    class(grid_warehouse_t),     optional, intent(in) :: grids     ! Set of grids to include in the configuration
-    class(profile_warehouse_t),  optional, intent(in) :: profiles  ! Set of profiles to include in the configuration
-    class(radiator_warehouse_t), optional, intent(in) :: radiators ! Set of radiators to include in the configuration
-    class(core_t),                         pointer    :: new_core
+    type(config_t),                        intent(inout) :: config    ! Full TUV-x configuration data
+    class(grid_warehouse_t),     optional, intent(in)    :: grids     ! Set of grids to include in the configuration
+    class(profile_warehouse_t),  optional, intent(in)    :: profiles  ! Set of profiles to include in the configuration
+    class(radiator_warehouse_t), optional, intent(in)    :: radiators ! Set of radiators to include in the configuration
+    class(core_t),                         pointer       :: new_core
 
     ! Local variables
     character(len=*), parameter :: Iam = 'Photolysis core constructor: '
