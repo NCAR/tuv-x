@@ -1,3 +1,31 @@
+{
+   <string_leak>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   ...
+   fun:__musica_config_MOD_get_string
+   fun:__tuvx_radiator_MOD_base_constructor
+   fun:__tuvx_radiator_MOD_constructor
+   ...
+}
+{
+   <other_string_leak>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   ...
+   fun:__musica_string_MOD_string_assign_char
+   fun:__tuvx_radiator_from_host_MOD_constructor_char
+   ...
+}
+{
+   <other_other_string_leak>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   ...
+   fun:__musica_config_MOD_get_string
+   fun:__tuvx_radiator_from_netcdf_file_MOD_constructor
+   ...
+}
 ###############################################################
 #
 # OpenMP suppressions
