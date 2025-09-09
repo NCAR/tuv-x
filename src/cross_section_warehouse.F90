@@ -15,7 +15,6 @@ module tuvx_cross_section_warehouse
 
   !> Radiative tranfser cross section type
   type cross_section_warehouse_t
-    private
     type(cross_section_ptr), allocatable :: cross_sections_(:) ! A:f:type:`~tuvx_cross_section/cross_section_ptr`
     type(string_t), allocatable          :: handles_(:) ! cross section "handle"
   contains

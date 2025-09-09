@@ -1,3 +1,19 @@
+{
+   <string_leak>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   ...
+   fun:__musica_config_MOD_get_string
+   ...
+}
+{
+   <other_string_leak>
+   Memcheck:Leak
+   match-leak-kinds: definite
+   ...
+   fun:__musica_string_MOD_string_assign_char
+   ...
+}
 ###############################################################
 #
 # OpenMP suppressions

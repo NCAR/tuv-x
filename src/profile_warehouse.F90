@@ -19,7 +19,6 @@ module tuvx_profile_warehouse
   public :: profile_warehouse_t, profile_warehouse_ptr
 
   type profile_warehouse_t
-    private
     type(profile_ptr), allocatable :: profiles_(:)
   contains
     ! returns a copy of a profile object
