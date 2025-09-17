@@ -18,7 +18,6 @@ module tuvx_grid_warehouse
 
   !> Grid warehouse type
   type :: grid_warehouse_t
-    private
     type(grid_ptr), allocatable :: grids_(:) ! grid objects
   contains
     !> get a copy of a grid object

@@ -3,11 +3,8 @@
 
 cmake_minimum_required(VERSION 3.17)
 
-project(
-  tuv-x
-  VERSION 0.12.0
-  LANGUAGES Fortran CXX C
-)
+# project and version must be on the same line so that the docs can extract it
+project(tuv-x VERSION 0.13.0 LANGUAGES Fortran CXX C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
@@ -88,9 +85,7 @@ include(cmake/dependencies.cmake)
 add_subdirectory(src)
 
 # add tuv-x standalone executable
-configure_file(src/version.F90.in version.F90 @ONLY)
-
-add_executable(tuv-x src/tuvx.F90 version.F90)
+add_executable(tuv-x src/tuvx.F90)
 
 set_target_properties(tuv-x
   PROPERTIES

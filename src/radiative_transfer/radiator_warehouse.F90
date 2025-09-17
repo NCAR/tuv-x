@@ -20,7 +20,6 @@ module tuvx_radiator_warehouse
 
   type radiator_warehouse_t
     ! Radiator warehouse
-    private
     type(radiator_ptr), allocatable :: radiators_(:) ! Radiators
   contains
     !> @name Returns a pointer to a requested radiator
