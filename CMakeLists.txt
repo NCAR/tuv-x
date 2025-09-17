@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.17)
 
 # project and version must be on the same line so that the docs can extract it
-project(tuv-x VERSION 0.12.0 LANGUAGES Fortran CXX C)
+project(tuv-x VERSION 0.13.0 LANGUAGES Fortran CXX C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
