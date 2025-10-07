@@ -11,16 +11,8 @@ Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 [![Docker](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/NCAR/tuv-x/branch/main/graph/badge.svg?token=H46AAEAQF9)](https://codecov.io/gh/NCAR/tuv-x)
 [![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
-[![](https://img.shields.io/badge/Contribute%20with-Gitpod-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/NCAR/tuv-x)
 
 Copyright (C) 2020-2025 University Corporation for Atmospheric Research
-
-# Try it out!
-
-Poke this button and you'll be taken to a cloud workspace that walks you through 
-a tutorial on how to use TUV-x.
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/NCAR/tuv-x)
 
 # Building and installing
 To build and install TUV-x locally, you must have the following libraries installed:
