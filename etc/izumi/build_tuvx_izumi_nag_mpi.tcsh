@@ -65,7 +65,6 @@ mkdir -p build
 cd build
 cmake -D CMAKE_Fortran_COMPILER=mpifort \
       -D CMAKE_Fortran_FLAGS="-mismatch -w=uda `nc-config --fflags`" \
-      -D TUVX_ENABLE_NC_CONFIG=ON \
       -D CMAKE_BUILD_TYPE=release \
       -D JSON_INCLUDE_DIR=$JSON_FORTRAN_HOME/lib \
       -D JSON_LIB=$JSON_FORTRAN_HOME/lib/libjsonfortran.a \
