@@ -57,7 +57,7 @@ pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
 FetchContent_Declare(
   yaml-cpp
   GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
-  GIT_TAG 28f93bdec6387d42332220afa9558060c8016795
+  GIT_TAG 65c1c270dbe7eec37b2df2531d7497c4eea79aee
   GIT_PROGRESS NOT
   FIND_PACKAGE_ARGS NAMES yaml-cpp
   ${FETCHCONTENT_QUIET})
