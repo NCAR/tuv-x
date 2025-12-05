@@ -29,7 +29,6 @@ module tuvx_core
     ! with a host application
     type(grid_warehouse_t),      pointer :: grid_warehouse_ => null()
     type(profile_warehouse_t),   pointer :: profile_warehouse_ => null()
-    type(radiator_warehouse_t),  pointer :: radiator_warehouse_ => null()
     type(spherical_geometry_t),  pointer :: spherical_geometry_ => null()
     type(la_sr_bands_t),         pointer :: la_sr_bands_ => null()
     type(radiative_transfer_t),  pointer, public :: radiative_transfer_ => null()
