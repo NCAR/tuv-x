@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.17)
 
 # project and version must be on the same line so that the docs can extract it
-project(tuv-x VERSION 0.13.0 LANGUAGES Fortran CXX C)
+project(tuv-x VERSION 0.14.0 LANGUAGES Fortran CXX C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
@@ -38,7 +38,6 @@ option(TUVX_ENABLE_TESTS "Build tests" ON)
 option(TUVX_ENABLE_BENCHMARK "Build benchmark examples" OFF)
 option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
-option(TUVX_ENABLE_NC_CONFIG "Use nc-config to determine NetCDF libraries" OFF)
 option(TUVX_ENABLE_REGRESSION_TESTS "Enable regression tests" ON)
 option(TUVX_BUILD_DOCS "Build the documentation" OFF)
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include" CACHE PATH "Directory to find Fortran module files during the build")

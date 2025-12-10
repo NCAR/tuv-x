@@ -712,7 +712,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Gets an array of config_t objects
-  subroutine get_config_array( this, key, value, caller, default, found )
+  recursive subroutine get_config_array( this, key, value, caller, default, found )
 
     use musica_assert,                 only : assert, assert_msg
 
@@ -839,7 +839,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Adds a subset of configuration data
-  subroutine add_config( this, key, value, caller )
+  recursive subroutine add_config( this, key, value, caller )
 
     use musica_assert,                 only : assert_msg
 
@@ -1067,7 +1067,7 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Adds a config_t array to the configuration data
-  subroutine add_config_array( this, key, value, caller )
+  recursive subroutine add_config_array( this, key, value, caller )
 
     use musica_assert,                 only : assert_msg
 
