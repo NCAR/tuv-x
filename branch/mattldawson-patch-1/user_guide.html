@@ -1,0 +1,1709 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>User Guide &#8212; TUV-x v0.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=4e29bbe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
+
+    <script src="_static/documentation_options.js?v=5b088fe0"></script>
+    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'user_guide';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.1';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://ncar.github.io/tuv-x/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API" href="api/index.html" />
+    <link rel="prev" title="Getting Started" href="getting_started.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="Logo image"/>
+    <script>document.write(`<img src="_static/logo.svg" class="logo__image only-dark" alt="Logo image"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contributing/index.html">
+                        Contributions
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="citation.html">
+                        Citing TUV-x
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/tuv-x" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="#">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contributing/index.html">
+                        Contributions
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="citation.html">
+                        Citing TUV-x
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="versionswitcherbutton" type="button" role="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="listbox" aria-controls="versionswitcherlist" aria-label="Version switcher list">
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="versionswitcherlist" class="version-switcher__menu dropdown-menu list-group-flush py-0" role="listbox" aria-labelledby="versionswitcherbutton">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/tuv-x" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">User Guide</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="user-guide">
+<h1>User Guide<a class="headerlink" href="#user-guide" title="Link to this heading">#</a></h1>
+<section id="general">
+<h2>General<a class="headerlink" href="#general" title="Link to this heading">#</a></h2>
+<p>Stand-alone TUV-x can be run from the command-line as:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./tuv-x<span class="w"> </span>configuration_file.json
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">configuration_file.json</span></code> contains the TUV-x configuration information described in
+<a class="reference internal" href="#configuration"><span class="std std-ref">configuration</span></a>.</p>
+<p>If photolysis rate constants are included in the configuration,
+TUV-x will output a file named <code class="docutils literal notranslate"><span class="pre">photolysis_rate_constants.nc</span></code> in the working directory. This
+file will contain the photolysis rate constants for each reaction at each vertical level
+for every time specified in the configuration file.</p>
+<p>If dose rates are included in the configuration,
+TUV-x will output a file named <code class="docutils literal notranslate"><span class="pre">dose_rates.nc</span></code> in the working directory.
+This file will contain the calculated dose rates at
+each vertical level for every time specified in the configuration.</p>
+<p>Some example configurations are available in the <a class="reference external" href="https://github.com/NCAR/tuv-x/tree/main/examples"><code class="docutils literal notranslate"><span class="pre">examples</span></code></a> folder.
+These will be copied to the build folder during the CMake build step.
+To run an example, from the build folder run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./tuv-x<span class="w"> </span>examples/full_config.json
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<span id="id1"></span><h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h2>
+<p>The TUV-x configuration
+<a class="reference external" href="https://www.json.org/json-en.html">JSON</a>
+file is used to set up TUV-x to calculate
+a set of user-selected photolysis rate constants and/or dose rates.
+It also allows you to specify details about how these
+are calculated (solver options, which absorbing species should be
+considered in determining the radiation field, etc.) and the
+conditions they should be calculated for (temperature, solar flux,
+solar zenith angle, etc.).</p>
+<p>Configuration data for specific components of TUV-x may
+include paths to needed data files. These paths can be absolute
+or relative to the folder in which you run the <code class="docutils literal notranslate"><span class="pre">tuvx</span></code> executable.
+(There are no hard-coded paths to data files in the TUV-x source
+code; they are all specified in the JSON configuration file.)</p>
+<p>TUV-x JSON data include a number of required and optional
+elements.
+Users can additionally decorate the JSON file with
+custom elements by using a “<code class="docutils literal notranslate"><span class="pre">__</span></code>” prefix for the custom key.
+TUV-x will ignore all key-value pairs whose key includes this
+prefix.
+These can be useful for including notes, descriptions,
+or references.
+They can also be useful if TUV-x is embedded
+in an application that needs to attach specific information
+to TUV-x objects.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;tuv object&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;a TUV-x required key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;a TUV-x optional key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sometimes bar&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;__my note&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;TUV-x will ignore this&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;__user provided data&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;will TUV-x ignore this object?&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The TUV-x configuration JSON file has six objects:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;O2 absorption&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;grids&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;radiative transfer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;photolysis&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;dose rates&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="nt">&quot;enable diagnostics&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>We use elipses (<code class="docutils literal notranslate"><span class="pre">...</span></code>) here and throughout this section for
+JSON data that are described in a separate sub-section of this
+page.</p>
+<p>The first four objects
+(<a class="reference internal" href="#configuration-o2-absorption"><span class="std std-ref">O2 absorption</span></a>,
+<a class="reference internal" href="#configuration-grids"><span class="std std-ref">grids</span></a>,
+<a class="reference internal" href="#configuration-profiles"><span class="std std-ref">profiles</span></a>, and
+<a class="reference internal" href="#configuration-radiation"><span class="std std-ref">radiative transfer</span></a>)
+are required for every TUV-x run.
+The last two objects
+(<a class="reference internal" href="#configuration-photolysis"><span class="std std-ref">photolysis rate constants</span></a> and
+<a class="reference internal" href="#configuration-dose-rates"><span class="std std-ref">dose rates</span></a>)
+are optional and allow the user to
+calculate photolysis rates or dose rates or both.
+Finally, the <code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code> field is used to output diagnostics from
+the core of tuv-x. If set to true, a folder called output will be created.
+This flag is optional and defaults to false.</p>
+<p>The following sections describe each of these six JSON
+object.</p>
+<section id="o2-absorption">
+<span id="configuration-o2-absorption"></span><h3>O2 Absorption<a class="headerlink" href="#o2-absorption" title="Link to this heading">#</a></h3>
+<p>This object describes how TUV-x calculates the special
+Lyman–Alpha and Shumann–Runge absorption bands for O2.
+It has a single required data member that provides the
+path to a text file containing parameters needed in
+these calculations:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;O2 absorption&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;cross section parameters file&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/cross_sections/O2_parameters.txt&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This file is a hold-over from the original TUV and has
+not yet been converted into a NetCDF file. It can be found
+in the location shown above relative to the <code class="docutils literal notranslate"><span class="pre">tuv-x/</span></code> root
+directory.</p>
+</section>
+<section id="grids">
+<span id="configuration-grids"></span><h3>Grids<a class="headerlink" href="#grids" title="Link to this heading">#</a></h3>
+<p>Grids define axes along which TUV-x data are distributed or calculations
+are performed.
+Depending on your use case, certain grids may or may not
+need to be included.
+At minimum, you will need to include a <code class="docutils literal notranslate"><span class="pre">height</span></code>
+grid (units: <code class="docutils literal notranslate"><span class="pre">km</span></code>) that defines the vertical grid TUV-x operates on,
+and a <code class="docutils literal notranslate"><span class="pre">wavelength</span></code> grid (units: <code class="docutils literal notranslate"><span class="pre">nm</span></code>), that defines the wavelength
+bins for which optical property data is provided.
+For stand-alone TUV-x, you will also need to provide a <code class="docutils literal notranslate"><span class="pre">time</span></code> grid
+(units: <code class="docutils literal notranslate"><span class="pre">hours</span></code>) that provides the time of day for which to calculate
+the photolysis and/or dose rates.</p>
+<p>There are three key-value pairs that are required for every grid, <code class="docutils literal notranslate"><span class="pre">type</span></code>
+, <code class="docutils literal notranslate"><span class="pre">units</span></code>, and <code class="docutils literal notranslate"><span class="pre">name</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">type</span></code> is a string that describes how the grid data is specified,
+and must be one of <code class="docutils literal notranslate"><span class="pre">equal</span> <span class="pre">interval</span></code>,
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">csv</span> <span class="pre">file</span></code>, and <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">config</span> <span class="pre">file</span></code>.
+These types are described below.
+The <code class="docutils literal notranslate"><span class="pre">units</span></code> are the units for the grid values and are used to ensure
+consistency throughout configuration inputs and
+with TUV conventions.</p>
+<section id="equal-interval">
+<h4>Equal Interval<a class="headerlink" href="#equal-interval" title="Link to this heading">#</a></h4>
+<p>This grid type is defined by start and end points, and a cell width:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my grid&quot;</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;equal interval&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foos&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;begins at&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;ends at&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">112.0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cell delta&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">10.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="from-csv-file">
+<h4>From CSV File<a class="headerlink" href="#from-csv-file" title="Link to this heading">#</a></h4>
+<p>This grid type is defined by data from a text file.
+The first line of the file is ignored and can be used for header info.
+The remaining lines should each include a single real number
+that will be used to define the grid.
+Values should be monotonic and increasing.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my grid&quot;</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;from csv file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bars&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/file&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="from-config-file">
+<h4>From Config File<a class="headerlink" href="#from-config-file" title="Link to this heading">#</a></h4>
+<p>The values for each cell of this grid type are included directly in
+the configuration file.
+Values should be monotonically increasing.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my grid&quot;</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;from config file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foos&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;values&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w"> </span><span class="mf">7.0</span><span class="p">,</span><span class="w"> </span><span class="mf">12.5</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="profiles">
+<span id="configuration-profiles"></span><h3>Profiles<a class="headerlink" href="#profiles" title="Link to this heading">#</a></h3>
+<p>Profiles define parameters on a <a class="reference internal" href="#configuration-grids"><span class="std std-ref">grid</span></a>.
+Similar to grids, depending on your use case, certain profiles may
+or may not need to be included.
+At minimum, you will need to include the key-value pairs listed
+in the following table.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>profile</p></th>
+<th class="head"><p>grid</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">temperature</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">height</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">solar</span> <span class="pre">zenith</span> <span class="pre">angle</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">time</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">Earth-Sun</span> <span class="pre">distance</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">time</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">surface</span> <span class="pre">albedo</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wavelength</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">extraterrestrial</span> <span class="pre">flux</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">wavelength</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">air</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">height</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The air profile defines the number density (molecules cm<sup>-3</sup>) of air
+as a function of height.</p>
+<p>In addition to the required profiles, profiles of atmospheric
+constituents that affect the radiation field by absorbing or
+scattering light should be included when these exist as
+<a class="reference internal" href="#configuration-radiators"><span class="std std-ref">radiators</span></a> in the
+<a class="reference internal" href="#configuration-radiation"><span class="std std-ref">radiative transfer</span></a> object.</p>
+<p>As with grids, there are two key-value pairs required for every
+profile, <code class="docutils literal notranslate"><span class="pre">type</span></code>, <code class="docutils literal notranslate"><span class="pre">units</span></code>, and <code class="docutils literal notranslate"><span class="pre">name</span></code>.
+The <code class="docutils literal notranslate"><span class="pre">units</span></code> are the units for the profile data and are used to ensure
+consistency throughout the configuration data and
+with expectations in the code.
+The <code class="docutils literal notranslate"><span class="pre">type</span></code> is a string that describes how the profile data is specified.
+There are two general-use types that can be used for any profile,
+<code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">csv</span> <span class="pre">file</span></code> and <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">config</span> <span class="pre">file</span></code>.
+In addition, there are several profile types that are useful for describing
+specific types of profiles, <code class="docutils literal notranslate"><span class="pre">O2</span></code>, <code class="docutils literal notranslate"><span class="pre">O3</span></code>, <code class="docutils literal notranslate"><span class="pre">air</span></code>, <code class="docutils literal notranslate"><span class="pre">solar</span> <span class="pre">zenith</span> <span class="pre">angle</span></code>,
+<code class="docutils literal notranslate"><span class="pre">Earth-Sun</span> <span class="pre">distance</span></code>, and <code class="docutils literal notranslate"><span class="pre">extraterrestrial</span> <span class="pre">flux</span></code>.</p>
+<p>The specific profile types are described below.</p>
+<section id="configuration-profiles-from-csv">
+<span id="id2"></span><h4>From CSV file<a class="headerlink" href="#configuration-profiles-from-csv" title="Link to this heading">#</a></h4>
+<p>This profile type loads profile data from a text file where the
+data is expected to be space-separated with the first column being
+the grid-point value and the second column being the value of the
+profile at that grid-point.
+Any number of header lines can be included at the top of the file
+by prefixing them with any of <code class="docutils literal notranslate"><span class="pre">#!$%*</span></code>.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interpolator</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">height</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>The format for the profile is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my profile&quot;</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;from csv file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foos&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;grid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bazes&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An optional <code class="docutils literal notranslate"><span class="pre">interpolator</span></code> key can be used to specify the
+interpolation strategy to apply to the incoming data if needed.
+The possible values are:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">linear</span></code>
+Standard linear interpolation scheme. This is the default
+interpolator used when one is not specified in the configuration
+data.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">conserving</span></code>
+Linear interpolation that conserves the area under the curve.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fractional</span> <span class="pre">source</span></code>
+Interpolation scheme for profiles that are integrated values.
+The interpolation is based on the fractional overlap between
+source and target grid sections relative to the source
+grid width.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fractional</span> <span class="pre">target</span></code>
+Interpolation scheme for profiles that are integrated values.
+The interpolation is based on the fractional overlap between
+source and target grid sections relative to the target
+grid width.</p></li>
+</ul>
+</section>
+<section id="configuration-profiles-from-config">
+<span id="id3"></span><h4>From Config File<a class="headerlink" href="#configuration-profiles-from-config" title="Link to this heading">#</a></h4>
+<p>This profile type extracts profile data directly from the configuration
+data file. There are two options for this profile format. Each option will
+require that <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">units</span></code> be present in the configuration file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">grid</span></code> option is required. In the case of <code class="docutils literal notranslate"><span class="pre">values</span></code>, the grid ensures
+that the number of elements in <code class="docutils literal notranslate"><span class="pre">values</span></code> matches the length of the grid.
+When using the <code class="docutils literal notranslate"><span class="pre">uniform</span> <span class="pre">value</span></code> option, the <code class="docutils literal notranslate"><span class="pre">edge_val</span></code>, or the edges of the
+cells, are determined from the grid.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">grid</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">values</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">uniform</span> <span class="pre">value</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>The first option specifies a single uniform value at every grid point:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my profile&quot;</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;from config file&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bars&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;uniform value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;grid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bazes&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The second option specifies values at each grid point in an array:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="w">  </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="nt">&quot;my profile&quot;</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;from config file&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bars&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;values&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="mf">12.3</span><span class="p">,</span><span class="w"> </span><span class="mf">32.4</span><span class="p">,</span><span class="w"> </span><span class="mf">103.2</span><span class="w"> </span><span class="p">],</span>
+<span class="w">    </span><span class="nt">&quot;grid&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;bazes&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="from-host">
+<span id="configuration-profiles-from-host"></span><h4>From Host<a class="headerlink" href="#from-host" title="Link to this heading">#</a></h4>
+<div class="admonition-todo admonition" id="id4">
+<p class="admonition-title">Todo</p>
+<p>fill this out</p>
+</div>
+</section>
+<section id="solar-zenith-angle">
+<h4>Solar Zenith Angle<a class="headerlink" href="#solar-zenith-angle" title="Link to this heading">#</a></h4>
+<p>This profile is specifically for calculating the solar zenith angle
+as a function of time.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">year</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">month</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">day</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">longitude</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">latitude</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time</span> <span class="pre">zone</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>Its configuration takes the form:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;solar zenith angle&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;solar zenith angle&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;degrees&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;year&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2002</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;month&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;day&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;longitude&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;latitude&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The latitude and longitude are in degrees. There is an optional
+argument <code class="docutils literal notranslate"><span class="pre">time</span> <span class="pre">zone</span></code> that defaults to 0, and is an offset
+in hours to adjust for a specific time zone relative to GMT.</p>
+</section>
+<section id="earth-sun-distance">
+<h4>Earth-Sun Distance<a class="headerlink" href="#earth-sun-distance" title="Link to this heading">#</a></h4>
+<p>This profile is specifically for calculating the Earth-Sun distance
+as a function of time. This profile requires that a grid named <code class="docutils literal notranslate"><span class="pre">time</span></code> be
+defined in the <a class="reference internal" href="#configuration-grids"><span class="std std-ref">Grids</span></a> section.</p>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">year</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">month</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">day</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">time</span> <span class="pre">zone</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>Its configuration takes the form:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Earth-Sun distance&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Earth-Sun distance&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;AU&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;year&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">2002</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;month&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;day&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">21</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>There is an optional argument <code class="docutils literal notranslate"><span class="pre">time</span> <span class="pre">zone</span></code> that defaults to 0,
+and is an offset in hours to adjust for a specific time zone
+relative to GMT.</p>
+</section>
+<section id="other-profiles">
+<h4>Other Profiles<a class="headerlink" href="#other-profiles" title="Link to this heading">#</a></h4>
+<p>The remaining profile types support legacy code from the original
+implementation of TUV. These will be gradually removed as configurations
+employing the general-use profile types are developed.</p>
+<p>These can be used as follows (note that file paths are relative
+to the root <code class="docutils literal notranslate"><span class="pre">tuv-x/</span></code> folder):</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;O3&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;O3&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/profiles/atmosphere/ussa.ozone&quot;</span>
+<span class="p">},</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;air&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;air&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/profiles/atmosphere/ussa.dens&quot;</span>
+<span class="p">},</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;O2&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;O2&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;data/profiles/atmosphere/ussa.dens&quot;</span>
+<span class="p">},</span>
+<span class="p">{</span>
+<span class="w">   </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extraterrestrial flux&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;extraterrestrial flux&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;photon cm-2 s-1&quot;</span><span class="p">,</span>
+<span class="w">   </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;data/profiles/solar/susim_hi.flx&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;data/profiles/solar/atlas3_1994_317_a.dat&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;data/profiles/solar/sao2010.solref.converted&quot;</span><span class="p">,</span>
+<span class="w">                </span><span class="s2">&quot;data/profiles/solar/neckel.flx&quot;</span><span class="p">],</span>
+<span class="w">   </span><span class="nt">&quot;interpolator&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;fractional target&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<section id="air-keys">
+<h5>Air Keys<a class="headerlink" href="#air-keys" title="Link to this heading">#</a></h5>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="extraterrestrial-flux-keys">
+<h5>Extraterrestrial Flux Keys<a class="headerlink" href="#extraterrestrial-flux-keys" title="Link to this heading">#</a></h5>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">interpolator</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>The regressoin tests compare the new version of TUV-x to the old version. One
+way is by directly comparing output. The <cite>enable diagnostics</cite> allows for this
+ouptut to be disabled. If this is enabled, a folder named <cite>output</cite> will be
+created in the same directory TUV-x is run from.</p>
+</section>
+<section id="o2-keys">
+<h5>O2 Keys<a class="headerlink" href="#o2-keys" title="Link to this heading">#</a></h5>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interpolator</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">height</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="o3-keys">
+<h5>O3 Keys<a class="headerlink" href="#o3-keys" title="Link to this heading">#</a></h5>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">interpolator</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">scale</span> <span class="pre">height</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">reference</span> <span class="pre">column</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+</section>
+<section id="radiative-transfer">
+<span id="configuration-radiation"></span><h3>Radiative Transfer<a class="headerlink" href="#radiative-transfer" title="Link to this heading">#</a></h3>
+<section id="solvers">
+<h4>Solvers<a class="headerlink" href="#solvers" title="Link to this heading">#</a></h4>
+<p>Radiative transfer specifies how the radiation field is calculated.
+The general format for radiative transfer is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;radiative transfer&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;cross sections&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;netcdf files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;my/data/file.nc&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;radiators&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;cross section&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;vertical profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;vertical profile units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;solver&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;delta eddington&quot;</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">sections</span></code> and <code class="docutils literal notranslate"><span class="pre">radiators</span></code> are required arrays
+(even if they are of zero length).
+The <code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">sections</span></code> define the absorption cross sections
+for the radiators.
+Cross section configuration formats are described
+<a class="reference internal" href="#configuration-cross-sections"><span class="std std-ref">below</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">radiators</span></code> define the atmospheric constituents that
+should be considered in the calculation of the radiation
+field.
+Radiator configuration formats are described
+<a class="reference internal" href="#configuration-radiators"><span class="std std-ref">below</span></a>.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">solver</span></code> key is required and specifies the solver to
+use for radiative transfer.
+There are currently two options, described below.</p>
+<section id="delta-eddington">
+<h5>Delta Eddington<a class="headerlink" href="#delta-eddington" title="Link to this heading">#</a></h5>
+<p>This is a fast 2-stream solver based on:
+Toon et al., J.Geophys.Res., v94 (D13), Nov 20, 1989.
+The configuration format for the delta-Eddington solver is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;type&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;delta eddington&quot;</span>
+</pre></div>
+</div>
+<p>There are no configuration options for this solver.</p>
+</section>
+<section id="discrete-ordinate">
+<h5>Discrete Ordinate<a class="headerlink" href="#discrete-ordinate" title="Link to this heading">#</a></h5>
+<p>This is an <code class="docutils literal notranslate"><span class="pre">n</span></code>-stream solver, where <code class="docutils literal notranslate"><span class="pre">n</span></code> is an
+even number between 2 and 32.
+The configuration format for the discrete ordinate solver is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;discrete ordinate&quot;</span><span class="p">,</span>
+<span class="nt">&quot;number of streams&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">number</span> <span class="pre">of</span> <span class="pre">streams</span></code> is required and specifies the number
+of streams to solve for.
+The value must be an even number between 2 and 32.</p>
+</section>
+</section>
+<section id="radiators">
+<span id="configuration-radiators"></span><h4>Radiators<a class="headerlink" href="#radiators" title="Link to this heading">#</a></h4>
+<p>Radiators represent atmospheric constituents that attenuate
+solar radiation and will be considered in calculations of the
+radiation field.</p>
+<section id="base">
+<h5>Base<a class="headerlink" href="#base" title="Link to this heading">#</a></h5>
+<p>The generic configuration data format for standard radiators is as
+follows:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;treat as air&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cross section&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;vertical profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;vertical profile units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;enable diagnostics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">treat</span> <span class="pre">as</span> <span class="pre">air</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">section</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">vertical</span> <span class="pre">profile</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">vertical</span> <span class="pre">profile</span> <span class="pre">units</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>The regression tests compare the new version of TUV-x to the old version. One
+way is by directly comparing output. The <code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code> allows for this
+ouptut to be disabled. If this is enabled, a folder named <code class="docutils literal notranslate"><span class="pre">output</span></code> will be
+created in the same directory TUV-x is run from.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">treat</span> <span class="pre">as</span> <span class="pre">air</span></code> flag can be used to indicate that the radiator
+should be treated in a unique way specific to air in the calculation
+of optical properties.
+The default value is false.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">section</span></code> must be the name of a cross
+section in the list of <code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">sections</span></code> in the
+<a class="reference internal" href="#configuration-radiation"><span class="std std-ref">Radiative Transfer</span></a> object.
+The vertical profile must be the name of a profile with
+the provided units that is present in the list of
+<a class="reference internal" href="#configuration-profiles"><span class="std std-ref">Profiles</span></a>.
+These profiles should describe the concentration of
+the constituent on the <code class="docutils literal notranslate"><span class="pre">height</span></code> grid.</p>
+</section>
+<section id="aerosols">
+<h5>Aerosols<a class="headerlink" href="#aerosols" title="Link to this heading">#</a></h5>
+<p>A special radiator type exists for aerosols, which
+provides fixed optical depths at each wavelength.
+An example of the aerosol configuration is provided
+below.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aerosols&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;aerosol&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;optical depths&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="mf">2.40e-01</span><span class="p">,</span><span class="w"> </span><span class="mf">1.06e-01</span><span class="p">,</span><span class="w"> </span><span class="mf">4.56e-02</span><span class="p">,</span><span class="w"> </span><span class="mf">1.91e-02</span><span class="p">,</span><span class="w"> </span><span class="mf">1.01e-02</span><span class="p">,</span><span class="w"> </span><span class="mf">7.63e-03</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">5.38e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">5.00e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">5.15e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.94e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.82e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.51e-03</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">4.74e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.37e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.28e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">4.03e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">3.83e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">3.78e-03</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">3.88e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">3.08e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">2.26e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">1.64e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">1.23e-03</span><span class="p">,</span><span class="w"> </span><span class="mf">9.45e-04</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">7.49e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">6.30e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">5.50e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">4.21e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">3.22e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">2.48e-04</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">1.90e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">1.45e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">1.11e-04</span><span class="p">,</span><span class="w"> </span><span class="mf">8.51e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">6.52e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">5.00e-05</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">3.83e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">2.93e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">2.25e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">1.72e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">1.32e-05</span><span class="p">,</span><span class="w"> </span><span class="mf">1.01e-05</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">7.72e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">5.91e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">4.53e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">3.46e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">2.66e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">2.04e-06</span><span class="p">,</span>
+<span class="w">                     </span><span class="mf">1.56e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">1.19e-06</span><span class="p">,</span><span class="w"> </span><span class="mf">9.14e-07</span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;single scattering albedo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.99</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;asymmetry factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.61</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;550 nm optical depth&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.235</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;enable diagnostics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>keys</p></th>
+<th class="head"><p>Required/Optional</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">type</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">optical</span> <span class="pre">depths</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">single</span> <span class="pre">scattering</span> <span class="pre">albdeo</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">asymmetry</span> <span class="pre">factor</span></code></p></td>
+<td><p>required</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">550</span> <span class="pre">nm</span> <span class="pre">optical</span> <span class="pre">depth</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code></p></td>
+<td><p>optional</p></td>
+</tr>
+</tbody>
+</table>
+<p>The regressoin tests compare the new version of TUV-x to the old version. One
+way is by directly comparing output. The <cite>enable diagnostics</cite> allows for this
+ouptut to be disabled. If this is enabled, a folder named <cite>output</cite> will be
+created in the same directory TUV-x is run from.</p>
+<p>The optical depths are expected to be on the <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>
+grid.</p>
+</section>
+<section id="configuration-radiators-from-host">
+<span id="id5"></span><h5>From Host<a class="headerlink" href="#configuration-radiators-from-host" title="Link to this heading">#</a></h5>
+<div class="admonition-todo admonition" id="id6">
+<p class="admonition-title">Todo</p>
+<p>fill this out</p>
+</div>
+</section>
+</section>
+</section>
+<section id="photolysis-reactions">
+<span id="configuration-photolysis"></span><h3>Photolysis Reactions<a class="headerlink" href="#photolysis-reactions" title="Link to this heading">#</a></h3>
+<p>The configuration for photolysis reactions takes the following form:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;photolysis&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;enable diagnostics&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;reactions&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my first reaction&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="nt">&quot;cross section&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">     </span><span class="nt">&quot;quantum yield&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">     </span><span class="nt">&quot;scaling factor&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.3</span>
+<span class="w">   </span><span class="p">},</span>
+<span class="w">   </span><span class="p">{</span>
+<span class="w">     </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;my second reaction&quot;</span><span class="p">,</span>
+<span class="w">     </span><span class="nt">&quot;cross section&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">     </span><span class="nt">&quot;quantum yield&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">},</span>
+<span class="w">   </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each member of <code class="docutils literal notranslate"><span class="pre">reactions</span></code> describes a photolysis
+reaction that TUV-x will calculate a rate constant for at runtime.
+The name for each photolysis reaction is user-defined,
+associated with the calculated rate constant,
+and can be used for mapping to a chemistry solver or other
+package.
+Each reaction must have a <code class="docutils literal notranslate"><span class="pre">cross</span> <span class="pre">section</span></code>, whose configuration
+format is described <a class="reference internal" href="#configuration-cross-sections"><span class="std std-ref">here</span></a>.
+Each reaction must also have a <code class="docutils literal notranslate"><span class="pre">quantum</span> <span class="pre">yield</span></code>, whose
+configuration is described <a class="reference internal" href="#configuration-quantum-yields"><span class="std std-ref">here</span></a>.
+The <code class="docutils literal notranslate"><span class="pre">scaling</span> <span class="pre">factor</span></code> is a optional scaling factor that will be
+applied to the calculated rate constant.</p>
+<p>Diagnostic output can be enabled by setting <code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code> to <code class="docutils literal notranslate"><span class="pre">true</span></code>.
+This keyword is not required and is <code class="docutils literal notranslate"><span class="pre">false</span></code> by default.
+When enabled,  a folder named
+<cite>output</cite> will be created with some diagnostic output for the cross sections
+and quantum yields. This is only used for regression tests and will be removed
+in the future.</p>
+<p>The file <code class="docutils literal notranslate"><span class="pre">data/photolysis_rate_constants.json</span></code> contains
+configuration data for every photolysis rate constant that
+can be calculated from data available in the <code class="docutils literal notranslate"><span class="pre">data/</span></code>
+folder.</p>
+</section>
+<section id="dose-rates">
+<span id="configuration-dose-rates"></span><h3>Dose Rates<a class="headerlink" href="#dose-rates" title="Link to this heading">#</a></h3>
+<p>The configuration for dose rates takes the following form:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;dose rates&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;my first dose rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;my second dose rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Each member of <code class="docutils literal notranslate"><span class="pre">dose</span> <span class="pre">rates</span></code> describes a dose rate that
+TUV-x will calculate at runtime.
+The key for each dose rate is a user-defined name that
+will be associated with the calculated rate.
+Each dose rate must have a <code class="docutils literal notranslate"><span class="pre">weights</span></code> object that
+defines a spectral weight, whose configuration format
+is described <a class="reference internal" href="#configuration-spectral-weights"><span class="std std-ref">here</span></a>.</p>
+<p>Additionally, diagnostic output can be enabled by adding <code class="docutils literal notranslate"><span class="pre">enable</span> <span class="pre">diagnostics</span></code> to the
+json configuration like in the sample below. In this case, a folder named
+<cite>output</cite> will be created with some diagnostic output for the cross sections
+and quantum yields. This is only used for regression tests and will be removed
+in the future.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;dose rates&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;enable diagnostics&quot;</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;my first dose rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">},</span>
+<span class="w">  </span><span class="nt">&quot;my second dose rate&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="additional-objects">
+<h3>Additional Objects<a class="headerlink" href="#additional-objects" title="Link to this heading">#</a></h3>
+<p>These configuration JSON objects are used in one or more
+of the six high-level JSON objects in the TUV-x data file.</p>
+<section id="cross-sections">
+<span id="configuration-cross-sections"></span><h4>Cross Sections<a class="headerlink" href="#cross-sections" title="Link to this heading">#</a></h4>
+<p>The configuration for a standard cross section is as
+follows:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;netcdf files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;file path&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;path/to/my/netcdf/file.nc&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;lower extrapolation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boundary&quot;</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;upper extrapotion&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;constant&quot;</span><span class="p">,</span>
+<span class="w">        </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span>
+<span class="w">      </span><span class="p">},</span>
+<span class="w">      </span><span class="nt">&quot;zero below&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">215.4</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;zero above&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">768.4</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;override bands&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;band&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lyman-alpha&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.32</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">],</span>
+<span class="w">  </span><span class="nt">&quot;apply O2 bands&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The NetCDF file should be structured as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dimensions</span><span class="p">:</span>
+         <span class="n">bins</span> <span class="o">=</span> <span class="n">NUMBER_OF_WAVELENGTH_BINS</span> <span class="p">;</span>
+         <span class="n">parameters</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>
+<span class="n">variables</span><span class="p">:</span>
+         <span class="n">double</span> <span class="n">wavelength</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+                  <span class="n">wavelength</span><span class="p">:</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;nm&quot;</span> <span class="p">;</span>
+         <span class="n">double</span> <span class="n">cross_section_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">NUMBER_OF_WAVELENGTH_BINS</span></code> is the number of wavelength
+bins the cross section values are provided on.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cross_section_parameters</span></code> array should hold the value
+of the cross section at each wavelength.
+TUV-x will interpolate the cross section
+data onto the TUV-x wavelength grid, as specified by the
+“wavelength” grid.</p>
+<p>For objects in the <code class="docutils literal notranslate"><span class="pre">netcdf</span> <span class="pre">files</span></code> array, the <code class="docutils literal notranslate"><span class="pre">file</span> <span class="pre">path</span></code>
+is required. The remaining keys are optional.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">lower</span> <span class="pre">extrapolation</span></code> and <code class="docutils literal notranslate"><span class="pre">upper</span> <span class="pre">extrapolation</span></code>
+keys will append data beyond the lower and upper limits
+of the input data set, respectively. When the <code class="docutils literal notranslate"><span class="pre">type</span></code>
+is <code class="docutils literal notranslate"><span class="pre">boundary</span></code>, the last data point in the data set is
+used for all points beyond the last point. When the
+<code class="docutils literal notranslate"><span class="pre">type</span></code> is <code class="docutils literal notranslate"><span class="pre">constant</span></code> a user-specified <code class="docutils literal notranslate"><span class="pre">value</span></code> is
+used for all points beyond the last point.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">zero</span> <span class="pre">above</span></code> and <code class="docutils literal notranslate"><span class="pre">zero</span> <span class="pre">below</span></code> keys are used to
+zero all points from the file above or below the
+specified wavelength values AFTER INTERPOLATION.</p>
+<p>An <code class="docutils literal notranslate"><span class="pre">override</span> <span class="pre">bands</span></code> array can be included to specify
+fixed values over specific bands. These values will be
+applied immediately before returning the cross section
+and thus override any calculated or interpolated values.
+Valid <code class="docutils literal notranslate"><span class="pre">band</span></code> values are <code class="docutils literal notranslate"><span class="pre">lyman-alpha</span></code>,
+<code class="docutils literal notranslate"><span class="pre">schumann-runge</span></code>, and <code class="docutils literal notranslate"><span class="pre">schumann-runge</span> <span class="pre">continuum</span></code>.
+The wavelength grid must cover the Lyman-alpha and
+Schumann-Runge bands if an override is specified,
+otherwise a configuration error is returned.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">apply</span> <span class="pre">O2</span> <span class="pre">bands</span></code> flag can be added to photolysis
+rates that dissociate <code class="docutils literal notranslate"><span class="pre">O2</span></code>. If this flag is set to
+<code class="docutils literal notranslate"><span class="pre">true</span></code>, cross section values in the Lyman-alpha and
+Schumann-Runge wavelength bands will be overwritten with
+TUV-x’s custom cross section values for O2 in these bands.</p>
+<p>A number of custom cross section types have been developed
+when more complex algorithms are needed to calculate
+cross sections.
+These generally apply to a specific photolysis reaction.
+Their configuration data formats are demonstrated
+in <code class="docutils literal notranslate"><span class="pre">data/photolysis_rate_constants.json</span></code>.</p>
+</section>
+<section id="quantum-yields">
+<span id="configuration-quantum-yields"></span><h4>Quantum Yields<a class="headerlink" href="#quantum-yields" title="Link to this heading">#</a></h4>
+<p>The configuration for a standard quantum yield can be of two forms.
+The first describes a quantum yield that is a constant value at
+all wavelengths:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;constant value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The second describes a quantum yield that is read from a NetCDF
+file:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;netcdf files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;path/to/my/netcdf/file.nc&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The NetCDF file should be structured as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dimensions</span><span class="p">:</span>
+        <span class="n">bins</span> <span class="o">=</span> <span class="n">NUMBER_OF_WAVELENGTH_BINS</span> <span class="p">;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>
+<span class="n">variables</span><span class="p">:</span>
+        <span class="n">double</span> <span class="n">wavelength</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+                <span class="n">wavelength</span><span class="p">:</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;nm&quot;</span> <span class="p">;</span>
+        <span class="n">double</span> <span class="n">quantum_yield_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+                <span class="n">quantum_yield_parameters</span><span class="p">:</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;fraction&quot;</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">NUMBER_OF_WAVELENGTH_BINS</span></code> is the number of wavelength
+bins the quantum yield values are provided on.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">quantum_yield_parameters</span></code> array should hold the value
+of the quantum yield at each wavelength.
+TUV-x will perform interpolation of the quantum yield data
+to the native wavelength grid.</p>
+<p>For either type of quantum yield, an <code class="docutils literal notranslate"><span class="pre">override</span> <span class="pre">bands</span></code>
+array can be included:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;constant value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;override bands&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">      </span><span class="nt">&quot;band&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;lyman-alpha&quot;</span><span class="p">,</span>
+<span class="w">      </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">0.32</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>An <code class="docutils literal notranslate"><span class="pre">override</span> <span class="pre">bands</span></code> array instructs TUV-x to apply
+fixed values over specific bands. These values will be
+applied immediately before returning the quantum yield
+and thus override any calculated or interpolated values.
+Valid <code class="docutils literal notranslate"><span class="pre">band</span></code> values are <code class="docutils literal notranslate"><span class="pre">lyman-alpha</span></code>,
+<code class="docutils literal notranslate"><span class="pre">schumann-runge</span></code>, and <code class="docutils literal notranslate"><span class="pre">schumann-runge</span> <span class="pre">continuum</span></code>.
+The wavelength grid must cover the Lyman-alpha and
+Schumann-Runge bands if an override is specified,
+otherwise a configuration error is returned.</p>
+<p>A number of custom quantum yield types have been developed
+when more complex algorithms are needed to calculate
+quantum yields.
+These generally apply to a specific photolysis reaction.
+Their configuration data formats are demonstrated
+in <code class="docutils literal notranslate"><span class="pre">data/photolysis_rate_constants.json</span></code>.</p>
+</section>
+<section id="spectral-weights">
+<span id="configuration-spectral-weights"></span><h4>Spectral Weights<a class="headerlink" href="#spectral-weights" title="Link to this heading">#</a></h4>
+<p>Standard spectral weight types load spectral weights from a NetCDF
+file.
+Their configuration format is as follows:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;netcdf files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;path/to/my/netcdf/file.nc&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The NetCDF file should be structured as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dimensions</span><span class="p">:</span>
+        <span class="n">bins</span> <span class="o">=</span> <span class="n">NUMBER_OF_WAVELENGTH_BINS</span> <span class="p">;</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>
+<span class="n">variables</span><span class="p">:</span>
+        <span class="n">double</span> <span class="n">wavelength</span><span class="p">(</span><span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+                <span class="n">wavelength</span><span class="p">:</span><span class="n">units</span> <span class="o">=</span> <span class="s2">&quot;nm&quot;</span> <span class="p">;</span>
+        <span class="n">double</span> <span class="n">spectral_weight_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">bins</span><span class="p">)</span> <span class="p">;</span>
+                <span class="n">spectral_weight_parameters</span><span class="p">:</span><span class="n">hdr</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span> <span class="p">;</span>
+</pre></div>
+</div>
+<p>Here, <code class="docutils literal notranslate"><span class="pre">NUMBER_OF_WAVELENGTH_BINS</span></code> is the number of wavelength
+bins the spectral weight values are provided on.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">spectral_weight_parameters</span></code> array should hold the value
+of the spectral weight at each wavelength.
+TUV-x will perform interpolation of the spectral weight  data
+to the native wavelength grid.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">type</span></code> and <code class="docutils literal notranslate"><span class="pre">netcdf</span> <span class="pre">files</span></code> keys are required. There are
+also two optional key-value pairs: <code class="docutils literal notranslate"><span class="pre">lower</span> <span class="pre">extrapolation</span></code> and
+<code class="docutils literal notranslate"><span class="pre">upper</span> <span class="pre">extrapolation</span></code>.
+These both have the same structure.
+An example of the <code class="docutils literal notranslate"><span class="pre">lower</span> <span class="pre">extrapolation</span></code> follows.</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;lower extrapolation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;boundary&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">type</span></code> can be <code class="docutils literal notranslate"><span class="pre">boundary</span></code> or <code class="docutils literal notranslate"><span class="pre">constant</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">boundary</span></code> is selected, the value at the lower (or upper)
+boundary of the input data will be extended to the
+lower (or upper) extent of the TUV-x wavelength grid.
+If <code class="docutils literal notranslate"><span class="pre">constant</span></code> is selected, a key-value pair <code class="docutils literal notranslate"><span class="pre">value</span></code>
+must also be present:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="nt">&quot;lower extrapolation&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;constant&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">12.2</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>This value will be used between the lower (or upper)
+boundaries of the input data and TUV-x wavelength grids.
+If no lower or upper extrapolation is specified, the
+values between the input data and TUV-x wavelength grids
+will be 0.</p>
+<p>A number of custom spectral weight types have been developed
+when more complex algorithms are needed to calculate
+spectral weights.
+Their configuration data formats are demonstrated
+in <code class="docutils literal notranslate"><span class="pre">data/dose_rates.json</span></code>.</p>
+</section>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="getting_started.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Getting Started</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">API</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general">General</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#o2-absorption">O2 Absorption</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#grids">Grids</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#equal-interval">Equal Interval</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#from-csv-file">From CSV File</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#from-config-file">From Config File</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#profiles">Profiles</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-profiles-from-csv">From CSV file</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-profiles-from-config">From Config File</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#from-host">From Host</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solar-zenith-angle">Solar Zenith Angle</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#earth-sun-distance">Earth-Sun Distance</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#other-profiles">Other Profiles</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#air-keys">Air Keys</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#extraterrestrial-flux-keys">Extraterrestrial Flux Keys</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#o2-keys">O2 Keys</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#o3-keys">O3 Keys</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiative-transfer">Radiative Transfer</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#solvers">Solvers</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#delta-eddington">Delta Eddington</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#discrete-ordinate">Discrete Ordinate</a></li>
+</ul>
+</li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#radiators">Radiators</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#base">Base</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#aerosols">Aerosols</a></li>
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration-radiators-from-host">From Host</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#photolysis-reactions">Photolysis Reactions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rates">Dose Rates</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-objects">Additional Objects</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-sections">Cross Sections</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#quantum-yields">Quantum Yields</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#spectral-weights">Spectral Weights</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="_sources/user_guide.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, NCAR/UCAR.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
