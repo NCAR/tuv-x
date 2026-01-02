@@ -35,6 +35,11 @@ if(TUVX_ENABLE_LAPACK)
   )
 endif()
 
+# Check if the variable is set and include user defined linker flags
+if(TUVX_USER_LDFLAGS)
+    target_link_libraries(tuvx_object PRIVATE ${TUVX_USER_LDFLAGS})
+endif()
+
 # tuvx library
 add_library(tuvx $<TARGET_OBJECTS:tuvx_object>)
 add_library(musica::tuvx ALIAS tuvx)
