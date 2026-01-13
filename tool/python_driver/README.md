@@ -4,7 +4,7 @@
 
 # Python driver for TUV-x
 
-Copyright (C) 2024-2025 University Corporation for Atmospheric Research
+Copyright (C) 2024-2026 University Corporation for Atmospheric Research
 
 TUV-x is a Fortran application that calculates photolysis rates.
 ACOM has developed a [Quick TUV-x Calculator](https://www.acom.ucar.edu/Models/TUV/Interactive_TUV/tuv-x.shtml) that accepts user input and runs a calculation.
@@ -25,5 +25,5 @@ python3 tuv-x-remote.py latitude=40.0 longitude=-105.0 date=20240320 time=19:00:
 # License
 
 - [Apache 2.0](/LICENSE)
-- Copyright (C) 2024-2025 University Corporation for Atmospheric Research
+- Copyright (C) 2024-2026 University Corporation for Atmospheric Research
 

@@ -110,7 +110,7 @@ for this example, but should be included in an actual module):
 
 .. code-block:: fortran
 
-   ! Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+   ! Copyright (C) 2020-2026 University Corporation for Atmospheric Research
    ! SPDX-License-Identifier: Apache-2.0
    !
    module tuvx_cross_section_foo
@@ -364,7 +364,7 @@ in this example, but should be included in an actual module):
 
 .. code-block:: fortran
 
-   ! Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+   ! Copyright (C) 2020-2026 University Corporation for Atmospheric Research
    ! SPDX-License-Identifier: Apache-2.0
    !
    module tuvx_spectral_weight_foo
@@ -636,7 +636,7 @@ for this example, but should be included in an actual module):
 
 .. code-block:: fortran
 
-   ! Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+   ! Copyright (C) 2020-2026 University Corporation for Atmospheric Research
    ! SPDX-License-Identifier: Apache-2.0
    !
    module tuvx_quantum_yield_foo
@@ -870,7 +870,7 @@ example, but should be included in an actual module):
 
 .. code-block:: fortran
 
-   ! Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+   ! Copyright (C) 2020-2026 University Corporation for Atmospheric Research
    ! SPDX-License-Identifier: Apache-2.0
    !
    module tuvx_radiator_foo
