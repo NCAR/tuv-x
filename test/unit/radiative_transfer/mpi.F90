@@ -1,4 +1,4 @@
-! Copyright (C) 2021-2025 University Corporation for Atmospheric Research
+! Copyright (C) 2021-2026 University Corporation for Atmospheric Research
 ! SPDX-License-Identifier: Apache-2.0
 
 program test_radiative_transfer_mpi

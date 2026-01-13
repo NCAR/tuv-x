@@ -5,7 +5,7 @@
 #
 # Author: Carl Drews, Atmospheric Chemistry Observations & Modeling
 # Created: February 2023
-# Copyright (C) 2023-2025 University Corporation for Atmospheric Research
+# Copyright (C) 2023-2026 University Corporation for Atmospheric Research
 
 
 
