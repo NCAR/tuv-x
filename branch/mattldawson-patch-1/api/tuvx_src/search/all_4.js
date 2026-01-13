@@ -1,0 +1,5 @@
+var searchData=
+[
+  ['finalize_41',['finalize',['../structtuvx__cross__section__warehouse_1_1cross__section__warehouse__t.html#af3ada68b152c4bf0efc76428b7a33d51',1,'tuvx_cross_section_warehouse::cross_section_warehouse_t::finalize()'],['../structtuvx__cross__section__no2__tint_1_1cross__section__no2__tint__t.html#aa69712ff78c61e9773893b9144130d86',1,'tuvx_cross_section_no2_tint::cross_section_no2_tint_t::finalize()'],['../structtuvx__cross__section__tint_1_1cross__section__tint__t.html#acdf30d5789139962399baa9793d0dd46',1,'tuvx_cross_section_tint::cross_section_tint_t::finalize()'],['../structtuvx__grid__warehouse_1_1grid__warehouse__t.html#ac08d5395d4e1886b4386ec1755155b28',1,'tuvx_grid_warehouse::grid_warehouse_t::finalize()'],['../structtuvx__radiator__warehouse_1_1radiator__warehouse__t.html#a5d3e8a95b6b5c64f4dc67be51f63a982',1,'tuvx_radiator_warehouse::radiator_warehouse_t::finalize()']]],
+  ['fixed_5ftemperature_5f_42',['fixed_temperature_',['../structtuvx__cross__section__temperature__based_1_1temperature__range__t.html#a212df7258b6b71cd2b300022916062a6',1,'tuvx_cross_section_temperature_based::temperature_range_t']]]
+];
