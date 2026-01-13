@@ -1,9 +1,20 @@
 include(CMakePackageConfigHelpers)
 
-# install the binary and static library
+if (TUVX_BUILD_CLI)
+  # install the binary
+  install(
+    TARGETS 
+      tuv-x
+    EXPORT 
+      tuvx_Exports
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  )
+endif()
+
+# install the static library
 install(
   TARGETS 
-   tuv-x tuvx tuvx_object
+   tuvx tuvx_object
   EXPORT 
     tuvx_Exports
   LIBRARY DESTINATION ${INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
