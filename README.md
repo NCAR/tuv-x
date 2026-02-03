@@ -12,7 +12,7 @@ Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 [![codecov](https://codecov.io/gh/NCAR/tuv-x/branch/main/graph/badge.svg?token=H46AAEAQF9)](https://codecov.io/gh/NCAR/tuv-x)
 [![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
 
-Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+Copyright (C) 2020-2026 University Corporation for Atmospheric Research
 
 # Building and installing
 To build and install TUV-x locally, you must have the following libraries installed:
@@ -165,4 +165,4 @@ installation and usage instructions.
 # License
 
 - [Apache 2.0](/LICENSE)
-- Copyright (C) 2020-2025 University Corporation for Atmospheric Research
+- Copyright (C) 2020-2026 University Corporation for Atmospheric Research

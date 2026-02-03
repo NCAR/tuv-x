@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.17)
 
 # project and version must be on the same line so that the docs can extract it
-project(tuv-x VERSION 0.14.0 LANGUAGES Fortran CXX C)
+project(tuv-x VERSION 0.14.1 LANGUAGES Fortran CXX C)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
@@ -40,6 +40,7 @@ option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_REGRESSION_TESTS "Enable regression tests" ON)
 option(TUVX_BUILD_DOCS "Build the documentation" OFF)
+option(TUVX_BUILD_CLI "Build the command line interface" ON)
 set(TUVX_MOD_DIR "${PROJECT_BINARY_DIR}/include" CACHE PATH "Directory to find Fortran module files during the build")
 set(TUVX_INSTALL_MOD_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH "Directory to install Fortran module files")
 set(TUVX_INSTALL_INCLUDE_DIR "${INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}" CACHE PATH "Directory to install include files")
@@ -83,42 +84,44 @@ include(cmake/dependencies.cmake)
 
 add_subdirectory(src)
 
-# add tuv-x standalone executable
-add_executable(tuv-x src/tuvx.F90)
+if(TUVX_BUILD_CLI)
+  # add tuv-x standalone executable
+  add_executable(tuv-x src/tuvx.F90)
 
-set_target_properties(tuv-x
-  PROPERTIES
-  LINKER_LANGUAGE Fortran
-)
-
-if(NOT BUILD_SHARED_LIBS)
   set_target_properties(tuv-x
     PROPERTIES
-    POSITION_INDEPENDENT_CODE ON
+    LINKER_LANGUAGE Fortran
   )
-endif()
 
-target_link_libraries(tuv-x 
-  PUBLIC 
-    musica::tuvx
-    yaml-cpp::yaml-cpp
-)
+  if(NOT BUILD_SHARED_LIBS)
+    set_target_properties(tuv-x
+      PROPERTIES
+      POSITION_INDEPENDENT_CODE ON
+    )
+  endif()
 
-target_include_directories(tuv-x
-  PUBLIC
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
-    $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
-
-if(TUVX_ENABLE_OPENMP)
-  target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)
-endif()
-
-if(TUVX_ENABLE_LAPACK)
-  target_link_libraries(tuv-x
-  PUBLIC
-    ${LAPACK_LIBRARIES}
-    ${BLAS_LIBRARIES}
+  target_link_libraries(tuv-x 
+    PUBLIC 
+      musica::tuvx
+      yaml-cpp::yaml-cpp
   )
+
+  target_include_directories(tuv-x
+    PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}/include>
+      $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
+
+  if(TUVX_ENABLE_OPENMP)
+    target_link_libraries(tuv-x PUBLIC OpenMP::OpenMP_Fortran)
+  endif()
+
+  if(TUVX_ENABLE_LAPACK)
+    target_link_libraries(tuv-x
+    PUBLIC
+      ${LAPACK_LIBRARIES}
+      ${BLAS_LIBRARIES}
+    )
+  endif()
 endif()
 
 ################################################################################
