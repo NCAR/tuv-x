@@ -1,0 +1,69 @@
+# versions and sizes from here: https://hub.docker.com/r/intel/oneapi-hpckit/tags
+FROM --platform=linux/amd64 intel/oneapi-hpckit:latest
+
+# Based off of this: https://dgpu-docs.intel.com/driver/installation.html#repository-public-key-used-for-package-and-repository-signing
+# however those docs (at the time of this writing are incorrect) and this is the correct url
+# community.intel.com/t5/Intel-oneAPI-Math-Kernel-Library/Cannot-update-any-packages-using-intel-oneapi-hpckit-latest/m-p/1603192#M36169
+RUN wget -qO - https://repositories.intel.com/gpu/intel-graphics.key | \
+  gpg --yes --dearmor --output /usr/share/keyrings/intel-graphics-archive-keyring.gpg
+
+RUN apt update \
+    && apt -y install \
+      cmake \
+      cmake-curses-gui \
+      git \
+      libhdf5-dev \
+      liblapack-dev \
+      lcov \
+      make \
+      m4 \
+      python3 \
+      python3-pip \
+      python3-numpy \
+      python3-scipy \
+      valgrind \
+      vim \
+      libyaml-cpp-dev \
+    && apt clean 
+
+# set compilers
+ENV CC=icx
+ENV CXX=icpx
+ENV FC=ifx
+
+# Download netcdf and netcdf-fortran and build and install them with intel
+RUN git clone https://github.com/Unidata/netcdf-c.git \
+  && cd netcdf-c \
+  && mkdir build \
+  && cd build \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D NETCDF_ENABLE_TESTS=OFF \
+    -D NETCDF_ENABLE_DAP_REMOTE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && make -j 4 \
+  && make install
+
+RUN git clone https://github.com/Unidata/netcdf-fortran.git \
+  && cd netcdf-fortran \
+  && mkdir build \
+  && cd build \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D ENABLE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && make -j 4 \
+  && make install
+
+# Micm
+COPY . /tuvx/
+
+# build the library and run the tests
+RUN mkdir /build \
+      && cd /build \ 
+      && cmake \
+        -D CMAKE_BUILD_TYPE=release \
+        -DCMAKE_Fortran_FLAGS="-I/usr/include" \
+        -DTUVX_ENABLE_REGRESSION_TESTS=OFF \
+        ../tuvx \
+      && make
+
+WORKDIR /build
