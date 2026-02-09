@@ -14,6 +14,7 @@ import os
 import sys
 import datetime
 import re
+import shutil
 import subprocess
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from generate_logo import make_logo
@@ -21,7 +22,6 @@ from generate_logo import make_logo
 DOCS_SOURCE_DIR = os.path.abspath(os.path.dirname(__file__))
 REPO_ROOT_DIR = os.path.abspath(os.path.join(DOCS_SOURCE_DIR, '..', '..'))
 BUILD_DIR = os.path.join(REPO_ROOT_DIR, 'build')
-DOXYGEN_XML_DIR = os.path.join(BUILD_DIR, 'docs', 'doxygen', 'xml')
 
 
 def _run_command(command, cwd=None):
@@ -32,25 +32,38 @@ def _run_command(command, cwd=None):
         raise
 
 
-def _ensure_doxygen_xml():
+def _build_doxygen(app, exception):
+    """Build doxygen HTML after sphinx finishes, on RTD only.
+
+    Runs doxygen directly rather than through cmake's Doxygen target,
+    which depends on the sphinx target and would create a circular dependency.
+    """
+    if exception:
+        return
     read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
     if not read_the_docs_build:
         return
 
+    # Run cmake configure to generate the Doxyfile from Doxyfile.in
     cache_file = os.path.join(BUILD_DIR, 'CMakeCache.txt')
     if not os.path.exists(cache_file):
         _run_command([
             'cmake',
             '-S', REPO_ROOT_DIR,
             '-B', BUILD_DIR,
-            '-D', 'TUVX_DOCS_ONLY=ON'
+            '-D', 'TUVX_DOCS_ONLY=ON',
+            '-D', 'TUVX_ENABLE_TESTS=OFF',
         ])
 
-    _run_command([
-        'cmake',
-        '--build', BUILD_DIR,
-        '--target', 'Doxygen'
-    ])
+    # Run doxygen directly (bypasses cmake build's circular sphinx dependency)
+    doxyfile = os.path.join(BUILD_DIR, 'docs', 'Doxyfile')
+    _run_command(['doxygen', doxyfile])
+
+    # Copy doxygen HTML output into the sphinx output directory
+    doxygen_html = os.path.join(BUILD_DIR, 'docs', 'sphinx', 'api', 'tuvx_src')
+    output_dir = os.path.join(app.outdir, 'api', 'tuvx_src')
+    if os.path.exists(doxygen_html):
+        shutil.copytree(doxygen_html, output_dir, dirs_exist_ok=True)
 
 
 # -- Project information -----------------------------------------------------
@@ -126,4 +139,5 @@ html_favicon = '_static/favicon.ico'
 html_logo = '_static/logo.svg'
 
 def setup(app):
-    app.connect("builder-inited", lambda _app: _ensure_doxygen_xml())
+    app.connect("build-finished", _build_doxygen)
+

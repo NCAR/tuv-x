@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2026-02-09T11:52:47.133892</dc:date>
+    <dc:date>2026-02-09T12:12:24.018602</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -39,9 +39,9 @@ L 56.25 94.597315
 z
 " style="fill: none"/>
    </g>
-   <g clip-path="url(#p18aece10cc)">
+   <g clip-path="url(#pf878a5fae1)">
     <image xlink:href="data:image/png;base64,
-iVBORw0KGgoAAAANSUhEUgAAAeUAAABwCAYAAAAg7GgmAAADdElEQVR4nO3dUVLiQABFUcOqZv9LmYWYKVPlx1CQBJMyj9fnfKKENlh90y3C9PHn7/xx1O3AfaedDz9tfcP8+viePfZ0YJy3ef1498e5f6y1r6+N4bbzfq/e/uwxprvvfXqsjeN+HXNrTFu3bR1r7bafHGfPeL7P1bPz9Ogc7T7GgZ9v65h7HueMcXyP5eG5fHCfrdtefd4fjWnt93vtvnvOw5m33/tv3GvzwN39jsxFz8a0d+6cTpiTX52bfzJ3v2I6aRjnHAYAOEqUASCEKANACFEGgBCizPVOep0GwLsTZa530qsWAd6dKANACFGmi63wMdhdoZQo08VkPQYXX5QSZbqYrMfg4otSogwAIUSZLlZQY7AjQqnjUZZ1ADjF8aR+njIOABiedS4AhBBlAAghygAQQpQBIIQoA0AIUQaAEEVR9q4RAEOZ+t5FpijKfU8OACvmvsVYUZQB4L2JMl1smIyhb4EEC1Gmi8l6DC6+KCXKABBClAEghI9uBIAQVsoAEMLnKQNACCtlAAghygAQQpQBIIQoA0AIUQaAEKIMACFEGQBCiDIAhBBlAAghygAQQpQBIIQo02W+egD8isl5ppMo08VkPQYXX5QSZQAIIcp0sYIagx0RSokyXUzWY3DxRSlRpovJegwuviglygAQQpTpYgU1BjsilBJlAAghygAQQpQBIIQocz1/HwRYiDIAhBBlrucV0wALUQaAEKIMACFEGQBCiDIAhBBlAAghylzP/ykDLESZ6/mXKICFKANACFGmi63wMdhdoZQo08VkPQYXX5QSZbqYrMfg4otSogwAIUSZLlZQY7AjQqnjUZZ1ADjF8aR+njIOABiedS4AhBBlAAghygAQQpQBIIQoA0AIUQaAEEVR9q4RAEOZ+t5FpijKfU8OACvmvsVYUZQB4L2JMl1smIyhb4EEC1Gmi8l6DC6+KCXKABBClAEghI9uBIAQVsoAEMLnKQNACCtlAAghygAQQpQBIIQoA0AIUQaAEKIMACFEGQBCiDIAhBBlAAghygAQQpQBIIQo02W+egD8isl5ppMo08VkPQYXX5QSZQAIIcp0sYIagx0RSokyXUzWY3DxRSlRpovJegwuviglygAQQpTpYgU1BjsilBJlAAghygAQQpQBIIQocz1/HwRYiDIAhBBlrucV0wAfX/4BTIJvQZcPbEEAAAAASUVORK5CYII=" id="image9ba372446e" transform="scale(1 -1) translate(0 -80.64)" x="56.25" y="-13.957315" width="349.2" height="80.64"/>
+iVBORw0KGgoAAAANSUhEUgAAAeUAAABwCAYAAAAg7GgmAAADdElEQVR4nO3dUVLiQABFUcOqZv9LmYWYKVPlx1CQBJMyj9fnfKKENlh90y3C9PHn7/xx1O3AfaedDz9tfcP8+viePfZ0YJy3ef1498e5f6y1r6+N4bbzfq/e/uwxprvvfXqsjeN+HXNrTFu3bR1r7bafHGfPeL7P1bPz9Ogc7T7GgZ9v65h7HueMcXyP5eG5fHCfrdtefd4fjWnt93vtvnvOw5m33/tv3GvzwN39jsxFz8a0d+6cTpiTX52bfzJ3v2I6aRjnHAYAOEqUASCEKANACFEGgBCizPVOep0GwLsTZa530qsWAd6dKANACFGmi63wMdhdoZQo08VkPQYXX5QSZbqYrMfg4otSogwAIUSZLlZQY7AjQqnjUZZ1ADjF8aR+njIOABiedS4AhBBlAAghygAQQpQBIIQoA0AIUQaAEEVR9q4RAEOZ+t5FpijKfU8OACvmvsVYUZQB4L2JMl1smIyhb4EEC1Gmi8l6DC6+KCXKABBClAEghI9uBIAQVsoAEMLnKQNACCtlAAghygAQQpQBIIQoA0AIUQaAEKIMACFEGQBCiDIAhBBlAAghygAQQpQBIIQo02W+egD8isl5ppMo08VkPQYXX5QSZQAIIcp0sYIagx0RSokyXUzWY3DxRSlRpovJegwuviglygAQQpTpYgU1BjsilBJlAAghygAQQpQBIIQocz1/HwRYiDIAhBBlrucV0wALUQaAEKIMACFEGQBCiDIAhBBlAAghylzP/ykDLESZ6/mXKICFKANACFGmi63wMdhdoZQo08VkPQYXX5QSZbqYrMfg4otSogwAIUSZLlZQY7AjQqnjUZZ1ADjF8aR+njIOABiedS4AhBBlAAghygAQQpQBIIQoA0AIUQaAEEVR9q4RAEOZ+t5FpijKfU8OACvmvsVYUZQB4L2JMl1smIyhb4EEC1Gmi8l6DC6+KCXKABBClAEghI9uBIAQVsoAEMLnKQNACCtlAAghygAQQpQBIIQoA0AIUQaAEKIMACFEGQBCiDIAhBBlAAghygAQQpQBIIQo02W+egD8isl5ppMo08VkPQYXX5QSZQAIIcp0sYIagx0RSokyXUzWY3DxRSlRpovJegwuviglygAQQpTpYgU1BjsilBJlAAghygAQQpQBIIQocz1/HwRYiDIAhBBlrucV0wAfX/4BTIJvQZcPbEEAAAAASUVORK5CYII=" id="image49a6c969c8" transform="scale(1 -1) translate(0 -80.64)" x="56.25" y="-13.957315" width="349.2" height="80.64"/>
    </g>
    <g id="patch_3">
     <path d="M 56.25 14.482685 
@@ -104,14 +104,14 @@ L 338.745858 93.064746
 L 361.060738 62.901765 
 L 361.060738 62.901765 
 z
-" clip-path="url(#p2e4c2aa1a7)" style="fill: none; stroke: #ee82ee; stroke-width: 2; stroke-linejoin: miter"/>
+" clip-path="url(#p94a82586ba)" style="fill: none; stroke: #ee82ee; stroke-width: 2; stroke-linejoin: miter"/>
    </g>
    <g id="matplotlib.axis_1"/>
    <g id="matplotlib.axis_2"/>
   </g>
  </g>
  <defs>
-  <clipPath id="p18aece10cc">
+  <clipPath id="pf878a5fae1">
    <path d="M 56.25 14.482685 
 L 128.668102 14.482685 
 L 128.668102 29.808376 
@@ -169,7 +169,7 @@ L 361.060738 62.901765
 z
 "/>
   </clipPath>
-  <clipPath id="p2e4c2aa1a7">
+  <clipPath id="p94a82586ba">
    <rect x="56.25" y="14.482685" width="348.75" height="80.11463"/>
   </clipPath>
  </defs>
