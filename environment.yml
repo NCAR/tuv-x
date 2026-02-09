@@ -7,7 +7,7 @@ dependencies:
   - gfortran
   - graphviz
   - libnetcdf
-  - libnetcdf-fortran
+  - netcdf-fortran
   - liblapack
   - liblapacke
   - python=3.12
