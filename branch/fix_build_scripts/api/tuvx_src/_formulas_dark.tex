@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage{ifthen}
+\usepackage{epsfig}
+\usepackage[utf8]{inputenc}
+\usepackage{xcolor}
+\color{white}
+\pagecolor{black}
+\usepackage{newunicodechar}
+  \newunicodechar{⁻}{${}^{-}$}% Superscript minus
+  \newunicodechar{²}{${}^{2}$}% Superscript two
+  \newunicodechar{³}{${}^{3}$}% Superscript three
+
+\pagestyle{empty}
+\begin{document}
+\[
+ 10^{\sum_i{(AA_i + (T-273)*BB_i)*\lambda^{lp_i}}}
+ \]
+\pagebreak
+
+$\lambda$
+\pagebreak
+
+$T$
+\pagebreak
+
+\[
+ Q(T) = 1 + e^{\frac{A}{B*T}}
+ \sigma(T,\lambda) = \frac{aa(\lambda)}{Q(T)} + bb(\lambda)*\[1-\frac{1}{Q(T)}\]
+ \]
+\pagebreak
+
+\[
+ \sigma(T,\lambda_i) = 10^{\(aa_i + bb_i / T\)}
+ \]
+\pagebreak
+
+$\lambda_i$
+\pagebreak
+
+\[
+ \sigma(T_{base}) * \[ 1.0 + A_1 * (T - T_{base}) + A_2 * (T - T_{base})^2 \]
+ \]
+\pagebreak
+
+$\sigma$
+\pagebreak
+
+$T_{base}$
+\pagebreak
+
+$A_1$
+\pagebreak
+
+$A_2$
+\pagebreak
+
+\end{document}

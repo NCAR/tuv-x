@@ -1,0 +1,1797 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>General Contributions &#8212; TUV-x v0.6 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=c5ced968eda925caa686" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=4e29bbe6" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=c5ced968eda925caa686"></script>
+
+    <script src="../_static/documentation_options.js?v=ff44e7b3"></script>
+    <script src="../_static/doctools.js?v=888ff710"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/design-tabs.js?v=36754332"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'contributing/contributors_guide';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_version = '0.14.2';
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://ncar.github.io/tuv-x/switcher.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'v0.6';
+        DOCUMENTATION_OPTIONS.show_version_warning_banner = false;
+        </script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Build the docs" href="build_the_docs.html" />
+    <link rel="prev" title="Code of Conduct" href="code_of_conduct.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="TUV-x v0.6 documentation - Home"/>
+    <script>document.write(`<img src="../_static/logo.svg" class="logo__image only-dark" alt="TUV-x v0.6 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Contributions
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../citation.html">
+                        Citing TUV-x
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-2"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-2"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-2"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-2">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/tuv-x" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item"><nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../getting_started.html">
+                        Getting Started
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../user_guide.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../api/index.html">
+                        API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="index.html">
+                        Contributions
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../citation.html">
+                        Citing TUV-x
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+<script>
+document.write(`
+  <div class="version-switcher__container dropdown">
+    <button id="pst-version-switcher-button-3"
+      type="button"
+      class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle"
+      data-bs-toggle="dropdown"
+      aria-haspopup="listbox"
+      aria-controls="pst-version-switcher-list-3"
+      aria-label="Version switcher list"
+    >
+      Choose version  <!-- this text may get changed later by javascript -->
+      <span class="caret"></span>
+    </button>
+    <div id="pst-version-switcher-list-3"
+      class="version-switcher__menu dropdown-menu list-group-flush py-0"
+      role="listbox" aria-labelledby="pst-version-switcher-button-3">
+      <!-- dropdown will be populated by javascript on page load -->
+    </div>
+  </div>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/NCAR/tuv-x" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item"><nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">General Contributions</a></li>
+
+<li class="toctree-l1"><a class="reference internal" href="build_the_docs.html">Build the docs</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Contributions</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">General...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section id="general-contributions">
+<h1>General Contributions<a class="headerlink" href="#general-contributions" title="Link to this heading">#</a></h1>
+<p>To submit a new feature or bug-fix, first create an issue on the
+<a class="reference external" href="https://github.com/NCAR/tuv-x">TUV-x GitHub repository</a>
+that describes the new feature or bug. The software contribution can
+then be submitted as a pull request. Please reference the issue in
+the pull request description.</p>
+<p>Software contributions must apply the
+<a class="reference external" href="https://ncar.github.io/musica-core/html/coding_style.html">MUSICA FORTRAN Style Guide</a>.
+See also the <a class="reference external" href="https://ncar.github.io/musica-core/html/contributors.html">MUSICA Recommendations for Contributors</a>
+and the <a class="reference external" href="https://github.com/NCAR/musica/blob/main/docs/Software%20Development%20Plan.pdf">MUSICA software development plan</a>.</p>
+<p>Developers must ensure that new features have complete unit test
+coverage. Pull requests that decrease the test coverage of the
+TUV-x code base will not be accepted. Developers must also ensure that
+new features are fully run-time configurable.</p>
+</section>
+<section id="science-contributions">
+<h1>Science Contributions<a class="headerlink" href="#science-contributions" title="Link to this heading">#</a></h1>
+<section id="cross-sections">
+<h2>Cross Sections<a class="headerlink" href="#cross-sections" title="Link to this heading">#</a></h2>
+<p>The base functionality for cross section calculations is described in
+<code class="docutils literal notranslate"><span class="pre">src/cross_section.F90</span></code>.
+The base cross section type <cite>~tuvx_cross_section/cross_section_t</cite> defined in this
+module includes a constructor that reads a set of NetCDF files
+specified in the configuration JSON object as an array of file
+paths with the key <code class="docutils literal notranslate"><span class="pre">netcdf</span> <span class="pre">files</span></code>.</p>
+<p>Here is an exmple configuration for a base cross section:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;netcdf files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&quot;path/to/my/netcdf/file.nc&quot;</span><span class="w"> </span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>More description of the cross section configuration can
+be found <a class="reference internal" href="../user_guide.html#configuration-cross-sections"><span class="std std-ref">here</span></a>.
+The reading of NetCDF file data is available to cross section
+subclasses through the <cite>tuvx_cross_section/base_constructor</cite> function.</p>
+<p>Data from each NetCDF file in the array in the configuration data
+will be loaded into an element of the
+<code class="docutils literal notranslate"><span class="pre">cross_section_parms</span></code> data member. If a NetCDF variable named
+<code class="docutils literal notranslate"><span class="pre">cross_section_parameters</span></code> is present, it will be used to populate
+the <code class="docutils literal notranslate"><span class="pre">array(:,:)</span></code> data member of the <code class="docutils literal notranslate"><span class="pre">cross_section_parms_t</span></code> object.
+This first dimension of the array is wavelength, and will be interpolated
+to the native TUV-x wavelength grid if this differs from the wavelength
+grid in the netcdf file (named <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>). The second dimension
+is used to accomodate multiple wavelength-resolved parameters for
+cross section calculations.</p>
+<p>If a NetCDF variable named <code class="docutils literal notranslate"><span class="pre">temperature</span></code> is present, it will be
+used to populate the <code class="docutils literal notranslate"><span class="pre">temperature(:)</span></code> data member of the
+<code class="docutils literal notranslate"><span class="pre">cross_section_parms_t</span></code> object.</p>
+<p>The calculation of cross sections is done by calling the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code>
+type-bound procedure on a <cite>~tuvx_cross_section/cross_section_t</cite> object.</p>
+<p>The base-class calculation of cross sections returns the
+wavelength-interpolated first parameter (<code class="docutils literal notranslate"><span class="pre">array(:,1)</span></code>) from the first
+NetCDF file (<code class="docutils literal notranslate"><span class="pre">cross_section_parms(1)</span></code>) specified in the configuration
+data.</p>
+<p>Cross section subclasses are located in the <code class="docutils literal notranslate"><span class="pre">src/cross_sections/</span></code> folder.
+These each provide unique algorithms for calculating cross sections.</p>
+<p>Before adding a new cross section class, first check to make sure there
+is not an existing class that can be configured to accomodate your
+needs. If you find that an existing cross section subclass could be used
+by moving one or more hard-coded parameters to the configuration data, this
+is preferable to adding a new subclass.</p>
+<p>If you determine that a new cross section subclass is needed, this can be
+done in five  steps:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#cs-create-subclass"><span class="std std-ref">Create subclass module</span></a></p></li>
+<li><p><a class="reference internal" href="#cs-add-to-build-scripts"><span class="std std-ref">Add subclass module to build scripts</span></a></p></li>
+<li><p><a class="reference internal" href="#cs-add-to-factory"><span class="std std-ref">Add subclass to factory function</span></a></p></li>
+<li><p><a class="reference internal" href="#cs-mpi"><span class="std std-ref">MPI functions</span></a></p></li>
+<li><p><a class="reference internal" href="#cs-create-unit-test"><span class="std std-ref">Create unit test</span></a></p></li>
+</ul>
+<section id="create-subclass-module">
+<span id="cs-create-subclass"></span><h3>Create subclass module<a class="headerlink" href="#create-subclass-module" title="Link to this heading">#</a></h3>
+<p>First, choose a unique name for your cross section calculation.
+Ideally, this name will describe the algorithm, rather than
+the specific photolysis reaction you are applying it to.
+However, many subclasses currently in TUV-x are named for
+specific photolysis reactions.
+For this example, we will use the name <code class="docutils literal notranslate"><span class="pre">foo</span></code> for our
+cross section algorithm.</p>
+<p><strong>Pay special attention to naming of files, modules, types, and functions
+in these instructions.</strong></p>
+<p>Create a file to hold your new subclass module in <code class="docutils literal notranslate"><span class="pre">src/cross_sections/</span></code> named
+<code class="docutils literal notranslate"><span class="pre">foo.F90</span></code>. The general layout of the module will be (comments have been omitted
+for this example, but should be included in an actual module):</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Copyright (C) 2020 National Center for Atmospheric Research</span>
+<span class="c">! SPDX-License-Identifier: Apache-2.0</span>
+<span class="c">!</span>
+<span class="k">module </span><span class="n">tuvx_cross_section_foo</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">tuvx_cross_section</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">cross_section_t</span>
+
+<span class="w">  </span><span class="k">implicit none</span>
+
+<span class="k">  private</span>
+<span class="k">  public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cross_section_foo_t</span>
+
+<span class="w">  </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">cross_section_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cross_section_foo_t</span>
+<span class="w">  </span><span class="k">contains</span>
+<span class="k">    procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">calculate</span>
+<span class="w">  </span><span class="k">end type </span><span class="n">cross_section_foo_t</span>
+
+<span class="w">  </span><span class="k">interface </span><span class="n">cross_section_foo_t</span>
+<span class="w">    </span><span class="k">module procedure </span><span class="n">constructor</span>
+<span class="w">  </span><span class="k">end interface </span><span class="n">cross_section_foo_t</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">constructor</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w">           </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="k">result</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert_msg</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_config</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">config_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_string</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">string_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_cross_section</span><span class="p">,</span><span class="w">            </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">base_constructor</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">cross_section_t</span><span class="p">),</span><span class="w">    </span><span class="k">pointer</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">config_t</span><span class="p">),</span><span class="w">            </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">string_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! This block of code ensures that the configuration keys are valid for</span>
+<span class="w">    </span><span class="c">! your class. These can be modified to fit your needs. The first</span>
+<span class="w">    </span><span class="c">! argument to assert_msg() should be a unique integer code for this error.</span>
+<span class="w">    </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;type&quot;</span>
+<span class="w">    </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert_msg</span><span class="p">(</span><span class="w"> </span><span class="mi">465568611</span><span class="p">,</span><span class="w">                                               </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="n">config</span><span class="p">%</span><span class="n">validate</span><span class="p">(</span><span class="w"> </span><span class="n">required_keys</span><span class="p">,</span><span class="w"> </span><span class="n">optional_keys</span><span class="w"> </span><span class="p">),</span><span class="w">         </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;Bad configuration data format for &quot;</span><span class="o">//</span><span class="w">                   </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;foo cross section.&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">cross_section_foo_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! You can call the base_constructor function to load data from NetCDF</span>
+<span class="w">    </span><span class="c">! files into the `cross_section_parms(:)` data member according to the</span>
+<span class="w">    </span><span class="c">! standard base class logic. Alternatively, you can perform custom</span>
+<span class="w">    </span><span class="c">! initialization of the subclass object here.</span>
+<span class="w">    </span><span class="k">call </span><span class="n">base_constructor</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">constructor</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">calculate</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">at_mid_point</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="n">reuslt</span><span class="p">(</span><span class="w"> </span><span class="n">cross_section</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_constants</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">dk</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">musica_dk</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">cross_section_foo_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w">  </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+<span class="w">    </span><span class="c">! This flag indicates whether the cross-section data should be calculated</span>
+<span class="w">    </span><span class="c">! at mid-points on the vertical grid. If it is false or omitted, cross-</span>
+<span class="w">    </span><span class="c">! section data are calculated at interfaces on the vertical grid.</span>
+<span class="w">    </span><span class="kt">logical</span><span class="p">,</span><span class="w"> </span><span class="k">optional</span><span class="p">,</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">at_mid_point</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">dk</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">cross_section</span><span class="p">(:,:)</span>
+
+<span class="w">    </span><span class="c">! Do your calculation here</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">calculate</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end module </span><span class="n">tuvx_cross_section_foo</span>
+</pre></div>
+</div>
+<p>The constructor function is reponsible for initializing new instances of your cross
+section subclass.
+First, you allocate the pointer to be returned as your new type
+(<code class="docutils literal notranslate"><span class="pre">cross_section_foo_t</span></code> in this example).
+Then you initialize its data members.
+If you just want to use the default initialization of the base class,
+you can call the <code class="docutils literal notranslate"><span class="pre">base_constructor()</span></code> function as shown above.
+You can alternatively initialize data members of the base class
+(<code class="docutils literal notranslate"><span class="pre">cross_section_parms(:)</span></code>) directly in this function or add data members to your
+subclass and initialize them here (see <code class="docutils literal notranslate"><span class="pre">src/cross_sections/o3_tint.F90</span></code> for an example).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function overrides the base-class <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function and will
+be called when a user calls the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> type-bound procedure on an instance of
+your new subclass.
+You can access grid and profile data from the “warehouse” objects passed in as function
+arguments, and any data in the base-class data members or in data members you’ve added
+to your subclass to perform your calculations.
+See the files in <code class="docutils literal notranslate"><span class="pre">src/cross_sections/</span></code> for examples of how to access this data in
+the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function.</p>
+</section>
+<section id="add-subclass-module-to-build-scripts">
+<span id="cs-add-to-build-scripts"></span><h3>Add subclass module to build scripts<a class="headerlink" href="#add-subclass-module-to-build-scripts" title="Link to this heading">#</a></h3>
+<p>To include your new class in the build, edit the <code class="docutils literal notranslate"><span class="pre">src/cross_sections/CMakeLists.txt</span></code> file
+and add your file name to the list saved as <code class="docutils literal notranslate"><span class="pre">SRC</span></code>.
+Files are in alphabetical order.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c">################################################################################</span>
+<span class="c"># Cross section source</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">SRC</span><span class="w"> </span><span class="s">acetone-ch3co_ch3.F90</span>
+<span class="w">        </span><span class="s">bro-br_o.F90</span>
+<span class="w">        </span><span class="s">ccl4.F90</span>
+<span class="w">        </span><span class="s">cfc-11.F90</span>
+<span class="w">        </span><span class="s">chbr3.F90</span>
+<span class="w">        </span><span class="s">chcl3.F90</span>
+<span class="w">        </span><span class="s">ch3ono2-ch3o_no2.F90</span>
+<span class="w">        </span><span class="s">ch2o.F90</span>
+<span class="w">        </span><span class="s">cl2-cl_cl.F90</span>
+<span class="w">        </span><span class="s">clono2.F90</span>
+<span class="w">        </span><span class="s">foo.F90</span>
+<span class="w">        </span><span class="s">h2o2-oh_oh.F90</span>
+<span class="w">        </span><span class="s">hcfc.F90</span>
+<span class="w">        </span><span class="s">hno3-oh_no2.F90</span>
+<span class="w">        </span><span class="s">hobr-oh_br.F90</span>
+<span class="w">        </span><span class="s">n2o-n2_o1d.F90</span>
+<span class="w">        </span><span class="s">n2o5-no2_no3.F90</span>
+<span class="w">        </span><span class="s">nitroxy_acetone.F90</span>
+<span class="w">        </span><span class="s">nitroxy_ethanol.F90</span>
+<span class="w">        </span><span class="s">no2_tint.F90</span>
+<span class="w">        </span><span class="s">o3_tint.F90</span>
+<span class="w">        </span><span class="s">oclo.F90</span>
+<span class="w">        </span><span class="s">rono2.F90</span>
+<span class="w">        </span><span class="s">t_butyl_nitrate.F90</span>
+<span class="w">        </span><span class="s">tint.F90</span>
+<span class="w">        </span><span class="s">rayliegh.F90</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="s">TRANSFORM</span><span class="w"> </span><span class="s">SRC</span><span class="w"> </span><span class="s">PREPEND</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">CROSS_SECTION_SRC</span><span class="w"> </span><span class="o">${</span><span class="nv">SRC</span><span class="o">}</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+
+<span class="c">################################################################################</span>
+</pre></div>
+</div>
+</section>
+<section id="add-subclass-to-factory-function">
+<span id="cs-add-to-factory"></span><h3>Add subclass to factory function<a class="headerlink" href="#add-subclass-to-factory-function" title="Link to this heading">#</a></h3>
+<p>In order to use your new subclass, you will need to add it to the
+<code class="docutils literal notranslate"><span class="pre">tuvx_cross_section_factory</span></code> module in <code class="docutils literal notranslate"><span class="pre">src/cross_section_factory.F90</span></code>.
+First, use-associate your new class at the module level:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">tuvx_cross_section_foo</span><span class="p">,</span><span class="w">            </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">cross_section_foo_t</span>
+</pre></div>
+</div>
+<p>Then, inside the <code class="docutils literal notranslate"><span class="pre">cross_section_builder()</span></code> function, add these lines to the
+<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">case</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="n">new_cross_section</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">cross_section_foo_t</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w">          </span><span class="p">&amp;</span>
+<span class="w">                                            </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, when you add a cross section of type <code class="docutils literal notranslate"><span class="pre">foo</span></code> to the configuration data,
+an instance of your new subclass will be created.</p>
+</section>
+<section id="mpi-functions">
+<span id="cs-mpi"></span><h3>MPI functions<a class="headerlink" href="#mpi-functions" title="Link to this heading">#</a></h3>
+<p>If your new class includes custom data members, you will have to add
+MPI functions. See <a class="reference internal" href="#developer-mpi"><span class="std std-ref">MPI Functions</span></a> for more details.</p>
+</section>
+<section id="create-unit-test">
+<span id="cs-create-unit-test"></span><h3>Create unit test<a class="headerlink" href="#create-unit-test" title="Link to this heading">#</a></h3>
+<p>The last step to adding a cross section is to create a unit test.
+This will ensure that your calculations are doing what you intended.
+It will also serve as an example for how users can configure and use your
+new subclass.</p>
+<p>See <a class="reference internal" href="#developer-add-test"><span class="std std-ref">Test Creation</span></a> for more details.</p>
+</section>
+</section>
+<section id="dose-rates">
+<h2>Dose Rates<a class="headerlink" href="#dose-rates" title="Link to this heading">#</a></h2>
+<p>Dose rates apply a spectral weight to the radiation field at each
+interface on the vertical grid.
+The configuration for a dose rate is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;weights&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="err">...</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The value of <code class="docutils literal notranslate"><span class="pre">weights</span></code> defines the spectral weight
+used to calculate the dose rate.
+The standard spectral weight configuration is described
+<a class="reference internal" href="../user_guide.html#configuration-spectral-weights"><span class="std std-ref">here</span></a>.</p>
+<p>If a new dose rate requires an algorithm for calculating the
+spectral weight that TUV-x does not currently support, a new
+spectral weight algorithm can be introduced in four steps:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#dose-rate-create-subclass"><span class="std std-ref">Create subclass module</span></a></p></li>
+<li><p><a class="reference internal" href="#dose-rate-add-to-build-scripts"><span class="std std-ref">Add subclass module to build scripts</span></a></p></li>
+<li><p><a class="reference internal" href="#dose-rate-add-to-factory"><span class="std std-ref">Add subclass to factory</span></a></p></li>
+<li><p><a class="reference internal" href="#dose-rate-mpi"><span class="std std-ref">MPI functions</span></a></p></li>
+<li><p><a class="reference internal" href="#dose-rate-create-unit-test"><span class="std std-ref">Create unit test</span></a></p></li>
+</ul>
+<section id="dose-rate-create-subclass">
+<span id="id1"></span><h3>Create subclass module<a class="headerlink" href="#dose-rate-create-subclass" title="Link to this heading">#</a></h3>
+<p>First, choose a unique name for your spectral weight algorithm.
+Ideally, this name will describe the algorithm, rather than
+the specific dose rate you are applying it to.</p>
+<p><strong>Pay special attention to the naming of files, modules, types, and
+functions in these instructions.</strong></p>
+<p>Create a file to hold your new subclass module in <code class="docutils literal notranslate"><span class="pre">src/spectral_weights/</span></code>
+named <code class="docutils literal notranslate"><span class="pre">foo.F90</span></code>.
+The general layout of the module will be (comments have been omitted
+in this example, but should be included in an actual module):</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Copyright (C) 2020 National Center for Atmospheric Research</span>
+<span class="c">! SPDX-License-Identifier: Apache-2.0</span>
+<span class="c">!</span>
+<span class="k">module </span><span class="n">tuvx_spectral_weight_foo</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">tuvx_spectral_weight</span><span class="p">,</span><span class="w">            </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">spectral_weight_t</span>
+
+<span class="w">  </span><span class="k">implicit none</span>
+
+<span class="k">  private</span>
+<span class="k">  public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spectral_weight_foo_t</span>
+
+<span class="w">  </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">spectral_weight_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">spectral_weight_foo_t</span>
+<span class="w">  </span><span class="k">contains</span>
+<span class="k">    procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">calculate</span>
+<span class="w">  </span><span class="k">end type </span><span class="n">spectral_weight_t</span>
+
+<span class="w">  </span><span class="k">interface </span><span class="n">spectral_weight_t</span>
+<span class="w">    </span><span class="k">module procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">constructor</span>
+<span class="w">  </span><span class="k">end interface </span><span class="n">spectral_weight_t</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">constructor</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w">           </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="k">result</span><span class="w"> </span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert_msg</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_config</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">config_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_string</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">string_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_spectral_weight</span><span class="p">,</span><span class="w">          </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">base_constructor</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">spectral_weight_t</span><span class="p">),</span><span class="w">  </span><span class="k">pointer</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">config_t</span><span class="p">),</span><span class="w">            </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">string_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! This block of code ensures that the configuration keys are valid for</span>
+<span class="w">    </span><span class="c">! your class. These can be modified to fit your needs. The first</span>
+<span class="w">    </span><span class="c">! argument to assert_msg() should be a unique integer code for this error.</span>
+<span class="w">    </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;type&quot;</span>
+<span class="w">    </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert_msg</span><span class="p">(</span><span class="w"> </span><span class="mi">407417332</span><span class="p">,</span><span class="w">                                               </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="n">config</span><span class="p">%</span><span class="n">validate</span><span class="p">(</span><span class="w"> </span><span class="n">required_keys</span><span class="p">,</span><span class="w"> </span><span class="n">optional_keys</span><span class="w"> </span><span class="p">),</span><span class="w">         </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;Bad configuration data format for &quot;</span><span class="o">//</span><span class="w">                   </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;foo spectral weight.&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">spectral_weight_foo_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! You can call the base_constructor function to load data from NetCDF</span>
+<span class="w">    </span><span class="c">! files into the `spectral_weight_parms(:)` data member according to the</span>
+<span class="w">    </span><span class="c">! standard base class logic. Alternatively, you can perform custom</span>
+<span class="w">    </span><span class="c">! initialization of the subclass object here.</span>
+<span class="w">    </span><span class="k">call </span><span class="n">base_constructor</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">constructor</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">subroutine </span><span class="n">calculate</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w">             </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="k">result</span><span class="p">(</span><span class="w"> </span><span class="n">spectral_weight</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_constants</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">dk</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">musica_dk</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">spectral_weight_foo_t</span><span class="p">),</span><span class="w">  </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">        </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">dk</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                   </span><span class="kd">::</span><span class="w"> </span><span class="n">spectral_weight</span><span class="p">(:)</span>
+
+<span class="w">    </span><span class="c">! do your calculations here</span>
+
+<span class="w">  </span><span class="k">end subroutine </span><span class="n">calculate</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end module </span><span class="n">tuvx_spectral_weight_foo</span>
+</pre></div>
+</div>
+<p>The constructor function is reponsible for initializing new instances of your
+spectral weight subclass.
+First, you allocate the pointer to be returned as your new type
+(<code class="docutils literal notranslate"><span class="pre">spectral_weight_foo_t</span></code> in this example).
+Then you initialize its data members.
+If you just want to use the default initialization of the base class, you can
+call the <code class="docutils literal notranslate"><span class="pre">base_constructor()</span></code> function as shown above.
+You can alternatively initialize data members of the base class (<code class="docutils literal notranslate"><span class="pre">spectral_weight_parms(:)</span></code>)
+directly in this function or add data members to your subclass and initialize them
+here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function overrides the base-class <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function and will be
+called when a user calls the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> type-bound procedure on an instance
+of your new subclass.
+You can access grid and profile data from the “warehouse” objects passed in as
+function arguments, and any data in the base-class data members or in data members
+you’ve added to your subclass to perform your calculations.
+See the files in <code class="docutils literal notranslate"><span class="pre">src/spectral_weights/</span></code> for examples of how to access this data
+in the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function.</p>
+</section>
+<section id="dose-rate-add-to-build-scripts">
+<span id="id2"></span><h3>Add subclass module to build scripts<a class="headerlink" href="#dose-rate-add-to-build-scripts" title="Link to this heading">#</a></h3>
+<p>To include your new class in the build, edit the
+<code class="docutils literal notranslate"><span class="pre">src/spectral_weights/CMakeLists.txt</span></code> file and add your file name to the list
+saved to <code class="docutils literal notranslate"><span class="pre">SRC</span></code>. Files are listed in alphabetical order.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c">################################################################################</span>
+<span class="c"># Spectral weight source</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">SRC</span><span class="w"> </span><span class="s">notch_filter.F90</span>
+<span class="w">        </span><span class="s">gaussian_filter.F90</span>
+<span class="w">        </span><span class="s">eppley.F90</span>
+<span class="w">        </span><span class="s">par.F90</span>
+<span class="w">        </span><span class="s">exp_decay.F90</span>
+<span class="w">        </span><span class="s">foo.F90</span>
+<span class="w">        </span><span class="s">scup_mice.F90</span>
+<span class="w">        </span><span class="s">standard_human_erythema.F90</span>
+<span class="w">        </span><span class="s">UV_Index.F90</span>
+<span class="w">        </span><span class="s">phytoplankton_boucher.F90</span>
+<span class="w">        </span><span class="s">plant_damage.F90</span>
+<span class="w">        </span><span class="s">plant_damage_flint_caldwell.F90</span>
+<span class="w">        </span><span class="s">plant_damage_flint_caldwell_ext.F90</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="s">TRANSFORM</span><span class="w"> </span><span class="s">SRC</span><span class="w"> </span><span class="s">PREPEND</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">SPECTRAL_WGHT_SRC</span><span class="w"> </span><span class="o">${</span><span class="nv">SRC</span><span class="o">}</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+
+<span class="c">################################################################################</span>
+</pre></div>
+</div>
+</section>
+<section id="add-subclass-to-factory">
+<span id="dose-rate-add-to-factory"></span><h3>Add subclass to factory<a class="headerlink" href="#add-subclass-to-factory" title="Link to this heading">#</a></h3>
+<p>In order to use your new subclass, you will need to add it to the
+<code class="docutils literal notranslate"><span class="pre">tuvx_spectral_weight_factory</span></code> module in <code class="docutils literal notranslate"><span class="pre">src/spectral_weight_factory.F90</span></code>.
+First use-associate your new class at the module level:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">tuvx_spectral_weight_foo</span><span class="p">,</span><span class="w">          </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">spectral_weight_foo_t</span>
+</pre></div>
+</div>
+<p>Then, inside the <code class="docutils literal notranslate"><span class="pre">spectral_weight_builder()</span></code> function, add these lines to the
+<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">case</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="n">new_spectral_weight</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">spectral_weight_foo_t</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w">       </span><span class="p">&amp;</span>
+<span class="w">                                                </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, when you add a spectral weight of type <code class="docutils literal notranslate"><span class="pre">foo</span></code> to the configuration data,
+an instance of your new subclass will be created.</p>
+</section>
+<section id="dose-rate-mpi">
+<span id="id3"></span><h3>MPI functions<a class="headerlink" href="#dose-rate-mpi" title="Link to this heading">#</a></h3>
+<p>If your new class includes custom data members, you will have to add
+MPI functions. See <a class="reference internal" href="#developer-mpi"><span class="std std-ref">MPI Functions</span></a> for more details.</p>
+</section>
+<section id="dose-rate-create-unit-test">
+<span id="id4"></span><h3>Create unit test<a class="headerlink" href="#dose-rate-create-unit-test" title="Link to this heading">#</a></h3>
+<p>The last step to adding a spectral weight is to create a unit test.
+This will ensure that your calculations are doing what you intended.
+It will also serve as an example for how users can configure and use
+your new subclass.</p>
+<p>See <a class="reference internal" href="#developer-add-test"><span class="std std-ref">Test Creation</span></a> for more details.</p>
+</section>
+</section>
+<section id="quantum-yields">
+<h2>Quantum Yields<a class="headerlink" href="#quantum-yields" title="Link to this heading">#</a></h2>
+<p>The base functionality for quantum yield calculations is described in
+<code class="docutils literal notranslate"><span class="pre">src/quantum_yield.F90</span></code>. The base quantum yield type <code class="docutils literal notranslate"><span class="pre">quantum_yield_t</span></code>
+defined in this module includes a constructor that reads a set of
+NetCDF files specified in the configuration JSON object as an
+array of file paths with the key <code class="docutils literal notranslate"><span class="pre">netcdf</span> <span class="pre">files</span></code> if present, or
+can set the value of the quantum yield to a constant when the
+<code class="docutils literal notranslate"><span class="pre">constant</span> <span class="pre">value</span></code> key is present and set to a real number.</p>
+<p>Here is an example configuration for a quantum yield:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;constant value&quot;</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Data from each NetCDF file will be loaded into an element of the
+<code class="docutils literal notranslate"><span class="pre">quantum_yield_parms</span></code> data member. If a NetCDF variable named
+<code class="docutils literal notranslate"><span class="pre">quantum_yield_parameters</span></code> is present, it will be used to populate
+the <code class="docutils literal notranslate"><span class="pre">array(:,:)</span></code> data member of the <code class="docutils literal notranslate"><span class="pre">quantum_yield_parms_t</span></code> object.
+This first dimension of the array is wavelength, and will be interpolated
+to the native TUV-x wavelength grid if this differs from the wavelength
+grid in the netcdf file (named <code class="docutils literal notranslate"><span class="pre">wavelength</span></code>). The second dimension
+is used to accomodate multiple wavelength-resolved parameters for
+quantum yield calculations.</p>
+<p>If a NetCDF variable named <code class="docutils literal notranslate"><span class="pre">temperature</span></code> is present, it will be
+used to populate the <code class="docutils literal notranslate"><span class="pre">temperature(:)</span></code> data member of the
+<code class="docutils literal notranslate"><span class="pre">quantum_yield_parms_t</span></code> object.</p>
+<p>The calculation of quantum yields is done by calling the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code>
+type-bound procedure on a <code class="docutils literal notranslate"><span class="pre">quantum_yield_t</span></code> object.</p>
+<p>The base-class calculation of quantum yields returns the
+wavelength-interpolated first parameter (<code class="docutils literal notranslate"><span class="pre">array(:,1)</span></code>) from the first
+NetCDF file (<code class="docutils literal notranslate"><span class="pre">quantum_yield_parms(1)</span></code>) specified in the configuration
+data.</p>
+<p>Quantum yield subclasses are located in the <code class="docutils literal notranslate"><span class="pre">src/quantum_yields/</span></code> folder.
+These each provide unique algorithms for calculating quantum yields.</p>
+<p>Before adding a new quantum yield class, first check to make sure there
+is not an existing class that can be configured to accomodate your
+needs. If you find that an existing quantum yield subclass could be used
+by moving one or more hard-coded parameters to the configuration data, this
+is preferable to adding a new subclass.</p>
+<p>If you determine that a new quantum yield subclass is needed, this can be
+done in four steps:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#qy-create-subclass"><span class="std std-ref">Create subclass module</span></a></p></li>
+<li><p><a class="reference internal" href="#qy-add-to-build-scripts"><span class="std std-ref">Add subclass module to build scripts</span></a></p></li>
+<li><p><a class="reference internal" href="#qy-add-to-factory"><span class="std std-ref">Add subclass to factory function</span></a></p></li>
+<li><p><a class="reference internal" href="#qy-mpi"><span class="std std-ref">MPI functions</span></a></p></li>
+<li><p><a class="reference internal" href="#qy-create-unit-test"><span class="std std-ref">Create unit test</span></a></p></li>
+</ul>
+<section id="qy-create-subclass">
+<span id="id5"></span><h3>Create subclass module<a class="headerlink" href="#qy-create-subclass" title="Link to this heading">#</a></h3>
+<p>First, choose a unique name for your quantum yield calculation. Ideally,
+this name will describe the algorithm, rather than the specific photolysis
+reaction you are applying it to. However, many subclasses currently in TUV-x
+are named for specific photolysis reactions. For this example, we will use
+the name <code class="docutils literal notranslate"><span class="pre">foo</span></code> for our quantum yield algorithm.</p>
+<p><strong>Pay special attention to naming of files, modules, types, and functions
+in these instructions.</strong></p>
+<p>Create a file to hold your new subclass module in <code class="docutils literal notranslate"><span class="pre">src/quantum_yields/</span></code> named
+<code class="docutils literal notranslate"><span class="pre">foo.F90</span></code>. The general layout of the module will be (comments have been omitted
+for this example, but should be included in an actual module):</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Copyright (C) 2020 National Center for Atmospheric Research</span>
+<span class="c">! SPDX-License-Identifier: Apache-2.0</span>
+<span class="c">!</span>
+<span class="k">module </span><span class="n">tuvx_quantum_yield_foo</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">tuvx_quantum_yield</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">quantum_yield_t</span>
+
+<span class="w">  </span><span class="k">implicit none</span>
+<span class="k">  private</span>
+
+<span class="k">  public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">quantum_yield_foo_t</span>
+
+<span class="w">  </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">quantum_yield_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">quantum_yield_foo_t</span>
+<span class="w">  </span><span class="k">contains</span>
+<span class="k">    procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">calculate</span>
+<span class="w">  </span><span class="k">end type </span><span class="n">quantum_yield_foo_t</span>
+
+<span class="w">  </span><span class="k">interface </span><span class="n">quantum_yield_foo_t</span>
+<span class="w">    </span><span class="k">module procedure </span><span class="n">constructor</span>
+<span class="w">  </span><span class="k">end interface</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">constructor</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w">           </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="k">result</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert_msg</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_config</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">config_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_string</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">string_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_quantum_yield</span><span class="p">,</span><span class="w">            </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">base_constructor</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">quantum_yield_t</span><span class="p">),</span><span class="w">    </span><span class="k">pointer</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">config_t</span><span class="p">),</span><span class="w">            </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">string_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! This block of code ensures that the configuration keys are valid for</span>
+<span class="w">    </span><span class="c">! your class. These can be modified to fit your needs. The first</span>
+<span class="w">    </span><span class="c">! argument to assert_msg() should be a unique integer code for this error.</span>
+<span class="w">    </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;type&quot;</span>
+<span class="w">    </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert_msg</span><span class="p">(</span><span class="w"> </span><span class="mi">409635586</span><span class="p">,</span><span class="w">                                               </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="n">config</span><span class="p">%</span><span class="n">validate</span><span class="p">(</span><span class="w"> </span><span class="n">required_keys</span><span class="p">,</span><span class="w"> </span><span class="n">optional_keys</span><span class="w"> </span><span class="p">),</span><span class="w">         </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;Bad configuration data format for &quot;</span><span class="o">//</span><span class="w">                   </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;foo quantum yield.&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">quantum_yield_foo_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! You can call the base_constructor function to load data from NetCDF</span>
+<span class="w">    </span><span class="c">! files into the `quantum_yield_parms(:)` data member according to the</span>
+<span class="w">    </span><span class="c">! standard base class logic. Alternatively, you can perform custom</span>
+<span class="w">    </span><span class="c">! initialization of the subclass object here.</span>
+<span class="w">    </span><span class="k">call </span><span class="n">base_constructor</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">constructor</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">calculate</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w">               </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="k">result</span><span class="p">(</span><span class="w"> </span><span class="n">quantum_yield</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_constants</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">dk</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">musica_dk</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">quantum_yield_foo_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">     </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w">  </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+<span class="w">    </span><span class="kt">real</span><span class="p">(</span><span class="nb">kind</span><span class="o">=</span><span class="n">dk</span><span class="p">),</span><span class="w"> </span><span class="k">allocatable</span><span class="w">                </span><span class="kd">::</span><span class="w"> </span><span class="n">quantum_yield</span><span class="p">(:,:)</span>
+
+<span class="w">    </span><span class="c">! Do your calculations here</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">calculate</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end module </span><span class="n">tuvx_quantum_yield_foo</span>
+</pre></div>
+</div>
+<p>The constructor function is reponsible for initializing new instances of your
+quantum yield subclass. First, you allocate the pointer to be returned as
+your new type (<code class="docutils literal notranslate"><span class="pre">quantum_yield_foo_t</span></code> in this example). Then you initialize
+its data members. If you just want to use the default initialization of the
+base class, you can call the <code class="docutils literal notranslate"><span class="pre">base_constructor()</span></code> function as shown above.
+You can alternatively initialize data members of the base class
+(<code class="docutils literal notranslate"><span class="pre">quantum_yield_parms(:)</span></code>) directly in this function or add data members
+to your subclass and initialize them here (see
+<code class="docutils literal notranslate"><span class="pre">src/quantum_yields/tint.F90</span></code> for an example).</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function overrides the base-class <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function
+and will be called when a user calls the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> type-bound procedure
+on an instance of your new subclass.
+You can access grid and profile data from the “warehouse” objects
+passed in as function arguments, and any data in the base-class data members
+or in data members you’ve added to your subclass to perform your calculations.
+See the files in <code class="docutils literal notranslate"><span class="pre">src/quantum_yields/</span></code> for examples of how to access this
+data in the <code class="docutils literal notranslate"><span class="pre">calculate()</span></code> function.</p>
+</section>
+<section id="qy-add-to-build-scripts">
+<span id="id6"></span><h3>Add subclass module to build scripts<a class="headerlink" href="#qy-add-to-build-scripts" title="Link to this heading">#</a></h3>
+<p>To include your new class in the build, edit the <code class="docutils literal notranslate"><span class="pre">src/quantum_yields/CMakeLists.txt</span></code>
+file and add your file name to the list saved to <code class="docutils literal notranslate"><span class="pre">SRC</span></code>. Files are listed in
+alphabetical order.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="nb">set</span><span class="p">(</span><span class="s">SRC</span><span class="w"> </span><span class="s">acetone-ch3co_ch3.F90</span>
+<span class="w">     </span><span class="s">c2h5cho.F90</span>
+<span class="w">     </span><span class="s">ch2chcho.F90</span>
+<span class="w">     </span><span class="s">ch2o.F90</span>
+<span class="w">     </span><span class="s">ch3cho-ch3_hco.F90</span>
+<span class="w">     </span><span class="s">ch3coch2ch3-ch3co_ch2ch3.F90</span>
+<span class="w">     </span><span class="s">ch3cocho.F90</span>
+<span class="w">     </span><span class="s">clo-cl_o1d.F90</span>
+<span class="w">     </span><span class="s">clo-cl_o3p.F90</span>
+<span class="w">     </span><span class="s">clono2-clo_no2.F90</span>
+<span class="w">     </span><span class="s">clono2-cl_no3.F90</span>
+<span class="hll"><span class="w">     </span><span class="s">foo.F90</span>
+</span><span class="w">     </span><span class="s">ho2-oh_o.F90</span>
+<span class="w">     </span><span class="s">mvk.F90</span>
+<span class="w">     </span><span class="s">no2_tint.F90</span>
+<span class="w">     </span><span class="s">no3_aq.F90</span>
+<span class="w">     </span><span class="s">o3-o2_o1d.F90</span>
+<span class="w">     </span><span class="s">o3-o2_o3p.F90</span>
+<span class="w">     </span><span class="s">tint.F90</span>
+<span class="w">     </span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="qy-add-to-factory">
+<span id="id7"></span><h3>Add subclass to factory function<a class="headerlink" href="#qy-add-to-factory" title="Link to this heading">#</a></h3>
+<p>In order to use your new subclass, you will need to add it to the
+<code class="docutils literal notranslate"><span class="pre">tuvx_quantum_yield_factory</span></code> module in <code class="docutils literal notranslate"><span class="pre">src/quantum_yield_factory.F90</span></code>.
+First use-associate your new class at the module level:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">tuvx_quantum_yield_foo</span><span class="p">,</span><span class="w">            </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">quantum_yield_foo_t</span>
+</pre></div>
+</div>
+<p>Then, inside the <code class="docutils literal notranslate"><span class="pre">quantum_yield_builder()</span></code> function, add these lines to the
+<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">case</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="n">quantum_yield</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">quantum_yield_foo_t</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w">              </span><span class="p">&amp;</span>
+<span class="w">                                        </span><span class="n">profile_warehouse</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, when you add a quantum yield of type <code class="docutils literal notranslate"><span class="pre">foo</span></code> to the configuration data,
+an instance of your new subclass will be created.</p>
+</section>
+<section id="qy-mpi">
+<span id="id8"></span><h3>MPI functions<a class="headerlink" href="#qy-mpi" title="Link to this heading">#</a></h3>
+<p>If your new class includes custom data members, you will have to add
+MPI functions. See <a class="reference internal" href="#developer-mpi"><span class="std std-ref">MPI Functions</span></a> for more details.</p>
+</section>
+<section id="qy-create-unit-test">
+<span id="id9"></span><h3>Create unit test<a class="headerlink" href="#qy-create-unit-test" title="Link to this heading">#</a></h3>
+<p>The last step to adding a quantum yield is to create a unit test. This will ensure
+that your calculations are doing what you intended. It will also serve as an example
+for how users can configure and use your new subclass.</p>
+<p>See <a class="reference internal" href="#developer-add-test"><span class="std std-ref">Test Creation</span></a> for more details.</p>
+</section>
+</section>
+<section id="radiators">
+<h2>Radiators<a class="headerlink" href="#radiators" title="Link to this heading">#</a></h2>
+<p>Radiators are atmospheric constituents that affect the calculation of the
+radiative field.
+The configuration for a standard radiator is:</p>
+<div class="highlight-JSON notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">  </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;base&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;cross section&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;vertical profile&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">&quot;vertical profile units&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;molecule cm-3&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>A description of the components of the radiator configuration are
+provided <a class="reference internal" href="../user_guide.html#configuration-radiators"><span class="std std-ref">here</span></a>.</p>
+<p>Most radiators can use the standard radiator configuration.
+If a new algorithm for calculating the optical properties of
+radiators is required, a new radiator subclass can be introduced
+in four steps:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#radiator-create-subclass"><span class="std std-ref">Create subclass module</span></a></p></li>
+<li><p><a class="reference internal" href="#radiator-add-to-build-scripts"><span class="std std-ref">Add subclass module to build scripts</span></a></p></li>
+<li><p><a class="reference internal" href="#radiator-add-to-factory"><span class="std std-ref">Add subclass to factory</span></a></p></li>
+<li><p><a class="reference internal" href="#radiator-mpi"><span class="std std-ref">MPI functions</span></a></p></li>
+<li><p><a class="reference internal" href="#radiator-create-unit-test"><span class="std std-ref">Create unit test</span></a></p></li>
+</ul>
+<section id="radiator-create-subclass">
+<span id="id10"></span><h3>Create subclass module<a class="headerlink" href="#radiator-create-subclass" title="Link to this heading">#</a></h3>
+<p>First, choose a unique name for your radiator algorithm.
+Ideally, this name will describe the algorithm, rather than the specific
+atmospheric constituent you are applying it to.
+For this example, we will use the name <code class="docutils literal notranslate"><span class="pre">foo</span></code> for our radiator algorithm.</p>
+<p><strong>Pay special attention to naming of files, modules, types, and functions
+in these instructions.</strong></p>
+<p>Create a file to hold your new subclass module in <code class="docutils literal notranslate"><span class="pre">src/radiators/</span></code> named
+<code class="docutils literal notranslate"><span class="pre">foo.F90</span></code>.
+The general layout of the module will be (comments have been omitted for this
+example, but should be included in an actual module):</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="c">! Copyright (C) 2020 National Center for Atmospheric Research</span>
+<span class="c">! SPDX-License-Identifier: Apache-2.0</span>
+<span class="c">!</span>
+<span class="k">module </span><span class="n">tuvx_radiator_foo</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">tuvx_radiator</span><span class="p">,</span><span class="w">                   </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">radiator_t</span>
+
+<span class="w">  </span><span class="k">implicit none</span>
+
+<span class="k">  private</span>
+<span class="k">  public</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">radiator_foo_t</span>
+
+<span class="w">  </span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">radiator_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">radiator_foo_t</span>
+<span class="w">  </span><span class="k">contains</span>
+<span class="k">    procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">update_state</span>
+<span class="w">  </span><span class="k">end type </span><span class="n">radiator_foo_t</span>
+
+<span class="w">  </span><span class="k">interface </span><span class="n">radiator_foo_t</span>
+<span class="w">    </span><span class="k">module procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">constructor</span>
+<span class="w">  </span><span class="k">end interface </span><span class="n">radiator_foo_t</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">function </span><span class="n">constructor</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">result</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert_msg</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_config</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">config_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_string</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">string_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_radiator</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">base_constructor</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">radiator_t</span><span class="p">),</span><span class="w">      </span><span class="k">pointer</span><span class="w">       </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">config_t</span><span class="p">),</span><span class="w">         </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">config</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">string_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! This block of code ensures that the configuration keys are valid for</span>
+<span class="w">    </span><span class="c">! your class. These can be modified to fit your needs. The first</span>
+<span class="w">    </span><span class="c">! argument to assert_msg() should be a unique integer code for this error.</span>
+<span class="w">    </span><span class="n">required_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;type&quot;</span>
+<span class="w">    </span><span class="n">optional_keys</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;name&quot;</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert_msg</span><span class="p">(</span><span class="w"> </span><span class="mi">302604745</span><span class="p">,</span><span class="w">                                               </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="n">config</span><span class="p">%</span><span class="n">validate</span><span class="p">(</span><span class="w"> </span><span class="n">required_keys</span><span class="p">,</span><span class="w"> </span><span class="n">optional_keys</span><span class="w"> </span><span class="p">),</span><span class="w">         </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;Bad configuration data format for &quot;</span><span class="o">//</span><span class="w">                   </span><span class="p">&amp;</span>
+<span class="w">                     </span><span class="s2">&quot;foo radiator.&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">radiator_foo_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! You can call the base_constructor function to load data data members</span>
+<span class="w">    </span><span class="c">! with configuration data available from the standard radiator class.</span>
+<span class="w">    </span><span class="c">! Alternatively, you can perform custom initialization of the subclass</span>
+<span class="w">    </span><span class="c">! object here.</span>
+<span class="w">    </span><span class="k">call </span><span class="n">base_constructor</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end function </span><span class="n">constructor</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">subroutine </span><span class="n">update_state</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="p">,</span><span class="w"> </span><span class="n">profile_warehouse</span><span class="p">,</span><span class="w">           </span><span class="p">&amp;</span>
+<span class="w">      </span><span class="n">cross_section_warehouse</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_cross_section_warehouse</span><span class="p">,</span><span class="w">  </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">cross_section_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_warehouse</span><span class="p">,</span><span class="w">           </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_warehouse_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_profile_warehouse</span><span class="p">,</span><span class="w">        </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">profile_warehouse_t</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">radiator_foo_t</span><span class="p">),</span><span class="w">           </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">grid_warehouse_t</span><span class="p">),</span><span class="w">          </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">grid_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">profile_warehouse_t</span><span class="p">),</span><span class="w">       </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">profile_warehouse</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">cross_section_warehouse_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">cross_section_warehouse</span>
+
+<span class="w">    </span><span class="c">! Calculate optical properties (layer optical depth, layer single</span>
+<span class="w">    </span><span class="c">! scattering albedo, and layer asymmetry factor) and load them into</span>
+<span class="w">    </span><span class="c">! this%state_</span>
+
+<span class="w">  </span><span class="k">end subroutine </span><span class="n">update_state</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end module </span><span class="n">tuvx_radiator_foo</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">constructor()</span></code> function is responsible for initializing new instances of
+your radiator subclass.
+First, you allocate the pointer to be returned as your new type
+(<code class="docutils literal notranslate"><span class="pre">radiator_foo_t</span></code> in this example).
+Then, you initialize its data members.
+If you want to use the default initialization of the base class, you can
+call the <code class="docutils literal notranslate"><span class="pre">base_constructor()</span></code> function as shown above.
+You can alternatively initialize data members of the base class directly in
+this function or add data members to your subclass and initialize them here.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">update_state()</span></code> function overrides the base-class <code class="docutils literal notranslate"><span class="pre">update_state()</span></code>
+function and will be called when a user calls the <code class="docutils literal notranslate"><span class="pre">update_state()</span></code> type-bound
+procedure on an instance of your new subclass.
+You can access grid, profile, and cross section data from the “warehouse”
+objects passed in as function arguments, and any data in the base-class data
+members or in data members you’ve added to your subclass to perform your
+calculations.
+See the files in <code class="docutils literal notranslate"><span class="pre">src/radiators/</span></code> for examples of how to access this data
+in the <code class="docutils literal notranslate"><span class="pre">update_state()</span></code> function.</p>
+</section>
+<section id="radiator-add-to-build-scripts">
+<span id="id11"></span><h3>Add subclass module to build scripts<a class="headerlink" href="#radiator-add-to-build-scripts" title="Link to this heading">#</a></h3>
+<p>To include your new class in the build, edit the
+<code class="docutils literal notranslate"><span class="pre">src/radiators/CMakeLists.txt</span></code> file and add your file name to the
+list save to <code class="docutils literal notranslate"><span class="pre">SRC</span></code>. Files are listed in alphabetical order.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c">################################################################################</span>
+<span class="c"># Radiator transfer source</span>
+
+<span class="nb">set</span><span class="p">(</span><span class="s">SRC</span><span class="w"> </span><span class="s">aerosol.F90</span>
+<span class="w">        </span><span class="s">foo.F90</span>
+<span class="w">        </span><span class="p">)</span>
+
+<span class="nb">list</span><span class="p">(</span><span class="s">TRANSFORM</span><span class="w"> </span><span class="s">SRC</span><span class="w"> </span><span class="s">PREPEND</span><span class="w"> </span><span class="s2">&quot;${CMAKE_CURRENT_SOURCE_DIR}/&quot;</span><span class="p">)</span>
+<span class="nb">set</span><span class="p">(</span><span class="s">RADIATOR_SRC</span><span class="w"> </span><span class="o">${</span><span class="nv">SRC</span><span class="o">}</span><span class="w"> </span><span class="s">PARENT_SCOPE</span><span class="p">)</span>
+
+<span class="c">################################################################################</span>
+</pre></div>
+</div>
+</section>
+<section id="radiator-add-to-factory">
+<span id="id12"></span><h3>Add subclass to factory<a class="headerlink" href="#radiator-add-to-factory" title="Link to this heading">#</a></h3>
+<p>In order to use your new subclass, you will need to add it to the
+<code class="docutils literal notranslate"><span class="pre">tuvx_radiator_factory</span></code> module in <code class="docutils literal notranslate"><span class="pre">src/radiator_factory.F90</span></code>.
+First, use-associate your new class at the module level:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">use </span><span class="n">tuvx_radiator_foo</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">radiator_foo_t</span>
+</pre></div>
+</div>
+<p>Then, inside the <code class="docutils literal notranslate"><span class="pre">radiator_builder()</span></code> function, add these lines to the
+<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">case</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="n">new_radiator</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">radiator_foo_t</span><span class="p">(</span><span class="w"> </span><span class="n">config</span><span class="p">,</span><span class="w"> </span><span class="n">grid_warehouse</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, when you add a radiator of type <code class="docutils literal notranslate"><span class="pre">foo</span></code> to the configuration data, an instance
+of your new subclass will be created.</p>
+<p>You must also add lines to the functions for getting a type by name and allocating
+a variable by type name.
+Inside the <code class="docutils literal notranslate"><span class="pre">radiator_type_name()</span></code> function, add these lines to the
+<code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">type</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type is</span><span class="p">(</span><span class="w"> </span><span class="n">radiator_foo_t</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="n">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;radiator_foo_t&quot;</span>
+</pre></div>
+</div>
+<p>Then, inside the <code class="docutils literal notranslate"><span class="pre">radiator_allocate()</span></code> function, add these lines
+to the <code class="docutils literal notranslate"><span class="pre">select</span> <span class="pre">case</span></code> block:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">case</span><span class="p">(</span><span class="w"> </span><span class="s1">&#39;radiator_foo_t&#39;</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">radiator_foo_t</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">radiator</span><span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These two functions allow your type to be passed among MPI processes
+in an HPC environment.</p>
+</section>
+<section id="radiator-mpi">
+<span id="id13"></span><h3>MPI functions<a class="headerlink" href="#radiator-mpi" title="Link to this heading">#</a></h3>
+<p>If your new class includes custom data members, you will have to add
+MPI functions. See <a class="reference internal" href="#developer-mpi"><span class="std std-ref">MPI Functions</span></a> for more details.</p>
+</section>
+<section id="radiator-create-unit-test">
+<span id="id14"></span><h3>Create unit test<a class="headerlink" href="#radiator-create-unit-test" title="Link to this heading">#</a></h3>
+<p>The last step to adding a radiator is to create a unit test.
+This will ensure that your calculations are doing what you intended.
+It will also serve as an example for how users can configure and use your new subclass.</p>
+<p>See <a class="reference internal" href="#developer-add-test"><span class="std std-ref">Test Creation</span></a> for more details.</p>
+</section>
+</section>
+<section id="developer-mpi">
+<span id="id15"></span><h2>MPI Functions<a class="headerlink" href="#developer-mpi" title="Link to this heading">#</a></h2>
+<p>If you are extending one of the classes described in this section, and your
+new class contains its own data members (beyond what are defined in the
+base class), you will have to include three MPI functions in your new
+module. These will allow instances of your class to be passed via MPI.</p>
+<p><strong>Note:</strong> You do not need to add or modify code to call these functions.
+As they override base-class functions, the calling functions will
+use them without modification.</p>
+<p>First, the <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi_pack(</span> <span class="pre">)</span></code>, and <code class="docutils literal notranslate"><span class="pre">mpi_unpack(</span> <span class="pre">)</span></code>
+functions must be included in your type definition:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">type</span><span class="p">,</span><span class="w"> </span><span class="k">extends</span><span class="p">(</span><span class="n">base_class_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">foo_t</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">foos_</span><span class="w"> </span><span class="c">! a data member specific to your class</span>
+<span class="k">contains</span>
+<span class="w">  </span><span class="p">...</span>
+<span class="w">  </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pack_size</span>
+<span class="w">  </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mpi_pack</span>
+<span class="w">  </span><span class="k">procedure</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">mpi_unpack</span>
+<span class="k">end type </span><span class="n">foo_t</span>
+</pre></div>
+</div>
+<p>The first of these functions returns the size of an MPI buffer that
+would be required to hold the data members of your type. Because you
+will be overriding the base class <code class="docutils literal notranslate"><span class="pre">pack_size()</span></code> function, you
+must include the size required to hold both your specific data
+members and the base class data members (whether you need them or
+not).</p>
+<p>This first function for the <code class="docutils literal notranslate"><span class="pre">foo_t</span></code> example is as follows:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="kt">integer </span><span class="k">function </span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">musica_mpi</span><span class="p">,</span><span class="w">                    </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">musica_mpi_pack_size</span>
+
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">foo_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="c">! object to be packed</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">,</span><span class="w">      </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="c">! MPI communicator</span>
+
+<span class="cp">#ifdef MUSICA_USE_MPI</span>
+<span class="w">  </span><span class="n">pack_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">base_class_t</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w">                         </span><span class="p">&amp;</span>
+<span class="w">              </span><span class="n">musica_mpi_pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">this</span><span class="p">%</span><span class="n">foos_</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="cp">#else</span>
+<span class="w">  </span><span class="n">pack_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">cross_section_t</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="cp">#endif</span>
+
+<span class="k">end function </span><span class="n">pack_size</span>
+</pre></div>
+</div>
+<p>The C preprocessor
+flags (<code class="docutils literal notranslate"><span class="pre">#ifdef</span></code>, <code class="docutils literal notranslate"><span class="pre">#else</span></code>, and <code class="docutils literal notranslate"><span class="pre">#endif</span></code>) are used here to
+determine whether MPI support has been compiled in or not.
+The first argument in the assignment of
+<code class="docutils literal notranslate"><span class="pre">pack_size</span></code> is the size required to pack the data members of
+the base class (this must always be included).
+The <code class="docutils literal notranslate"><span class="pre">musica_mpi_pack_size()</span></code> function can be used to get the
+pack size of many primitive Fortran data
+types and allocatable arrays (see the
+<a class="reference external" href="https://ncar.github.io/musica-core/html/namespacemusica__mpi.html">musica core</a>
+library documentation for more details).</p>
+<p>The second MPI function that must be added packs an instance of your
+new class onto a character buffer so that it can be passed to
+other MPI processes:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">mpi_pack</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert</span>
+<span class="w">  </span><span class="k">use </span><span class="n">musica_mpi</span><span class="p">,</span><span class="w">                    </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">musica_mpi_pack</span>
+
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">foo_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w">      </span><span class="c">! object to be packed</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">,</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">buffer</span><span class="p">(:)</span><span class="w"> </span><span class="c">! memory buffer</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">,</span><span class="w">      </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">position</span><span class="w">  </span><span class="c">! current buffer position</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">,</span><span class="w">      </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span><span class="w">      </span><span class="c">! MPI communicator</span>
+
+<span class="cp">#ifdef MUSICA_USE_MPI</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prev_pos</span>
+
+<span class="w">  </span><span class="n">prev_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">position</span>
+<span class="w">  </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">base_class_t</span><span class="p">%</span><span class="n">mpi_pack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">musica_mpi_pack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">foos_</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">582324821</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_pos</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="cp">#endif</span>
+
+<span class="k">end subroutine </span><span class="n">mpi_pack</span>
+</pre></div>
+</div>
+<p>The call to <code class="docutils literal notranslate"><span class="pre">this%base_class_t%mpi_pack(</span> <span class="pre">)</span></code> packs the data members
+of the base class onto the character buffer, and is required.
+Similar to the <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code> function, this subroutine makes use of
+the generic <code class="docutils literal notranslate"><span class="pre">musica_mpi_pack(</span> <span class="pre">)</span></code> function for packing primitive Fortran
+data types onto a character buffer (see the
+<a class="reference external" href="https://ncar.github.io/musica-core/html/namespacemusica__mpi.html">musica core</a>
+library documentation for more details).
+The <code class="docutils literal notranslate"><span class="pre">assert(</span> <span class="pre">)</span></code> call helps with debugging MPI errors and ensures
+that the data you packed fits in the pack size from the <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code>
+function.</p>
+<p>The final MPI function that must be added unpacks an instance of
+your new class from a character buffer:</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">subroutine </span><span class="n">mpi_unpack</span><span class="p">(</span><span class="w"> </span><span class="n">this</span><span class="p">,</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert</span>
+<span class="w">  </span><span class="k">use </span><span class="n">musica_mpi</span><span class="p">,</span><span class="w">                    </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">musica_mpi_unpack</span>
+
+<span class="w">  </span><span class="k">class</span><span class="p">(</span><span class="n">foo_t</span><span class="p">),</span><span class="w"> </span><span class="k">intent</span><span class="p">(</span><span class="n">out</span><span class="p">)</span><span class="w">   </span><span class="kd">::</span><span class="w"> </span><span class="n">this</span><span class="w">      </span><span class="c">! object to be unpacked</span>
+<span class="w">  </span><span class="kt">character</span><span class="p">,</span><span class="w">    </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">buffer</span><span class="p">(:)</span><span class="w"> </span><span class="c">! memory buffer</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">,</span><span class="w">      </span><span class="k">intent</span><span class="p">(</span><span class="n">inout</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">position</span><span class="w">  </span><span class="c">! current buffer position</span>
+<span class="w">  </span><span class="kt">integer</span><span class="p">,</span><span class="w">      </span><span class="k">intent</span><span class="p">(</span><span class="n">in</span><span class="p">)</span><span class="w">    </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span><span class="w">      </span><span class="c">! MPI communicator</span>
+
+<span class="cp">#ifdef MUSICA_USE_MPI</span>
+<span class="w">  </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">prev_pos</span>
+
+<span class="w">  </span><span class="n">prev_pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">position</span>
+<span class="w">  </span><span class="k">call </span><span class="n">this</span><span class="p">%</span><span class="n">base_class_t</span><span class="p">%</span><span class="n">mpi_unpack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">musica_mpi_unpack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="p">,</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">foos_</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">560718944</span><span class="p">,</span><span class="w"> </span><span class="n">position</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">prev_pos</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">this</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="cp">#endif</span>
+
+<span class="k">end subroutine </span><span class="n">mpi_unpack</span>
+</pre></div>
+</div>
+<p>The call to <code class="docutils literal notranslate"><span class="pre">this%base_class_t%mpi_unpack(</span> <span class="pre">)</span></code> unpacks the data
+members of the base class from the character buffer, and is
+required.
+Similar to the <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code> function, this subroutine makes use of
+the generic <code class="docutils literal notranslate"><span class="pre">musica_mpi_unpack(</span> <span class="pre">)</span></code> function for unpacking primitive
+Fortran data types from a character buffer (see the
+<a class="reference external" href="https://ncar.github.io/musica-core/html/namespacemusica__mpi.html">musica core</a>
+library documentation for more details).
+The <code class="docutils literal notranslate"><span class="pre">assert(</span> <span class="pre">)</span></code> call helps with debugging MPI errors and ensures
+that the data you packed fits in the pack size from the <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code>
+function.</p>
+</section>
+<section id="test-creation">
+<span id="developer-add-test"></span><h2>Test Creation<a class="headerlink" href="#test-creation" title="Link to this heading">#</a></h2>
+<section id="standard-test-program">
+<h3>Standard Test Program<a class="headerlink" href="#standard-test-program" title="Link to this heading">#</a></h3>
+<p>Unit tests are required for all new code contributions.
+Source code for new unit tests should be added to the <code class="docutils literal notranslate"><span class="pre">test/unit/</span></code> folder
+or one of its sub-folders depending on the module being tested.
+Unit tests are typically Fortran programs that are linked to the <code class="docutils literal notranslate"><span class="pre">tuv-x</span></code>
+library and test the components of a single Fortran module in the <code class="docutils literal notranslate"><span class="pre">src/</span></code>
+tree.</p>
+<p>An example of a  unit test for the fictitous <code class="docutils literal notranslate"><span class="pre">foo</span></code> module is shown below.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">test_foo</span>
+
+<span class="w">  </span><span class="k">implicit none</span>
+
+<span class="k">  call </span><span class="n">test_foo_t</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">subroutine </span><span class="n">test_foo_t</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="c">! Tests the foo_t type</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">              </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_foo</span><span class="p">,</span><span class="w">                   </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">foo_t</span>
+
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">foo_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_foo</span>
+
+<span class="w">    </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">501352581</span><span class="p">,</span><span class="w"> </span><span class="n">my_foo</span><span class="p">%</span><span class="n">do_bar</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="mf">2.5</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">503258115</span><span class="p">,</span><span class="w"> </span><span class="n">my_foo</span><span class="p">%</span><span class="n">do_baz</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="s2">&quot;qux&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end subroutine </span><span class="n">test_foo_t</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end program </span><span class="n">test_foo</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://ncar.github.io/musica-core/html/namespacemusica__assert.html">musica_assert</a>
+module contains a number of functions that can be useful in
+unit tests.</p>
+</section>
+<section id="test-program-with-mpi">
+<h3>Test Program with MPI<a class="headerlink" href="#test-program-with-mpi" title="Link to this heading">#</a></h3>
+<p>If your new class requires the MPI functions <code class="docutils literal notranslate"><span class="pre">pack_size(</span> <span class="pre">)</span></code>, <code class="docutils literal notranslate"><span class="pre">mpi_pack(</span> <span class="pre">)</span></code>,
+and <code class="docutils literal notranslate"><span class="pre">mpi_unpack(</span> <span class="pre">)</span></code>, these should be tested as well.
+The approach used in most TUV-x unit tests is to create the object to be
+tested on the primary process, pass it to all other MPI processes, and test
+the object on all MPI processes. An example for the fictitous <code class="docutils literal notranslate"><span class="pre">grid_foo_t</span></code> module
+follows.</p>
+<div class="highlight-fortran notranslate"><div class="highlight"><pre><span></span><span class="k">program </span><span class="n">test_grid_foo</span>
+
+<span class="w">  </span><span class="k">use </span><span class="n">musica_mpi</span><span class="p">,</span><span class="w">                      </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">musica_mpi_init</span><span class="p">,</span><span class="w">                </span><span class="p">&amp;</span>
+<span class="w">                                              </span><span class="n">musica_mpi_finalize</span>
+<span class="w">  </span><span class="k">implicit none</span>
+
+<span class="k">  call </span><span class="n">musica_mpi_init</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">test_grid_foo_t</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+<span class="w">  </span><span class="k">call </span><span class="n">musica_mpi_finalize</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+
+<span class="k">contains</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="w">  </span><span class="k">subroutine </span><span class="n">test_grid_foo_t</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="c">! Test the grid_foo_t type that extends the grid_t type</span>
+
+<span class="w">    </span><span class="k">use </span><span class="n">musica_assert</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">assert</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_mpi</span>
+<span class="w">    </span><span class="k">use </span><span class="n">musica_string</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">string_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_foo</span><span class="p">,</span><span class="w">                 </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_foo_t</span>
+<span class="w">    </span><span class="k">use </span><span class="n">tuvx_grid_factory</span><span class="p">,</span><span class="w">             </span><span class="k">only</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">grid_type_name</span><span class="p">,</span><span class="w"> </span><span class="n">grid_allocate</span>
+
+<span class="w">    </span><span class="k">class</span><span class="p">(</span><span class="n">grid_t</span><span class="p">),</span><span class="w"> </span><span class="k">pointer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">my_grid</span>
+<span class="w">    </span><span class="kt">character</span><span class="p">,</span><span class="w"> </span><span class="k">allocatable</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">buffer</span><span class="p">(:)</span>
+<span class="w">    </span><span class="kt">integer</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">pack_size</span>
+<span class="w">    </span><span class="k">type</span><span class="p">(</span><span class="n">string_t</span><span class="p">)</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">type_name</span>
+<span class="w">    </span><span class="kt">integer</span><span class="p">,</span><span class="w"> </span><span class="k">parameter</span><span class="w"> </span><span class="kd">::</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MPI_COMM_WORLD</span>
+
+<span class="w">    </span><span class="c">! Create the grid on the primary process</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">musica_mpi_rank</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">my_grid</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">grid_foo_t</span><span class="p">(</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="n">type_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">grid_type_name</span><span class="p">(</span><span class="w"> </span><span class="n">my_grid</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="n">pack_size</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">type_name</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">my_grid</span><span class="p">%</span><span class="n">pack_size</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">(</span><span class="w"> </span><span class="n">pack_size</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">      </span><span class="k">call </span><span class="n">type_name</span><span class="p">%</span><span class="n">mpi_pack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">call </span><span class="n">my_grid</span><span class="p">%</span><span class="n">mpi_pack</span><span class="p">(</span><span class="w">   </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">582976374</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">pack_size</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">end if</span>
+
+<span class="w">    </span><span class="c">! Broadcast the buffer to all other MPI processes</span>
+<span class="w">    </span><span class="k">call </span><span class="n">musica_mpi_bcast</span><span class="p">(</span><span class="w"> </span><span class="n">pack_size</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">musica_mpi_rank</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">allocate</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">(</span><span class="w"> </span><span class="n">pack_size</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">call </span><span class="n">musica_mpi_bcast</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! Unpack the buffer on all other MPI processes</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="w"> </span><span class="n">musica_mpi_rank</span><span class="p">(</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">ne</span><span class="p">.</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">then</span>
+<span class="k">      </span><span class="n">pos</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">      </span><span class="k">call </span><span class="n">type_name</span><span class="p">%</span><span class="nb">unpack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="n">my_grid</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">grid_allocate</span><span class="p">(</span><span class="w"> </span><span class="n">type_name</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">call </span><span class="n">my_grid</span><span class="p">%</span><span class="n">mpi_unpack</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="p">,</span><span class="w"> </span><span class="n">comm</span><span class="w"> </span><span class="p">)</span>
+<span class="w">      </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">127437743</span><span class="p">,</span><span class="w"> </span><span class="n">pos</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">pack_size</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">end if</span>
+<span class="k">    deallocate</span><span class="p">(</span><span class="w"> </span><span class="n">buffer</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="c">! test the object on all processes</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">501352581</span><span class="p">,</span><span class="w"> </span><span class="n">my_grid</span><span class="p">%</span><span class="n">do_bar</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="mi">1</span><span class="mf">2.5</span><span class="w"> </span><span class="p">)</span>
+<span class="w">    </span><span class="k">call </span><span class="n">assert</span><span class="p">(</span><span class="w"> </span><span class="mi">503258115</span><span class="p">,</span><span class="w"> </span><span class="n">my_grid</span><span class="p">%</span><span class="n">do_baz</span><span class="p">(</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="p">.</span><span class="n">eq</span><span class="p">.</span><span class="w"> </span><span class="s2">&quot;qux&quot;</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">    </span><span class="k">deallocate</span><span class="p">(</span><span class="w"> </span><span class="n">my_grid</span><span class="w"> </span><span class="p">)</span>
+
+<span class="w">  </span><span class="k">end subroutine </span><span class="n">test_grid_foo_t</span>
+
+<span class="c">!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!</span>
+
+<span class="k">end program </span><span class="n">test_grid_foo</span>
+</pre></div>
+</div>
+<p>Similar patters apply to profiles, cross sections, quantum yields, and
+radiators.
+Note that this test should pass whether MPI support is compiled in or not.
+When MPI support is not compiled in, the pack functions do nothing and all
+tests are performed on the primary (only) process.</p>
+<p>When MPI support for TUV-x is built in, as described in <a class="reference internal" href="../getting_started.html#install-mpi"><span class="std std-ref">MPI Support</span></a>,
+when the tests are run, they will be run with 2 or more MPI processes and
+your message passing functions will be tested when, from the build folder,
+you run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span><span class="nb">test</span>
+</pre></div>
+</div>
+</section>
+<section id="update-to-build-script">
+<h3>Update to Build Script<a class="headerlink" href="#update-to-build-script" title="Link to this heading">#</a></h3>
+<p>For both the standard test program or the test program with MPI support,
+you will need to modify the <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file in the
+folder where you saved your test source code (for this example we assume the above
+file is named <code class="docutils literal notranslate"><span class="pre">test_foo.F90</span></code>) to include your new source in the build, and
+your test in the test suite.
+An updated <code class="docutils literal notranslate"><span class="pre">CMakeLists.txt</span></code> file for the <code class="docutils literal notranslate"><span class="pre">foo</span></code> test is shown below.</p>
+<div class="highlight-cmake notranslate"><div class="highlight"><pre><span></span><span class="c">################################################################################</span>
+<span class="c"># Test utilities</span>
+
+<span class="nb">include</span><span class="p">(</span><span class="s">test_util</span><span class="p">)</span>
+
+<span class="c">################################################################################</span>
+<span class="c"># Photo-decomp tests</span>
+
+<span class="nb">create_standard_test</span><span class="p">(</span><span class="s">NAME</span><span class="w"> </span><span class="s">some_existing_test</span><span class="w"> </span><span class="s">SOURCES</span><span class="w"> </span><span class="s">test_bar.F90</span><span class="p">)</span>
+<span class="nb">create_standard_test</span><span class="p">(</span><span class="s">NAME</span><span class="w"> </span><span class="s">foo</span><span class="w"> </span><span class="s">SOURCES</span><span class="w"> </span><span class="s">test_foo.F90</span><span class="p">)</span>
+
+<span class="c">################################################################################</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">create_standard_test()</span></code> CMake function adds your new executable to the build,
+links it to the <code class="docutils literal notranslate"><span class="pre">tuv-x</span></code> library, and includes the test as well as a
+memory check of your test to the testing suite.
+The function is defined in <code class="docutils literal notranslate"><span class="pre">cmake-modules/test_util.cmake</span></code>, but can generally used
+as shown above.</p>
+<p>If your test needs access to data files, you can place these in the <code class="docutils literal notranslate"><span class="pre">test/data/</span></code>
+folder.
+By default, your test executable will be run in the build folder and can access
+data files you place in this folder using a relative path: <code class="docutils literal notranslate"><span class="pre">test/data/my_foo_data.txt</span></code>.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  <!-- Previous / next buttons -->
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="code_of_conduct.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Code of Conduct</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="build_the_docs.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Build the docs</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">General Contributions</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#science-contributions">Science Contributions</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cross-sections">Cross Sections</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-subclass-module">Create subclass module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-subclass-module-to-build-scripts">Add subclass module to build scripts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-subclass-to-factory-function">Add subclass to factory function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mpi-functions">MPI functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-unit-test">Create unit test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rates">Dose Rates</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rate-create-subclass">Create subclass module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rate-add-to-build-scripts">Add subclass module to build scripts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#add-subclass-to-factory">Add subclass to factory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rate-mpi">MPI functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#dose-rate-create-unit-test">Create unit test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quantum-yields">Quantum Yields</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qy-create-subclass">Create subclass module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qy-add-to-build-scripts">Add subclass module to build scripts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qy-add-to-factory">Add subclass to factory function</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qy-mpi">MPI functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#qy-create-unit-test">Create unit test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#radiators">Radiators</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiator-create-subclass">Create subclass module</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiator-add-to-build-scripts">Add subclass module to build scripts</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiator-add-to-factory">Add subclass to factory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiator-mpi">MPI functions</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#radiator-create-unit-test">Create unit test</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#developer-mpi">MPI Functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-creation">Test Creation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standard-test-program">Standard Test Program</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#test-program-with-mpi">Test Program with MPI</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#update-to-build-script">Update to Build Script</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+  <div class="tocsection sourcelink">
+    <a href="../_sources/contributing/contributors_guide.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=c5ced968eda925caa686"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=c5ced968eda925caa686"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+  <p class="copyright">
+    
+      © Copyright 2022-2023, NCAR/UCAR.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item"><p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
