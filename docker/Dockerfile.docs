@@ -8,12 +8,9 @@ RUN dnf -y update \
         gcc-c++ \
         gcc-fortran \
         git \
-        lapack-devel \
         make \
-        netcdf-fortran-devel \
         python3 \
         python3-pip \
-        yaml-cpp-devel \
     && dnf clean all
 
 # build the tuv-x tool
@@ -29,9 +26,7 @@ RUN echo "The suffix is '$SWITCHER_SUFFIX'"
 RUN mkdir /build \
       && cd /build \
       && cmake \
-        -D TUVX_ENABLE_TESTS=OFF \
-        -D TUVX_ENABLE_BENCHMARK=OFF \
-        -D TUVX_BUILD_DOCS=ON \
+        -D TUVX_DOCS_ONLY=ON \
         /tuv-x \
       && make docs
 

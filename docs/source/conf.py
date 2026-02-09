@@ -10,13 +10,13 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-from generate_logo import make_logo
 import os
 import sys
 import datetime
 import re
 import subprocess
-sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
+from generate_logo import make_logo
 
 DOCS_SOURCE_DIR = os.path.abspath(os.path.dirname(__file__))
 REPO_ROOT_DIR = os.path.abspath(os.path.join(DOCS_SOURCE_DIR, '..', '..'))
