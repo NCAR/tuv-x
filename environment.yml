@@ -1,4 +1,4 @@
-name: micm-docs
+name: tuvx-docs
 channels:
   - conda-forge
 dependencies:
