@@ -64,6 +64,7 @@ if(NOT TUVX_DOCS_ONLY)
 
   set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
+  FetchContent_MakeAvailable(yaml-cpp)
 
   # Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
   if(NOT TARGET yaml-cpp::yaml-cpp)
@@ -72,8 +73,6 @@ if(NOT TUVX_DOCS_ONLY)
       add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
     endif()
   endif()
-
-  FetchContent_MakeAvailable(yaml-cpp)
 endif()
 
 # ##############################################################################
