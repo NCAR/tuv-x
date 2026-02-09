@@ -43,34 +43,36 @@ if(TUVX_ENABLE_OPENMP)
   endif()
 endif()
 
-# ##############################################################################
-# NetCDF library
+if(NOT TUVX_DOCS_ONLY)
+  # ##############################################################################
+  # NetCDF library
 
-find_package(PkgConfig REQUIRED)
+  find_package(PkgConfig REQUIRED)
 
-pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
-pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
+  pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
+  pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
 
-# ##############################################################################
-# yaml-cpp
+  # ##############################################################################
+  # yaml-cpp
 
-FetchContent_Declare(
-  yaml-cpp
-  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
-  GIT_TAG 65c1c270dbe7eec37b2df2531d7497c4eea79aee
-  GIT_PROGRESS NOT
-  FIND_PACKAGE_ARGS NAMES yaml-cpp
-  ${FETCHCONTENT_QUIET})
+  FetchContent_Declare(
+    yaml-cpp
+    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
+    GIT_TAG 65c1c270dbe7eec37b2df2531d7497c4eea79aee
+    GIT_PROGRESS NOT
+    FIND_PACKAGE_ARGS NAMES yaml-cpp
+    ${FETCHCONTENT_QUIET})
 
-set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
+  set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
-FetchContent_MakeAvailable(yaml-cpp)
+  FetchContent_MakeAvailable(yaml-cpp)
 
-# Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
-if(NOT TARGET yaml-cpp::yaml-cpp)
-  if(TARGET yaml-cpp)
-    # Create alias for system-installed yaml-cpp that provides 'yaml-cpp' target
-    add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+  # Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
+  if(NOT TARGET yaml-cpp::yaml-cpp)
+    if(TARGET yaml-cpp)
+      # Create alias for system-installed yaml-cpp that provides 'yaml-cpp' target
+      add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
+    endif()
   endif()
 endif()
 

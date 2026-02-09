@@ -67,7 +67,7 @@ def _ensure_doxygen_xml():
             'cmake',
             '-S', REPO_ROOT_DIR,
             '-B', BUILD_DIR,
-            '-D', 'TUVX_BUILD_DOCS=ON'
+            '-D', 'TUVX_DOCS_ONLY=ON'
         ], env=cmake_env)
 
     _run_command([
