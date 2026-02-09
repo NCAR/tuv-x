@@ -7,15 +7,12 @@ RUN dnf -y update \
         gcc \
         gcc-c++ \
         gcc-fortran \
-        gdb \
         git \
         lapack-devel \
-        lcov \
         make \
         netcdf-fortran-devel \
         python3 \
         python3-pip \
-        valgrind \
         yaml-cpp-devel \
     && dnf clean all
 

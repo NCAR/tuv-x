@@ -10,21 +10,53 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
+from generate_logo import make_logo
 import os
 import sys
 import datetime
 import re
+import subprocess
 sys.path.insert(0, os.path.abspath('.'))
 
-from generate_logo import make_logo
+DOCS_SOURCE_DIR = os.path.abspath(os.path.dirname(__file__))
+REPO_ROOT_DIR = os.path.abspath(os.path.join(DOCS_SOURCE_DIR, '..', '..'))
+BUILD_DIR = os.path.join(REPO_ROOT_DIR, 'build')
+DOXYGEN_XML_DIR = os.path.join(BUILD_DIR, 'docs', 'doxygen', 'xml')
+
+
+def _run_command(command, cwd=None):
+    try:
+        subprocess.run(command, cwd=cwd, check=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        sys.stderr.write(f"Command failed: {command}\n{exc}\n")
+        raise
+
+
+def _ensure_doxygen_xml():
+    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+    if not read_the_docs_build:
+        return
+
+    cache_file = os.path.join(BUILD_DIR, 'CMakeCache.txt')
+    if not os.path.exists(cache_file):
+        _run_command([
+            'cmake',
+            '-S', REPO_ROOT_DIR,
+            '-B', BUILD_DIR,
+            '-D', 'TUVX_BUILD_DOCS=ON'
+        ])
+
+    _run_command([
+        'cmake',
+        '--build', BUILD_DIR,
+        '--target', 'Doxygen'
+    ])
+
 
 # -- Project information -----------------------------------------------------
-
 project = 'TUV-x'
-copyright = f"2022-{datetime.datetime.now().year}, NCAR/UCAR"
-author = 'NCAR/UCAR'
-
-suffix = os.getenv("SWITCHER_SUFFIX", "")
+copyright = f"2022-{datetime.datetime.now().year}, NSF-NCAR/ACOM"
+author = 'NSF-NCAR/ACOM'
 
 # the suffix is required. This is controlled by the dockerfile that builds the docs
 regex = r'project\(.*VERSION\s+(\d+\.\d+\.\d+)'
@@ -35,7 +67,7 @@ with open(f'../../CMakeLists.txt', 'r') as f:
         match = re.match(regex, line)
         if match:
             version = match.group(1)
-release = f'v{version}{suffix}'
+release = f'v{version}'
 
 
 # -- General configuration ---------------------------------------------------
@@ -73,11 +105,7 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     "external_links": [],
     "github_url": "https://github.com/NCAR/tuv-x",
-    "navbar_end": ["version-switcher", "navbar-icon-links"],
-    "switcher": {
-        "json_url": "https://ncar.github.io/tuv-x/switcher.json",
-        "version_match": release,
-    },
+    "navbar_end": ["navbar-icon-links"],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -96,3 +124,6 @@ html_css_files = [
 html_favicon = '_static/favicon.ico'
 
 html_logo = '_static/logo.svg'
+
+def setup(app):
+    app.connect("builder-inited", lambda _app: _ensure_doxygen_xml())
