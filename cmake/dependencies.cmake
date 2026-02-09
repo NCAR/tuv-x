@@ -4,7 +4,7 @@ include(FetchContent)
 # ##############################################################################
 # LAPACK
 
-if(TUVX_ENABLE_LAPACK)
+if(TUVX_ENABLE_LAPACK AND NOT TUVX_DOCS_ONLY)
   find_package(LAPACK)
   find_package(LAPACKE)
   find_package(BLAS)
@@ -13,7 +13,7 @@ endif()
 # ##############################################################################
 # Memory check
 
-if(TUVX_ENABLE_MEMCHECK)
+if(TUVX_ENABLE_MEMCHECK AND NOT TUVX_DOCS_ONLY)
   find_file(
     MEMCHECK_SUPPRESS_FILE
     DOC "Suppression file for memory checking"
@@ -33,7 +33,7 @@ endif()
 # ##############################################################################
 # OpenMP
 
-if(TUVX_ENABLE_OPENMP)
+if(TUVX_ENABLE_OPENMP AND NOT TUVX_DOCS_ONLY)
   find_package(OpenMP)
   if(OpenMP_Fortran_FOUND)
     message(STATUS "Compiling with OpenMP support")
@@ -43,18 +43,17 @@ if(TUVX_ENABLE_OPENMP)
   endif()
 endif()
 
+# ##############################################################################
+# NetCDF library
+
 if(NOT TUVX_DOCS_ONLY)
-  # ##############################################################################
-  # NetCDF library
-
-  find_package(PkgConfig REQUIRED)
-
   pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
   pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
+endif()
 
-  # ##############################################################################
-  # yaml-cpp
-
+# ##############################################################################
+# yaml-cpp
+if(NOT TUVX_DOCS_ONLY)
   FetchContent_Declare(
     yaml-cpp
     GIT_REPOSITORY https://github.com/jbeder/yaml-cpp/
@@ -66,14 +65,6 @@ if(NOT TUVX_DOCS_ONLY)
   set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 
   FetchContent_MakeAvailable(yaml-cpp)
-
-  # Ensure yaml-cpp::yaml-cpp target exists (handle both system and FetchContent scenarios)
-  if(NOT TARGET yaml-cpp::yaml-cpp)
-    if(TARGET yaml-cpp)
-      # Create alias for system-installed yaml-cpp that provides 'yaml-cpp' target
-      add_library(yaml-cpp::yaml-cpp ALIAS yaml-cpp)
-    endif()
-  endif()
 endif()
 
 # ##############################################################################
@@ -87,7 +78,7 @@ endif()
 # ##############################################################################
 # google test and benchmark
 
-if(TUVX_ENABLE_BENCHMARK)
+if(TUVX_ENABLE_BENCHMARK AND NOT TUVX_DOCS_ONLY)
   FetchContent_Declare(
     googlebenchmark
     GIT_REPOSITORY https://github.com/google/benchmark.git
@@ -109,7 +100,7 @@ if(TUVX_ENABLE_BENCHMARK)
   endif()
 endif()
 
-if(TUVX_ENABLE_TESTS)
+if(TUVX_ENABLE_TESTS AND NOT TUVX_DOCS_ONLY)
   FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
