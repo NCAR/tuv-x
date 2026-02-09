@@ -1019,25 +1019,31 @@ contains
     character(len=1, kind=c_char), allocatable, target :: all_chars(:)
     integer :: i, j, total_len, offset, str_len
 
-    total_len = 0
-    do i = 1, size( value )
-      total_len = total_len + len_trim( value( i )%val_ ) + 1
-    end do
-    allocate( all_chars( total_len ) )
-    allocate( c_strings( size( value ) ) )
-    offset = 1
-    do i = 1, size( value )
-      str_len = len_trim( value( i )%val_ )
-      do j = 1, str_len
-        all_chars( offset + j - 1 ) = value( i )%val_( j:j )
+    ! Special case for empty arrays to avoid non-conforming c_loc on zero-size arrays
+    if( size( value ) == 0 ) then
+      c_array%size_ = 0
+      c_array%ptr_ = c_null_ptr
+    else
+      total_len = 0
+      do i = 1, size( value )
+        total_len = total_len + len_trim( value( i )%val_ ) + 1
       end do
-      all_chars( offset + str_len ) = c_null_char
-      c_strings( i )%ptr_ = c_loc( all_chars( offset ) )
-      c_strings( i )%size_ = str_len
-      offset = offset + str_len + 1
-    end do
-    c_array%ptr_ = c_loc( c_strings )
-    c_array%size_ = size( c_strings )
+      allocate( all_chars( total_len ) )
+      allocate( c_strings( size( value ) ) )
+      offset = 1
+      do i = 1, size( value )
+        str_len = len_trim( value( i )%val_ )
+        do j = 1, str_len
+          all_chars( offset + j - 1 ) = value( i )%val_( j:j )
+        end do
+        all_chars( offset + str_len ) = c_null_char
+        c_strings( i )%ptr_ = c_loc( all_chars( offset ) )
+        c_strings( i )%size_ = str_len
+        offset = offset + str_len + 1
+      end do
+      c_array%ptr_ = c_loc( c_strings )
+      c_array%size_ = size( c_strings )
+    end if
     if( .not. c_associated( this%node_ ) ) call initialize_config_t( this )
     call yaml_add_string_array_c( this%node_, to_c_string( key ), c_array )
 
