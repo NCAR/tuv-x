@@ -19,6 +19,8 @@ RUN apt update \
       m4 \
       python3 \
       python3-pip \
+      python3-numpy \
+      python3-scipy \
       valgrind \
       vim \
       libyaml-cpp-dev \
@@ -27,14 +29,17 @@ RUN apt update \
 # set compilers
 ENV CC=icx
 ENV CXX=icpx
-ENV FC=ifort
+ENV FC=ifx
 
 # Download netcdf and netcdf-fortran and build and install them with intel
 RUN git clone https://github.com/Unidata/netcdf-c.git \
   && cd netcdf-c \
   && mkdir build \
   && cd build \
-  && cmake -D CMAKE_BUILD_TYPE=release -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D NETCDF_ENABLE_TESTS=OFF \
+    -D NETCDF_ENABLE_DAP_REMOTE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
   && make -j 4 \
   && make install
 
@@ -42,7 +47,9 @@ RUN git clone https://github.com/Unidata/netcdf-fortran.git \
   && cd netcdf-fortran \
   && mkdir build \
   && cd build \
-  && cmake -D CMAKE_BUILD_TYPE=release -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D ENABLE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
   && make -j 4 \
   && make install
 
@@ -58,7 +65,5 @@ RUN mkdir /build \
         -DTUVX_ENABLE_REGRESSION_TESTS=OFF \
         ../tuvx \
       && make
-
-RUN pip3 install numpy scipy
 
 WORKDIR /build
