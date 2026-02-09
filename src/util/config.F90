@@ -1016,26 +1016,36 @@ contains
 
     type(string_array_t_c) :: c_array
     type(string_t_c), allocatable, target :: c_strings(:)
-    character(len=1, kind=c_char), pointer :: c_string(:)
-    integer :: i, size
+    character(len=1, kind=c_char), allocatable, target :: all_chars(:)
+    integer :: i, j, total_len, offset, str_len
 
-    allocate( c_strings( size( value ) ) )
-    do i = 1, size( value )
-      allocate( c_string, source = to_c_string( value( i )%val_ ) )
-      c_strings( i )%ptr_ = c_loc( c_string )
-      c_strings( i )%size_ = len( value( i )%val_ )
-      nullify( c_string )
-    end do
-    c_array%ptr_ = c_loc( c_strings )
-    c_array%size_ = size( c_strings )
+    ! Special case for empty arrays to avoid non-conforming c_loc on zero-size arrays
+    if( size( value ) == 0 ) then
+      c_array%size_ = 0
+      c_array%ptr_ = c_null_ptr
+    else
+      total_len = 0
+      do i = 1, size( value )
+        total_len = total_len + len_trim( value( i )%val_ ) + 1
+      end do
+      allocate( all_chars( total_len ) )
+      allocate( c_strings( size( value ) ) )
+      offset = 1
+      do i = 1, size( value )
+        str_len = len_trim( value( i )%val_ )
+        do j = 1, str_len
+          all_chars( offset + j - 1 ) = value( i )%val_( j:j )
+        end do
+        all_chars( offset + str_len ) = c_null_char
+        c_strings( i )%ptr_ = c_loc( all_chars( offset ) )
+        c_strings( i )%size_ = str_len
+        offset = offset + str_len + 1
+      end do
+      c_array%ptr_ = c_loc( c_strings )
+      c_array%size_ = size( c_strings )
+    end if
     if( .not. c_associated( this%node_ ) ) call initialize_config_t( this )
     call yaml_add_string_array_c( this%node_, to_c_string( key ), c_array )
-    do i = 1, size( value )
-      call c_f_pointer( c_strings( i )%ptr_, c_string,                        &
-                        [ c_strings( i )%size_ + 1 ] )
-      deallocate( c_string )
-      c_strings( i )%ptr_ = c_null_ptr
-    end do
 
   end subroutine add_string_array
 
