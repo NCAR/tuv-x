@@ -2,11 +2,15 @@ name: micm-docs
 channels:
   - conda-forge
 dependencies:
-  - python=3.12
   - cmake
-  - gfortran
   - doxygen
+  - gfortran
   - graphviz
+  - libnetcdf-dev
+  - libnetcdff-dev
+  - liblapack-dev
+  - liblapacke-dev
+  - python=3.12
   - pip
   - pip:
       - -r docs/requirements.txt
