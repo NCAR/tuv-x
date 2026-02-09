@@ -142,7 +142,7 @@ endif()
 ################################################################################
 # TUV-x tests
 
-if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
+if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS AND NOT TUVX_DOCS_ONLY)
   # Test code coverage
   if(TUVX_ENABLE_COVERAGE)
     include(CodeCoverage)
