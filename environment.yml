@@ -6,10 +6,10 @@ dependencies:
   - doxygen
   - gfortran
   - graphviz
-  - libnetcdf-dev
-  - libnetcdff-dev
-  - liblapack-dev
-  - liblapacke-dev
+  - libnetcdf
+  - libnetcdff
+  - liblapack
+  - liblapacke
   - python=3.12
   - pip
   - pip:
