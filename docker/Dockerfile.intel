@@ -60,7 +60,7 @@ COPY . /tuvx/
 RUN mkdir /build \
       && cd /build \ 
       && cmake \
-        -D CMAKE_BUILD_TYPE=release \
+        -D CMAKE_BUILD_TYPE=debug \
         -DCMAKE_Fortran_FLAGS="-I/usr/include" \
         -DTUVX_ENABLE_REGRESSION_TESTS=OFF \
         ../tuvx \
