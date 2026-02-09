@@ -24,18 +24,42 @@ BUILD_DIR = os.path.join(REPO_ROOT_DIR, 'build')
 DOXYGEN_XML_DIR = os.path.join(BUILD_DIR, 'docs', 'doxygen', 'xml')
 
 
-def _run_command(command, cwd=None):
+def _run_command(command, cwd=None, env=None):
     try:
-        subprocess.run(command, cwd=cwd, check=True)
+        subprocess.run(command, cwd=cwd, env=env, check=True)
     except (OSError, subprocess.CalledProcessError) as exc:
         sys.stderr.write(f"Command failed: {command}\n{exc}\n")
         raise
+
+
+def _build_cmake_env():
+    conda_prefix = os.environ.get('CONDA_PREFIX')
+    if not conda_prefix:
+        return None
+
+    env = os.environ.copy()
+    pkg_config_path = os.path.join(conda_prefix, 'lib', 'pkgconfig')
+    existing_pkg_config_path = env.get('PKG_CONFIG_PATH')
+    if existing_pkg_config_path:
+        env['PKG_CONFIG_PATH'] = f"{pkg_config_path}:{existing_pkg_config_path}"
+    else:
+        env['PKG_CONFIG_PATH'] = pkg_config_path
+
+    existing_cmake_prefix_path = env.get('CMAKE_PREFIX_PATH')
+    if existing_cmake_prefix_path:
+        env['CMAKE_PREFIX_PATH'] = f"{conda_prefix}:{existing_cmake_prefix_path}"
+    else:
+        env['CMAKE_PREFIX_PATH'] = conda_prefix
+
+    return env
 
 
 def _ensure_doxygen_xml():
     read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
     if not read_the_docs_build:
         return
+
+    cmake_env = _build_cmake_env()
 
     cache_file = os.path.join(BUILD_DIR, 'CMakeCache.txt')
     if not os.path.exists(cache_file):
@@ -44,13 +68,13 @@ def _ensure_doxygen_xml():
             '-S', REPO_ROOT_DIR,
             '-B', BUILD_DIR,
             '-D', 'TUVX_BUILD_DOCS=ON'
-        ])
+        ], env=cmake_env)
 
     _run_command([
         'cmake',
         '--build', BUILD_DIR,
         '--target', 'Doxygen'
-    ])
+    ], env=cmake_env)
 
 
 # -- Project information -----------------------------------------------------
@@ -124,6 +148,7 @@ html_css_files = [
 html_favicon = '_static/favicon.ico'
 
 html_logo = '_static/logo.svg'
+
 
 def setup(app):
     app.connect("builder-inited", lambda _app: _ensure_doxygen_xml())
