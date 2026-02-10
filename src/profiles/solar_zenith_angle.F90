@@ -18,7 +18,7 @@ module tuvx_profile_solar_zenith_angle
 
   type, extends(profile_t) :: profile_solar_zenith_angle_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_solar_zenith_angle
   end type profile_solar_zenith_angle_t
 
   interface profile_solar_zenith_angle_t
@@ -107,7 +107,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_solar_zenith_angle( this )
     ! Cleanup the memory used by this object
 
     type(profile_solar_zenith_angle_t), intent(inout) :: this ! This f:type:`~tuvx_profile_solar_zenith_angle/profile_solar_zenith_angle_t`
@@ -122,7 +122,7 @@ contains
       deallocate( this%delta_val_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_solar_zenith_angle
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

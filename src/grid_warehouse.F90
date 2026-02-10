@@ -42,7 +42,7 @@ module tuvx_grid_warehouse
     !> Unpacks a warehouse from a character buffer into the object
     procedure :: mpi_unpack
     !> Finalize the object
-    final :: finalize
+    final :: finalize_grid_warehouse
   end type grid_warehouse_t
 
   !> Grid warehouse_t constructor
@@ -481,7 +481,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_grid_warehouse( this )
     ! Finalize grid warehouse
 
     !> Arguments
@@ -498,7 +498,7 @@ contains
       deallocate( this%grids_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_grid_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

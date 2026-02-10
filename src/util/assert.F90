@@ -53,7 +53,6 @@ contains
 
   !> Asserts condition to be true or fails with provided message
   subroutine assert_msg_string( code, condition, error_message )
-
     use musica_string,                 only : string_t
 
     !> Unique code for the assertion

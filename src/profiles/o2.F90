@@ -13,7 +13,7 @@ module tuvx_profile_o2
 
   type, extends(profile_t) :: profile_o2_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_o2
   end type profile_o2_t
 
   interface profile_o2_t
@@ -171,7 +171,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_o2( this )
     ! Cleanup the memory used by this object
 
     type(profile_o2_t), intent(inout) :: this ! This f:type:`~tuvx_profile_o2/profile_o2_t`
@@ -192,7 +192,7 @@ contains
       deallocate( this%exo_layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_o2
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

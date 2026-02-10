@@ -18,7 +18,7 @@ module tuvx_profile_earth_sun_distance
 
   type, extends(profile_t) :: profile_earth_sun_distance_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_earth_sun_distance
   end type profile_earth_sun_distance_t
 
   !> Constructor
@@ -104,7 +104,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_earth_sun_distance( this )
     ! Cleanup the memory used by this object
 
     type(profile_earth_sun_distance_t), intent(inout) :: this ! This f:type:`~tuvx_profile_earth_sun_distance/profile_earth_sun_distance_t`
@@ -119,7 +119,7 @@ contains
       deallocate( this%delta_val_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_earth_sun_distance
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

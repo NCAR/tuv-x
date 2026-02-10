@@ -13,7 +13,7 @@ module tuvx_profile_air
 
   type, extends(profile_t) :: profile_air_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_air
   end type profile_air_t
 
   interface profile_air_t
@@ -176,7 +176,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_air( this )
     ! Clean up this object
 
     type(profile_air_t), intent(inout) :: this
@@ -200,7 +200,7 @@ contains
       deallocate( this%burden_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_air
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
