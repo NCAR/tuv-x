@@ -13,7 +13,7 @@ module tuvx_profile_extraterrestrial_flux
 
   type, extends(profile_t) :: profile_extraterrestrial_flux_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_extraterrestrial_flux
   end type profile_extraterrestrial_flux_t
 
   !> Constructor
@@ -274,7 +274,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_extraterrestrial_flux( this )
     ! Cleanup the memory used by this object
 
     type(profile_extraterrestrial_flux_t), intent(inout) :: this ! This f:type:`~tuvx_profile_extraterrestrial_flux/profile_extraterrestrial_flux_t`
@@ -284,7 +284,7 @@ contains
     if( allocated( this%delta_val_ ) ) deallocate( this%delta_val_ )
     if( allocated( this%layer_dens_ ) ) deallocate( this%layer_dens_ )
 
-  end subroutine finalize
+  end subroutine finalize_profile_extraterrestrial_flux
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

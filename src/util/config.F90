@@ -641,11 +641,12 @@ contains
     integer(c_int) :: size, i
     type(string_t_c), pointer :: c_strings(:)
     logical(kind=c_bool) :: l_found
+    logical :: condition
 
     c_array = yaml_get_string_array_c( this%node_, to_c_string( key ),        &
                                        l_found )
-    call assert_msg( 469804765, l_found .or. present( default ) .or.          &
-                     present( found ), "Key '"//trim( key )//                 &
+    condition = l_found .or. present( default ) .or. present( found )
+    call assert_msg( 469804765, condition, "Key '"//trim( key )//                 &
                      "' requested by "//trim( caller )//" not found" )
     if( present( found ) ) then
       found = l_found
@@ -688,11 +689,12 @@ contains
     real(kind=c_double), pointer :: c_doubles(:)
     integer :: i
     logical(kind=c_bool) :: l_found
+    logical :: condition
 
-    c_array = yaml_get_double_array_c( this%node_, to_c_string( key ),        &
+    c_array = yaml_get_double_array_c( this%node_, to_c_string( key ),    &
                                        l_found )
-    call assert_msg( 507829003, l_found .or. present( default )               &
-                     .or. present( found ), "Key '"//trim( key )//            &
+    condition = l_found .or. present( default ) .or. present( found )
+    call assert_msg( 507829003, condition, "Key '"//trim( key )//         &
                      "' requested by "//trim( caller )//" not found" )
     if( present( found ) ) then
       found = l_found
@@ -733,11 +735,12 @@ contains
     type(c_ptr), pointer :: c_nodes(:)
     integer :: i
     logical(kind=c_bool) :: l_found
+    logical :: condition
 
     c_array = yaml_get_node_array_c( this%node_, to_c_string( key ), l_found )
-    call assert_msg( 737497064, l_found .or. present( default )               &
-                     .or. present( found ), "Key '"//trim( key )//            &
-                     "' requested by "//trim( caller )//" not found" )
+    condition = l_found .or. present( default ) .or. present( found )
+    call assert_msg( 737497064, condition, "Key '"//trim( key )// &
+                    "' requested by "//trim( caller )//" not found" )
     if( present( found ) ) then
       found = l_found
       if( .not. l_found .and. .not. present( default ) ) return

@@ -184,7 +184,10 @@ contains
     class(grid_t), pointer :: wavelengths
     real(kind=dk) :: energy_term
     type(string_t) :: required_keys(4), optional_keys(1)
-    type(string_t) :: heating_required_keys(1), heating_optional_keys(0)
+    type(string_t) :: heating_required_keys(1)
+    type(string_t), allocatable :: heating_optional_keys(:)
+
+    allocate(heating_optional_keys(0))
 
     required_keys(1) = "name"
     required_keys(2) = "cross section"
@@ -312,15 +315,19 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Returns the names of each photolysis reaction with a heating rate
-  function labels( this )
+  function labels( this ) result(res)
 
-    !> Photolysis reaction labels
-    type(string_t), allocatable :: labels(:)
     !> Heating rate collection
     class(heating_rates_t), intent(in) :: this
+    !> Photolysis reaction labels
+    type(string_t), allocatable :: res(:)
+    integer :: i
 
-    allocate( labels( size( this%heating_parameters_ ) ) )
-    labels(:) = this%heating_parameters_(:)%label_
+    allocate( res( size( this%heating_parameters_ ) ) )
+
+    do i = 1, size(res)
+      res(i) = this%heating_parameters_(i)%label_
+    end do
 
   end function labels
 

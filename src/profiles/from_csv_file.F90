@@ -14,7 +14,7 @@ module tuvx_profile_from_csv_file
 
   type, extends(profile_t) :: profile_from_csv_file_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_from_csv_file
   end type profile_from_csv_file_t
 
   interface profile_from_csv_file_t
@@ -188,7 +188,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_from_csv_file( this )
     ! Cleanup the memory used by this object
 
     type(profile_from_csv_file_t), intent(inout) :: this ! This f:type:`~tuvx_profile_from_csv_file/profile_from_csv_file_t`
@@ -207,7 +207,7 @@ contains
       deallocate( this%layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_from_csv_file
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

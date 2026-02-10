@@ -13,7 +13,7 @@ module tuvx_profile_o3
 
   type, extends(profile_t) :: profile_o3_t
   contains
-    final     :: finalize
+    final     :: finalize_o3
   end type profile_o3_t
 
   !> Constructor
@@ -200,7 +200,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_o3( this )
     ! Cleanup the memory used by this object
 
     type(profile_o3_t), intent(inout) :: this ! This f:type:`~tuvx_profile_o3/profile_o3_t`
@@ -218,7 +218,7 @@ contains
       deallocate( this%layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_o3
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
