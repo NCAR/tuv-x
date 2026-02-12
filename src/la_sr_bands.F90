@@ -925,8 +925,8 @@ contains
     ! call Chebyshev Evaluation routine to calc A and B from
     !	set of 20 coeficients for each wavelength
     do I = 1,size( A )
-      A(I) = this%chebyshev_evaluation( this%AC( 1, I ), X )
-      B(I) = this%chebyshev_evaluation( this%BC( 1, I ), X )
+      A(I) = this%chebyshev_evaluation( this%AC( :, I ), X )
+      B(I) = this%chebyshev_evaluation( this%BC( :, I ), X )
     enddo
 
   end subroutine calc_params
