@@ -896,7 +896,7 @@ contains
     class(la_sr_bands_t), intent(inout)  :: this
     real(dk), intent(in)  :: T
     real(dk), intent(in)  :: X
-    real(dk), allocatable :: XS(:)
+    real(dk)              :: XS( nsrb )
 
     ! Local variables
     real(dk), parameter :: T0 = 220._dk
@@ -904,7 +904,6 @@ contains
 
     call this%calc_params( X, A, B )
 
-    allocate( XS( nsrb ) )
     XS(:) = exp( A * ( T - T0 ) + B )
 
   end function effxs
