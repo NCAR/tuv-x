@@ -1,0 +1,73 @@
+# nvidia rate limits requests. You can get around this by restarting docker if for 
+# some reason you have to build this image many times
+# https://stackoverflow.com/a/75757516/5217293
+#
+# Container versions, and sizes, can be found at https://catalog.ngc.nvidia.com/orgs/nvidia/containers/nvhpc/tags
+#
+FROM nvcr.io/nvidia/nvhpc:25.7-devel-cuda12.9-ubuntu24.04
+
+RUN apt update \
+    && apt -y install \
+    curl \
+    gcc \
+    gdb \
+    gfortran \
+    git \
+    liblapack-dev \
+    libhdf5-dev \
+    make \
+    pkg-config \
+    python3 \
+    python3-numpy \
+    python3-pip \
+    python3-scipy \
+    valgrind \ 
+    vim \
+    && apt clean 
+
+ENV LD_LIBRARY_PATH=/usr/local/lib64
+
+# set compilers
+ENV CXX=nvc++
+ENV CC=nvc
+ENV FC=nvfortran
+
+# Download netcdf and netcdf-fortran and build and install them with intel
+RUN git clone https://github.com/Unidata/netcdf-c.git \
+  && cd netcdf-c \
+  && mkdir build \
+  && cd build \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D NETCDF_ENABLE_TESTS=OFF \
+    -D NETCDF_ENABLE_DAP=OFF \
+    -D NETCDF_ENABLE_DAP_REMOTE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && make -j 4 \
+  && make install
+
+RUN git clone https://github.com/Unidata/netcdf-fortran.git \
+  && cd netcdf-fortran \
+  && mkdir build \
+  && cd build \
+  && cmake -D CMAKE_BUILD_TYPE=release \
+    -D ENABLE_TESTS=OFF \
+    -D CMAKE_INSTALL_PREFIX=/usr/local .. \
+  && make -j 4 \
+  && make install
+
+# Copy the tuvx code
+COPY . tuvx
+
+# build the tuv-x tool
+RUN cd /tuvx \
+      && mkdir build \
+      && cd build \
+      && cmake -D CMAKE_BUILD_TYPE=debug \
+               -D TUVX_INSTALL_INCLUDE_DIR=/usr/local/include \
+               -D TUVX_INSTALL_MOD_DIR=/usr/local/include \
+               -D TUVX_ENABLE_TESTS=ON \
+               -D TUVX_ENABLE_REGRESSION_TESTS=OFF \
+               .. \
+      && make install 
+
+WORKDIR /tuvx/build

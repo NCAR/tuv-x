@@ -904,7 +904,8 @@ contains
 
     call this%calc_params( X, A, B )
 
-    XS = exp( A * ( T - T0 ) + B )
+    allocate( XS( nsrb ) )
+    XS(:) = exp( A * ( T - T0 ) + B )
 
   end function effxs
 

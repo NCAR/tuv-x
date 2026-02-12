@@ -34,7 +34,7 @@ module tuvx_output
     procedure :: output
     procedure, private :: add_grids
     procedure, private :: add_photolysis_diagnostics
-    final :: finalize
+    final :: finalize_output_t
   end type output_t
 
   interface output_t
@@ -337,13 +337,13 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> Cleans up memory
-  subroutine finalize( this )
+  subroutine finalize_output_t( this )
 
     type(output_t), intent(inout) :: this
 
     if( associated( this%file_ ) ) deallocate( this%file_ )
 
-  end subroutine finalize
+  end subroutine finalize_output_t
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
