@@ -707,14 +707,16 @@ contains
     NORM = rONE/ real( nz - iONE, dk )
     do k = iONE, nz
       o2col1( k ) = max( o2col( k ), colmin )
-      x  = log( o2col1( k ) )
-      if( x < 38.0_dk ) then
+      if( o2col( k ) < colmin ) then
         ktop1 = k - iONE
         ktop  = min( ktop1, ktop )
-      else if( x > 56.0_dk ) then
-        kbot = k
       else
-        o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        x  = log( o2col1( k ) )
+        if( x > 56.0_dk ) then
+          kbot = k
+        else
+          o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        endif
       endif
     enddo
 
@@ -805,14 +807,16 @@ contains
     kbot = 0
     do k = iONE, nz
       o2col1( k ) = max( o2col( k ), colmin )
-      x = log( o2col1( k ) )
-      if( x < 38.0_dk ) then
+      if( o2col( k ) < colmin ) then
         ktop1 = k - 1
         ktop  = min( ktop1, ktop )
-      else if ( x > 56.0_dk ) then
-        kbot = k
       else
-        o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        x = log( o2col1( k ) )
+        if ( x > 56.0_dk ) then
+          kbot = k
+        else
+          o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        endif
       endif
     enddo
 
