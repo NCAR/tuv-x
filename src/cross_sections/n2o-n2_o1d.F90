@@ -99,6 +99,7 @@ contains
     integer :: lambdaNdx, nzdim, vertNdx
     real(dk)    :: lambda, Tadj, A, B
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -120,8 +121,8 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     !*** quantum yield of N(4s) and NO(2Pi) is less than 1% (Greenblatt and
     !*** Ravishankara), so quantum yield of O(1D) is assumed to be unity
@@ -134,12 +135,12 @@ contains
               * lambda+A0
           B = ( ( B3 * lambda + B2 ) * lambda + B1 ) * lambda + B0
           B = ( Tadj - Thold ) * exp( B )
-          cross_section( lambdaNdx, vertNdx ) = exp( A + B )
+          wrkCrossSection( lambdaNdx, vertNdx ) = exp( A + B )
         endif
       enddo
     enddo
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

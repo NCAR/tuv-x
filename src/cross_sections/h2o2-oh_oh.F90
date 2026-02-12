@@ -98,6 +98,7 @@ contains
         'h2o2+hv->oh+oh cross section calculate'
     integer    :: vertNdx, wNdx
     real(dk)       :: lambda, sumA, sumB, t, chi
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer :: zGrid
     class(grid_t),    pointer :: lambdaGrid
     class(profile_t), pointer :: temperature
@@ -107,7 +108,7 @@ contains
     temperature =>                                                            &
         profile_warehouse%get_profile( this%temperature_profile_ )
 
-    allocate( cross_section( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
     associate( wl => lambdaGrid%edge_, wc => lambdaGrid%mid_ )
     do vertNdx = 1, zGrid%ncells_ + 1
@@ -123,17 +124,17 @@ contains
                   * lambda + B0
            t = min( max( temperature%edge_val_( vertNdx ), 200._dk ), 400._dk )
            chi = rONE / ( rONE + exp( -1265._dk / t ) )
-           cross_section( wNdx, vertNdx ) =                                   &
+           wrkCrossSection( wNdx, vertNdx ) =                                 &
                ( chi * sumA + ( rONE - chi ) * sumB ) * 1.E-21_dk
          else
-           cross_section( wNdx, vertNdx ) =                                   &
+           wrkCrossSection( wNdx, vertNdx ) =                                 &
                this%cross_section_parms(1)%array( wNdx, 1 )
          endif
       enddo
     enddo
     end associate
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )
