@@ -144,13 +144,16 @@ contains
                                      this%handle_%val_//" profile height grid" )
     this%edge_val_ = exp( this%edge_val_ )
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
       this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_ = ( this%edge_val_( 2 : this%ncells_ + 1 ) -              &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
       this%edge_val_( 1 : this%ncells_ ) )
 
-    this%layer_dens_ = zGrid%delta_ *                                         &
+    this%layer_dens_(:) = zGrid%delta_ *                                      &
       sqrt( this%edge_val_( 1 : this%ncells_ ) ) *                            &
       sqrt( this%edge_val_( 2 : this%ncells_ + 1 ) ) * km2cm
 

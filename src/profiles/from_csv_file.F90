@@ -148,10 +148,12 @@ contains
     this%edge_val_ = theInterpolator%interpolate( grid%edge_, zdata, profile, &
                                      this%handle_%val_//" profile height grid" )
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
                               this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_  = ( this%edge_val_( 2 : this%ncells_ + 1 ) -             &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
                          this%edge_val_( 1 : this%ncells_) )
 
     ! This can be removed as part of issue #139 for adopting SI units
@@ -161,7 +163,8 @@ contains
       unit_conv = 1.0_dk
     end if
 
-    this%layer_dens_ = this%mid_val_ * grid%delta_ * unit_conv
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%layer_dens_(:) = this%mid_val_ * grid%delta_ * unit_conv
 
     this%layer_dens_( this%ncells_ ) = this%layer_dens_( this%ncells_ )
 

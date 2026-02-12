@@ -72,12 +72,13 @@ contains
     class(grid_t), pointer :: lambdaGrid
     class(grid_t), pointer :: zGrid
     real(dk), allocatable  :: wrkQuantumYield(:)
+    real(dk), allocatable  :: wrkQuantumYield2D(:,:)
 
     zGrid => grid_warehouse%get_grid( this%height_grid_ )
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
 
     allocate( wrkQuantumYield( lambdaGrid%ncells_ ) )
-    allocate( quantum_yield( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    allocate( wrkQuantumYield2D( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
     where( lambdaGrid%mid_ >= 248._dk )
       wrkQuantumYield = rONE
@@ -87,10 +88,10 @@ contains
     endwhere
     wrkQuantumYield = max( rZERO, wrkQuantumYield )
     do vertNdx = 1, zGrid%ncells_ + 1
-      quantum_yield( :, vertNdx ) = wrkQuantumYield
+      wrkQuantumYield2D( :, vertNdx ) = wrkQuantumYield
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield2D )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

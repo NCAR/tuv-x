@@ -129,6 +129,7 @@ contains
 
     integer                       :: lambdaNdx
     integer                       :: nzdim, vertNdx
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelTemp(:), modelDens(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -156,8 +157,8 @@ contains
     modelTemp = mdlTemperature%edge_val_
     modelDens = mdlDensity%edge_val_
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
-    quantum_yield = rZERO
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
+    wrkQuantumYield = rZERO
 
 vert_loop: &
     do vertNdx = 1, nzdim
@@ -213,11 +214,11 @@ lambda_loop: &
           if( this%do_CO_ ) qy = qy + fco
           if( this%do_CH3CO_ ) qy = qy + fac
         endif
-        quantum_yield( lambdaNdx, vertNdx ) = qy
+        wrkQuantumYield( lambdaNdx, vertNdx ) = qy
       enddo lambda_loop
     enddo vert_loop
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

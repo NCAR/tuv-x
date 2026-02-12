@@ -346,7 +346,7 @@ contains
     ! unique.
 
     class(radiator_state_t), intent(inout) :: this
-    class(radiator_ptr),     intent(in)    :: radiators(:)
+    type(radiator_ptr),      intent(in)    :: radiators(:)
 
     real(dk), parameter :: kfloor = 1.0_dk / largest ! smallest value for radiative properties
     real(dk), parameter :: kair_asym_factor = 0.1_dk
@@ -397,7 +397,10 @@ contains
     dscat_accum = max( dscat_accum, kfloor )
     dabs_accum  = max( dabs_accum, kfloor )
 
-    this%layer_OD_ = dscat_accum + dabs_accum
+    if( .not. allocated( this%layer_OD_ ) ) then
+      allocate( this%layer_OD_, mold = dscat_accum )
+    end if
+    this%layer_OD_(:,:) = dscat_accum + dabs_accum
     if( .not. allocated( this%layer_SSA_ ) ) then
       allocate( this%layer_SSA_, mold = this%layer_OD_ )
     end if

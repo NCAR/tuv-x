@@ -77,6 +77,7 @@ contains
     real(dk)                      :: Tfactor
     real(dk),         allocatable :: quantum_yield_tmp(:)
     real(dk),         allocatable :: quantum_yield_wrk(:)
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelTemp(:), modelDens(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -93,8 +94,8 @@ contains
     modelTemp = mdlTemperature%edge_val_
     modelDens = mdlDensity%edge_val_
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
-    quantum_yield = rZERO
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
+    wrkQuantumYield = rZERO
 
     associate( quantum_yield_chnl1 => this%quantum_yield_parms(1)%array(:,1), &
                quantum_yield_chnl2 => this%quantum_yield_parms(1)%array(:,2) )
@@ -109,15 +110,15 @@ contains
                       / ( 2.45e19_dk * quantum_yield_chnl2 * quantum_yield_tmp )
         quantum_yield_wrk = quantum_yield_wrk * ( rONE                         &
                           + .05_dk * ( lambdaGrid%mid_ - 329._dk ) * Tfactor )
-        quantum_yield(:,vertNdx) = rONE / ( rONE / quantum_yield_tmp +         &
+        wrkQuantumYield(:,vertNdx) = rONE / ( rONE / quantum_yield_tmp +       &
                                    quantum_yield_wrk * modelDens( vertNdx ) )
       elsewhere
-        quantum_yield( :, vertNdx ) = quantum_yield_chnl2
+        wrkQuantumYield( :, vertNdx ) = quantum_yield_chnl2
       endwhere
     enddo
     end associate
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

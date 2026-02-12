@@ -215,6 +215,7 @@ file_loop: &
     integer     :: nTemp
     integer     :: fileNdx, tNdx, vertNdx
     real(dk)    :: Tadj, Tstar
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     class(grid_t),    pointer :: lambdaGrid
     class(grid_t),    pointer :: zGrid
     class(profile_t), pointer :: temperature
@@ -225,9 +226,9 @@ file_loop: &
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
     temperature => profile_warehouse%get_profile( this%temperature_profile_ )
 
-    allocate( quantum_yield(lambdaGrid%ncells_,zGrid%ncells_+1) )
+    allocate( wrkQuantumYield(lambdaGrid%ncells_,zGrid%ncells_+1) )
 
-    quantum_yield = rZERO
+    wrkQuantumYield = rZERO
 file_loop: &
     do fileNdx = 1, size( this%parameters )
       associate( Temp => this%parameters( fileNdx )%temperature,             &
@@ -243,7 +244,7 @@ file_loop: &
         enddo
         tNdx = tNdx - 1
         Tstar = ( Tadj - Temp( tNdx ) ) / wrkQyield%deltaT( tNdx )
-        quantum_yield( :, vertNdx ) = quantum_yield( :, vertNdx )             &
+        wrkQuantumYield( :, vertNdx ) = wrkQuantumYield( :, vertNdx )         &
                                     + wrkQyield%array(:,tNdx)                 &
                                     + Tstar * ( wrkQyield%array( :, tNdx + 1 )&
                                                 - wrkQyield%array( :, tNdx ) )
@@ -251,7 +252,7 @@ file_loop: &
       end associate
     enddo file_loop
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

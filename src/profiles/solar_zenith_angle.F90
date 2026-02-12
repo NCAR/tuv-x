@@ -93,12 +93,14 @@ contains
       this%edge_val_ = [this%edge_val_,NINETY - solarElevation]
     enddo
 
-    this%mid_val_ = .5_dk * ( &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( &
       this%edge_val_(1_ik:this%ncells_) + &
       this%edge_val_(2_ik:this%ncells_+1_ik) &
     )
 
-    this%delta_val_ = this%edge_val_(2_ik:this%ncells_+1_ik) - &
+    this%delta_val_(:) = this%edge_val_(2_ik:this%ncells_+1_ik) - &
       this%edge_val_(1_ik:this%ncells_)
 
     deallocate( timeGrid )

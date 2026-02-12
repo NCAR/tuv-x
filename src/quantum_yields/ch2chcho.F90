@@ -74,6 +74,7 @@ contains
 
     integer                       :: nzdim, vertNdx
     real(dk),         allocatable :: phi0(:)
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelDens(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -86,26 +87,26 @@ contains
     nzdim = zGrid%ncells_ + iONE
     modelDens = mdlDensity%edge_val_
 
-    allocate( quantum_yield(lambdaGrid%ncells_,nzdim) )
+    allocate( wrkQuantumYield(lambdaGrid%ncells_,nzdim) )
     allocate( phi0(lambdaGrid%ncells_) )
-    quantum_yield = rZERO
+    wrkQuantumYield = rZERO
 
     do vertNdx = iONE,nzdim
       associate( M => modelDens(vertNdx) )
       if( M > 2.6e19_dk ) then
-        quantum_yield(:,vertNdx) = phiL
+        wrkQuantumYield(:,vertNdx) = phiL
       else
         if( M <= 8.e17_dk ) then
           phi0 = phiU + 1.613e-17_dk*8.e17_dk
         else
           phi0 = phiU + 1.613e-17_dk*M
         endif
-        quantum_yield(:,vertNdx) = phiL + rONE/phi0
+        wrkQuantumYield(:,vertNdx) = phiL + rONE/phi0
       endif
       end associate
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

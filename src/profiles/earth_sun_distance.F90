@@ -91,10 +91,12 @@ contains
       this%edge_val_  = [ this%edge_val_, soldst ]
     enddo
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
       this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_ = ( this%edge_val_( 2 : this%ncells_ + 1 ) -              &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
       this%edge_val_( 1 : this%ncells_ ) )
 
     deallocate( timeGrid )
