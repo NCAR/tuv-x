@@ -32,7 +32,7 @@ ENV CXX=nvc++
 ENV CC=nvc
 ENV FC=nvfortran
 
-# Download netcdf and netcdf-fortran and build and install them with intel
+# Download netcdf and netcdf-fortran and build and install them with nvhpc
 RUN git clone https://github.com/Unidata/netcdf-c.git \
   && cd netcdf-c \
   && mkdir build \
