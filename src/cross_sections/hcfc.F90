@@ -84,6 +84,7 @@ contains
     integer                   :: lambdaNdx, polyNdx
     real(dk)                      :: Tadj, sigma, uLambda
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -105,8 +106,8 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     uLambda = this%cross_section_parms(1)%temperature(2)
 vert_loop:                                                                    &
@@ -131,11 +132,11 @@ lambda_loop:                                                                  &
         else
           sigma = rZERO
         endif
-        cross_section( lambdaNdx, vertNdx ) = sigma
+        wrkCrossSection( lambdaNdx, vertNdx ) = sigma
       enddo lambda_loop
     enddo vert_loop
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

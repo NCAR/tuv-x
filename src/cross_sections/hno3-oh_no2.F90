@@ -176,6 +176,7 @@ contains
     real(dk), parameter         :: T0 = 298._dk
     integer           :: vertNdx
     real(dk),         allocatable :: Temp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: lambdaGrid
     class(grid_t),    pointer     :: zGrid
     class(profile_t), pointer     :: temperature
@@ -185,16 +186,16 @@ contains
     temperature =>                                                            &
         profile_warehouse%get_profile( this%temperature_profile_ )
 
-    allocate( cross_section( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
     Temp = temperature%edge_val_ - T0
     do vertNdx = 1, zGrid%ncells_ + 1
-      cross_section( :, vertNdx ) =                                           &
+      wrkCrossSection( :, vertNdx ) =                                         &
           this%cross_section_parms(1)%array(:,1)                              &
           * exp( this%cross_section_parms(1)%array(:,2) * Temp( vertNdx ) )
     enddo
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

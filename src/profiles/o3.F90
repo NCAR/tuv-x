@@ -13,7 +13,7 @@ module tuvx_profile_o3
 
   type, extends(profile_t) :: profile_o3_t
   contains
-    final     :: finalize
+    final     :: finalize_o3
   end type profile_o3_t
 
   !> Constructor
@@ -161,13 +161,16 @@ contains
     this%edge_val_ = theInterpolator%interpolate( zGrid%edge_, zdata, profile,&
                                      this%handle_%val_//" profile height grid" )
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
                               this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_ = this%edge_val_( 2 : this%ncells_ + 1 ) -                &
+    this%delta_val_(:) = this%edge_val_( 2 : this%ncells_ + 1 ) -             &
                       this%edge_val_( 1 : this%ncells_ )
 
-    this%layer_dens_ = zGrid%delta_ * this%mid_val_ * km2cm
+    this%layer_dens_(:) = zGrid%delta_ * this%mid_val_ * km2cm
 
     this%layer_dens_( this%ncells_ ) = this%layer_dens_( this%ncells_ ) +     &
         this%edge_val_( this%ncells_ + 1 ) * this%hscale_ * km2cm
@@ -179,13 +182,13 @@ contains
       if( O3ScaleFactor /= 1.0_dk ) then
         this%edge_val_ = O3ScaleFactor * this%edge_val_
 
-        this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +        &
+        this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +     &
                                   this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-        this%delta_val_ = this%edge_val_( 2 : this%ncells_ + 1 ) -            &
+        this%delta_val_(:) = this%edge_val_( 2 : this%ncells_ + 1 ) -         &
                           this%edge_val_( 1 : this%ncells_ )
 
-        this%layer_dens_ = zGrid%delta_ * this%mid_val_ * km2cm
+        this%layer_dens_(:) = zGrid%delta_ * this%mid_val_ * km2cm
 
         this%layer_dens_( this%ncells_ ) = this%layer_dens_( this%ncells_ ) + &
             this%edge_val_( this%ncells_ + 1 ) * this%hscale_ * km2cm
@@ -200,7 +203,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_o3( this )
     ! Cleanup the memory used by this object
 
     type(profile_o3_t), intent(inout) :: this ! This f:type:`~tuvx_profile_o3/profile_o3_t`
@@ -218,7 +221,7 @@ contains
       deallocate( this%layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_o3
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

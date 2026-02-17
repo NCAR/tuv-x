@@ -14,17 +14,62 @@ import os
 import sys
 import datetime
 import re
-sys.path.insert(0, os.path.abspath('.'))
-
+import shutil
+import subprocess
+sys.path.insert(0, os.path.abspath(os.path.dirname(__file__)))
 from generate_logo import make_logo
 
+DOCS_SOURCE_DIR = os.path.abspath(os.path.dirname(__file__))
+REPO_ROOT_DIR = os.path.abspath(os.path.join(DOCS_SOURCE_DIR, '..', '..'))
+BUILD_DIR = os.path.join(REPO_ROOT_DIR, 'build')
+
+
+def _run_command(command, cwd=None):
+    try:
+        subprocess.run(command, cwd=cwd, check=True)
+    except (OSError, subprocess.CalledProcessError) as exc:
+        sys.stderr.write(f"Command failed: {command}\n{exc}\n")
+        raise
+
+
+def _build_doxygen(app, exception):
+    """Build doxygen HTML after sphinx finishes, on RTD only.
+
+    Runs doxygen directly rather than through cmake's Doxygen target,
+    which depends on the sphinx target and would create a circular dependency.
+    """
+    if exception:
+        return
+    read_the_docs_build = os.environ.get('READTHEDOCS', None) == 'True'
+    if not read_the_docs_build:
+        return
+
+    # Run cmake configure to generate the Doxyfile from Doxyfile.in
+    cache_file = os.path.join(BUILD_DIR, 'CMakeCache.txt')
+    if not os.path.exists(cache_file):
+        _run_command([
+            'cmake',
+            '-S', REPO_ROOT_DIR,
+            '-B', BUILD_DIR,
+            '-D', 'TUVX_DOCS_ONLY=ON',
+            '-D', 'TUVX_ENABLE_TESTS=OFF',
+        ])
+
+    # Run doxygen directly (bypasses cmake build's circular sphinx dependency)
+    doxyfile = os.path.join(BUILD_DIR, 'docs', 'Doxyfile')
+    _run_command(['doxygen', doxyfile])
+
+    # Copy doxygen HTML output into the sphinx output directory
+    doxygen_html = os.path.join(BUILD_DIR, 'docs', 'sphinx', 'api', 'tuvx_src')
+    output_dir = os.path.join(app.outdir, 'api', 'tuvx_src')
+    if os.path.exists(doxygen_html):
+        shutil.copytree(doxygen_html, output_dir, dirs_exist_ok=True)
+
+
 # -- Project information -----------------------------------------------------
-
 project = 'TUV-x'
-copyright = f"2022-{datetime.datetime.now().year}, NCAR/UCAR"
-author = 'NCAR/UCAR'
-
-suffix = os.getenv("SWITCHER_SUFFIX", "")
+copyright = f"2022-{datetime.datetime.now().year}, NSF-NCAR/ACOM"
+author = 'NSF-NCAR/ACOM'
 
 # the suffix is required. This is controlled by the dockerfile that builds the docs
 regex = r'project\(.*VERSION\s+(\d+\.\d+\.\d+)'
@@ -35,7 +80,7 @@ with open(f'../../CMakeLists.txt', 'r') as f:
         match = re.match(regex, line)
         if match:
             version = match.group(1)
-release = f'v{version}{suffix}'
+release = f'v{version}'
 
 
 # -- General configuration ---------------------------------------------------
@@ -73,11 +118,7 @@ html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     "external_links": [],
     "github_url": "https://github.com/NCAR/tuv-x",
-    "navbar_end": ["version-switcher", "navbar-icon-links"],
-    "switcher": {
-        "json_url": "https://ncar.github.io/tuv-x/switcher.json",
-        "version_match": release,
-    },
+    "navbar_end": ["navbar-icon-links"],
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,
@@ -96,3 +137,7 @@ html_css_files = [
 html_favicon = '_static/favicon.ico'
 
 html_logo = '_static/logo.svg'
+
+def setup(app):
+    app.connect("build-finished", _build_doxygen)
+

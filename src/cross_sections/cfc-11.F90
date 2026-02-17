@@ -84,6 +84,7 @@ contains
     integer                   :: nzdim, vertNdx
     real(dk)                      :: Tadj
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -105,17 +106,17 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     do vertNdx = 1, nzdim
       Tadj = 1.e-4_dk * ( modelTemp( vertNdx ) - 298._dk )
-      cross_section( :, vertNdx ) =                                           &
+      wrkCrossSection( :, vertNdx ) =                                         &
           this%cross_section_parms(1)%array(:,1)                              &
           * exp( ( lambdaGrid%mid_ - 184.9_dk ) * Tadj )
     enddo
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

@@ -85,19 +85,19 @@ c     EXP(56.) = 2.091e24
       DO k=1,nz    !! loop for alt
          o2col1(k) = MAX(o2col(k),EXP(38.))
 
-         x  = ALOG(o2col1(k))
-         
-         IF (x .LT. 38.0) THEN
+         IF (o2col(k) .LT. EXP(38.)) THEN
             ktop1 = k-1
-            write(*,*) ktop1
             ktop  = MIN(ktop1,ktop)
-         ELSE IF (x .GT. 56.0) THEN
-            kbot = k
          ELSE
-            CALL effxs( x, tlev(k), xs )
-            DO i=1,17
-               o2xsk(k,i) = xs(i)
-            END DO
+            x  = ALOG(o2col1(k))
+            IF (x .GT. 56.0) THEN
+               kbot = k
+            ELSE
+               CALL effxs( x, tlev(k), xs )
+               DO i=1,17
+                  o2xsk(k,i) = xs(i)
+               END DO
+            ENDIF
          ENDIF
 
       END DO                    !! finish loop for alt

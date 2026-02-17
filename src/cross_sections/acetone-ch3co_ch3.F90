@@ -94,6 +94,7 @@ contains
     integer                   :: nzdim, vertNdx
     real(dk)                      :: Tadj
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -115,8 +116,8 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     call assert_msg(811958314, &
       size( this%cross_section_parms(1)%array, dim = 2 ) == 4, &
@@ -125,14 +126,14 @@ contains
     associate( coefficient => this%cross_section_parms(1)%array )
       do vertNdx = 1, nzdim
         Tadj = min( 298._dk, max( 235._dk, modelTemp( vertNdx ) ) )
-        cross_section(:,vertNdx) = coefficient(:,1)                           &
+        wrkCrossSection(:,vertNdx) = coefficient(:,1)                         &
                           * ( rONE + Tadj * ( coefficient(:,2)                &
                                               + Tadj*(coefficient(:,3)        &
                                               + Tadj*coefficient(:,4) ) ) )
       enddo
     end associate
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

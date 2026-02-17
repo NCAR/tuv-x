@@ -370,6 +370,9 @@ rate_loop:                                                                    &
       end associate
       end if
 
+      if (.not. allocated( xsqy ) ) then
+        allocate( xsqy( size( cross_section, 2 ), size( cross_section, 1 ) ) )
+      end if
       xsqy = transpose( cross_section * quantum_yield )
       do vertNdx = 1, zGrid%ncells_ + 1
         photolysis_rates( vertNdx, rateNdx ) =                                &

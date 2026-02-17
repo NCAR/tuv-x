@@ -68,6 +68,7 @@ contains
     real(dk), parameter ::    rZERO = 0.0_dk
     real(dk), parameter ::    rONE  = 1.0_dk
     integer                :: nzdim, vertNdx
+    real(dk), allocatable  :: wrkQuantumYield(:,:)
     class(grid_t), pointer :: zGrid
     class(grid_t), pointer :: lambdaGrid
 
@@ -76,18 +77,18 @@ contains
 
     nzdim = zGrid%ncells_ + 1
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
 
     where( lambdaGrid%mid_ < 263.4_dk )
-      quantum_yield(:,1) = rZERO
+      wrkQuantumYield(:,1) = rZERO
     elsewhere
-      quantum_yield(:,1) = rONE
+      wrkQuantumYield(:,1) = rONE
     endwhere
     do vertNdx = 2, nzdim
-      quantum_yield( :, vertNdx ) = quantum_yield(:,1)
+      wrkQuantumYield( :, vertNdx ) = wrkQuantumYield(:,1)
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

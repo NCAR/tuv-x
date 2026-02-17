@@ -69,6 +69,7 @@ contains
     real(dk), parameter ::    rONE  = 1.0_dk
 
     integer                       :: nzdim, vertNdx
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelTemp(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -82,15 +83,15 @@ contains
     nzdim = zGrid%ncells_ + 1
     modelTemp = mdlTemperature%edge_val_
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
-    quantum_yield = rZERO
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
+    wrkQuantumYield = rZERO
 
     do vertNdx = 1, nzdim
-      quantum_yield( :, vertNdx ) =                                           &
+      wrkQuantumYield( :, vertNdx ) =                                         &
         exp( -2400._dk / modelTemp(vertNdx) + 3.6_dk ) ! Chu & Anastasio, 2003
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

@@ -43,7 +43,7 @@ module tuvx_profile_warehouse
     procedure :: mpi_pack
     ! unpacks a warehouse from a character buffer into the object
     procedure :: mpi_unpack
-    final :: finalize
+    final :: finalize_profile_warehouse
   end type profile_warehouse_t
 
   interface profile_warehouse_t
@@ -488,7 +488,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_warehouse( this )
     ! Finalize profile warehouse
 
     use musica_constants, only : ik => musica_ik
@@ -508,7 +508,7 @@ contains
       deallocate( this%profiles_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_warehouse
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -13,7 +13,7 @@ module tuvx_profile_o2
 
   type, extends(profile_t) :: profile_o2_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_o2
   end type profile_o2_t
 
   interface profile_o2_t
@@ -147,13 +147,16 @@ contains
     this%edge_val_ = exp( this%edge_val_ )
     this%edge_val_ = o2Vmr * this%edge_val_
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
                               this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_ = ( this%edge_val_( 2 : this%ncells_ + 1 ) -              &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
                         this%edge_val_( 1 : this%ncells_ ) )
 
-    this%layer_dens_ = zGrid%delta_ *                                         &
+    this%layer_dens_(:) = zGrid%delta_ *                                      &
       sqrt( this%edge_val_( 1 : this%ncells_ ) ) *                            &
       sqrt( this%edge_val_( 2 : this%ncells_ + 1 ) ) * km2cm
 
@@ -171,7 +174,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_o2( this )
     ! Cleanup the memory used by this object
 
     type(profile_o2_t), intent(inout) :: this ! This f:type:`~tuvx_profile_o2/profile_o2_t`
@@ -192,7 +195,7 @@ contains
       deallocate( this%exo_layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_o2
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

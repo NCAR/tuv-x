@@ -152,8 +152,10 @@ contains
       Xsection%temperature = netcdf_obj%temperature
       nTemps = size( Xsection%temperature )
       if( nTemps > 1 ) then
-        Xsection%deltaT = Xsection%temperature( 2 : nParms )                  &
-                          - Xsection%temperature( 1 : nParms - 1 )
+        if( allocated( Xsection%deltaT ) ) deallocate( Xsection%deltaT )
+        allocate( Xsection%deltaT( nParms - 1 ) )
+        Xsection%deltaT(:) = Xsection%temperature( 2 : nParms )               &
+                            - Xsection%temperature( 1 : nParms - 1 )
         monopos = all( Xsection%deltaT > rZERO )
         if( .not. monopos ) then
           if( any( Xsection%deltaT > rZERO ) ) then
@@ -171,8 +173,10 @@ contains
                 netcdf_obj%parameters( :, Ndxu )
             netcdf_obj%parameters( :, Ndxu ) = data_parameter
           enddo
-          Xsection%deltaT = Xsection%temperature( 2 : nParms )                &
-                            - Xsection%temperature( 1 : nParms - 1 )
+          if( allocated( Xsection%deltaT ) ) deallocate( Xsection%deltaT )
+          allocate( Xsection%deltaT( nParms - 1 ) )
+          Xsection%deltaT(:) = Xsection%temperature( 2 : nParms )             &
+                              - Xsection%temperature( 1 : nParms - 1 )
         endif
       endif
 

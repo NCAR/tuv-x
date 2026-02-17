@@ -71,6 +71,7 @@ contains
     integer                    :: vertNdx, lambdaNdx
     real(dk)                   :: lambda
     real(dk),      allocatable :: wrkQuantumYield(:)
+    real(dk),      allocatable :: wrkQuantumYield2D(:,:)
     class(grid_t), pointer     :: lambdaGrid
     class(grid_t), pointer     :: zGrid
 
@@ -78,7 +79,7 @@ contains
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
 
     allocate( wrkQuantumYield( lambdaGrid%ncells_) )
-    allocate( quantum_yield( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    allocate( wrkQuantumYield2D( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
     do lambdaNdx = 1,lambdaGrid%ncells_
       lambda = lambdaGrid%mid_( lambdaNdx )
@@ -92,10 +93,10 @@ contains
     enddo
 
     do vertNdx = 1, zGrid%ncells_ + 1
-      quantum_yield( :, vertNdx ) = wrkQuantumYield
+      wrkQuantumYield2D( :, vertNdx ) = wrkQuantumYield
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield2D )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

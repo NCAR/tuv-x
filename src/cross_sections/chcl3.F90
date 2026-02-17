@@ -88,8 +88,9 @@ contains
     real(dk), parameter :: b4 = 1.7555e-9_dk
 
     integer :: lambdaNdx, vertNdx, nzdim
-    real(dk)    :: w1, tcoeff, Tadj, wrkCrossSection
+    real(dk)    :: w1, tcoeff, Tadj, wrkValue
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -111,25 +112,25 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     associate( wc => lambdaGrid%mid_, Temp => modelTemp )
     do vertNdx = 1, nzdim
       Tadj = min( max( Temp( vertNdx ), 210._dk ), 300._dk ) - 295._dk
       do lambdaNdx = 1, lambdaGrid%ncells_
-        wrkCrossSection = this%cross_section_parms(1)%array( lambdaNdx, 1 )
+        wrkValue = this%cross_section_parms(1)%array( lambdaNdx, 1 )
         if( wc( lambdaNdx ) > 190._dk .and. wc( lambdaNdx ) < 240._dk ) then
           w1 = wc( lambdaNdx )
           tcoeff = b0 + w1 * ( b1 + w1 * ( b2 + w1 * ( b3 + w1 * b4 ) ) )
-          wrkCrossSection = wrkCrossSection * 10._dk**( tcoeff * Tadj )
+          wrkValue = wrkValue * 10._dk**( tcoeff * Tadj )
         endif
-        cross_section( lambdaNdx, vertNdx ) = wrkCrossSection
+        wrkCrossSection( lambdaNdx, vertNdx ) = wrkValue
       enddo
     enddo
     end associate
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

@@ -89,6 +89,7 @@ contains
     real(dk)    :: Temp, Wpoly, w1
     integer :: lambdaNdx, vertNdx, nzdim
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlTemperature
@@ -110,8 +111,8 @@ contains
       modelTemp = mdlTemperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     do vertNdx = 1,nzdim
       Temp = max( min( 300._dk, modelTemp( vertNdx ) ), 210._dk )
@@ -120,17 +121,17 @@ contains
         w1 = lambdaGrid%mid_( lambdaNdx )
         if( w1 > 194._dk .and. w1 < 250._dk ) then
           Wpoly = b0 + w1 * ( b1 + w1 * ( b2 + w1 * ( b3 + b4 * w1 ) ) )
-          cross_section( lambdaNdx, vertNdx ) =                               &
+          wrkCrossSection( lambdaNdx, vertNdx ) =                             &
               this%cross_section_parms(1)%array( lambdaNdx, 1 )               &
               * 10._dk**( Wpoly * Temp )
         else
-          cross_section( lambdaNdx, vertNdx ) =                               &
+          wrkCrossSection( lambdaNdx, vertNdx ) =                             &
               this%cross_section_parms(1)%array(lambdaNdx,1)
         endif
       enddo
     enddo
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

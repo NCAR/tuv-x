@@ -13,7 +13,7 @@ module tuvx_profile_air
 
   type, extends(profile_t) :: profile_air_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_air
   end type profile_air_t
 
   interface profile_air_t
@@ -144,13 +144,16 @@ contains
                                      this%handle_%val_//" profile height grid" )
     this%edge_val_ = exp( this%edge_val_ )
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
       this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_ = ( this%edge_val_( 2 : this%ncells_ + 1 ) -              &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
       this%edge_val_( 1 : this%ncells_ ) )
 
-    this%layer_dens_ = zGrid%delta_ *                                         &
+    this%layer_dens_(:) = zGrid%delta_ *                                      &
       sqrt( this%edge_val_( 1 : this%ncells_ ) ) *                            &
       sqrt( this%edge_val_( 2 : this%ncells_ + 1 ) ) * km2cm
 
@@ -176,7 +179,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_air( this )
     ! Clean up this object
 
     type(profile_air_t), intent(inout) :: this
@@ -200,7 +203,7 @@ contains
       deallocate( this%burden_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_air
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

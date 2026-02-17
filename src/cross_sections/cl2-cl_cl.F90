@@ -81,6 +81,7 @@ contains
     integer :: lambdaNdx, vertNdx, nzdim
     real(dk)    :: aa, bb, bbsq, alpha, ex1, ex2
     real(dk),         allocatable :: modelTemp(:)
+    real(dk),         allocatable :: wrkCrossSection(:,:)
     class(grid_t),    pointer     :: lambdaGrid
     class(grid_t),    pointer     :: zGrid
     class(profile_t), pointer     :: temperature
@@ -102,7 +103,7 @@ contains
       modelTemp = temperature%edge_val_
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
     associate( wc => lambdaGrid%mid_ )
     do vertNdx = 1, nzdim
@@ -115,13 +116,13 @@ contains
                       * ( log( 329.5_dk / wc( lambdaNdx ) ) )**2 )
         ex2 =  .932_dk * exp( -91.5_dk * alpha                                &
                        * ( log( 406.5_dk / wc( lambdaNdx ) ) )**2 )
-        cross_section( lambdaNdx, vertNdx ) =                                 &
+        wrkCrossSection( lambdaNdx, vertNdx ) =                               &
             1.e-20_dk * sqrt( alpha ) * ( ex1 + ex2 )
       enddo
     enddo
     end associate
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

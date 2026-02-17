@@ -18,7 +18,7 @@ module tuvx_netcdf
     real(musica_dk), allocatable :: parameters(:,:)
   contains
     procedure :: read_netcdf_file => run
-    final     :: finalize
+    final     :: finalize_netcdf
   end type netcdf_t
 
 contains
@@ -79,7 +79,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_netcdf( this )
     ! Cleans up memory of the NetCDF class
 
     type(netcdf_t), intent(inout) :: this
@@ -94,7 +94,7 @@ contains
       deallocate( this%parameters )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_netcdf
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

@@ -707,14 +707,16 @@ contains
     NORM = rONE/ real( nz - iONE, dk )
     do k = iONE, nz
       o2col1( k ) = max( o2col( k ), colmin )
-      x  = log( o2col1( k ) )
-      if( x < 38.0_dk ) then
+      if( o2col( k ) < colmin ) then
         ktop1 = k - iONE
         ktop  = min( ktop1, ktop )
-      else if( x > 56.0_dk ) then
-        kbot = k
       else
-        o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        x  = log( o2col1( k ) )
+        if( x > 56.0_dk ) then
+          kbot = k
+        else
+          o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        endif
       endif
     enddo
 
@@ -805,14 +807,16 @@ contains
     kbot = 0
     do k = iONE, nz
       o2col1( k ) = max( o2col( k ), colmin )
-      x = log( o2col1( k ) )
-      if( x < 38.0_dk ) then
+      if( o2col( k ) < colmin ) then
         ktop1 = k - 1
         ktop  = min( ktop1, ktop )
-      else if ( x > 56.0_dk ) then
-        kbot = k
       else
-        o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        x = log( o2col1( k ) )
+        if ( x > 56.0_dk ) then
+          kbot = k
+        else
+          o2_cross_section_k( k, : nsrb ) = this%effxs( x, tlev( k ) )
+        endif
       endif
     enddo
 
@@ -896,7 +900,7 @@ contains
     class(la_sr_bands_t), intent(inout)  :: this
     real(dk), intent(in)  :: T
     real(dk), intent(in)  :: X
-    real(dk), allocatable :: XS(:)
+    real(dk)              :: XS( nsrb )
 
     ! Local variables
     real(dk), parameter :: T0 = 220._dk
@@ -904,7 +908,7 @@ contains
 
     call this%calc_params( X, A, B )
 
-    XS = exp( A * ( T - T0 ) + B )
+    XS(:) = exp( A * ( T - T0 ) + B )
 
   end function effxs
 
@@ -925,8 +929,8 @@ contains
     ! call Chebyshev Evaluation routine to calc A and B from
     !	set of 20 coeficients for each wavelength
     do I = 1,size( A )
-      A(I) = this%chebyshev_evaluation( this%AC( 1, I ), X )
-      B(I) = this%chebyshev_evaluation( this%BC( 1, I ), X )
+      A(I) = this%chebyshev_evaluation( this%AC( :, I ), X )
+      B(I) = this%chebyshev_evaluation( this%BC( :, I ), X )
     enddo
 
   end subroutine calc_params

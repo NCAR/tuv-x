@@ -74,6 +74,7 @@ contains
     real(dk),         allocatable :: quantum_yield_chnl1(:)
     real(dk),         allocatable :: quantum_yield_chnl2(:)
     real(dk),         allocatable :: quantum_yield_wrk(:)
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelDens(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -86,9 +87,9 @@ contains
     nzdim = zGrid%ncells_ + 1
     modelDens = mdlDensity%edge_val_
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
     allocate( quantum_yield_wrk( lambdaGrid%ncells_ ) )
-    quantum_yield = rZERO
+    wrkQuantumYield = rZERO
 
     quantum_yield_chnl1 = this%quantum_yield_parms(1)%array(:,2)
     quantum_yield_chnl2 = rONE - this%quantum_yield_parms(1)%array(:,1)
@@ -99,14 +100,14 @@ contains
     endwhere
     do vertNdx = 1,nzdim
       air_dens_factor = modelDens( vertNdx ) / 2.465e19_dk
-      quantum_yield( :, vertNdx ) =                                           &
+      wrkQuantumYield( :, vertNdx ) =                                         &
                       quantum_yield_chnl1 * ( rONE + quantum_yield_wrk )      &
                       / ( rONE + quantum_yield_wrk * air_dens_factor )
-      quantum_yield( :, vertNdx ) =                                           &
-          min( rONE, max( rZERO, quantum_yield( :, vertNdx ) ) )
+      wrkQuantumYield( :, vertNdx ) =                                         &
+          min( rONE, max( rZERO, wrkQuantumYield( :, vertNdx ) ) )
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

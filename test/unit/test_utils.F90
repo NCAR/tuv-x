@@ -117,6 +117,10 @@ contains
 
     integer :: i_level, i_wavelength
 
+    print *, "Checking 2D arrays with size ", size( results, dim = 1 ), " x ", &
+      size( results, dim = 2 )
+    print *, "Against expected results with size ", size( expected_results, dim = 1 ), &
+      " x ", size( expected_results, dim = 2 )
     call assert( 516187173, &
       size( results, dim = 1 ) == size( expected_results, dim = 1) )
     call assert( 963555019, &
