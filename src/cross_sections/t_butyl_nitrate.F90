@@ -81,6 +81,7 @@ contains
     real(dk), parameter :: b = 0.5307_dk
     real(dk), parameter :: c = -115.5_dk
     integer(ik)            :: nzdim, vertNdx
+    real(dk),      allocatable :: wrkCrossSection(:,:)
     class(grid_t), pointer :: zGrid
     class(grid_t), pointer :: lambdaGrid
 
@@ -94,20 +95,20 @@ contains
       endif
     endif
 
-    allocate( cross_section( lambdaGrid%ncells_, nzdim ) )
-    cross_section = rZERO
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
+    wrkCrossSection = rZERO
 
     where( lambdaGrid%mid_ >= 270._dk .and. lambdaGrid%mid_ <= 330._dk )
-      cross_section(:,1) =                                                    &
+      wrkCrossSection(:,1) =                                                  &
           exp( c + lambdaGrid%mid_ * ( b +  a * lambdaGrid%mid_ ) )
     elsewhere
-      cross_section(:,1) = rZERO
+      wrkCrossSection(:,1) = rZERO
     endwhere
     do vertNdx = 2, nzdim
-      cross_section( :, vertNdx ) = cross_section(:,1)
+      wrkCrossSection( :, vertNdx ) = wrkCrossSection(:,1)
     enddo
 
-    cross_section = transpose( cross_section )
+    cross_section = transpose( wrkCrossSection )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

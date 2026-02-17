@@ -83,6 +83,7 @@ contains
     integer     :: wNdx, vertNdx
     real(dk)    :: kt, q1, q2, T300, lambda
     real(dk)    :: qfac1, qfac2
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     class(grid_t),    pointer :: lambdaGrid
     class(grid_t),    pointer :: zGrid
     class(profile_t), pointer :: temperature
@@ -91,8 +92,8 @@ contains
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
     temperature => profile_warehouse%get_profile( this%temperature_profile_ )
 
-    allocate( quantum_yield( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
-    quantum_yield = rZERO
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    wrkQuantumYield = rZERO
 
     associate( w => lambdaGrid%mid_, Temp => temperature%edge_val_ )
 
@@ -105,14 +106,14 @@ contains
       T300 = Temp( vertNdx ) / 300._dk
 
       where( w(:) <= 305._dk )
-        quantum_yield( :, vertNdx ) = 0.90_dk
+        wrkQuantumYield( :, vertNdx ) = 0.90_dk
       elsewhere( w(:) > 328._dk .and. w(:) <= 340._dk )
-        quantum_yield( :, vertNdx ) = 0.08_dk
+        wrkQuantumYield( :, vertNdx ) = 0.08_dk
       endwhere
       do wNdx = 1, size( w )
         lambda = w( wNdx )
         if( lambda > 305._dk .and. lambda <= 328._dk ) then
-          quantum_yield( wNdx, vertNdx ) = 0.0765_dk                          &
+          wrkQuantumYield( wNdx, vertNdx ) = 0.0765_dk                        &
             + a(1) * qfac1 * EXP( -( (x(1) - lambda ) / om(1) )**4 )          &
             + a(2) * T300 * T300 * qfac2 *                                    &
                                      EXP( -( ( x(2) - lambda ) / om(2) )**2 ) &
@@ -123,7 +124,7 @@ contains
 
     end associate
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

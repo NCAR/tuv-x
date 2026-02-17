@@ -18,7 +18,7 @@ module tuvx_profile_solar_zenith_angle
 
   type, extends(profile_t) :: profile_solar_zenith_angle_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_solar_zenith_angle
   end type profile_solar_zenith_angle_t
 
   interface profile_solar_zenith_angle_t
@@ -93,12 +93,14 @@ contains
       this%edge_val_ = [this%edge_val_,NINETY - solarElevation]
     enddo
 
-    this%mid_val_ = .5_dk * ( &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( &
       this%edge_val_(1_ik:this%ncells_) + &
       this%edge_val_(2_ik:this%ncells_+1_ik) &
     )
 
-    this%delta_val_ = this%edge_val_(2_ik:this%ncells_+1_ik) - &
+    this%delta_val_(:) = this%edge_val_(2_ik:this%ncells_+1_ik) - &
       this%edge_val_(1_ik:this%ncells_)
 
     deallocate( timeGrid )
@@ -107,7 +109,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_solar_zenith_angle( this )
     ! Cleanup the memory used by this object
 
     type(profile_solar_zenith_angle_t), intent(inout) :: this ! This f:type:`~tuvx_profile_solar_zenith_angle/profile_solar_zenith_angle_t`
@@ -122,7 +124,7 @@ contains
       deallocate( this%delta_val_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_solar_zenith_angle
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

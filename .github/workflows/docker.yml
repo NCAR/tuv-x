@@ -27,11 +27,19 @@ jobs:
           - Dockerfile.mpi
           - Dockerfile.mpi.memcheck
           - Dockerfile.intel
+          - Dockerfile.nvhpc
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           submodules: recursive
+
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # this might remove tools that are actually needed,
+          # if set to "true" but frees about 6 GB
+          tool-cache: false
 
       - name: Build Docker image
         run: docker build -t tuvx -f docker/${{ matrix.dockerfile }} .

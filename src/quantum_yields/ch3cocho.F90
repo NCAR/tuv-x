@@ -75,6 +75,7 @@ contains
     integer                       :: nzdim, vertNdx
     integer                       :: lambdaNdx
     real(dk)                      :: phi0, kq, lambda, airfac, qy
+    real(dk),         allocatable :: wrkQuantumYield(:,:)
     real(dk),         allocatable :: modelDens(:)
     class(grid_t),    pointer     :: zGrid
     class(grid_t),    pointer     :: lambdaGrid
@@ -87,8 +88,8 @@ contains
     nzdim = zGrid%ncells_ + 1
     modelDens = mdlDensity%edge_val_
 
-    allocate( quantum_yield( lambdaGrid%ncells_, nzdim ) )
-    quantum_yield = rZERO
+    allocate( wrkQuantumYield( lambdaGrid%ncells_, nzdim ) )
+    wrkQuantumYield = rZERO
 
     ! zero pressure yield:
     ! 1.0 for wc < 380 nm
@@ -113,11 +114,11 @@ contains
         else
           qy = rZERO
         endif
-        quantum_yield( lambdaNdx, vertNdx ) = qy
+        wrkQuantumYield( lambdaNdx, vertNdx ) = qy
       enddo
     enddo
 
-    quantum_yield = transpose( quantum_yield )
+    quantum_yield = transpose( wrkQuantumYield )
 
     deallocate( zGrid )
     deallocate( lambdaGrid )

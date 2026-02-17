@@ -88,6 +88,9 @@ contains
     type(string_t) :: required_keys(1), optional_keys(1)
     type(string_t) :: rate_required_keys(2), rate_optional_keys(0)
     type(config_t) :: rate_config
+    type(string_t), allocatable :: temp_handles(:)
+    type(spectral_weight_ptr), allocatable :: temp_weights(:)
+    integer :: i_elem
 
     required_keys(1) = "rates"
     optional_keys(1) = "enable diagnostics"
@@ -131,14 +134,33 @@ contains
       call wght_config%get( "weights", spectral_weight_config, Iam )
       call wght_config%get( "name", wght_key, Iam )
 
-      rates%handles_ = [ rates%handles_, wght_key ]
+      temp_handles = rates%handles_
+      deallocate( rates%handles_ )
+      allocate( rates%handles_( size( temp_handles ) + 1 ) )
+      rates%handles_( 1:size( temp_handles ) ) = temp_handles(:)
+      rates%handles_( size( rates%handles_ ) ) = wght_key
+      deallocate( temp_handles )
+
       call config%get( iter, wght_config, Iam )
 
       spectral_weight%val_ => &
          spectral_weight_builder( spectral_weight_config, grid_warehouse,     &
                                   profile_warehouse )
-      rates%spectral_weights_ = [ rates%spectral_weights_,                    &
-                                  spectral_weight ]
+      allocate( temp_weights( size( rates%spectral_weights_ ) ) )
+      do i_elem = 1, size( temp_weights )
+        temp_weights( i_elem )%val_ => rates%spectral_weights_( i_elem )%val_
+        nullify( rates%spectral_weights_( i_elem )%val_ )
+      end do
+      deallocate( rates%spectral_weights_ )
+      allocate( rates%spectral_weights_( size( temp_weights ) + 1 ) )
+      do i_elem = 1, size( temp_weights )
+        rates%spectral_weights_( i_elem )%val_ => temp_weights( i_elem )%val_
+        nullify( temp_weights( i_elem )%val_ )
+      end do
+      rates%spectral_weights_( size( rates%spectral_weights_ ) )%val_ =>     &
+          spectral_weight%val_
+      nullify( spectral_weight%val_ )
+      deallocate( temp_weights )
     end do
     deallocate( iter )
 

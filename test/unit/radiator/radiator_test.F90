@@ -77,8 +77,10 @@ program radiator_test
     use tuvx_radiator,                 only : radiator_ptr, radiator_state_t
 
     type(radiator_state_t) :: a_state, b_state, total_state
-    type(radiator_ptr)     :: radiators(2), one_radiator(1)
+    type(radiator_ptr), allocatable :: radiators(:), one_radiator(:)
 
+    allocate( radiators(2) )
+    allocate( one_radiator(1) )
     allocate( radiators(1)%val_ )
     allocate( radiators(2)%val_ )
     allocate( one_radiator(1)%val_ )

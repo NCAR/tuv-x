@@ -137,8 +137,10 @@ contains
       call assert_msg( 834627068, nTemps >= nParms,                           &
                        'File: '//file_path//' temperature array has less '//  &
                        'than the number of parameters.' )
-      Xsection%deltaT = Xsection%temperature( 2 : nParms )                    &
-                        - Xsection%temperature( 1 : nParms - 1 )
+      if( allocated( Xsection%deltaT ) ) deallocate( Xsection%deltaT )
+      allocate( Xsection%deltaT( nParms - 1 ) )
+      Xsection%deltaT(:) = Xsection%temperature( 2 : nParms )                 &
+                          - Xsection%temperature( 1 : nParms - 1 )
       monopos = all( Xsection%deltaT > rZERO )
       if( .not. monopos ) then
         call assert_msg( 655847084, .not. any( Xsection%deltaT > rZERO ),     &
@@ -154,8 +156,10 @@ contains
               netcdf_obj%parameters( :, Ndxu )
           netcdf_obj%parameters( :, Ndxu ) = data_parameter
         enddo
-        Xsection%deltaT = Xsection%temperature( 2 : nParms )                  &
-                          - Xsection%temperature( 1 : nParms - 1 )
+        if( allocated( Xsection%deltaT ) ) deallocate( Xsection%deltaT )
+        allocate( Xsection%deltaT( nParms - 1 ) )
+        Xsection%deltaT(:) = Xsection%temperature( 2 : nParms )               &
+                            - Xsection%temperature( 1 : nParms - 1 )
       endif
 
       ! interpolate from data to model wavelength grid

@@ -55,9 +55,11 @@ contains
     call config%get( "values", this%edge_, Iam )
 
     this%ncells_ = size( this%edge_ ) - 1
-    this%mid_ = .5_dk *                                                       &
+    allocate( this%mid_( this%ncells_ ) )
+    allocate( this%delta_( this%ncells_ ) )
+    this%mid_(:) = .5_dk *                                                    &
       ( this%edge_( 1 : this%ncells_ ) + this%edge_( 2 : this%ncells_ + 1 ) )
-    this%delta_ =                                                             &
+    this%delta_(:) =                                                          &
       this%edge_( 2 : this%ncells_ + 1 ) - this%edge_( 1 : this%ncells_ )
 
   end function constructor

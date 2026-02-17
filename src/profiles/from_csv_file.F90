@@ -14,7 +14,7 @@ module tuvx_profile_from_csv_file
 
   type, extends(profile_t) :: profile_from_csv_file_t
   contains
-    final     :: finalize
+    final     :: finalize_profile_from_csv_file
   end type profile_from_csv_file_t
 
   interface profile_from_csv_file_t
@@ -148,10 +148,12 @@ contains
     this%edge_val_ = theInterpolator%interpolate( grid%edge_, zdata, profile, &
                                      this%handle_%val_//" profile height grid" )
 
-    this%mid_val_ = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +            &
+    allocate( this%mid_val_( this%ncells_ ) )
+    allocate( this%delta_val_( this%ncells_ ) )
+    this%mid_val_(:) = .5_dk * ( this%edge_val_( 1 : this%ncells_ ) +         &
                               this%edge_val_( 2 : this%ncells_ + 1 ) )
 
-    this%delta_val_  = ( this%edge_val_( 2 : this%ncells_ + 1 ) -             &
+    this%delta_val_(:) = ( this%edge_val_( 2 : this%ncells_ + 1 ) -           &
                          this%edge_val_( 1 : this%ncells_) )
 
     ! This can be removed as part of issue #139 for adopting SI units
@@ -161,7 +163,8 @@ contains
       unit_conv = 1.0_dk
     end if
 
-    this%layer_dens_ = this%mid_val_ * grid%delta_ * unit_conv
+    allocate( this%layer_dens_( this%ncells_ ) )
+    this%layer_dens_(:) = this%mid_val_ * grid%delta_ * unit_conv
 
     this%layer_dens_( this%ncells_ ) = this%layer_dens_( this%ncells_ )
 
@@ -188,7 +191,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine finalize( this )
+  subroutine finalize_profile_from_csv_file( this )
     ! Cleanup the memory used by this object
 
     type(profile_from_csv_file_t), intent(inout) :: this ! This f:type:`~tuvx_profile_from_csv_file/profile_from_csv_file_t`
@@ -207,7 +210,7 @@ contains
       deallocate( this%layer_dens_ )
     endif
 
-  end subroutine finalize
+  end subroutine finalize_profile_from_csv_file
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

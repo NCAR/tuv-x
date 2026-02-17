@@ -122,8 +122,10 @@ contains
       call assert_msg( 167399246, nTemps >= nParms, Iam//'File: '//           &
                        trim( netcdfFiles( fileNdx )%to_char( ) )//            &
                        ' temperature array < number parameters' )
-      Qyield%deltaT = Qyield%temperature( 2 : nParms ) -                      &
-                        Qyield%temperature( 1 : nParms - 1 )
+      if( allocated( Qyield%deltaT ) ) deallocate( Qyield%deltaT )
+      allocate( Qyield%deltaT( nParms - 1 ) )
+      Qyield%deltaT(:) = Qyield%temperature( 2 : nParms ) -                   &
+                          Qyield%temperature( 1 : nParms - 1 )
       monopos = all( Qyield%deltaT > rZERO )
       if( .not. monopos ) then
         call assert_msg( 606144012, .not. any( Qyield%deltaT > rZERO ),       &
@@ -140,8 +142,10 @@ contains
               netcdf_obj%parameters( :, Ndxu )
           netcdf_obj%parameters( :, Ndxu ) = data_parameter
         enddo
-        Qyield%deltaT = Qyield%temperature( 2 : nParms ) -                    &
-                          Qyield%temperature( 1 : nParms - 1 )
+        if( allocated( Qyield%deltaT ) ) deallocate( Qyield%deltaT )
+        allocate( Qyield%deltaT( nParms - 1 ) )
+        Qyield%deltaT(:) = Qyield%temperature( 2 : nParms ) -                 &
+                            Qyield%temperature( 1 : nParms - 1 )
       endif
       ! interpolate from data to model wavelength grid
       if( allocated( netcdf_obj%wavelength ) ) then

@@ -64,27 +64,27 @@ contains
     call assert( 312726817, associated( my_file ) )
 
     ! check units
-    var_name = "foo"
+    var_name = string_t("foo")
     call assert( 600672797, my_file%variable_units( var_name, my_name )       &
                             .eq. "foobits" )
 
     ! check for variables
-    var_name = "foo"
+    var_name = string_t("foo")
     call assert( 745691162, my_file%exists( var_name, my_name ) )
     call assert( 852745200, .not. my_file%exists( "not there", my_name ) )
 
     ! scalar real
-    var_name = "qux"
+    var_name = string_t("qux")
     call my_file%read( var_name, real0D, my_name )
     call assert( 322376438, real0D .eq. 92.37_dk )
 
     ! scalar int
-    var_name = "quux"
+    var_name = string_t("quux")
     call my_file%read( var_name, int0D, my_name )
     call assert( 330171719, int0D .eq. 7 )
 
     ! unallocated 1D real
-    var_name = "foo"
+    var_name = string_t("foo")
     call my_file%read( var_name, real1D, my_name )
     call assert( 441036825, allocated( real1D ) )
     call assert( 442942359, size( real1D ) .eq. 4 )
@@ -96,7 +96,7 @@ contains
 
     ! pre-allocatted 1D real
     allocate( real1D( 3 ) )
-    var_name = "bar"
+    var_name = string_t("bar")
     call my_file%read( var_name, real1D, my_name )
     call assert( 329457898, allocated( real1D ) )
     call assert( 889144089, size( real1D ) .eq. 3 )
@@ -106,7 +106,7 @@ contains
     deallocate( real1D )
 
     ! unallocated 1D int
-    var_name = "quuz"
+    var_name = string_t("quuz")
     call my_file%read( var_name, int1D, my_name )
     call assert( 595878700, allocated( int1D ) )
     call assert( 820515390, size( int1D ) .eq. 4 )
@@ -118,7 +118,7 @@ contains
 
     ! pre-allocated 1D int
     allocate( int1D( 4 ) )
-    var_name = "quuz"
+    var_name = string_t("quuz")
     call my_file%read( var_name, int1D, my_name )
     call assert( 917493109, allocated( int1D ) )
     call assert( 182385707, size( int1D ) .eq. 4 )
@@ -129,7 +129,7 @@ contains
     deallocate( int1D )
 
     ! unallocated 2D real
-    var_name = "baz"
+    var_name = string_t("baz")
     call my_file%read( var_name, real2D, my_name )
     call assert( 910775563, allocated( real2D ) )
     call assert( 517887503, size( real2D, 1 ) .eq. 3 )
@@ -169,7 +169,7 @@ contains
     deallocate( real2D )
 
     ! 3D unallocated variable
-    var_name = "foobar"
+    var_name = string_t("foobar")
     call my_file%read( var_name, real3D, my_name )
     call assert( 628827846, allocated( real3D ) )
     call assert( 688571939, size( real3D, 1 ) .eq. 1 )
@@ -190,7 +190,7 @@ contains
     deallocate( real3D )
 
     ! 3D pre-allocated variable
-    var_name = "foobar"
+    var_name = string_t("foobar")
     allocate( real3D( 1, 3, 4 ) )
     call my_file%read( var_name, real3D, my_name )
     call assert( 506458779, allocated( real3D ) )
@@ -212,7 +212,7 @@ contains
     deallocate( real3D )
 
     ! 4D unallocated variable
-    var_name = "corge"
+    var_name = string_t("corge")
     call my_file%read( var_name, real4D, my_name )
     call assert( 464572470, allocated( real4D ) )
     call assert( 911940316, size( real4D, 1 ) .eq. 2 )
@@ -246,7 +246,7 @@ contains
     deallocate( real4D )
 
     ! 4D allocated variable
-    var_name = "corge"
+    var_name = string_t("corge")
     allocate( real4D( 2, 1, 3, 4 ) )
     call my_file%read( var_name, real4D, my_name )
     call assert( 493635311, allocated( real4D ) )
@@ -281,13 +281,13 @@ contains
     deallocate( real4D )
 
     ! dimension names
-    var_name = "qux"
+    var_name = string_t("qux")
     dim_names = my_file%variable_dimensions( var_name, my_name )
     call assert( 685336671, allocated( dim_names ) )
     call assert( 410031263, size( dim_names ) .eq. 0 )
     deallocate( dim_names )
 
-    var_name = "corge"
+    var_name = string_t("corge")
     dim_names = my_file%variable_dimensions( var_name, my_name )
     call assert( 513726528, allocated( dim_names ) )
     call assert( 562942007, size( dim_names ) .eq. 4 )
@@ -324,24 +324,24 @@ contains
     my_file => io_netcdf_t( file_name )
     call assert( 362264371, associated( my_file ) )
 
-    var_name = "qux"
+    var_name = string_t("qux")
     call my_file%write( var_name, 92.37_dk, my_name )
 
-    var_name = "foo"
-    dim_names(1) = "f"
-    units = "foobits"
+    var_name = string_t("foo")
+    dim_names(1) = string_t("f")
+    units = string_t("foobits")
     call my_file%write( var_name, dim_names(1),                               &
                         (/ 15.32_dk, 3.14_dk, 26.71_dk, 19.34_dk /), my_name )
     call my_file%set_variable_units( var_name, units, my_name )
 
-    var_name = "bar"
-    dim_names(1) = "g"
+    var_name = string_t("bar")
+    dim_names(1) = string_t("g")
     call my_file%write( var_name, dim_names(1),                               &
                         (/ 51.43_dk, 123.01_dk, 32.61_dk /), my_name )
 
-    var_name = "baz"
-    dim_names(1) = "g"
-    dim_names(2) = "f"
+    var_name = string_t("baz")
+    dim_names(1) = string_t("g")
+    dim_names(2) = string_t("f")
     allocate( real2D( 3, 4 ) )
     real2D(:,1) = (/ 31.2_dk, 41.3_dk, 623.34_dk /)
     real2D(:,2) = (/ 124.24_dk, 1592.3_dk, 42.53_dk /)
@@ -349,10 +349,10 @@ contains
     real2D(:,4) = (/ 51.64_dk, -61.7_dk, -423000.0_dk /)
     call my_file%write( var_name, dim_names(1:2), real2D, my_name )
 
-    var_name = "foobar"
-    dim_names(1) = "h"
-    dim_names(2) = "g"
-    dim_names(3) = "f"
+    var_name = string_t("foobar")
+    dim_names(1) = string_t("h")
+    dim_names(2) = string_t("g")
+    dim_names(3) = string_t("f")
     allocate( real3D( 1, 3, 4 ) )
     real3D(1,:,1) = (/ 532.123_dk, 1.5e+28_dk, 42.5_dk /)
     real3D(1,:,2) = (/ 39.25_dk, 4293.12_dk, 9753.231_dk /)
@@ -360,11 +360,11 @@ contains
     real3D(1,:,4) = (/ 84918000.0_dk, 13.2_dk, 8293.12_dk /)
     call my_file%write( var_name, dim_names(1:3), real3D, my_name )
 
-    var_name = "corge"
-    dim_names(1) = "i"
-    dim_names(2) = "h"
-    dim_names(3) = "g"
-    dim_names(4) = "f"
+    var_name = string_t("corge")
+    dim_names(1) = string_t("i")
+    dim_names(2) = string_t("h")
+    dim_names(3) = string_t("g")
+    dim_names(4) = string_t("f")
     allocate( real4D( 2, 1, 3, 4 ) )
     real4D(:,1,1,1) = (/ 532.123_dk, 632.123_dk /)
     real4D(:,1,2,1) = (/ 1.5e+28_dk, 2.5e+28_dk /)
@@ -380,11 +380,11 @@ contains
     real4D(:,1,3,4) = (/ 8293.12_dk, 9293.12_dk /)
     call my_file%write( var_name, dim_names(1:4), real4D, my_name )
 
-    var_name = "quux"
+    var_name = string_t("quux")
     call my_file%write( var_name, 7, my_name )
 
-    var_name = "quuz"
-    dim_names(1) = "f"
+    var_name = string_t("quuz")
+    dim_names(1) = string_t("f")
     call my_file%write( var_name, dim_names(1), (/ 9, 3, 12, 1 /), my_name )
 
     ! clean up
@@ -415,18 +415,18 @@ contains
     my_file => io_netcdf_t( file_name )
 
     ! 1D real
-    var_name = "foo"
-    append_dim = "f"
-    units = "foobits"
+    var_name = string_t("foo")
+    append_dim = string_t("f")
+    units = string_t("foobits")
     call my_file%append( var_name, units, append_dim, 1, 15.32_dk, my_name )
     call my_file%append( var_name, units, append_dim, 2, 3.14_dk,  my_name )
     call my_file%append( var_name, units, append_dim, 3, 26.71_dk, my_name )
     call my_file%append( var_name, units, append_dim, 4, 19.34_dk, my_name )
 
     ! 2D real
-    var_name = "baz"
-    append_dim = "f"
-    dim_names(1) = "g"
+    var_name = string_t("baz")
+    append_dim = string_t("f")
+    dim_names(1) = string_t("g")
     allocate( real1D( 3 ) )
     real1D(:) = (/ 31.2_dk, 41.3_dk, 623.34_dk /)
     call my_file%append( var_name, units, append_dim, 1, dim_names(1), real1D,&
@@ -443,10 +443,10 @@ contains
     deallocate( real1D )
 
     ! 3D real
-    var_name = "foobar"
-    append_dim   = "f"
-    dim_names(1) = "h"
-    dim_names(2) = "g"
+    var_name = string_t("foobar")
+    append_dim   = string_t("f")
+    dim_names(1) = string_t("h")
+    dim_names(2) = string_t("g")
     allocate( real2D( 1, 3 ) )
     real2D(1,:) = (/ 532.123_dk, 1.5e+28_dk, 42.5_dk /)
     call my_file%append( var_name, units, append_dim, 1, dim_names, real2D,   &
@@ -463,11 +463,12 @@ contains
     deallocate( real2D )
 
     ! 4D real
-    var_name = "corge"
-    append_dim   = "f"
-    dim_names(1) = "i"
-    dim_names(2) = "h"
-    dim_names(3) = "g"
+    var_name = string_t("corge")
+    append_dim   = string_t("f")
+    dim_names(1) = string_t("i")
+    dim_names(2) = string_t("h")
+    dim_names(3) = string_t("g")
+    dim_names(4) = string_t("f")
     allocate( real3D( 2, 1, 3 ) )
     real3D(:,1,1) = (/ 532.123_dk, 632.123_dk /)
     real3D(:,1,2) = (/ 1.5e+28_dk, 2.5e+28_dk /)
@@ -492,8 +493,8 @@ contains
     deallocate( real3D )
 
     ! 1D int
-    var_name = "quuz"
-    append_dim = "f"
+    var_name = string_t("quuz")
+    append_dim = string_t("f")
     call my_file%append( var_name, units, append_dim, 1, 9,  my_name )
     call my_file%append( var_name, units, append_dim, 2, 3,  my_name )
     call my_file%append( var_name, units, append_dim, 3, 12, my_name )
@@ -508,17 +509,17 @@ contains
     call assert( 829668994, associated( my_file ) )
 
     ! check units
-    var_name = "foo"
+    var_name = string_t("foo")
     call assert( 606937838, my_file%variable_units( var_name, my_name )       &
                             .eq. "foobits" )
 
     ! check for variables
-    var_name = "foo"
+    var_name = string_t("foo")
     call assert( 154305685, my_file%exists( var_name, my_name ) )
     call assert( 601673531, .not. my_file%exists( "not there", my_name ) )
 
     ! 1D real
-    var_name = "foo"
+    var_name = string_t("foo")
     call my_file%read( var_name, real1D, my_name )
     call assert( 214049778, allocated( real1D ) )
     call assert( 661417624, size( real1D ) .eq. 4 )
@@ -529,7 +530,7 @@ contains
     deallocate( real1D )
 
     ! 2D real
-    var_name = "baz"
+    var_name = string_t("baz")
     call my_file%read( var_name, real2D, my_name )
     call assert( 125066082, allocated( real2D ) )
     call assert( 919917577, size( real2D, 1 ) .eq. 4 )
@@ -549,7 +550,7 @@ contains
     deallocate( real2D )
 
     ! 3D variable
-    var_name = "foobar"
+    var_name = string_t("foobar")
     call my_file%read( var_name, real3D, my_name )
     call assert( 539636810, allocated( real3D ) )
     call assert( 704529407, size( real3D, 1 ) .eq. 4 )
@@ -570,7 +571,7 @@ contains
     deallocate( real3D )
 
     ! 4D variable
-    var_name = "corge"
+    var_name = string_t("corge")
     call my_file%read( var_name, real4D, my_name )
     call assert( 514219865, allocated( real4D ) )
     call assert( 344062961, size( real4D, 1 ) .eq. 4 )
@@ -604,7 +605,7 @@ contains
     deallocate( real4D )
 
     ! 1D int
-    var_name = "quuz"
+    var_name = string_t("quuz")
     call my_file%read( var_name, int1D, my_name )
     call assert( 250469612, allocated( int1D ) )
     call assert( 697837458, size( int1D ) .eq. 4 )
