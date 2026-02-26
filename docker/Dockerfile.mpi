@@ -1,4 +1,4 @@
-FROM fedora:37
+FROM fedora:latest
 
 RUN dnf -y update \
     && dnf install -y sudo \
