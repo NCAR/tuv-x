@@ -196,12 +196,6 @@ contains
          ENDIF
          TAUC(LC) = TAUC(LC - 1) + DTAUC(LC)
       ENDDO
-!                                ** Check input dimensions and variables
-
-      CALL CHEKIN( NLYR, DTAUC, SSALB, PMOM,          &
-                   NTAU, UTAU, NSTR, NUMU, UMU, NPHI, &
-                   PHI, UMU0, FISOT, ALBEDO,          &
-                   HL, TAUC, solver_constants )
 
 !                                 ** Zero internal and output arrays
 
@@ -225,6 +219,13 @@ contains
           NCUT, NLYR, NTAU, NN, NSTR, PLANK,                    &
           NUMU, ONLYFL, OPRIM, PMOM, SSALB, TAUC, TAUCPR, UTAU, &
           UTAUPR, UMU, UMU0, USRTAU, USRANG )
+
+!                                ** Check input dimensions and variables
+
+      CALL CHEKIN( NLYR, DTAUC, SSALB, PMOM,          &
+                   NTAU, UTAU, NSTR, NUMU, UMU, NPHI, &
+                   PHI, UMU0, FISOT, ALBEDO,          &
+                   HL, TAUC, solver_constants )
 
 !                                 ** Print input information
       IF ( PRNT(1) ) THEN

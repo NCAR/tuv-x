@@ -16,7 +16,7 @@ authors:
   - family-names: Thind
     given-names: Montek
 title: "NCAR/tuv-x"
-version: 0.14.0
+version: 0.14.3
 doi: 10.5281/zenodo.7126039
 url: "https://github.com/NCAR/tuv-x"
 year: 2025
