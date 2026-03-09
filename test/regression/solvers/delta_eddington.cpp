@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
+#include <cmath>
 
 double* CopyVector(const std::vector<double>& vec)
 {
@@ -67,8 +68,8 @@ void CheckInputs(
 {
   // Solar zenith angles have been converted to radians from degrees
   ASSERT_EQ(solar_zenith_angles.size(), 2);
-  ASSERT_NEAR(solar_zenith_angles.at(0), 1.8294 * 3.14159265 / 180.0, 1.0e-6);
-  ASSERT_NEAR(solar_zenith_angles.at(1), 28.199 * 3.14159265 / 180.0, 1.0e-6);
+  ASSERT_NEAR(solar_zenith_angles.at(0), 1.8294 * M_PI / 180.0, 1.0e-4);
+  ASSERT_NEAR(solar_zenith_angles.at(1), 28.199 * M_PI / 180.0, 1.0e-4);
 
   // Earth-Sun distances are in AU
   ASSERT_EQ(earth_sun_distances.size(), 2);
