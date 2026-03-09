@@ -4,8 +4,8 @@
 
 #include <gtest/gtest.h>
 
-#include <iostream>
 #include <cmath>
+#include <iostream>
 
 double* CopyVector(const std::vector<double>& vec)
 {
