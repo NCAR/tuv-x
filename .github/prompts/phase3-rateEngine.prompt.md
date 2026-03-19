@@ -4,7 +4,7 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 ## Context
 
-Once the radiation field is solved (Phase 1) and transforms are available (Phase 2), photolysis rates, dose rates, and heating rates are computed by integrating the radiation field against cross-sections, quantum yields, or spectral weights over wavelength. These are all weighted spectral integrals — highly parallelizable across columns and reactions.
+Once the radiation field is solved (Phase 1) and transforms are defined (Phase 2), rates are computed by a three-step pipeline: (1) **calculate** each transform (cross-section, quantum yield, or spectral weight) to produce weight matrices `[λ × z × col]`, (2) **apply** the weights to the radiation field via element-wise multiplication, (3) **reduce** by summing over wavelengths to produce rates `[z × col]`. These are all weighted spectral integrals — highly parallelizable across columns and reactions.
 
 ## Step 13: Implement photolysis rate calculator
 
@@ -15,9 +15,9 @@ $$J_i(z) = \sum_\lambda F(\lambda, z) \cdot \sigma_i(\lambda, z) \cdot \phi_i(\l
 where $F$ is actinic flux, $\sigma_i$ is cross-section, $\phi_i$ is quantum yield, and $\Delta\lambda$ is wavelength bin width.
 
 Implementation:
-- Evaluate each reaction's cross-section and quantum yield transforms at the current atmospheric state
-- Compute element-wise product with actinic flux using `ForEachRow` and column views
-- Sum over wavelength dimension (reduction per height layer per column)
+- **Calculate**: evaluate each reaction's cross-section and quantum yield transforms at the current atmospheric state to produce weight matrices
+- **Apply**: compute element-wise product of actinic flux × σ weights × φ weights × Δλ using `ForEachRow` and column views
+- **Reduce**: sum over wavelength dimension (reduction per height layer per column)
 - Output: 3D array `[reaction × height × column]`
 - Use `ArrayPolicy::Function` to pre-compile the per-timestep rate calculation for optimal vectorization across columns
 
@@ -27,6 +27,8 @@ template<typename ArrayPolicy>
 class PhotolysisCalculator {
     void add_reaction(std::string name, TransformFunc<ArrayPolicy> cross_section, TransformFunc<ArrayPolicy> quantum_yield);
     void calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state, Array3D<T>& rates);
+    // calculate() internally: (1) calculates each transform's weights from `state`,
+    // (2) applies weights to `field` (element-wise multiply), (3) reduces over wavelengths into `rates`
 };
 ```
 

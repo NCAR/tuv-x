@@ -144,7 +144,9 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 2: Composable Transform System
 
-- [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that maps atmospheric state to a 3D output array `[wavelength × height × column]`:
+   **What is a transform?** A transform is a set of per-wavelength, per-height weights `[wavelength × height × column]` — conceptually a weight matrix that can be *applied* to the radiation field (element-wise multiplication). Cross-sections, quantum yields, and spectral weights are all transforms. Calculating a transform may depend on atmospheric conditions (T, P, density), but those are inputs to the *weight calculation*, not to the application. You first **calculate** a transform (produce the weight matrix), then **apply** it to the radiation field (multiply), then **reduce** (sum over wavelengths) to get rates.
+
+- [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[wavelength × height × column]` given the current atmospheric state:
    ```cpp
    using TransformFunc = std::function<void(
        const Grid<Policy>& wavelength_grid,
@@ -152,20 +154,20 @@ This means solver functions never loop over columns explicitly — they express 
        const Profile<Policy>& temperature,
        const Profile<Policy>& pressure,
        const Profile<Policy>& air_density,
-       Array3D<T>& output  // [wavelength × height × column]
+       Array3D<T>& weights  // [wavelength × height × column] — the calculated transform
    )>;
    ```
-   **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform — users can write raw lambdas, function objects, or free functions directly. No factory or wrapper is required:
+   **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform calculator — users can write raw lambdas, function objects, or free functions directly. No factory or wrapper is required:
    ```cpp
-   // User-written transform — just a lambda matching the signature:
+   // User-written transform — just a lambda that calculates weights:
    TransformFunc<Policy> my_cross_section = [coeff](const auto& wl_grid, const auto& alt_grid,
-       const auto& temperature, const auto& pressure, const auto& air_density, auto& output) {
-       // User's custom logic using ForEachRow, ColumnView, etc.
+       const auto& temperature, const auto& pressure, const auto& air_density, auto& weights) {
+       // Calculate cross-section weights using ForEachRow, ColumnView, etc.
    };
    ```
-   The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
+   The weights include the column dimension because temperature, pressure, and density vary per column, so the calculated weights differ per column. The weights are later applied to the radiation field in Phase 3 (rate calculation).
 
-- [ ] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
+- [ ] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables — each one calculates a particular kind of weight matrix. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda that calculates weights matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
 
    | Factory function | Math | Useful for |
    |-----------|------|------------------------|
@@ -184,17 +186,17 @@ This means solver functions never loop over columns explicitly — they express 
 
    | Combinator | Description |
    |------------|-------------|
-   | `in_region(lambda_min, lambda_max, transform)` | Apply transform only in a wavelength sub-range; zero outside |
-   | `multiply(a, b)` | Run both transforms, multiply their outputs element-wise |
-   | `add(a, b)` | Run both transforms, add their outputs element-wise |
-   | `piecewise({region1: t1, region2: t2, ...})` | Different transforms in different wavelength regions |
-   | `clamp(transform, min, max)` | Clamp output values |
-   | `override_band(band_name, value, transform)` | Replace values in named spectral bands (Lyman-alpha, Schumann-Runge) |
-   | `scale(factor, transform)` | Multiply by constant factor |
+   | `in_region(lambda_min, lambda_max, transform)` | Calculate weights only where λ_min ≤ λ ≤ λ_max; zero outside |
+   | `multiply(a, b)` | Calculate both weight sets, multiply element-wise to produce composite weights |
+   | `add(a, b)` | Calculate both weight sets, add element-wise to produce composite weights |
+   | `piecewise({region1: t1, region2: t2, ...})` | Calculate different weights in different wavelength regions |
+   | `clamp(transform, min, max)` | Clamp calculated weight values |
+   | `override_band(band_name, value, transform)` | Replace weight values in named spectral bands (Lyman-alpha, Schumann-Runge) |
+   | `scale(factor, transform)` | Multiply calculated weights by constant factor |
 
-   **Why combinators instead of sequential application?** A `TransformFunc` *writes* to the output array — it doesn't modify an existing value. Applying two transforms in sequence would just overwrite the first result with the second. Combinators like `multiply(a, b)` internally run both transforms (one into the output, one into a temporary), then combine the results element-wise. This is the only way to combine two independent computations.
+   **Why combinators instead of sequential calculation?** A `TransformFunc` *writes* to the weight array — it doesn't modify an existing value. Calculating two transforms in sequence would just overwrite the first weight set with the second. Combinators like `multiply(a, b)` internally calculate both weight sets (one into the output, one into a temporary), then combine them element-wise to produce a single composite weight matrix.
 
-- [ ] 10. **Port existing cross-section algorithms as composed transforms.** For each of the 27 cross-section types in `src/cross_sections/`, express as a library factory, a composition of factories via combinators, or a direct user-written `TransformFunc` lambda. Example for CCl4:
+- [ ] 10. **Port existing cross-section algorithms as composed transforms.** For each of the 27 cross-section types in `src/cross_sections/`, express the weight calculation as a library factory, a composition of factories via combinators, or a direct user-written `TransformFunc` lambda. Example for CCl4:
     ```cpp
     auto ccl4_xs = multiply(
         from_data(netcdf_reader("CCl4.nc"), conserving_interpolator()),
@@ -210,7 +212,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 3: Rate Calculation Engine
 
-- [ ] 13. **Implement photolysis rate calculator.** Port `src/photolysis_rates.F90`. The core operation is:
+- [ ] 13. **Implement photolysis rate calculator.** Port `src/photolysis_rates.F90`. The pipeline is: (1) **calculate** each reaction's cross-section and quantum yield transforms (weight matrices), (2) **apply** them to the radiation field (element-wise multiply: field × σ × φ × Δλ), (3) **reduce** by summing over wavelengths:
     $$J_i(z) = \sum_\lambda F(\lambda, z) \cdot \sigma_i(\lambda, z) \cdot \phi_i(\lambda, z) \cdot \Delta\lambda$$
     This is a batched dot product per height layer per reaction — highly parallelizable across columns and reactions. The API takes a solved `RadiationField`, a list of `(cross_section_transform, quantum_yield_transform)` pairs, and returns an `Array3D [reaction × height × column]`.
 
@@ -274,7 +276,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 - **Unit tests** (GTest): Each transform factory function, combinator, interpolator, data reader, and solver step gets individual tests. Include tests of user-written `TransformFunc` lambdas to verify the API is fully open. Migrate existing C++ tests from the current repo.
 - **Regression tests**: Pre-compute reference outputs from the current Fortran solver for several standard configurations (`examples/tuv_5_4.json`, `examples/ts1_tsmlt.json`) and store as binary fixtures. The new C++ solver must match within floating-point tolerance.
-- **Cross-validation of transforms**: For each of the 27 cross-section types and 20 quantum yield types, compare the new composed-transform output against Fortran reference values at multiple temperature/pressure points.
+- **Cross-validation of transforms**: For each of the 27 cross-section types and 20 quantum yield types, compare the calculated weight matrices against Fortran reference values at multiple temperature/pressure points.
 - **Performance benchmarks**: Google Benchmark tests for multi-column solver throughput (1, 10, 100, 1000 columns) on CPU. CUDA/HIP benchmarks once GPU policy is implemented.
 - **MUSICA integration test**: End-to-end test through MUSICA's config-driven pipeline producing identical photolysis rates.
 
@@ -283,7 +285,7 @@ This means solver functions never loop over columns explicitly — they express 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Language | C++ | Builds on existing partial port; native MUSICA integration; standard HPC ecosystem |
-| Transform API | Open callable signature (`TransformFunc`) | Any lambda/callable matching the signature is a valid transform; convenience factory library covers common patterns; combinators compose any transforms; config layer lives in MUSICA |
+| Transform API | Open callable signature (`TransformFunc`) | A transform is a weight matrix `[λ × z × col]`; `TransformFunc` *calculates* the weights from atmospheric state; any matching callable is a valid transform calculator; convenience factory library covers common patterns; combinators compose weight calculations; the weights are then *applied* to the radiation field separately (Phase 3) |
 | GPU portability | Template policies | Lighter weight than Kokkos/SYCL; consistent with existing codebase; can wrap Kokkos later if needed |
 | Migration strategy | New standalone repo | Clean separation; old Fortran repo stays as reference/validation; MUSICA switches dependency when ready |
 | Data readers | Pluggable interface, NetCDF-C default | Future-proofs against format changes; no Fortran dependency |

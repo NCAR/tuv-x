@@ -4,11 +4,15 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 ## Context
 
-The current Fortran codebase has 27 cross-section types, 20 quantum yield types, and 12 spectral weight types, each implemented as a separate class with a factory pattern. Analysis shows these decompose into ~8 recurring mathematical patterns. The new library defines an open `TransformFunc` API — any lambda or callable matching the signature is a valid transform. A convenience library of pre-built factory functions covers the common patterns, and combinators allow composing transforms. Users can mix library-provided factories, combinators, and raw user-written lambdas freely. No config files — MUSICA handles configuration.
+The current Fortran codebase has 27 cross-section types, 20 quantum yield types, and 12 spectral weight types, each implemented as a separate class with a factory pattern. Analysis shows these decompose into ~8 recurring mathematical patterns.
+
+**What is a transform?** A transform is a set of per-wavelength, per-height weights `[λ × z × col]` — conceptually a weight matrix that can be *applied* to the radiation field via element-wise multiplication. Cross-sections, quantum yields, and spectral weights are all transforms. The weight values may depend on atmospheric conditions (T, P, density), but those are inputs to the *weight calculation*, not to the application. The pipeline is: **calculate** the transform (produce the weight matrix) → **apply** it to the radiation field (multiply) → **reduce** (sum over wavelengths) to get rates (Phase 3).
+
+The new library defines an open `TransformFunc` API — any lambda or callable matching the signature can *calculate* a transform. A convenience library of pre-built factory functions covers the common weight-calculation patterns, and combinators allow composing weight calculations. Users can mix library-provided factories, combinators, and raw user-written lambdas freely. No config files — MUSICA handles configuration.
 
 ## Step 7: Design the transform type system
 
-Define `TransformFunc` as a callable mapping atmospheric state → 3D output array `[wavelength × height × column]`:
+Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[λ × z × col]` given the current atmospheric state:
 
 ```cpp
 template<typename ArrayPolicy>
@@ -18,30 +22,30 @@ using TransformFunc = std::function<void(
     const Profile<ArrayPolicy>& temperature,
     const Profile<ArrayPolicy>& pressure,
     const Profile<ArrayPolicy>& air_density,
-    Array3D<typename ArrayPolicy::value_type>& output  // [wavelength × height × column]
+    Array3D<typename ArrayPolicy::value_type>& weights  // [λ × z × col] — the calculated transform
 )>;
 ```
 
-**`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform. Users can write raw lambdas, function objects, or free functions directly — no factory or wrapper is required:
+**`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform calculator. Users can write raw lambdas, function objects, or free functions directly — no factory or wrapper is required:
 
 ```cpp
-// User-written transform — just a lambda matching the TransformFunc signature:
+// User-written transform — just a lambda that calculates weights:
 TransformFunc<ArrayPolicy> rayleigh_xs = [](const auto& wl_grid, const auto& alt_grid,
-    const auto& temperature, const auto& pressure, const auto& air_density, auto& output) {
-    // Rayleigh scattering formula using ForEachRow, ColumnView, etc.
-    // This IS the transform — no wrapper needed.
+    const auto& temperature, const auto& pressure, const auto& air_density, auto& weights) {
+    // Calculate Rayleigh scattering weights using ForEachRow, ColumnView, etc.
+    // The resulting weights will later be applied to the radiation field.
 };
 ```
 
-The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
+The weights include the column dimension because temperature, pressure, and density vary per column, so the calculated weights differ per column. The weights are later *applied* to the radiation field (element-wise multiplication) in Phase 3 (rate calculation).
 
-Transform implementations should use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function`) for all per-element computation. For transforms computed from static reference data (loaded via `DataReader`), the reference data is broadcast into the per-column output using `ForEachRow`. Performance-critical transforms (called every timestep) should return pre-compiled `ArrayPolicy::Function` objects.
+Transform implementations should use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function`) for all per-element computation. For transforms calculated from static reference data (loaded via `DataReader`), the reference data is broadcast into the per-column weights using `ForEachRow`. Performance-critical transforms (calculated every timestep) should return pre-compiled `ArrayPolicy::Function` objects.
 
 ## Step 8: Implement convenience transform library
 
-Provide a library of pre-built factory functions that return `TransformFunc` callables. These are **convenience utilities built on the same public API a user would use** — they capture parameters and return a lambda matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators (Step 9), or ignore them entirely and write raw lambdas.
+Provide a library of pre-built factory functions that return `TransformFunc` callables — each one calculates a particular kind of weight matrix. These are **convenience utilities built on the same public API a user would use** — they capture parameters and return a lambda that calculates weights matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators (Step 9), or ignore them entirely and write raw lambdas.
 
-### Factory functions (each returns a `TransformFunc`)
+### Factory functions (each returns a `TransformFunc` that calculates weights)
 
 | Factory function | Math | Useful for |
 |-----------|------|---------------------------|
@@ -59,27 +63,27 @@ Provide a library of pre-built factory functions that return `TransformFunc` cal
 |---------|---------|
 | `wrap_analytic(f)` | Takes a simple `f(λ)→double` or `f(λ,T)→double` and wraps it into the full `TransformFunc` signature, handling grid iteration and column broadcasting internally. Useful for quick one-liner formulas. |
 
-`wrap_analytic` is a convenience for simple formulas — it is **not** the primary way to create custom transforms. For anything beyond a trivial formula, users should write a full `TransformFunc` lambda directly.
+`wrap_analytic` is a convenience for simple formulas — it is **not** the primary way to create custom transforms. For anything beyond a trivial formula, users should write a full `TransformFunc` lambda that calculates the weights directly.
 
 ## Step 9: Implement transform combinators
 
-Combinators are higher-order functions: they take one or more `TransformFunc` values and return a new `TransformFunc`. They work with **any** transform — library-provided factories or user-written lambdas:
+Combinators are higher-order functions: they take one or more `TransformFunc` values and return a new `TransformFunc` that calculates composite weights. They work with **any** transform — library-provided factories or user-written lambdas:
 
 | Combinator | Semantics |
 |------------|-----------|
-| `in_region(λ_min, λ_max, t)` | Apply `t` only where λ_min ≤ λ ≤ λ_max; zero outside |
-| `multiply(a, b)` | Run both transforms, multiply their outputs element-wise |
-| `add(a, b)` | Run both transforms, add their outputs element-wise |
-| `piecewise({regions...})` | Different transforms per wavelength region |
-| `clamp(t, min, max)` | Clamp output values |
-| `override_band(name, value, t)` | Replace values in named bands (Lyman-α, Schumann-Runge) |
-| `scale(factor, t)` | Multiply by constant |
+| `in_region(λ_min, λ_max, t)` | Calculate weights only where λ_min ≤ λ ≤ λ_max; zero outside |
+| `multiply(a, b)` | Calculate both weight sets, multiply element-wise to produce composite weights |
+| `add(a, b)` | Calculate both weight sets, add element-wise to produce composite weights |
+| `piecewise({regions...})` | Calculate different weights per wavelength region |
+| `clamp(t, min, max)` | Clamp calculated weight values |
+| `override_band(name, value, t)` | Replace weight values in named bands (Lyman-α, Schumann-Runge) |
+| `scale(factor, t)` | Multiply calculated weights by constant |
 
-**Why combinators instead of sequential application?** A `TransformFunc` *writes* to the output array — it doesn't modify an existing value. Applying two transforms in sequence would just overwrite the first result with the second. Combinators like `multiply(a, b)` internally run both transforms (one into the output, one into a temporary), then combine the results element-wise.
+**Why combinators instead of sequential calculation?** A `TransformFunc` *writes* to the weight array — it doesn't modify existing values. Calculating two transforms in sequence would just overwrite the first weight set with the second. Combinators like `multiply(a, b)` internally calculate both weight sets (one into the output, one into a temporary), then combine them element-wise to produce a single composite weight matrix.
 
 ## Step 10: Port cross-section algorithms
 
-Express each of the 27 Fortran cross-section types as either a library factory, a composition of factories via combinators, or a user-written `TransformFunc` lambda. Reference files in `src/cross_sections/`:
+Express each of the 27 Fortran cross-section types as a weight calculation: either a library factory, a composition of factories via combinators, or a user-written `TransformFunc` lambda. Reference files in `src/cross_sections/`:
 
 ### Simple cases (direct factory mapping)
 - `base` → `from_data(reader, conserving_interpolator())`
