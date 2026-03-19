@@ -4,16 +4,16 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 ## Context
 
-We are creating a new standalone C++ library (`tuv-x-cpp`) to replace the Fortran-based TUV-x photolysis rate calculator. This phase sets up the new repo, migrates existing complete C++ code, and establishes the template policy system for CPU/GPU portability.
+We are replacing the Fortran-based TUV-x photolysis rate calculator with a pure C++ implementation, working on a `cpp-rewrite` branch in the existing `tuv-x` repo. This phase sets up the branch, restructures existing C++ code, and establishes the template policy system for CPU/GPU portability.
 
-## Step 1: Create new repository
+## Step 1: Set up the `cpp-rewrite` branch
 
-Create a new repo with:
+Create a clean branch from `main` and remove Fortran source, legacy config files, and unused build scaffolding. Set up:
 - CMake 3.21+ build system (matching MUSICA requirements)
 - Languages: `CXX` with optional `CUDA`/`HIP` support
 - Google Test and Google Benchmark as test/benchmark dependencies (FetchContent)
 - NetCDF-C as an optional dependency (for data readers)
-- Project name: `tuv-x` or `tuv-x-cpp`, aliased as `musica::tuvx`
+- Project name: `tuv-x`, aliased as `musica::tuvx`
 - Apache-2.0 license (matching MUSICA)
 
 Directory structure:
@@ -169,7 +169,11 @@ Port these already-complete implementations from the current `tuv-x` repo:
 - GTest tests for Array1D (new), Array2D, Array3D, Grid, Profile, TridiagonalSolver, ErrorFunction
 - Google Benchmark for tridiagonal solver — `benchmark/benchmark_tridiagonal_solver.cpp`
 
-Ensure all migrated tests pass in the new repo before proceeding.
+Ensure all restructured tests pass on the `cpp-rewrite` branch before proceeding.
+
+### Documentation
+
+As code is restructured, add Doxygen `///` comments to every public class and function in `include/tuvx/`. Keep comments succinct: state what it does, what the parameters mean, and any preconditions. Omit `@author`, `@date`, `@file` boilerplate. For implementations ported from Fortran, reference the original subroutine/file.
 
 ## Step 3: Define template policy system
 

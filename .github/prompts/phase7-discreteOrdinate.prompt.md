@@ -26,3 +26,7 @@ Port `src/radiative_transfer/solvers/discrete_ordinant_util.F90` — the `PSNDO`
 - `src/radiative_transfer/solvers/discrete_ordinant.F90` — wrapper (~282 lines)
 - `src/radiative_transfer/solvers/discrete_ordinant_util.F90` — full DISORT implementation (~3,700 lines, `PSNDO` subroutine)
 - `src/radiative_transfer/solver_factory.F90` — dispatches on `"discrete ordinate"` type string
+
+### Documentation
+
+Document the DISORT solver's public interface and key internal steps with Doxygen `///` comments. Reference the Fortran `PSNDO` subroutine and relevant literature (Stamnes et al., 1988). Note how it differs from Delta Eddington in stream count and accuracy.

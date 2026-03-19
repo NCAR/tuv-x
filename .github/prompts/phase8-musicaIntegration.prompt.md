@@ -4,7 +4,7 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 ## Context
 
-MUSICA (Multi-Scale Infrastructure for Chemistry and Aerosols) is the parent library that combines TUV-x with other chemistry tools (MICM, CARMA, MechanismConfiguration) and exposes them through Python, JavaScript, Julia, and Fortran interfaces. The new tuv-x C++ library must integrate seamlessly.
+MUSICA (Multi-Scale Infrastructure for Chemistry and Aerosols) is the parent library that combines TUV-x with other chemistry tools (MICM, CARMA, MechanismConfiguration) and exposes them through Python, JavaScript, and Fortran interfaces. The new tuv-x C++ library must integrate seamlessly.
 
 ### MICM API Consistency
 
@@ -33,7 +33,7 @@ MUSICA uses FetchContent to pull tuv-x. Update the dependency variables:
 # In MUSICA's cmake/dependencies.cmake
 FetchContent_Declare(
     tuvx
-    GIT_REPOSITORY ${TUVX_GIT_REPOSITORY}  # point to new repo
+    GIT_REPOSITORY ${TUVX_GIT_REPOSITORY}  # same repo, point to cpp-rewrite branch (then main once merged)
     GIT_TAG ${TUVX_GIT_TAG}
 )
 ```
@@ -64,23 +64,21 @@ This maps the existing config types (`"tint"`, `"O3"`, `"temperature based"`, et
 
 - **Python** (PyBind11): Wrap the C++ `Solver` and `PhotolysisCalculator` classes. Transforms can be specified as Python callables or by name (MUSICA maps names to C++ lambdas).
 - **JavaScript** (WASM): Compile C++ solver to WebAssembly via Emscripten. Only CPU path.
-- **Julia**: `ccall` into the C API wrapper.
 - **Fortran**: `iso_c_binding` into the C API wrapper (for legacy model integration).
 
 ### Migration path
 
-1. New tuv-x library reaches feature parity with Fortran for Delta Eddington solver
-2. MUSICA adds the new library as an alternative dependency alongside the old one
+1. C++ implementation reaches feature parity with Fortran for Delta Eddington solver
+2. MUSICA points `TUVX_GIT_TAG` at the `cpp-rewrite` branch for testing
 3. Regression tests verify identical output
-4. MUSICA switches default to new library
-5. Old Fortran tuv-x repo archived (kept for reference)
+4. `cpp-rewrite` branch merges to `main`, replacing the Fortran code
+5. Fortran code preserved in git history for reference
 
 ### Key MUSICA references
 - [MUSICA repo](https://github.com/NCAR/musica) — `cmake/dependencies.cmake` for FetchContent setup
 - `include/musica/` — C++ API headers
 - `python/` — PyBind11 bindings
 - `javascript/` — WASM/Emscripten build
-- `julia/` — Julia wrapper
 - `fortran/` — Fortran interface via `iso_c_binding`
 
 ### Existing TUV-x integration in MUSICA

@@ -50,3 +50,7 @@ The conserving interpolator is the most important — it ensures spectral quanti
 
 ### Fortran reference
 - `src/interpolate.F90` — `interpolator_linear_t`, `interpolator_conserving_t`, `interpolator_fractional_source_t`, `interpolator_fractional_target_t`
+
+### Documentation
+
+Document `RadiatorState::Accumulate()`, the Lyman-α/Schumann-Runge parameterization, and each interpolator with Doxygen `///` comments. For `Accumulate()`, document the weighting formulas (τ additive, SSA/g weighted by τ). Reference Fortran source files.

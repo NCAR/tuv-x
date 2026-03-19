@@ -56,3 +56,7 @@ Port `src/heating_rates.F90`.
 
 ### Fortran reference
 - `src/heating_rates.F90` — `heating_rates_t` class
+
+### Documentation
+
+Document `PhotolysisCalculator`, `DoseRateCalculator`, and `HeatingRateCalculator` with Doxygen `///` comments. Explain the calculate/apply/reduce pipeline in the class-level doc. Reference the Fortran source.

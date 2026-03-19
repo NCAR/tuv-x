@@ -1,6 +1,6 @@
 # Plan: TUV-x C++ Solver Library Rewrite
 
-**TL;DR**: Create a new standalone C++ library (new repo, e.g., `tuv-x-cpp`) that replaces the Fortran-based TUV-x with a high-performance photolysis rate constant calculator. The library provides a pure programmatic C++ API — no configuration files — with composable lambda-based transforms for cross-sections, quantum yields, and dose rates. Data structures use template policies to support both CPU SIMD (multi-column vectorization) and GPU (CUDA/HIP) execution. Delta Eddington solver ships first; Discrete Ordinate follows. MUSICA wraps this library and handles YAML/JSON configuration and Python/JS/Julia bindings.
+**TL;DR**: Replace the Fortran-based TUV-x with a high-performance C++ photolysis rate constant calculator, developed on a clean branch (`cpp-rewrite`) in the existing `tuv-x` repo. The library provides a pure programmatic C++ API — no configuration files — with composable lambda-based transforms for cross-sections, quantum yields, and dose rates. Data structures use template policies to support both CPU SIMD (multi-column vectorization) and GPU (CUDA/HIP) execution. Delta Eddington solver ships first; Discrete Ordinate follows. MUSICA wraps this library and handles YAML/JSON configuration and Python/JS/Fortran bindings.
 
 ## Phase 0: Project Scaffolding
 
@@ -19,9 +19,18 @@ The TUV-x C++ library performs **no unit conversions** whatsoever. All input dat
 
 All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wavelengths in nm) must be pre-converted to SI units before being consumed by TUV-x. The responsibility for unit conversion lies with the caller or the data preparation pipeline — not with the library itself.
 
-- [ ] 1. **Create new repository** (`tuv-x-cpp` or chosen name) with CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
+### Documentation Policy
 
-- [ ] 2. **Migrate reusable C++ code from current repo.** Port the following already-complete implementations from `include/tuvx/` into the new repo's `include/` and `src/`:
+Document as you go — every public header, class, function, and non-obvious implementation detail gets documentation **when it is written**, not as a separate phase. Keep it meaningful and succinct:
+
+- **Public API** (headers in `include/tuvx/`): Doxygen `///` comments on every class, function, and template parameter. State what it does, what the parameters mean, and any preconditions — not how it works internally.
+- **Non-obvious implementation details** (in `.cpp`/`.inl` files): Brief inline comments explaining *why*, not *what*. Algorithms ported from Fortran should reference the original subroutine name and source file.
+- **README**: Keep the top-level README current with build instructions, a usage example, and a link to the Doxygen-generated API docs.
+- **No verbose boilerplate**: Omit `@author`, `@date`, `@file`, and other noise. Don't restate what the code already says.
+
+- [ ] 1. **Create `cpp-rewrite` branch** in the existing `tuv-x` repo. Reset the branch to a clean state: remove Fortran source, legacy config, and unused build scaffolding. Set up CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
+
+- [ ] 2. **Restructure existing C++ code.** Reorganize the already-complete implementations from `include/tuvx/` into a clean directory structure on the `cpp-rewrite` branch:
    - `Array1D<T>` — new implementation (see below), modeled after `Array2D`/`Array3D`
    - `Array2D<T>`, `Array3D<T>` — `include/tuvx/util/array2d.hpp`, `include/tuvx/util/array3d.hpp`
    - `Grid<ArrayPolicy>` — `include/tuvx/grid.hpp`
@@ -270,7 +279,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 8: MUSICA Integration
 
-- [ ] 23. **Update MUSICA to consume the new library.** MUSICA's CMake system (`TUVX_GIT_REPOSITORY` / `TUVX_GIT_TAG`) uses FetchContent for tuv-x. Point it at the new repo. Build the YAML/JSON configuration layer in MUSICA that maps config files to the pure C++ API, translating `"type": "tint"` into the corresponding composed lambda transforms. MUSICA's PyBind11 / JS / Julia bindings wrap the new C API.
+- [ ] 23. **Update MUSICA to consume the new library.** MUSICA's CMake system (`TUVX_GIT_REPOSITORY` / `TUVX_GIT_TAG`) uses FetchContent for tuv-x. Point it at the `cpp-rewrite` branch (and eventually `main` once merged). Build the YAML/JSON configuration layer in MUSICA that maps config files to the pure C++ API, translating `"type": "tint"` into the corresponding composed lambda transforms. MUSICA's PyBind11 / JS / Fortran bindings wrap the new C API.
 
 ## Verification
 
@@ -287,9 +296,10 @@ This means solver functions never loop over columns explicitly — they express 
 | Language | C++ | Builds on existing partial port; native MUSICA integration; standard HPC ecosystem |
 | Transform API | Open callable signature (`TransformFunc`) | A transform is a weight matrix `[λ × z × col]`; `TransformFunc` *calculates* the weights from atmospheric state; any matching callable is a valid transform calculator; convenience factory library covers common patterns; combinators compose weight calculations; the weights are then *applied* to the radiation field separately (Phase 3) |
 | GPU portability | Template policies | Lighter weight than Kokkos/SYCL; consistent with existing codebase; can wrap Kokkos later if needed |
-| Migration strategy | New standalone repo | Clean separation; old Fortran repo stays as reference/validation; MUSICA switches dependency when ready |
+| Migration strategy | Clean branch in existing repo | Work on `cpp-rewrite` branch in the existing `tuv-x` repo; preserves issue tracker, CI config, and history; Fortran code is removed on the branch; branch replaces `main` when ready |
 | Data readers | Pluggable interface, NetCDF-C default | Future-proofs against format changes; no Fortran dependency |
 | Solver order | Delta Eddington first | Simpler two-stream method; validates full pipeline before tackling DISORT's 3,700 lines |
 | Configuration | No config files in solver library | Clean separation of concerns; MUSICA handles all configuration mapping |
 | Units | SI only, no conversions | All inputs/outputs in SI units (m, rad, s, K, Pa); no unit conversion code in the library; callers and data pipelines are responsible for providing SI data |
 | MICM consistency | Align API conventions with MICM | Both TUV-x and MICM are MUSICA components; consistent syntax (`operator[]`, `ForEachRow`, `ColumnView`, `Function` factory, `ArrayPolicy` template pattern) reduces cognitive load for users working across both libraries. Diverge only when TUV-x requirements demand it (e.g., `Array1D` instead of `std::vector`) |
+| Documentation | Inline, as-you-go | Every public API gets succinct Doxygen comments when written; implementation comments explain *why* not *what*; no verbose boilerplate (`@author`, `@date`, `@file`); README stays current |

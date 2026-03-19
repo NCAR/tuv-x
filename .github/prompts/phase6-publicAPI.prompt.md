@@ -93,7 +93,10 @@ This enables:
 - MUSICA's Fortran interface via `iso_c_binding`
 - Python bindings via ctypes (fallback) or direct PyBind11 wrapping of C++ API
 - JavaScript/WASM compilation
-- Julia `ccall`
 
 ### Reference
 - `test/regression/solvers/delta_eddington.hpp` — existing C-interop struct pattern (`SolverInput`, `SolverOutput`)
+
+### Documentation
+
+The public API is the primary user-facing surface — document thoroughly. Every class, method, and C function gets Doxygen `///` comments. Include a brief usage example in the `Solver` class-level doc. The C API wrapper functions should document ownership semantics (who frees what). Update the README with a complete build-and-use example.

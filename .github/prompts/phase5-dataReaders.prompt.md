@@ -50,3 +50,7 @@ The pluggable interface allows adding CSV, HDF5, binary, or in-memory readers wi
 - `src/netcdf.F90` — NetCDF reading utilities used by cross-section and quantum yield constructors
 - `data/cross_sections/` — 145+ `.nc` files
 - `data/quantum_yields/` — 14 `.nc` files
+
+### Documentation
+
+Document the `DataReader` interface and `NetCDFReader` implementation with Doxygen `///` comments. Document the expected file format, the SI-unit requirement, and how users implement custom readers.

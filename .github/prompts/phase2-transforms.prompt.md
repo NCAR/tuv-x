@@ -129,3 +129,7 @@ Temperature parameterization utilities in `src/cross_sections/util/`: `temperatu
 | `exp_decay` | `wrap_analytic([](λ) { return pow(10, (300e-9-λ)/14e-9); })` |
 | `PAR` | `in_region(400e-9, 700e-9, constant(1.0))` |
 | Others | Literature-specific analytic formulas |
+
+### Documentation
+
+Document the `TransformFunc` signature, every factory function, and every combinator with Doxygen `///` comments. For each factory, document the mathematical formula it implements and example usage. For each ported cross-section/quantum yield, reference the Fortran source file.

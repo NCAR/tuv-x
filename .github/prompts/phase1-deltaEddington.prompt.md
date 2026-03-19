@@ -72,3 +72,7 @@ Test configurations should include the standard examples:
 - `examples/tuv_5_4.json` — standard 156-wavelength, 120-layer US standard atmosphere
 - Multiple solar zenith angles (the existing Fortran test uses 1.8294° and 28.199°; C++ tests must specify these in radians: ~0.03194 rad and ~0.4922 rad)
 - Multiple columns (verify multi-column batching produces identical per-column results)
+
+### Documentation
+
+Document all public functions (spherical geometry utilities, `RadiationField`, `Solve()`) with Doxygen `///` comments as they are written. For each ported algorithm, reference the Fortran subroutine name and source file. Keep comments succinct — state what the function does and its preconditions, not a line-by-line translation of the algorithm.
