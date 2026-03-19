@@ -66,5 +66,5 @@ For the new library: pre-compute Fortran reference outputs and store as binary/N
 
 Test configurations should include the standard examples:
 - `examples/tuv_5_4.json` — standard 156-wavelength, 120-layer US standard atmosphere
-- Multiple solar zenith angles (the existing test uses 1.8294° and 28.199°)
+- Multiple solar zenith angles (the existing Fortran test uses 1.8294° and 28.199°; C++ tests must specify these in radians: ~0.03194 rad and ~0.4922 rad)
 - Multiple columns (verify multi-column batching produces identical per-column results)

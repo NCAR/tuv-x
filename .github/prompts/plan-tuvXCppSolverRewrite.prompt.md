@@ -4,6 +4,21 @@
 
 ## Phase 0: Project Scaffolding
 
+### SI Units Policy
+
+The TUV-x C++ library performs **no unit conversions** whatsoever. All input data — whether provided programmatically or read from data files — must already be in SI units before use:
+
+- **Wavelength**: meters (m), not nanometers
+- **Distance/altitude**: meters (m), not kilometers
+- **Angles**: radians (rad), not degrees
+- **Temperature**: Kelvin (K)
+- **Pressure**: Pascals (Pa)
+- **Time**: seconds (s)
+- **Cross-sections**: m² (not cm²)
+- **Number density**: molecules/m³ (not molecules/cm³)
+
+All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wavelengths in nm) must be pre-converted to SI units before being consumed by TUV-x. The responsibility for unit conversion lies with the caller or the data preparation pipeline — not with the library itself.
+
 - [ ] 1. **Create new repository** (`tuv-x-cpp` or chosen name) with CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
 
 - [ ] 2. **Migrate reusable C++ code from current repo.** Port the following already-complete implementations from `include/tuvx/` into the new repo's `include/` and `src/`:
@@ -37,7 +52,7 @@
    - **Step 5**: Solve tridiagonal system using existing `TridiagonalMatrix::Solve()` (Thomas algorithm)
    - **Step 6**: Back-substitute $Y$ to compute fluxes and actinic flux components
    - All operations process batches of columns; the column dimension is innermost for SIMD/GPU vectorization
-   - All units in SI (meters, radians, seconds) — convert from Fortran's km/nm/degrees at API boundaries
+   - All units in SI (meters, radians, seconds) — no unit conversions in solver code; all input data must be provided in SI units
 
 - [ ] 6. **Regression test against Fortran solver.** Adapt the existing test harness in `test/regression/solvers/` to validate the new C++ solver against pre-computed Fortran reference outputs stored as binary/NetCDF files. This decouples testing from the Fortran build.
 
@@ -84,8 +99,8 @@
     ```cpp
     auto ccl4_xs = compose(
         from_data(netcdf_reader("CCl4.nc"), conserving_interpolator()),
-        in_region(194_nm, 250_nm,
-            polynomial_scaling({b0, b1, b2, b3, b4}, 295.0_K))
+        in_region(194e-9, 250e-9,
+            polynomial_scaling({b0, b1, b2, b3, b4}, 295.0))
     );
     ```
     For complex cases like O3 (4 regions, refraction correction) or H2O2 (blended polynomials via Boltzmann $\chi$), use `piecewise()` and `analytic()` with custom lambdas.
@@ -173,3 +188,4 @@
 | Data readers | Pluggable interface, NetCDF-C default | Future-proofs against format changes; no Fortran dependency |
 | Solver order | Delta Eddington first | Simpler two-stream method; validates full pipeline before tackling DISORT's 3,700 lines |
 | Configuration | No config files in solver library | Clean separation of concerns; MUSICA handles all configuration mapping |
+| Units | SI only, no conversions | All inputs/outputs in SI units (m, rad, s, K, Pa); no unit conversion code in the library; callers and data pipelines are responsible for providing SI data |

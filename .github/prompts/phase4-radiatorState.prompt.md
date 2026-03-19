@@ -26,10 +26,10 @@ Host models provide radiator data directly via the C++ API — no config-file-ba
 
 ## Step 17: Implement Lyman-Alpha and Schumann-Runge band parameterization
 
-Port `src/la_sr_bands.F90`. This handles special UV absorption bands of O₂ (121.4–175.4 nm) that require separate treatment:
+Port `src/la_sr_bands.F90`. This handles special UV absorption bands of O₂ (121.4e-9–175.4e-9 m) that require separate treatment:
 
-- Lyman-Alpha band: strong O₂ absorption line at 121.6 nm
-- Schumann-Runge bands: structured O₂ absorption between 175–205 nm
+- Lyman-Alpha band: strong O₂ absorption line at 121.6e-9 m
+- Schumann-Runge bands: structured O₂ absorption between 175e-9–205e-9 m
 - These bands use lookup tables and parameterized transmission functions rather than the standard column-by-column solver
 
 ### Fortran reference

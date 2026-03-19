@@ -57,13 +57,13 @@ Express each of the 27 Fortran cross-section types as compositions. Reference fi
 ### Simple cases (direct primitive mapping)
 - `base` → `from_data(reader, conserving_interpolator())`
 - `tint` → `temperature_interpolation(reader)`
-- `CCl4` → `compose(from_data(...), in_region(194nm, 250nm, polynomial_scaling(...)))`
+- `CCl4` → `compose(from_data(...), in_region(194e-9, 250e-9, polynomial_scaling(...)))`
 - `CFC-11` → `compose(from_data(...), exponential_scaling(...))`
 - `CH2O` → `compose(from_data(...), linear_correction(slope_data))`
-- `Rayleigh` → `analytic([](λ) { return 4.02e-28 / pow(λ, p(λ)); })`
+- `Rayleigh` → `analytic([](λ) { ... })` — Rayleigh scattering formula with λ in meters
 
 ### Complex cases (multi-region / custom logic)
-- `O3` → `piecewise({<185nm: data1, 185-195nm: data2, 195-345nm: tint, >345nm: data4})` with refraction correction
+- `O3` → `piecewise({<185e-9: data1, 185e-9–195e-9: data2, 195e-9–345e-9: tint, >345e-9: data4})` with refraction correction
 - `H2O2` → blended polynomial via Boltzmann χ — use `analytic()` with custom lambda
 - `acetone` → Horner polynomial in temperature
 
@@ -80,7 +80,7 @@ Temperature parameterization utilities in `src/cross_sections/util/`: `temperatu
 |--------------|-------------------|
 | `base` | `from_data(...)` or constant value |
 | `tint`, `NO2 tint` | `temperature_interpolation(...)` |
-| `CH2O` | `stern_volmer(phi0, k)` in region 330–360nm |
+| `CH2O` | `stern_volmer(phi0, k)` in region 330e-9–360e-9 m |
 | `taylor series` | `analytic(polynomial_lambda)` with clamp(0,1) |
 | `O3→O(1D)` | `analytic(matsumi_formula)` — multi-region Gaussians |
 | `H2SO4 Mills` | `analytic(mean_free_path_formula)` |
@@ -95,6 +95,6 @@ Temperature parameterization utilities in `src/cross_sections/util/`: `temperatu
 | `base` | `from_data(reader, conserving_interpolator())` |
 | `gaussian` | `analytic([](λ, μ) { return exp(-ln2 * 0.04 * (λ-μ)²); })` |
 | `notch_filter` | `in_region(λ_min, λ_max, analytic([](λ) { return 1.0; }))` |
-| `exp_decay` | `analytic([](λ) { return pow(10, (300-λ)/14); })` |
-| `PAR` | `in_region(400nm, 700nm, constant(1.0))` |
+| `exp_decay` | `analytic([](λ) { return pow(10, (300e-9-λ)/14e-9); })` |
+| `PAR` | `in_region(400e-9, 700e-9, constant(1.0))` |
 | Others | Literature-specific analytic formulas |

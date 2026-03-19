@@ -18,7 +18,7 @@ public:
     /// Read parameter data as a 2D array [wavelength × parameter_index]
     virtual Array2D<double> read_parameters(const std::string& variable_prefix) = 0;
 
-    /// Read the wavelength grid [nm or m depending on convention]
+    /// Read the wavelength grid [m]
     virtual std::vector<double> read_wavelengths() = 0;
 
     /// Read temperature grid (optional — only for T-dependent data)
@@ -31,10 +31,10 @@ public:
 Implement `NetCDFReader : DataReader` using the NetCDF-C library (`libnetcdf`):
 - Opens `.nc` files and reads `wavelength`, `temperature`, `{prefix}_parameters` variables
 - The existing ~160 NetCDF files in `data/cross_sections/` and `data/quantum_yields/` use a consistent naming convention with variable prefixes `cross_section_`, `quantum_yield_`, `temperature_`
-- Unit conversion: data files use nm for wavelength and K for temperature; convert to SI (meters) at read time
+- No unit conversions: all data files must provide wavelengths in meters (m) and temperatures in Kelvin (K). If legacy data files use nm, they must be converted to SI units before use by TUV-x
 
 ### NetCDF variable structure (existing files)
-- `wavelength` — 1D array of wavelengths [nm]
+- `wavelength` — 1D array of wavelengths [m]
 - `temperature` — 1D array of temperatures [K] (optional)
 - `{prefix}_parameters` — 2D array `[wavelength × parameter_type]`
 
