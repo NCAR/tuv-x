@@ -16,14 +16,14 @@ namespace tuvx {
 /// Atmospheric column state for a batch of columns
 template<typename ArrayPolicy>
 struct AtmosphericState {
-    Grid<ArrayPolicy> altitude_grid;        // per-column vertical grid [m]
-    Grid<ArrayPolicy> wavelength_grid;      // shared wavelength grid [m]
-    Profile<ArrayPolicy> temperature;       // temperature profile [K]
-    Profile<ArrayPolicy> pressure;          // pressure profile [Pa]
-    Profile<ArrayPolicy> air_density;       // air number density [molec/m³]
-    std::vector<double> solar_zenith_angles; // per-column [rad]
-    std::vector<double> earth_sun_distances; // per-column [AU]
-    double surface_albedo;
+    Grid<ArrayPolicy> altitude_grid;           // per-column vertical grid [m]
+    Grid<ArrayPolicy> wavelength_grid;         // shared wavelength grid [m]
+    Profile<ArrayPolicy> temperature;          // temperature profile [K]
+    Profile<ArrayPolicy> pressure;             // pressure profile [Pa]
+    Profile<ArrayPolicy> air_density;          // air number density [molec/m³]
+    Array1D<typename ArrayPolicy::value_type> solar_zenith_angles;   // per-column [rad]
+    Array1D<typename ArrayPolicy::value_type> earth_sun_distances;   // per-column [AU]
+    typename ArrayPolicy::value_type surface_albedo;
 };
 
 /// Solver for radiative transfer
