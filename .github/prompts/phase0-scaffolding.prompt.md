@@ -154,7 +154,7 @@ The Fortran codebase is full of cryptic abbreviations (`edr_`, `eup_`, `fdr_`, `
 Port these already-complete implementations from the current `tuv-x` repo:
 
 ### Data structures
-- **`Array1D<T>` — new implementation** to create in `include/tuvx/util/array1d.hpp`, following the same pattern as `Array2D`/`Array3D`. This is a policy-aware 1D array that replaces `std::vector` in all interfaces that interact with policy-backed types (e.g., `Grid`, `Profile`, `RadiatorState`). When backed by `DeviceArrayPolicy`, data resides in device memory — `std::vector` cannot serve this role. Must support the same element access syntax as `Array2D`/`Array3D` via `ArrayPolicy`.
+- **`Array1D<T>` — new implementation** to create in `include/tuvx/util/array1d.hpp`, following the same pattern as `Array2D`/`Array3D`. This is a policy-aware 1D array that replaces `std::vector` in all interfaces that interact with policy-backed types (e.g., `Grid`, `Profile`, `RadiatorState`). When backed by `DeviceArrayPolicy`, data resides in device memory — `std::vector` cannot serve this role. Must support the same element access syntax (`operator[]`), bulk operations (`ForEachRow`, `Function` factory), and dimension queries (`NumRows()`) as `Array2D`/`Array3D` via `ArrayPolicy`. Note: for `Array1D`, `ForEachRow` iterates element-wise (each element is a "row").
 - `Array2D<T>` — `include/tuvx/util/array2d.hpp`
 - `Array3D<T>` — `include/tuvx/util/array3d.hpp`
 - `Grid<ArrayPolicy>` — `include/tuvx/grid.hpp`
@@ -177,21 +177,37 @@ Extend the existing `ArrayPolicy` pattern. The key principle: **solver algorithm
 
 `ArrayPolicy` controls:
 - **Memory allocation**: where data lives (host heap, device memory)
-- **Data layout**: how elements are arranged (SoA with column index innermost)
-- **Element access**: syntax for reading/writing (identical API for host and device)
+- **Data layout**: how elements are physically arranged in memory (implementation-defined; optimized per target)
+- **Element access**: square-bracket syntax (`array[i][j]`, `array[i][j][k]`) for reading/writing by logical index (identical API for host and device)
 
 Concrete policies to implement:
-- `HostArrayPolicy` — `std::vector`-backed; SoA layout for SIMD auto-vectorization
-- `DeviceArrayPolicy` — CUDA/HIP device memory; coalesced access; `__host__ __device__` accessors
+- `HostArrayPolicy` — `std::vector`-backed; layout optimized for SIMD auto-vectorization
+- `DeviceArrayPolicy` — CUDA/HIP device memory; layout optimized for coalesced access; `__host__ __device__` accessors
 
 All core types (`Array1D`, `Grid`, `Profile`, `RadiatorState`, `RadiationField`, `TridiagonalMatrix`) are templated on `ArrayPolicy` — preserve and extend this pattern. `Array1D<T>` is new and must be created following the same conventions as `Array2D<T>` and `Array3D<T>`. **No `std::vector` should appear in any function signature that also accepts policy-backed types** — use `Array1D` instead to ensure correctness with device-resident data.
+
+### MICM-Consistent Bulk Operations API
+
+TUV-x array types must provide the same bulk operations API as MICM's `Matrix`/`VectorMatrix` types, since both are MUSICA components and a consistent interface reduces user friction. The API consists of:
+
+1. **Square-bracket element access**: `operator[]` chaining for logical indexing (e.g., `array[i][j]` for 2D). Returns proxy/view objects. Must match MICM's `matrix[row][col]` convention.
+
+2. **`ForEachRow(lambda, views...)`**: Layout-agnostic bulk iteration over all elements in a row (the solver's parallelization dimension). The policy controls vectorization/threading. Arguments are column views (`GetColumnView(col)` / `GetConstColumnView(col)`) and/or `Array1D` vectors.
+
+3. **`GetRowVariable()`**: Temporary per-row storage for intermediate calculations within `ForEachRow` chains.
+
+4. **`ArrayType<T>::Function(lambda, prototype_args...)`**: Factory that creates a reusable, policy-compiled function object. Pre-computes layout metadata at creation time. Column counts are validated at invocation; row counts may differ from the prototype. Matches MICM's `MatrixPolicy<T>::Function()` factory.
+
+5. **`NumRows()`, `NumColumns()`**: Dimension queries matching MICM naming.
+
+Solver hot paths **must** use `ForEachRow`/`Function` rather than element-by-element `operator[]` access — the bulk API is how the policy achieves vectorization/coalescing.
 
 ## Existing C++ code to reference
 
 Key files in the current tuv-x repo:
 - `include/tuvx/util/array1d.hpp` — policy-aware 1D array (**new — to be created**)
-- `include/tuvx/util/array2d.hpp` — row-major 2D array
-- `include/tuvx/util/array3d.hpp` — row-major 3D array
+- `include/tuvx/util/array2d.hpp` — 2D array with `operator[][]`, `ForEachRow`, `ColumnView`, `Function` factory (layout determined by policy)
+- `include/tuvx/util/array3d.hpp` — 3D array with `operator[][][]`, `ForEachRow`, `ColumnView`, `Function` factory (layout determined by policy)
 - `include/tuvx/grid.hpp` — multi-column grid with mid_points/edges
 - `include/tuvx/profile.hpp` — mid-point/edge values on a grid
 - `include/tuvx/radiative_transfer/radiator.hpp` — RadiatorState with optical_depth, SSA, asymmetry

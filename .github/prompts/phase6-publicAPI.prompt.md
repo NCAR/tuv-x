@@ -59,9 +59,10 @@ public:
 
 ### Design principles
 - Template on `ArrayPolicy` — same API for CPU and GPU
-- Batch-oriented: always operates on collections of columns
+- Batch-oriented: always operates on collections of columns via `ForEachRow`/`Function` bulk operations
 - No internal state beyond registered reactions — thread-safe after setup
 - All units in SI
+- **MICM-consistent API conventions**: square-bracket element access (`array[i][j]`), `ForEachRow`/`ColumnView`/`Function` factory, `NumRows()`/`NumColumns()` queries — consistent with MICM's `Matrix`/`VectorMatrix` types since both are MUSICA components
 
 ### Fortran reference
 - `src/core.F90` — `core_t` class: the current top-level API with `run()`, `get_grid()`, `get_profile()`, `get_photolysis_cross_section()`, etc.

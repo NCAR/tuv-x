@@ -43,7 +43,11 @@ $$F_n^- = Y_1^n e_3^n + Y_2^n e_4^n + C_n^-(\tau_n)$$
 ### Implementation requirements
 
 - Template on `ArrayPolicy` — same algorithm for CPU and GPU
-- Process batches of columns; column dimension is innermost for SIMD/GPU vectorization
+- Use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function` factory) for all hot-path computation — no explicit loops over columns
+- Create `ArrayPolicy::Function` objects for the per-timestep solver steps (gamma computation, source functions, tridiagonal assembly, back-substitution) so the policy can pre-compile optimized iteration patterns
+- Use `GetColumnView()` / `GetConstColumnView()` for accessing per-column data within `ForEachRow` lambdas
+- Use `GetRowVariable()` for intermediate per-row temporaries ($\lambda_n$, $\Gamma_n$, $C^+$, $C^-$)
+- Process batches of columns; the `ArrayPolicy` determines the optimal data layout for parallelization across columns
 - All units in SI (meters, radians, seconds)
 - Use existing `TridiagonalMatrix::Solve()` for step 5
 - Refer to [issue #64](https://github.com/NCAR/tuv-x/issues/64) sub-issues #102, #103, #104 for step-by-step breakdown

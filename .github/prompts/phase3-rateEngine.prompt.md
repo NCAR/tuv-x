@@ -16,9 +16,10 @@ where $F$ is actinic flux, $\sigma_i$ is cross-section, $\phi_i$ is quantum yiel
 
 Implementation:
 - Evaluate each reaction's cross-section and quantum yield transforms at the current atmospheric state
-- Compute element-wise product with actinic flux
-- Sum over wavelength dimension (dot product per height layer)
+- Compute element-wise product with actinic flux using `ForEachRow` and column views
+- Sum over wavelength dimension (reduction per height layer per column)
 - Output: 3D array `[reaction × height × column]`
+- Use `ArrayPolicy::Function` to pre-compile the per-timestep rate calculation for optimal vectorization across columns
 
 API:
 ```cpp

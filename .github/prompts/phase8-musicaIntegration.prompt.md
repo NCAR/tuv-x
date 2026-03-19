@@ -6,6 +6,23 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 MUSICA (Multi-Scale Infrastructure for Chemistry and Aerosols) is the parent library that combines TUV-x with other chemistry tools (MICM, CARMA, MechanismConfiguration) and exposes them through Python, JavaScript, Julia, and Fortran interfaces. The new tuv-x C++ library must integrate seamlessly.
 
+### MICM API Consistency
+
+TUV-x and MICM are both MUSICA components and should present a consistent interface to users working across both libraries. The following conventions are shared:
+
+| Convention | MICM | TUV-x | Notes |
+|-----------|------|-------|-------|
+| Element access | `matrix[row][col]` | `array[i][j]`, `array[i][j][k]` | Square-bracket syntax via proxy objects |
+| Bulk iteration | `matrix.ForEachRow(lambda, views...)` | `array.ForEachRow(lambda, views...)` | Policy controls vectorization |
+| Column access | `GetColumnView(col)`, `GetConstColumnView(col)` | Same | Read-only and mutable views |
+| Temporaries | `GetRowVariable()` | Same | Per-row intermediate storage |
+| Function factory | `MatrixPolicy<T>::Function(lambda, args...)` | `ArrayType<T>::Function(lambda, args...)` | Policy-compiled reusable operations |
+| Dimension queries | `NumRows()`, `NumColumns()` | `NumRows()`, `NumColumns()` | Matching names |
+| Template policy | `template<class> class MatrixPolicy` | `typename ArrayPolicy` | Same pattern, different naming (TUV-x uses existing convention) |
+| `std::vector` in APIs | Used alongside `MatrixPolicy` | **Replaced by `Array1D`** | TUV-x is stricter — no `std::vector` in policy-adjacent APIs; MICM may adopt this later |
+
+Diverge from MICM conventions **only** when TUV-x requirements demand it.
+
 ## Step 23: Update MUSICA to consume the new library
 
 ### CMake integration

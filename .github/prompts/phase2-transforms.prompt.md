@@ -8,7 +8,7 @@ The current Fortran codebase has 27 cross-section types, 20 quantum yield types,
 
 ## Step 7: Design the transform type system
 
-Define `TransformFunc` as a callable mapping atmospheric state → 2D output array `[wavelength × height]`:
+Define `TransformFunc` as a callable mapping atmospheric state → 3D output array `[wavelength × height × column]`:
 
 ```cpp
 template<typename ArrayPolicy>
@@ -18,11 +18,13 @@ using TransformFunc = std::function<void(
     const Profile<ArrayPolicy>& temperature,
     const Profile<ArrayPolicy>& pressure,
     const Profile<ArrayPolicy>& air_density,
-    Array2D<typename ArrayPolicy::value_type>& output
+    Array3D<typename ArrayPolicy::value_type>& output  // [wavelength × height × column]
 )>;
 ```
 
-This is the universal signature for cross-sections, quantum yields, and spectral weights.
+This is the universal signature for cross-sections, quantum yields, and spectral weights. The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
+
+Transform implementations should use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function`) for all per-element computation. For transforms computed from static reference data (loaded via `DataReader`), the reference data is broadcast into the per-column output using `ForEachRow`. Performance-critical transforms (called every timestep) should return pre-compiled `ArrayPolicy::Function` objects.
 
 ## Step 8: Implement composable transform primitives
 

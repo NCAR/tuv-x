@@ -35,11 +35,95 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
 - [ ] 3. **Define template policy system for CPU/GPU portability.** Extend the existing `ArrayPolicy` pattern into a coherent execution/memory policy. The solver algorithms are written once, templated on a single `ArrayPolicy` — from the algorithm's perspective, array access is identical regardless of backing storage:
 
    - `ArrayPolicy` controls: memory allocation (where), data layout (how), and element access (syntax)
-   - `HostArrayPolicy` — `std::vector`-backed; SoA layout with column index innermost for compiler auto-vectorization (SIMD)
-   - `DeviceArrayPolicy` — CUDA/HIP device memory; coalesced access patterns; same element access syntax via `__host__ __device__` accessors
+   - `HostArrayPolicy` — `std::vector`-backed; data layout chosen for compiler auto-vectorization (SIMD)
+   - `DeviceArrayPolicy` — CUDA/HIP device memory; data layout chosen for coalesced access; same element access syntax via `__host__ __device__` accessors
    - Solver functions are templated on `ArrayPolicy` and written exactly once — no `#ifdef` branching, no runtime dispatch
    - All core types (`Grid`, `Profile`, `RadiatorState`, `RadiationField`, `TridiagonalMatrix`) are already templated on `ArrayPolicy` in the existing codebase; this pattern is preserved and extended
    - **`Array1D<T>`**: Create a new 1D array type following the same pattern as `Array2D<T>` and `Array3D<T>`. This replaces all uses of `std::vector` in APIs that interact with `Grid`/`Profile`/policy-backed data, ensuring consistency when data is device-resident. `Array1D` must support the same `ArrayPolicy`-controlled memory allocation and access as the 2D/3D types. **No `std::vector` should appear in any function signature that also takes policy-backed types** — use `Array1D` instead
+
+### Bulk Operations API (MICM-Consistent)
+
+Raw element access (`array[i][j]`, `array[i][j][k]`) is available for setup and debugging, but **solver hot paths must use the bulk operations API** for layout-independent parallelization. This API follows the same design as MICM's `Matrix`/`VectorMatrix` pattern (both are MUSICA components and should present a consistent interface to users).
+
+The bulk operations API provides three core abstractions:
+
+#### Element access — square-bracket syntax
+
+All array types use `operator[]` chaining for logical element access, matching MICM's convention:
+```cpp
+Array1D<double> a(num_columns);
+a[col] = 1.0;
+
+Array2D<double> b(num_sections, num_columns);
+b[section][col] = 2.0;
+
+Array3D<double> c(num_wavelengths, num_layers, num_columns);
+c[wl][layer][col] = 3.0;
+```
+The `operator[]` returns a proxy/view object whose own `operator[]` resolves to the next dimension. The underlying index computation is policy-defined — the square-bracket chain provides logical access without prescribing physical layout.
+
+#### `ForEachRow` — layout-agnostic bulk iteration
+
+Operates on all elements along the innermost logical dimension (columns) simultaneously. The policy implementation decides how to vectorize/parallelize:
+```cpp
+// Given a 2D array [sections × columns]:
+array.ForEachRow(
+    [](const double& a, double& b) { b = a * 2.0; },
+    array.GetConstColumnView(0),   // read from column 0
+    array.GetColumnView(1)         // write to column 1
+);
+```
+`ForEachRow` takes a lambda plus any number of column views (or `Array1D` vectors). The lambda receives one element per argument per row. The policy controls iteration order and vectorization.
+
+Column views provide layout-abstracted access to a single column's data across all rows:
+- `GetColumnView(col)` — mutable view
+- `GetConstColumnView(col)` — read-only view
+- `GetRowVariable()` — temporary per-row storage (for intermediate calculations)
+
+#### `ArrayPolicy::Function` — reusable policy-compiled operations
+
+For performance-critical operations that are called repeatedly (e.g., every solver timestep), create a reusable function object. This allows the policy to pre-compute layout metadata and generate optimized iteration patterns:
+```cpp
+auto func = Array3D<double>::Function(
+    [](auto&& arr) {
+        auto tmp = arr.GetRowVariable();
+        arr.ForEachRow(
+            [](const double& a, const double& b, double& t)
+            { t = a + b; },
+            arr.GetConstColumnView(0),
+            arr.GetConstColumnView(1),
+            tmp);
+        arr.ForEachRow(
+            [](const double& t, double& c) { c = t * 2.0; },
+            tmp,
+            arr.GetColumnView(2));
+    }, prototype_array);  // prototype provides type/dimension info
+
+// Reuse with different arrays of the same column count:
+func(array_a);  // OK — applies optimized operation
+func(array_b);  // OK — different row count is fine
+```
+Column counts are validated at invocation time; row counts may differ from the prototype. This matches MICM's `MatrixPolicy::Function` factory exactly.
+
+### Multi-Column Architecture
+
+The solver always operates on a **set of columns simultaneously**. Every `Array1D`, `Array2D`, and `Array3D` in the solver pipeline carries a column dimension:
+
+| Array type | Logical dimensions | Column semantics | Examples |
+|-----------|-------------------|------------------|----------|
+| `Array1D` | `(column)` | One scalar per column | solar zenith angle, surface albedo |
+| `Array2D` | `(X, column)` | 1D data per column | grid mid-points/edges, profile values |
+| `Array3D` | `(X, Y, column)` | 2D data per column | optical depth `(wavelength, layer, column)`, cross-section output `(wavelength, height, column)` |
+
+These are *logical* dimensions — the underlying memory layout and dimension ordering is determined entirely by the concrete `ArrayPolicy` implementation. Solver code accesses elements by logical index using square-bracket syntax (e.g., `array[wavelength_idx][layer_idx][column_idx]`) and the policy maps that to the optimal physical layout.
+
+Solver hot paths use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function`) rather than element-by-element access. Solver code is written as bulk operations on `ArrayXD` data — the same operation applies to every column. The concrete `ArrayPolicy` implementation decides how to parallelize across the column dimension:
+- `HostArrayPolicy`: layout optimized for compiler auto-vectorization (SIMD) across columns
+- `DeviceArrayPolicy`: layout optimized for coalesced GPU memory access
+
+This means solver functions never loop over columns explicitly — they express element-wise or reduction operations via `ForEachRow` on the full `ArrayXD`, and the policy handles parallelization. Performance-critical operations (e.g., tridiagonal solve, delta-scaling) should use `ArrayPolicy::Function` to create reusable, policy-optimized function objects.
+
+**Exception**: `DataReader` returns (`Array1D` for wavelengths, `Array2D` for parameter tables) do *not* have a column dimension — these are static reference data shared across all columns. The column dimension is introduced when this data is broadcast into per-column arrays during transform evaluation.
 
 
 ## Phase 1: Delta Eddington Solver
@@ -53,14 +137,14 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
    - **Step 4**: Assemble right-hand side $E_n$ with surface albedo boundary condition
    - **Step 5**: Solve tridiagonal system using existing `TridiagonalMatrix::Solve()` (Thomas algorithm)
    - **Step 6**: Back-substitute $Y$ to compute fluxes and actinic flux components
-   - All operations process batches of columns; the column dimension is innermost for SIMD/GPU vectorization
+   - All operations process batches of columns; the `ArrayPolicy` determines the optimal data layout for parallelization
    - All units in SI (meters, radians, seconds) — no unit conversions in solver code; all input data must be provided in SI units
 
 - [ ] 6. **Regression test against Fortran solver.** Adapt the existing test harness in `test/regression/solvers/` to validate the new C++ solver against pre-computed Fortran reference outputs stored as binary/NetCDF files. This decouples testing from the Fortran build.
 
 ## Phase 2: Composable Transform System
 
-- [ ] 7. **Design the transform type system.** Define a `Transform<Policy>` as a callable that maps atmospheric state to a 2D array `[wavelength × height]`:
+- [ ] 7. **Design the transform type system.** Define a `Transform<Policy>` as a callable that maps atmospheric state to a 3D array `[wavelength × height × column]`:
    ```cpp
    using TransformFunc = std::function<void(
        const Grid<Policy>& wavelength_grid,
@@ -68,10 +152,10 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
        const Profile<Policy>& temperature,
        const Profile<Policy>& pressure,
        const Profile<Policy>& air_density,
-       Array2D<T>& output  // [wavelength × height]
+       Array3D<T>& output  // [wavelength × height × column]
    )>;
    ```
-   This is the fundamental signature for cross-sections, quantum yields, and spectral weights.
+   This is the fundamental signature for cross-sections, quantum yields, and spectral weights. The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
 
 - [ ] 8. **Implement composable transform primitives.** Each returns a `TransformFunc` (or equivalent callable). These are the building blocks:
 
@@ -115,7 +199,7 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
 
 - [ ] 13. **Implement photolysis rate calculator.** Port `src/photolysis_rates.F90`. The core operation is:
     $$J_i(z) = \sum_\lambda F(\lambda, z) \cdot \sigma_i(\lambda, z) \cdot \phi_i(\lambda, z) \cdot \Delta\lambda$$
-    This is a batched dot product per height layer per reaction — highly parallelizable across columns and reactions. The API takes a solved `RadiationField`, a list of `(cross_section_transform, quantum_yield_transform)` pairs, and returns a 2D array `[reaction × height × column]`.
+    This is a batched dot product per height layer per reaction — highly parallelizable across columns and reactions. The API takes a solved `RadiationField`, a list of `(cross_section_transform, quantum_yield_transform)` pairs, and returns an `Array3D [reaction × height × column]`.
 
 - [ ] 14. **Implement dose rate calculator.** Port `src/dose_rates.F90`. Similar structure: spectral irradiance × spectral weight → dose rate per height.
 
@@ -193,3 +277,4 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
 | Solver order | Delta Eddington first | Simpler two-stream method; validates full pipeline before tackling DISORT's 3,700 lines |
 | Configuration | No config files in solver library | Clean separation of concerns; MUSICA handles all configuration mapping |
 | Units | SI only, no conversions | All inputs/outputs in SI units (m, rad, s, K, Pa); no unit conversion code in the library; callers and data pipelines are responsible for providing SI data |
+| MICM consistency | Align API conventions with MICM | Both TUV-x and MICM are MUSICA components; consistent syntax (`operator[]`, `ForEachRow`, `ColumnView`, `Function` factory, `ArrayPolicy` template pattern) reduces cognitive load for users working across both libraries. Diverge only when TUV-x requirements demand it (e.g., `Array1D` instead of `std::vector`) |
