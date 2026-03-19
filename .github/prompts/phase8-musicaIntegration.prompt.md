@@ -52,13 +52,13 @@ TransformFunc<HostArrayPolicy> build_cross_section(const YAML::Node& config) {
         auto reader = NetCDFReader(config["netcdf files"][0]["file path"]);
         return temperature_interpolation(reader);
     } else if (type == "CCl4+hv->Products") {
-        // ... compose primitives per config
+        // ... build transform using multiply/add/piecewise per config
     }
     // etc.
 }
 ```
 
-This maps the existing config types (`"tint"`, `"O3"`, `"temperature based"`, etc.) to composed transforms.
+This maps the existing config types (`"tint"`, `"O3"`, `"temperature based"`, etc.) to transforms built with factories and combinators.
 
 ### Language bindings
 

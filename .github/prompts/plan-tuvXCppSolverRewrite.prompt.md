@@ -144,7 +144,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 2: Composable Transform System
 
-- [ ] 7. **Design the transform type system.** Define a `Transform<Policy>` as a callable that maps atmospheric state to a 3D array `[wavelength × height × column]`:
+- [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that maps atmospheric state to a 3D output array `[wavelength × height × column]`:
    ```cpp
    using TransformFunc = std::function<void(
        const Grid<Policy>& wavelength_grid,
@@ -155,43 +155,56 @@ This means solver functions never loop over columns explicitly — they express 
        Array3D<T>& output  // [wavelength × height × column]
    )>;
    ```
-   This is the fundamental signature for cross-sections, quantum yields, and spectral weights. The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
+   **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform — users can write raw lambdas, function objects, or free functions directly. No factory or wrapper is required:
+   ```cpp
+   // User-written transform — just a lambda matching the signature:
+   TransformFunc<Policy> my_cross_section = [coeff](const auto& wl_grid, const auto& alt_grid,
+       const auto& temperature, const auto& pressure, const auto& air_density, auto& output) {
+       // User's custom logic using ForEachRow, ColumnView, etc.
+   };
+   ```
+   The output includes the column dimension because temperature, pressure, and density vary per column, so the computed values differ per column.
 
-- [ ] 8. **Implement composable transform primitives.** Each returns a `TransformFunc` (or equivalent callable). These are the building blocks:
+- [ ] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
 
-   | Primitive | Replaces | Description |
-   |-----------|----------|-------------|
-   | `from_data(reader, interpolator)` | Base `cross_section_t` | Load tabulated data via pluggable reader; interpolate to model grid |
-   | `temperature_interpolation(reader)` | `tint` | Linear interpolation between tabulated T-dependent data sets |
-   | `polynomial_scaling(coeffs, T_ref)` | CCl4, acetone, ClONO2 | $\sigma_0 \cdot P(T - T_{ref}, \lambda)$ |
-   | `exponential_scaling(coeffs, T_ref)` | CFC-11, RONO2, N2O5 | $\sigma_0 \cdot \exp(f(T, \lambda))$ |
-   | `linear_correction(slope_data)` | CH2O | $\sigma_0 + \beta \cdot \Delta T$ |
-   | `analytic(lambda_expr)` | Rayleigh, nitroxy compounds | User-supplied lambda for analytic formulas |
-   | `stern_volmer(phi0, k)` | CH2O quantum yield | Quenching: $1/(1/\phi_0 + k \cdot M)$ |
-   | `parameterized(type, params)` | Taylor/Burkholder/Harwood | Pluggable parameterization strategies |
+   | Factory function | Math | Useful for |
+   |-----------|------|------------------------|
+   | `from_data(reader, interpolator)` | Tabulated data → model grid interpolation | Base cross-sections, quantum yields |
+   | `temperature_interpolation(reader)` | $\sigma(\lambda,T) = \sigma_i + \frac{T-T_i}{T_{i+1}-T_i}(\sigma_{i+1}-\sigma_i)$ | T-dependent tint types |
+   | `polynomial_scaling(coeffs, T_ref)` | $\sigma_0 \cdot P(T - T_{ref}, \lambda)$ | CCl4, acetone, ClONO2, HCFC |
+   | `exponential_scaling(coeffs, T_ref)` | $\sigma_0 \cdot \exp(f(T, \lambda))$ | CFC-11, RONO2, N2O5, CHBr3 |
+   | `linear_correction(slope_data)` | $\sigma_0 + \beta \cdot \Delta T$ | CH2O |
+   | `stern_volmer(phi0, k)` | $\phi = 1/(1/\phi_0 + k \cdot M)$ | Quenching quantum yields |
+   | `parameterized(type, params)` | Taylor series, Burkholder, Harwood strategies | T-parameterized cross-sections |
+   | `wrap_analytic(f)` | Adapts a simple `f(λ)→double` or `f(λ,T)→double` into the full `TransformFunc` signature | Quick one-liner formulas (Rayleigh, etc.) |
 
-- [ ] 9. **Implement transform combinators.** These compose primitives:
+   `wrap_analytic` is a **signature adapter** — it takes a simple function of wavelength (and optionally temperature) and wraps it to handle grid iteration and column broadcasting internally. It is a convenience for simple formulas, not the primary way to create custom transforms.
+
+- [ ] 9. **Implement transform combinators.** These are higher-order functions that take one or more `TransformFunc` values and return a new `TransformFunc`. They work with **any** transform — library-provided or user-written:
 
    | Combinator | Description |
    |------------|-------------|
    | `in_region(lambda_min, lambda_max, transform)` | Apply transform only in a wavelength sub-range; zero outside |
-   | `compose(base, modifier)` | Apply modifier to base output (multiply, add) |
+   | `multiply(a, b)` | Run both transforms, multiply their outputs element-wise |
+   | `add(a, b)` | Run both transforms, add their outputs element-wise |
    | `piecewise({region1: t1, region2: t2, ...})` | Different transforms in different wavelength regions |
    | `clamp(transform, min, max)` | Clamp output values |
    | `override_band(band_name, value, transform)` | Replace values in named spectral bands (Lyman-alpha, Schumann-Runge) |
    | `scale(factor, transform)` | Multiply by constant factor |
 
-- [ ] 10. **Port existing cross-section algorithms as composed transforms.** For each of the 27 cross-section types in `src/cross_sections/`, express as a composition of primitives. Example for CCl4:
+   **Why combinators instead of sequential application?** A `TransformFunc` *writes* to the output array — it doesn't modify an existing value. Applying two transforms in sequence would just overwrite the first result with the second. Combinators like `multiply(a, b)` internally run both transforms (one into the output, one into a temporary), then combine the results element-wise. This is the only way to combine two independent computations.
+
+- [ ] 10. **Port existing cross-section algorithms as composed transforms.** For each of the 27 cross-section types in `src/cross_sections/`, express as a library factory, a composition of factories via combinators, or a direct user-written `TransformFunc` lambda. Example for CCl4:
     ```cpp
-    auto ccl4_xs = compose(
+    auto ccl4_xs = multiply(
         from_data(netcdf_reader("CCl4.nc"), conserving_interpolator()),
         in_region(194e-9, 250e-9,
             polynomial_scaling({b0, b1, b2, b3, b4}, 295.0))
     );
     ```
-    For complex cases like O3 (4 regions, refraction correction) or H2O2 (blended polynomials via Boltzmann $\chi$), use `piecewise()` and `analytic()` with custom lambdas.
+    For complex cases like O3 (4 regions, refraction correction) or H2O2 (blended polynomials via Boltzmann $\chi$), use `piecewise()` with a mix of library factories and user-written lambdas.
 
-- [ ] 11. **Port quantum yield algorithms** (~20 types in `src/quantum_yields/`) using the same primitive/combinator system. Most reuse the same primitives; `stern_volmer`, `analytic`, and `temperature_interpolation` cover the majority.
+- [ ] 11. **Port quantum yield algorithms** (~20 types in `src/quantum_yields/`) using the same library factories, combinators, and/or user-written lambdas. Most reuse existing factories; `stern_volmer`, `wrap_analytic`, and `temperature_interpolation` cover the majority.
 
 - [ ] 12. **Port spectral weight algorithms** (~12 types in `src/spectral_weights/`) — these are simpler wavelength-only transforms (`gaussian`, `notch_filter`, `exponential_decay`, etc.).
 
@@ -259,7 +272,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Verification
 
-- **Unit tests** (GTest): Each transform primitive, combinator, interpolator, data reader, and solver step gets individual tests. Migrate existing C++ tests from the current repo.
+- **Unit tests** (GTest): Each transform factory function, combinator, interpolator, data reader, and solver step gets individual tests. Include tests of user-written `TransformFunc` lambdas to verify the API is fully open. Migrate existing C++ tests from the current repo.
 - **Regression tests**: Pre-compute reference outputs from the current Fortran solver for several standard configurations (`examples/tuv_5_4.json`, `examples/ts1_tsmlt.json`) and store as binary fixtures. The new C++ solver must match within floating-point tolerance.
 - **Cross-validation of transforms**: For each of the 27 cross-section types and 20 quantum yield types, compare the new composed-transform output against Fortran reference values at multiple temperature/pressure points.
 - **Performance benchmarks**: Google Benchmark tests for multi-column solver throughput (1, 10, 100, 1000 columns) on CPU. CUDA/HIP benchmarks once GPU policy is implemented.
@@ -270,7 +283,7 @@ This means solver functions never loop over columns explicitly — they express 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Language | C++ | Builds on existing partial port; native MUSICA integration; standard HPC ecosystem |
-| Transform API | Lambda/functional composables | Removes ~3,000 lines of factory/config dispatch code; composable and testable; config layer lives in MUSICA |
+| Transform API | Open callable signature (`TransformFunc`) | Any lambda/callable matching the signature is a valid transform; convenience factory library covers common patterns; combinators compose any transforms; config layer lives in MUSICA |
 | GPU portability | Template policies | Lighter weight than Kokkos/SYCL; consistent with existing codebase; can wrap Kokkos later if needed |
 | Migration strategy | New standalone repo | Clean separation; old Fortran repo stays as reference/validation; MUSICA switches dependency when ready |
 | Data readers | Pluggable interface, NetCDF-C default | Future-proofs against format changes; no Fortran dependency |
