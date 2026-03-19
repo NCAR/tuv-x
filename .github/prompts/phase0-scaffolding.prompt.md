@@ -154,6 +154,7 @@ The Fortran codebase is full of cryptic abbreviations (`edr_`, `eup_`, `fdr_`, `
 Port these already-complete implementations from the current `tuv-x` repo:
 
 ### Data structures
+- **`Array1D<T>` — new implementation** to create in `include/tuvx/util/array1d.hpp`, following the same pattern as `Array2D`/`Array3D`. This is a policy-aware 1D array that replaces `std::vector` in all interfaces that interact with policy-backed types (e.g., `Grid`, `Profile`, `RadiatorState`). When backed by `DeviceArrayPolicy`, data resides in device memory — `std::vector` cannot serve this role. Must support the same element access syntax as `Array2D`/`Array3D` via `ArrayPolicy`.
 - `Array2D<T>` — `include/tuvx/util/array2d.hpp`
 - `Array3D<T>` — `include/tuvx/util/array3d.hpp`
 - `Grid<ArrayPolicy>` — `include/tuvx/grid.hpp`
@@ -165,7 +166,7 @@ Port these already-complete implementations from the current `tuv-x` repo:
 - `TridiagonalMatrix<T>`, `Solve()` — `include/tuvx/linear_algebra/linear_algebra.hpp`
 
 ### Tests and benchmarks
-- GTest tests for Array2D, Array3D, Grid, Profile, TridiagonalSolver, ErrorFunction
+- GTest tests for Array1D (new), Array2D, Array3D, Grid, Profile, TridiagonalSolver, ErrorFunction
 - Google Benchmark for tridiagonal solver — `benchmark/benchmark_tridiagonal_solver.cpp`
 
 Ensure all migrated tests pass in the new repo before proceeding.
@@ -183,11 +184,12 @@ Concrete policies to implement:
 - `HostArrayPolicy` — `std::vector`-backed; SoA layout for SIMD auto-vectorization
 - `DeviceArrayPolicy` — CUDA/HIP device memory; coalesced access; `__host__ __device__` accessors
 
-All core types (`Grid`, `Profile`, `RadiatorState`, `RadiationField`, `TridiagonalMatrix`) are already templated on `ArrayPolicy` — preserve and extend this pattern.
+All core types (`Array1D`, `Grid`, `Profile`, `RadiatorState`, `RadiationField`, `TridiagonalMatrix`) are templated on `ArrayPolicy` — preserve and extend this pattern. `Array1D<T>` is new and must be created following the same conventions as `Array2D<T>` and `Array3D<T>`. **No `std::vector` should appear in any function signature that also accepts policy-backed types** — use `Array1D` instead to ensure correctness with device-resident data.
 
 ## Existing C++ code to reference
 
 Key files in the current tuv-x repo:
+- `include/tuvx/util/array1d.hpp` — policy-aware 1D array (**new — to be created**)
 - `include/tuvx/util/array2d.hpp` — row-major 2D array
 - `include/tuvx/util/array3d.hpp` — row-major 3D array
 - `include/tuvx/grid.hpp` — multi-column grid with mid_points/edges

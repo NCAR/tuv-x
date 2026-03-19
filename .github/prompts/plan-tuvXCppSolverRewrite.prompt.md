@@ -22,6 +22,7 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
 - [ ] 1. **Create new repository** (`tuv-x-cpp` or chosen name) with CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
 
 - [ ] 2. **Migrate reusable C++ code from current repo.** Port the following already-complete implementations from `include/tuvx/` into the new repo's `include/` and `src/`:
+   - `Array1D<T>` — new implementation (see below), modeled after `Array2D`/`Array3D`
    - `Array2D<T>`, `Array3D<T>` — `include/tuvx/util/array2d.hpp`, `include/tuvx/util/array3d.hpp`
    - `Grid<ArrayPolicy>` — `include/tuvx/grid.hpp`
    - `Profile<ArrayPolicy>` — `include/tuvx/profile.hpp`
@@ -38,6 +39,7 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
    - `DeviceArrayPolicy` — CUDA/HIP device memory; coalesced access patterns; same element access syntax via `__host__ __device__` accessors
    - Solver functions are templated on `ArrayPolicy` and written exactly once — no `#ifdef` branching, no runtime dispatch
    - All core types (`Grid`, `Profile`, `RadiatorState`, `RadiationField`, `TridiagonalMatrix`) are already templated on `ArrayPolicy` in the existing codebase; this pattern is preserved and extended
+   - **`Array1D<T>`**: Create a new 1D array type following the same pattern as `Array2D<T>` and `Array3D<T>`. This replaces all uses of `std::vector` in APIs that interact with `Grid`/`Profile`/policy-backed data, ensuring consistency when data is device-resident. `Array1D` must support the same `ArrayPolicy`-controlled memory allocation and access as the 2D/3D types. **No `std::vector` should appear in any function signature that also takes policy-backed types** — use `Array1D` instead
 
 
 ## Phase 1: Delta Eddington Solver
@@ -133,8 +135,8 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
     ```cpp
     class DataReader {
         virtual Array2D<double> read_parameters(const std::string& variable_prefix) = 0;
-        virtual std::vector<double> read_wavelengths() = 0;
-        virtual std::vector<double> read_temperatures() = 0;  // optional
+        virtual Array1D<double> read_wavelengths() = 0;
+        virtual Array1D<double> read_temperatures() = 0;  // optional
     };
     ```
     Implement `NetCDFReader` using NetCDF-C (no Fortran dependency). This reads the existing ~160 `.nc` files unchanged. Additional readers (HDF5, CSV, binary) can be added later.
@@ -143,19 +145,21 @@ All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wave
 
 - [ ] 20. **Define the top-level solver API.** This replaces the Fortran `core_t`. The API is purely programmatic — no config files:
     ```cpp
+    template<typename ArrayPolicy>
     class Solver {
         // Configure solver with template policy for CPU or GPU
         void solve(
-            const std::vector<Column>& columns,  // batch of atmospheric columns
-            const SolverOptions& options,          // solver type, surface albedo, etc.
-            RadiationField& radiation_field        // output
+            const AtmosphericState<ArrayPolicy>& state,
+            const RadiatorState<ArrayPolicy>& radiator_state,
+            RadiationField<ArrayPolicy>& radiation_field   // output
         );
     };
 
     // Full pipeline: solve radiation field then compute rates
+    template<typename ArrayPolicy>
     class PhotolysisCalculator {
-        void add_reaction(std::string name, TransformFunc cross_section, TransformFunc quantum_yield);
-        void calculate(const RadiationField& field, const AtmosphericState& state, RateOutput& output);
+        void add_reaction(std::string name, TransformFunc<ArrayPolicy> cross_section, TransformFunc<ArrayPolicy> quantum_yield);
+        void calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& rates);
     };
     ```
 

@@ -19,12 +19,14 @@ public:
     virtual Array2D<double> read_parameters(const std::string& variable_prefix) = 0;
 
     /// Read the wavelength grid [m]
-    virtual std::vector<double> read_wavelengths() = 0;
+    virtual Array1D<double> read_wavelengths() = 0;
 
     /// Read temperature grid (optional — only for T-dependent data)
-    virtual std::vector<double> read_temperatures() = 0;
+    virtual Array1D<double> read_temperatures() = 0;
 };
 ```
+
+**Note**: The `DataReader` returns `Array1D` (not `std::vector`) so that returned data can be directly used with policy-backed types (`Grid`, `Profile`, etc.) without copies. When the solver runs on GPU, these arrays may need to reside in device memory — `std::vector` cannot support this.
 
 ### NetCDF-C reader implementation
 
