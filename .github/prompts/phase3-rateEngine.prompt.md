@@ -26,9 +26,9 @@ API:
 template<typename ArrayPolicy>
 class PhotolysisCalculator {
     void add_reaction(std::string name, TransformFunc<ArrayPolicy> cross_section, TransformFunc<ArrayPolicy> quantum_yield);
-    void calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state, Array3D<T>& rates);
+    Array3D<typename ArrayPolicy::value_type> calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state);
     // calculate() internally: (1) calculates each transform's weights from `state`,
-    // (2) applies weights to `field` (element-wise multiply), (3) reduces over wavelengths into `rates`
+    // (2) applies weights to `field` (element-wise multiply), (3) reduces over wavelengths → returns rates [reaction × height × column]
 };
 ```
 

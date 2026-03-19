@@ -13,26 +13,35 @@ The public API replaces the Fortran `core_t` class. It is purely programmatic �
 ```cpp
 namespace tuvx {
 
-/// Atmospheric column state for a batch of columns
+/// Atmospheric column state for a batch of columns.
+/// This is the single state object passed to TransformFunc — it carries everything
+/// a transform might need. Add fields here as needed (e.g., constituent concentrations
+/// for quenching quantum yields) without breaking the TransformFunc signature.
 template<typename ArrayPolicy>
 struct AtmosphericState {
-    Grid<ArrayPolicy> altitude_grid;           // per-column vertical grid [m]
+    Grid<ArrayPolicy> height;                  // per-column vertical grid [m]
     Grid<ArrayPolicy> wavelength_grid;         // shared wavelength grid [m]
     Profile<ArrayPolicy> temperature;          // temperature profile [K]
     Profile<ArrayPolicy> pressure;             // pressure profile [Pa]
-    Profile<ArrayPolicy> air_density;          // air number density [molec/m³]
-    Array1D<typename ArrayPolicy::value_type> solar_zenith_angles;   // per-column [rad]
-    Array1D<typename ArrayPolicy::value_type> earth_sun_distances;   // per-column [AU]
-    typename ArrayPolicy::value_type surface_albedo;
+    Profile<ArrayPolicy> air_density;          // air number density [mol/m³]
+    Profile<ArrayPolicy> surface_albedo;       // per-column, potentially per-wavelength [dimensionless]
+    Array1D<typename ArrayPolicy::value_type> solar_zenith_angle;    // per-column [rad]
+    Array1D<typename ArrayPolicy::value_type> earth_sun_distance;    // per-column [AU]
+    // Extensible: add constituent concentrations, surface properties, etc. as needed
 };
 
-/// Solver for radiative transfer
+/// Solver for radiative transfer.
+/// Radiators are configured at construction (via builder) and owned by the solver.
 template<typename ArrayPolicy>
 class Solver {
 public:
-    void solve(
+    /// Create a properly-sized atmospheric state container
+    AtmosphericState<ArrayPolicy> GetState(int num_columns);
+    /// Create a properly-sized radiation field container
+    RadiationField<ArrayPolicy> GetRadiationField(int num_columns);
+    /// Solve the radiative transfer equation. Returns convergence/diagnostic info.
+    SolveResult solve(
         const AtmosphericState<ArrayPolicy>& state,
-        const RadiatorState<ArrayPolicy>& radiator_state,
         RadiationField<ArrayPolicy>& radiation_field
     );
 };
@@ -47,11 +56,11 @@ public:
         TransformFunc<ArrayPolicy> quantum_yield,
         double scaling_factor = 1.0
     );
-    void calculate(
+    /// Calculate rates: (1) calculate transforms, (2) apply to field, (3) reduce over wavelengths
+    Array3D<typename ArrayPolicy::value_type> calculate(
         const RadiationField<ArrayPolicy>& field,
-        const AtmosphericState<ArrayPolicy>& state,
-        Array3D<typename ArrayPolicy::value_type>& rates  // [reaction × height × column]
-    );
+        const AtmosphericState<ArrayPolicy>& state
+    );  // returns [reaction × height × column]
 };
 
 } // namespace tuvx

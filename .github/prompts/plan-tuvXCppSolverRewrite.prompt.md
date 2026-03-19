@@ -2,6 +2,105 @@
 
 **TL;DR**: Replace the Fortran-based TUV-x with a high-performance C++ photolysis rate constant calculator, developed on a clean branch (`cpp-rewrite`) in the existing `tuv-x` repo. The library provides a pure programmatic C++ API — no configuration files — with composable lambda-based transforms for cross-sections, quantum yields, and dose rates. Data structures use template policies to support both CPU SIMD (multi-column vectorization) and GPU (CUDA/HIP) execution. Delta Eddington solver ships first; Discrete Ordinate follows. MUSICA wraps this library and handles YAML/JSON configuration and Python/JS/Fortran bindings.
 
+### Target README Example
+
+This draft example is the API we are building toward. It should compile and run as-is when the library is complete. Keep it up to date as the API evolves — if the example gets ugly, the API needs work.
+
+```cpp
+#include <tuvx/solver.hpp>
+#include <tuvx/photolysis_calculator.hpp>
+#include <tuvx/grid.hpp>
+#include <tuvx/profile.hpp>
+#include <tuvx/radiative_transfer/radiator.hpp>
+#include <tuvx/radiative_transfer/radiation_field.hpp>
+
+#include <iomanip>
+#include <iostream>
+
+using Policy = tuvx::HostArrayPolicy;
+
+int main()
+{
+  // Define the wavelength grid, which is shared across all columns and is constant in time
+  tuvx::Grid<Policy> wavelength_grid("m", 1, 4);   // units, 1 column, 4 wavelength bins
+  wavelength_grid.SetEdges({ 280e-9, 300e-9, 320e-9, 340e-9, 400e-9 }); // SetEdges() uses edges to calculate mid-points internally
+
+  // create a solver for the radiation field
+  auto solver = tuvx::CpuSolverBuilder<tuvx::DeltaEddingtonParameters>(tuvx::DeltaEddingtonParameters::StandardParameters())
+    .WithWavelengthGrid(wavelength_grid)
+    .WithNumberOfVerticalMidpoints(2)
+    .WithRadiator("O2", tuvx::Library::CrossSections::O2) // these might come from a VERY SMALL set of built-in library cross-sections (maybe just O2, Air, and O3)
+    .WithRadiator("Air", tuvx::Library::CrossSections::Air)
+    .Build();
+
+  // get containers for the atmospheric state and radiation field
+  auto atm_state = solver.GetState(1);          // 1 column
+  auto rad_field = solver.GetRadiationField(1); // 1 column
+
+  // set the input state for the solver
+  atm_state.height[0].SetEdges({ 0.0, 5000.0, 10000.0 });   // set height grid for first column (0–5 km, 5–10 km)
+  atm_state.temperature[0].SetConstant(250.0);              // 250 K constant profile for first column
+  atm_state.pressure[0].SetMidpoints({ 50000.0, 20000.0 }); // 500 hPa at surface, 200 hPa at 10 km for first column
+  atm_state.air_density[0].SetMidpoints({ 42.0, 15.0 });    // 42 mol/m³ at surface, 15 mol/m³ at 10 km for first column
+
+  atm_state.solar_zenith_angle[0] = 0.5236;           // 30° in radians for first column
+  atm_state.earth_sun_distance[0] = 1.0;              // 1 AU for first column
+  atm_state.surface_albedo[0].SetConstant(0.1);       // 10% surface albedo for first column
+
+  // solve for the radiation field ---
+  auto result = solver.solve(atm_state, rad_field); // result holds solver stats, whether converged, etc.
+
+  // define photolysis reactions using lambda transforms
+  auto calc = rad_field.GetPhotolysisCalculator();
+
+  // Reaction 1: O3 + hv → O2 + O(1D)
+  //   Cross-section: temperature-dependent Gaussian centered at 300 nm
+  //   Quantum yield: constant 0.7
+  calc.add_reaction("O3->O2+O1D",
+    // cross-section transform (calculates weights)
+    [](const auto& state, auto& weights) {
+      weights.ForEachRow([&](double& weight, const double& wavelength, const double& temperature) {
+        double sigma_300 = 1.0e-22; // m² at 300 nm
+        double temp_factor = (temperature - 200.0) / 100.0; // simple linear temp dependence
+        double sigma = sigma_300 * std::exp(-std::pow((wavelength - 300e-9) / 10e-9, 2)) * (1 + temp_factor);
+        weight = sigma;
+
+      }, state.wavelength_grid.mid_points(), state.temperature.mid_points()); // access all wavelengths and temperatures across all columns, heights, wavelengths
+    },
+    // quantum yield transform (constant weights)
+    [](const auto& state, auto& weights) {
+      weights.set_constant(0.7);
+    }
+  );
+
+  // Reaction 2: NO2 + hv → NO + O
+  //   Cross-section: 5.0e-23 m² below 350 nm, 1.0e-24 m² above — built from combinators
+  //   Quantum yield: constant 0.5
+  calc.add_reaction("NO2->NO+O",
+    tuvx::add(
+      tuvx::in_region(0.0, 350e-9, tuvx::constant(5.0e-23)),   // 5.0e-23 m² for λ < 350 nm
+      tuvx::in_region(350e-9, 400e-9, tuvx::constant(1.0e-24)) // 1.0e-24 m² for λ ≥ 350 nm
+    ),
+    tuvx::constant(0.5)
+  );
+
+  // calculate photolysis rates
+  auto rates = calc.calculate(rad_field, atm_state);
+  rates.Print();
+
+  return 0;
+}
+```
+
+To build (assuming TUV-x is installed):
+
+```
+g++ -o photolysis photolysis.cpp -I/usr/local/tuvx/include -std=c++20
+./photolysis
+```
+
+**This example is our north star.** If any API change makes this example harder to read or write, that change needs strong justification.
+
 ## Phase 0: Project Scaffolding
 
 ### SI Units Policy
@@ -15,7 +114,7 @@ The TUV-x C++ library performs **no unit conversions** whatsoever. All input dat
 - **Pressure**: Pascals (Pa)
 - **Time**: seconds (s)
 - **Cross-sections**: m² (not cm²)
-- **Number density**: molecules/m³ (not molecules/cm³)
+- **Number density**: moles/m³ (not molecules/cm³)
 
 All outputs are in SI units. Any data files (e.g., legacy NetCDF files with wavelengths in nm) must be pre-converted to SI units before being consumed by TUV-x. The responsibility for unit conversion lies with the caller or the data preparation pipeline — not with the library itself.
 
@@ -153,33 +252,33 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 2: Composable Transform System
 
-   **What is a transform?** A transform is a set of per-wavelength, per-height weights `[wavelength × height × column]` — conceptually a weight matrix that can be *applied* to the radiation field (element-wise multiplication). Cross-sections, quantum yields, and spectral weights are all transforms. Calculating a transform may depend on atmospheric conditions (T, P, density), but those are inputs to the *weight calculation*, not to the application. You first **calculate** a transform (produce the weight matrix), then **apply** it to the radiation field (multiply), then **reduce** (sum over wavelengths) to get rates.
+   **What is a transform?** A transform is a set of per-wavelength, per-height weights `[wavelength × height × column]` — conceptually a weight matrix that can be *applied* to the radiation field (element-wise multiplication). Cross-sections, quantum yields, and spectral weights are all transforms. Calculating a transform may depend on atmospheric state (T, P, density, constituent concentrations, etc.), but those are inputs to the *weight calculation*, not to the application. You first **calculate** a transform (produce the weight matrix), then **apply** it to the radiation field (multiply), then **reduce** (sum over wavelengths) to get rates.
 
 - [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[wavelength × height × column]` given the current atmospheric state:
    ```cpp
+   template<typename ArrayPolicy>
    using TransformFunc = std::function<void(
-       const Grid<ArrayPolicy>& wavelength_grid,
-       const Grid<ArrayPolicy>& altitude_grid,
-       const Profile<ArrayPolicy>& temperature,
-       const Profile<ArrayPolicy>& pressure,
-       const Profile<ArrayPolicy>& air_density,
-       Array3D<typename ArrayPolicy::value_type>& weights  // [wavelength × height × column] — the calculated transform
+       const AtmosphericState<ArrayPolicy>& state,          // grids, T, P, density, constituents, etc.
+       Array3D<typename ArrayPolicy::value_type>& weights   // [wavelength × height × column] — the calculated transform
    )>;
    ```
+   `TransformFunc` takes a single `AtmosphericState` rather than individual parameters so the signature is stable — adding new state fields (e.g., constituent concentrations for quenching yields) doesn't break existing transforms.
+
    **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform calculator — users can write raw lambdas, function objects, or free functions directly. No factory or wrapper is required:
    ```cpp
    // User-written transform — just a lambda that calculates weights:
-   TransformFunc<ArrayPolicy> my_cross_section = [coeff](const auto& wl_grid, const auto& alt_grid,
-       const auto& temperature, const auto& pressure, const auto& air_density, auto& weights) {
+   TransformFunc<ArrayPolicy> my_cross_section = [coeff](const auto& state, auto& weights) {
+       // Access state.wavelength_grid, state.temperature, state.pressure, etc.
        // Calculate cross-section weights using ForEachRow, ColumnView, etc.
    };
    ```
-   The weights include the column dimension because temperature, pressure, and density vary per column, so the calculated weights differ per column. The weights are later applied to the radiation field in Phase 3 (rate calculation).
+   The weights include the column dimension because atmospheric state varies per column, so the calculated weights differ per column. The weights are later applied to the radiation field in Phase 3 (rate calculation).
 
 - [ ] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables — each one calculates a particular kind of weight matrix. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda that calculates weights matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
 
    | Factory function | Math | Useful for |
    |-----------|------|------------------------|
+   | `constant(value)` | Sets all weights to a single value | Flat quantum yields, unit weights |
    | `from_data(reader, interpolator)` | Tabulated data → model grid interpolation | Base cross-sections, quantum yields |
    | `temperature_interpolation(reader)` | $\sigma(\lambda,T) = \sigma_i + \frac{T-T_i}{T_{i+1}-T_i}(\sigma_{i+1}-\sigma_i)$ | T-dependent tint types |
    | `polynomial_scaling(coeffs, T_ref)` | $\sigma_0 \cdot P(T - T_{ref}, \lambda)$ | CCl4, acetone, ClONO2, HCFC |
@@ -251,23 +350,20 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 6: Public API
 
-- [ ] 20. **Define the top-level solver API.** This replaces the Fortran `core_t`. The API is purely programmatic — no config files:
+- [ ] 20. **Define the top-level solver API.** This replaces the Fortran `core_t`. The API is purely programmatic — no config files. Radiators are configured at construction time (via a builder) and owned by the solver. The solver creates properly-sized containers for state and radiation field:
     ```cpp
     template<typename ArrayPolicy>
     class Solver {
-        // Configure solver with template policy for CPU or GPU
-        void solve(
-            const AtmosphericState<ArrayPolicy>& state,
-            const RadiatorState<ArrayPolicy>& radiator_state,
-            RadiationField<ArrayPolicy>& radiation_field   // output
-        );
+        AtmosphericState<ArrayPolicy> GetState(int num_columns);
+        RadiationField<ArrayPolicy> GetRadiationField(int num_columns);
+        SolveResult solve(const AtmosphericState<ArrayPolicy>& state, RadiationField<ArrayPolicy>& field);
     };
 
     // Full pipeline: solve radiation field then compute rates
     template<typename ArrayPolicy>
     class PhotolysisCalculator {
         void add_reaction(std::string name, TransformFunc<ArrayPolicy> cross_section, TransformFunc<ArrayPolicy> quantum_yield);
-        void calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& rates);
+        Array3D<typename ArrayPolicy::value_type> calculate(const RadiationField<ArrayPolicy>& field, const AtmosphericState<ArrayPolicy>& state);
     };
     ```
 
@@ -294,7 +390,7 @@ This means solver functions never loop over columns explicitly — they express 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
 | Language | C++ | Builds on existing partial port; native MUSICA integration; standard HPC ecosystem |
-| Transform API | Open callable signature (`TransformFunc`) | A transform is a weight matrix `[λ × z × col]`; `TransformFunc` *calculates* the weights from atmospheric state; any matching callable is a valid transform calculator; convenience factory library covers common patterns; combinators compose weight calculations; the weights are then *applied* to the radiation field separately (Phase 3) |
+| Transform API | Open callable signature (`TransformFunc`) | A transform is a weight matrix `[λ × z × col]`; `TransformFunc(state, weights)` *calculates* the weights from a single `AtmosphericState` object (extensible with constituents, surface properties, etc.); any matching callable is a valid transform calculator; convenience factory library covers common patterns; combinators compose weight calculations; the weights are then *applied* to the radiation field separately (Phase 3) |
 | GPU portability | Template policies | Lighter weight than Kokkos/SYCL; consistent with existing codebase; can wrap Kokkos later if needed |
 | Migration strategy | Clean branch in existing repo | Work on `cpp-rewrite` branch in the existing `tuv-x` repo; preserves issue tracker, CI config, and history; Fortran code is removed on the branch; branch replaces `main` when ready |
 | Data readers | Pluggable interface, NetCDF-C default | Future-proofs against format changes; no Fortran dependency |

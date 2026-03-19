@@ -6,7 +6,7 @@ See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture 
 
 The current Fortran codebase has 27 cross-section types, 20 quantum yield types, and 12 spectral weight types, each implemented as a separate class with a factory pattern. Analysis shows these decompose into ~8 recurring mathematical patterns.
 
-**What is a transform?** A transform is a set of per-wavelength, per-height weights `[λ × z × col]` — conceptually a weight matrix that can be *applied* to the radiation field via element-wise multiplication. Cross-sections, quantum yields, and spectral weights are all transforms. The weight values may depend on atmospheric conditions (T, P, density), but those are inputs to the *weight calculation*, not to the application. The pipeline is: **calculate** the transform (produce the weight matrix) → **apply** it to the radiation field (multiply) → **reduce** (sum over wavelengths) to get rates (Phase 3).
+**What is a transform?** A transform is a set of per-wavelength, per-height weights `[λ × z × col]` — conceptually a weight matrix that can be *applied* to the radiation field via element-wise multiplication. Cross-sections, quantum yields, and spectral weights are all transforms. The weight values may depend on atmospheric state (T, P, density, constituent concentrations, etc.), but those are inputs to the *weight calculation*, not to the application. The pipeline is: **calculate** the transform (produce the weight matrix) → **apply** it to the radiation field (multiply) → **reduce** (sum over wavelengths) to get rates (Phase 3).
 
 The new library defines an open `TransformFunc` API — any lambda or callable matching the signature can *calculate* a transform. A convenience library of pre-built factory functions covers the common weight-calculation patterns, and combinators allow composing weight calculations. Users can mix library-provided factories, combinators, and raw user-written lambdas freely. No config files — MUSICA handles configuration.
 
@@ -17,27 +17,25 @@ Define `TransformFunc` as a callable that **calculates** a transform — i.e., f
 ```cpp
 template<typename ArrayPolicy>
 using TransformFunc = std::function<void(
-    const Grid<ArrayPolicy>& wavelength_grid,
-    const Grid<ArrayPolicy>& altitude_grid,
-    const Profile<ArrayPolicy>& temperature,
-    const Profile<ArrayPolicy>& pressure,
-    const Profile<ArrayPolicy>& air_density,
-    Array3D<typename ArrayPolicy::value_type>& weights  // [λ × z × col] — the calculated transform
+    const AtmosphericState<ArrayPolicy>& state,          // grids, T, P, density, constituents, etc.
+    Array3D<typename ArrayPolicy::value_type>& weights   // [λ × z × col] — the calculated transform
 )>;
 ```
+
+`TransformFunc` takes a single `AtmosphericState` rather than individual parameters so the signature is stable — adding new state fields (e.g., constituent concentrations for quenching yields) doesn't break existing transforms.
 
 **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform calculator. Users can write raw lambdas, function objects, or free functions directly — no factory or wrapper is required:
 
 ```cpp
 // User-written transform — just a lambda that calculates weights:
-TransformFunc<ArrayPolicy> rayleigh_xs = [](const auto& wl_grid, const auto& alt_grid,
-    const auto& temperature, const auto& pressure, const auto& air_density, auto& weights) {
+TransformFunc<ArrayPolicy> rayleigh_xs = [](const auto& state, auto& weights) {
+    // Access state.wavelength_grid, state.temperature, state.pressure, etc.
     // Calculate Rayleigh scattering weights using ForEachRow, ColumnView, etc.
     // The resulting weights will later be applied to the radiation field.
 };
 ```
 
-The weights include the column dimension because temperature, pressure, and density vary per column, so the calculated weights differ per column. The weights are later *applied* to the radiation field (element-wise multiplication) in Phase 3 (rate calculation).
+The weights include the column dimension because atmospheric state varies per column, so the calculated weights differ per column. The weights are later *applied* to the radiation field (element-wise multiplication) in Phase 3 (rate calculation).
 
 Transform implementations should use the **bulk operations API** (`ForEachRow`, `ColumnView`, `Function`) for all per-element computation. For transforms calculated from static reference data (loaded via `DataReader`), the reference data is broadcast into the per-column weights using `ForEachRow`. Performance-critical transforms (calculated every timestep) should return pre-compiled `ArrayPolicy::Function` objects.
 
@@ -49,6 +47,7 @@ Provide a library of pre-built factory functions that return `TransformFunc` cal
 
 | Factory function | Math | Useful for |
 |-----------|------|---------------------------|
+| `constant(value)` | Sets all weights to a single value | Flat quantum yields, unit weights |
 | `from_data(reader, interpolator)` | Tabulated data → model grid interpolation | Base cross-sections, quantum yields |
 | `temperature_interpolation(reader)` | $\sigma(\lambda,T) = \sigma_i + \frac{T-T_i}{T_{i+1}-T_i}(\sigma_{i+1}-\sigma_i)$ | T-dependent tint types |
 | `polynomial_scaling(coeffs, T_ref)` | $\sigma_0 \cdot P(T-T_{ref}, \lambda)$ | CCl4, acetone, ClONO2, HCFC |
