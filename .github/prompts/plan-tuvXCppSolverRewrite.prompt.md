@@ -149,18 +149,18 @@ This means solver functions never loop over columns explicitly — they express 
 - [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[wavelength × height × column]` given the current atmospheric state:
    ```cpp
    using TransformFunc = std::function<void(
-       const Grid<Policy>& wavelength_grid,
-       const Grid<Policy>& altitude_grid,
-       const Profile<Policy>& temperature,
-       const Profile<Policy>& pressure,
-       const Profile<Policy>& air_density,
-       Array3D<T>& weights  // [wavelength × height × column] — the calculated transform
+       const Grid<ArrayPolicy>& wavelength_grid,
+       const Grid<ArrayPolicy>& altitude_grid,
+       const Profile<ArrayPolicy>& temperature,
+       const Profile<ArrayPolicy>& pressure,
+       const Profile<ArrayPolicy>& air_density,
+       Array3D<typename ArrayPolicy::value_type>& weights  // [wavelength × height × column] — the calculated transform
    )>;
    ```
    **`TransformFunc` is the open, user-facing API.** Any callable matching this signature is a valid transform calculator — users can write raw lambdas, function objects, or free functions directly. No factory or wrapper is required:
    ```cpp
    // User-written transform — just a lambda that calculates weights:
-   TransformFunc<Policy> my_cross_section = [coeff](const auto& wl_grid, const auto& alt_grid,
+   TransformFunc<ArrayPolicy> my_cross_section = [coeff](const auto& wl_grid, const auto& alt_grid,
        const auto& temperature, const auto& pressure, const auto& air_density, auto& weights) {
        // Calculate cross-section weights using ForEachRow, ColumnView, etc.
    };
