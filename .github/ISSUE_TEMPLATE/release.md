@@ -15,7 +15,6 @@ assignees: ''
 
 - [ ] Create a new branch (do **not** name it `release`)
 - [ ] Update the version number in `CMakeLists.txt`
-- [ ] In `docs/source/conf.py`, set the release version variable to `v<version>`
 - [ ] Update `CITATION.cff`
   - Update the version number
   - Ensure all contributors are listed as authors
