@@ -6,7 +6,8 @@ Daily journal entries are in [`journal/`](journal/). Each file covers one day's 
 
 | Date | Journal | Summary |
 |------|---------|---------|
-| 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Project setup: branching strategy, Phase 0 plan, validation strategy, workflow conventions |
+| 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Session 1: Project setup, branching strategy, Phase 0 plan, validation strategy |
+| 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Session 2: Phase 0 implementation, CI/CD, Codex review, AGENTS.md |
 
 ---
 
@@ -17,5 +18,6 @@ Claude API usage for this project, tracked per session. LLM time is actual infer
 | Date | Model | LLM Time | Wall Time | Turns | Session Summary |
 |------|-------|----------|-----------|-------|-----------------|
 | 5 Apr 2026 | Opus 4.6 | ~6 min | TBD | ~25 | Branching strategy, Phase 0 plan, Fortran preservation, validation strategy, CLAUDE.md |
+| 5 Apr 2026 | Opus 4.6 | ~28 min | TBD | ~11 | Phase 0 implementation, CI/CD, Codex Review II, AGENTS.md |
 
-**Running totals:** ~6 min LLM time
+**Running totals:** ~34 min LLM time
