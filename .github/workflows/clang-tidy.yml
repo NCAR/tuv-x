@@ -23,9 +23,13 @@ jobs:
     - name: Run clang-tidy on headers
       run: |
         find include -type f -name '*.hpp' -exec \
-          clang-tidy --config-file=.clang-tidy -p build --warnings-as-errors='*' {} +
+          clang-tidy --config-file=.clang-tidy -p build \
+          --extra-arg=-I${{ github.workspace }}/include \
+          --warnings-as-errors='*' {} +
 
     - name: Run clang-tidy on sources
       run: |
         find src -type f -name '*.cpp' -exec \
-          clang-tidy --config-file=.clang-tidy -p build --warnings-as-errors='*' {} +
+          clang-tidy --config-file=.clang-tidy -p build \
+          --extra-arg=-I${{ github.workspace }}/include \
+          --warnings-as-errors='*' {} +
