@@ -15,6 +15,9 @@ namespace tuvx
    public:
     Array2D() = default;
 
+    /// @brief Construct an array with the given dimensions.
+    /// @param dim1 Size of the first dimension (rows).
+    /// @param dim2 Size of the second dimension (columns).
     Array2D(std::size_t dim1, std::size_t dim2)
         : dim1_(dim1),
           dim2_(dim2),
@@ -32,10 +35,12 @@ namespace tuvx
       return data_[index(i, j)];
     }
 
+    /// @brief Size of the first dimension (rows).
     std::size_t Size1() const
     {
       return dim1_;
     }
+    /// @brief Size of the second dimension (columns).
     std::size_t Size2() const
     {
       return dim2_;

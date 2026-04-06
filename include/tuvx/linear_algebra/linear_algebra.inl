@@ -32,17 +32,17 @@ namespace tuvx
   inline void Solve(TridiagonalMatrix<T> &A, std::vector<T> &b)
   {
     T temp;
-    std::size_t N = b.size();
+    std::size_t n = b.size();
     // forward pass
-    for (std::size_t i = 1; i < N; i++)
+    for (std::size_t i = 1; i < n; i++)
     {
       temp = A.lower_diagonal_[i - 1] / A.main_diagonal_[i - 1];
       A.main_diagonal_[i] -= temp * A.upper_diagonal_[i - 1];
       b[i] -= temp * b[i - 1];
     }
     // back substitution
-    b[N - 1] = b[N - 1] / A.main_diagonal_[N - 1];
-    for (std::size_t i = N - 2;; i--)
+    b[n - 1] = b[n - 1] / A.main_diagonal_[n - 1];
+    for (std::size_t i = n - 2;; i--)
     {
       b[i] = (b[i] - A.upper_diagonal_[i] * b[i + 1]) / A.main_diagonal_[i];
       if (i == 0)

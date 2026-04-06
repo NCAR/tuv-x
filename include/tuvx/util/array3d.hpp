@@ -16,6 +16,10 @@ namespace tuvx
    public:
     Array3D() = default;
 
+    /// @brief Construct an array with the given dimensions.
+    /// @param dim1 Size of the first dimension.
+    /// @param dim2 Size of the second dimension.
+    /// @param dim3 Size of the third dimension.
     Array3D(std::size_t dim1, std::size_t dim2, std::size_t dim3)
         : dim1_(dim1),
           dim2_(dim2),
@@ -34,16 +38,19 @@ namespace tuvx
       return data_[index(i, j, k)];
     }
 
+    /// @brief Size of the first dimension.
     std::size_t Size1() const
     {
       return dim1_;
     }
 
+    /// @brief Size of the second dimension.
     std::size_t Size2() const
     {
       return dim2_;
     }
 
+    /// @brief Size of the third dimension.
     std::size_t Size3() const
     {
       return dim3_;

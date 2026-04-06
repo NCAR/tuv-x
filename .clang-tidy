@@ -2,20 +2,38 @@
 
 Checks: >
   -*,
-  readability-identifier-naming,
+  bugprone-*,
+  cert-*,
+  clang-analyzer-*,
+  cppcoreguidelines-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  readability-*,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
+  -cppcoreguidelines-avoid-magic-numbers
 
 WarningsAsErrors: '*'
 
 CheckOptions:
-  - key:             readability-identifier-naming.FunctionCase
-    value:           CamelCase
   - key:             readability-identifier-naming.ClassCase
     value:           CamelCase
+  - key:             readability-identifier-naming.FunctionCase
+    value:           CamelCase
+  - key:             readability-identifier-naming.VariableCase
+    value:           lower_case
+  - key:             readability-identifier-naming.ParameterCase
+    value:           aNy_CasE
   - key:             readability-identifier-naming.MemberCase
     value:           aNy_CasE
   - key:             readability-identifier-naming.MemberSuffix
     value:           _
+  - key:             readability-identifier-naming.ConstantCase
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.ClassConstantCase
     value:           UPPER_CASE
   - key:             readability-identifier-naming.GlobalConstantCase
     value:           UPPER_CASE
+  - key:             readability-identifier-naming.TemplateParameterCase
+    value:           CamelCase
