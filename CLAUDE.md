@@ -17,12 +17,17 @@ TUV-x — photolysis rate constant calculator. Rewriting from Fortran to C++.
 
 **Phase lifecycle:**
 1. **Plan** — write/revise `plan/phaseN.md`, discuss until the user is satisfied
-2. **Generate reference data** — build/run Fortran, capture outputs as CSV in `test/reference/phaseN/`
-3. **Implement** — only when explicitly told to proceed, on the phase branch
+2. **Test plan** — define what tests will be written, what they validate, what tolerances apply. Part of the plan, not implementation.
+3. **Generate reference data** — build/run Fortran, capture outputs as CSV in `test/reference/phaseN/`
+4. **Implement** — only when explicitly told to proceed, on the phase branch
 4. **PR + human review** — open a GitHub PR to merge the phase branch into `cpp-rewrite`. Full stop. The user reviews the PR on GitHub before any merge.
 5. **Next phase** — only after the PR is merged
 
 No phase begins implementation until the prior phase's PR is merged.
+
+**Session continuity**: Each `plan/phaseN.md` must contain enough context to initialize a fresh session — goals, current state, what's done, what remains. If implementation is interrupted mid-session, update the plan file with progress before ending.
+
+**Cross-model review**: Claude is the primary coding agent. Other models (e.g., Codex) review plans and code. Plans should be self-contained and readable by any agent without prior conversation context.
 
 ## Repository Layout (cpp-rewrite branch)
 
@@ -37,6 +42,12 @@ No phase begins implementation until the prior phase's PR is merged.
 ## Communication Style
 
 The user is direct and concise. Short corrections ("stop", "no", "not that") are normal workflow — not rudeness. Never apologize when corrected; just adjust and move on.
+
+At the end of each planning session, before implementation begins, share a Zen proverb.
+
+## Project History
+
+[HISTORY.md](HISTORY.md) is the index — a journal table and the AI Compute Log. Daily narratives go in `journal/YYYY-MM-DD.md` (one file per day, one entry per session). Update at the end of each session with what was attempted, what broke, what worked, and what was learned. Add an entry to the AI Compute Log table in HISTORY.md with LLM inference time from `durationMs` fields in `~/.claude/projects/-Users-fillmore-EarthSystem-TUV-x/<session>.jsonl`.
 
 ## Validation
 

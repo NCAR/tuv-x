@@ -435,6 +435,47 @@ Step 5.2  Update README
 
 ---
 
+## Validation Strategy
+
+### Principles
+
+- **Validate at every phase checkpoint** with whatever is testable at that point.
+- **Reference data generated from Fortran** — build and run the Fortran code, capture outputs as CSV.
+- **Reference CSV committed to git** in `test/reference/` so it's tracked and reproducible.
+- **No bit-for-bit requirement** — numerical operations may be reordered. Tolerances are empirical, adjusted per test based on what makes sense.
+- **Intermediate outputs, not just final rates** — capture grid values, optical properties, solver intermediates, transform weights, etc. so divergences can be localized.
+- **Defer optimization** — get correctness first, tune later.
+
+### Reference Data Layout
+
+```
+test/reference/
+  phase1/                              # Delta Eddington solver outputs
+  phase2/                              # Cross-section/quantum yield weight matrices
+  phase3/                              # Photolysis rates, dose rates, heating rates
+  phase4/                              # Radiator accumulation, LA/SR bands
+  phase5/                              # Data reader outputs (interpolated data)
+  ...
+```
+
+### Phase 0 Validation
+
+Phase 0 is scaffolding — no new numerical code. Validation is simply: **all existing GTest unit tests pass under the new C++ build system.** The tridiagonal solver already has tests comparing against LAPACKE; those continue to pass.
+
+Numerical reference data generation begins at Phase 1.
+
+### Phase 1+ Validation
+
+Each subsequent phase generates its own reference data before C++ implementation begins:
+
+1. Build Fortran code on this machine (homebrew clang/flang)
+2. Run with controlled inputs (documented in the reference directory)
+3. Capture intermediate and final outputs as CSV
+4. C++ tests (GTest) load the CSV and compare within per-test tolerances
+5. If tolerance needs adjusting, document why in the test
+
+---
+
 ## Acceptance Criteria
 
 Phase 0 is done when:
@@ -452,3 +493,4 @@ Phase 0 is done when:
 - [ ] Codecov configured with 95% target
 - [ ] Public headers have Doxygen comments
 - [ ] README reflects C++ rewrite status
+- [ ] All existing GTest unit tests pass under the new build (no new numerical validation needed)
