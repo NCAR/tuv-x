@@ -24,6 +24,7 @@ message(STATUS "CMake build configuration for tuv-x(${CMAKE_BUILD_TYPE}) ${PROJE
 ################################################################################
 # Project wide setup options
 
+# Placeholders — no enable_language() or target logic yet. Wired in when DeviceArrayPolicy lands.
 option(TUVX_ENABLE_CUDA      "Enable CUDA support"           OFF)
 option(TUVX_ENABLE_HIP       "Enable HIP support"            OFF)
 option(TUVX_ENABLE_TESTS     "Build unit tests"              ON)

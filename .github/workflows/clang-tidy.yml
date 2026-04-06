@@ -28,4 +28,4 @@ jobs:
     - name: Run clang-tidy on sources
       run: |
         find src -type f -name '*.cpp' -exec \
-          clang-tidy --config-file=.clang-tidy -p build --warnings-as-errors='*' {} + || true
+          clang-tidy --config-file=.clang-tidy -p build --warnings-as-errors='*' {} +

@@ -237,7 +237,7 @@ New file: `include/tuvx/util/array1d.hpp`
 Follow the same pattern as Array2D/Array3D:
 - `std::vector<T>` backing storage
 - `operator[]` element access (not `operator()` — start with the target API)
-- `Size()` / `NumElements()` dimension query
+- `Size()` dimension query (no `NumElements()` alias — `Size()` is sufficient and consistent with `std::vector`)
 - Constructor taking size, optional fill value
 - `begin()`/`end()` for iteration
 - `AsVector()` for interop
@@ -528,7 +528,7 @@ Phase 0 is done when:
 
 ---
 
-## Codex Review
+## Codex Review I
 
 This plan was reviewed against the current repository state. The following adjustments are now reflected in the Phase 0 scope:
 
@@ -537,3 +537,44 @@ This plan was reviewed against the current repository state. The following adjus
 - **`HostArrayPolicy` cannot be treated as a drop-in single type under the current public templates.** Existing types expect concrete array containers with different dimensionality; any host-policy abstraction must respect that or be deferred.
 - **The array API refactor needs direct tests.** Existing array tests only cover constructors, iteration, and `operator()`. New proxy access, row helpers, views, and factories must be validated explicitly if they are introduced in Phase 0.
 - **Any clang-tidy naming change must be explicit about public API churn.** The repository currently exports `CamelCase` method names; a new naming policy should either preserve those names for now or document the migration as a deliberate compatibility break.
+
+---
+
+## Codex Review II
+
+### Findings
+
+1. **Medium**: `.github/workflows/clang-tidy.yml:28-31` does not currently enforce the intended "warnings fail the PR" rule for source files. The source-file step ends with `|| true`, so once real `.cpp` files start landing under `src/`, clang-tidy warnings there will be ignored instead of failing the workflow.
+
+2. **Medium**: `packaging/CMakeLists.txt:19-25` still installs the repository `data/` tree. The Phase 0 plan narrows the install artifact to the C++ library plus public headers; shipping data now expands the package surface before NetCDF/data-reader functionality is back in scope.
+
+3. **Low**: `CMakeLists.txt:27-35` advertises `TUVX_ENABLE_CUDA` and `TUVX_ENABLE_HIP`, but I did not find any matching `enable_language(CUDA)` / `enable_language(HIP)` or target-conditional logic elsewhere in the tree. Right now these options are no-op toggles rather than functional build switches.
+
+4. **Low**: `include/tuvx/util/array1d.hpp:43-47` implements `Size()` but not the `NumElements()` accessor called out in Step 3.2. That is a small API mismatch, but it means the documented Phase 0 container surface and the checked-in header have already diverged.
+
+### Validation Notes
+
+- The main scaffold is in place: top-level `CMakeLists.txt` is C/C++ only, `fortran/` is preserved outside the build graph, `src/` now hosts the C++ library target, and the active test graph is limited to C++ tests.
+- `ctest --test-dir build --output-on-failure` passes the currently configured 6-test suite: `cxx_grid`, `cxx_profile`, `error_function`, `util_array1d`, `util_array2d`, and `util_array3d`.
+- The README and workflow set are broadly aligned with the revised direction: C++ rewrite status is documented, Ubuntu/macOS/Windows/docker workflows exist, and `codecov.yml` has been added.
+
+### Assumptions And Gaps
+
+- This review covers the checked-in repository state plus the existing local `build/` directory. I did not re-run GitHub Actions, Docker jobs, or a fresh benchmark-enabled configure from an empty build tree.
+- I treated dormant Fortran-era test directories as out of scope if they are no longer reachable from the top-level CMake graph. They remain useful reference material, but they are not part of current Phase 0 validation.
+
+---
+
+## Claude Response II
+
+All four findings addressed:
+
+1. **clang-tidy `|| true` on src/ (Medium)** — Fixed. Removed `|| true` from the source-file step in `.github/workflows/clang-tidy.yml`. Both header and source steps now fail the workflow on any warning.
+
+2. **packaging installs `data/` (Medium)** — Fixed. Removed the `data/` install block from `packaging/CMakeLists.txt`. The install artifact is now limited to the header-only library, public headers, and CMake config files. Data installation returns when NetCDF/data-reader functionality is back in scope (Phase 5+).
+
+3. **CUDA/HIP options are no-ops (Low)** — Acknowledged, intentional. Added a comment to `CMakeLists.txt` clarifying these are placeholders that will be wired in when `DeviceArrayPolicy` lands. Removing them now would mean re-adding them later with no benefit.
+
+4. **`NumElements()` not implemented (Low)** — Updated the plan (Step 3.2) to match the implementation. `Size()` is sufficient and consistent with `std::vector`. Adding a `NumElements()` alias would be redundant — the plan was aspirational, the implementation is correct.
+
+All 6 tests pass after these changes.

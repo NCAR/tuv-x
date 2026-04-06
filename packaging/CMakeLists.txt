@@ -16,14 +16,6 @@ install(
     ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
-# install the data files
-install(
-  DIRECTORY
-    ${PROJECT_SOURCE_DIR}/data/
-  DESTINATION
-    ${INSTALL_PREFIX}/data
-)
-
 # install the cmake config files
 set(cmake_config_install_location ${INSTALL_PREFIX}/cmake/tuvx-${PROJECT_VERSION})
 
