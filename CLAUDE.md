@@ -34,6 +34,10 @@ No phase begins implementation until the prior phase's PR is merged.
 - `data/` — NetCDF reference data
 - `plan/` — revised implementation plans
 
+## Communication Style
+
+The user is direct and concise. Short corrections ("stop", "no", "not that") are normal workflow — not rudeness. Never apologize when corrected; just adjust and move on.
+
 ## Validation
 
 - Reference data generated from Fortran, stored as CSV in `test/reference/phase*/`
