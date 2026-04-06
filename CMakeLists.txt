@@ -41,6 +41,15 @@ include(GNUInstallDirs)
 set(INSTALL_PREFIX "tuvx-${PROJECT_VERSION}")
 
 ################################################################################
+# TUV-x docs (can be built standalone without library dependencies)
+
+if(TUVX_BUILD_DOCS)
+  add_subdirectory(docs)
+endif()
+
+if(NOT TUVX_BUILD_DOCS)
+
+################################################################################
 # Dependencies
 
 include(cmake/dependencies.cmake)
@@ -49,13 +58,6 @@ include(cmake/dependencies.cmake)
 # TUV-x library target
 
 add_subdirectory(src)
-
-################################################################################
-# TUV-x docs
-
-if(TUVX_BUILD_DOCS)
-  add_subdirectory(docs)
-endif()
 
 ################################################################################
 # TUV-x tests
@@ -88,5 +90,7 @@ endif()
 if(TUVX_ENABLE_BENCHMARK AND TUVX_ENABLE_LAPACK)
   add_subdirectory(benchmark)
 endif()
+
+endif() # NOT TUVX_BUILD_DOCS
 
 ################################################################################

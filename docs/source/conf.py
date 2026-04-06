@@ -51,8 +51,7 @@ def _build_doxygen(app, exception):
             'cmake',
             '-S', REPO_ROOT_DIR,
             '-B', BUILD_DIR,
-            '-D', 'TUVX_DOCS_ONLY=ON',
-            '-D', 'TUVX_ENABLE_TESTS=OFF',
+            '-D', 'TUVX_BUILD_DOCS=ON',
         ])
 
     # Run doxygen directly (bypasses cmake build's circular sphinx dependency)
