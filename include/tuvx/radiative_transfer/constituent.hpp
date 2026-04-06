@@ -7,6 +7,9 @@
 #include <tuvx/grid.hpp>
 #include <tuvx/util/array3d.hpp>
 
+#include <cstddef>
+#include <vector>
+
 namespace tuvx
 {
 

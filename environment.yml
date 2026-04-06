@@ -4,7 +4,6 @@ channels:
 dependencies:
   - cmake
   - doxygen
-  - gfortran
   - graphviz
   - python=3.12
   - pip

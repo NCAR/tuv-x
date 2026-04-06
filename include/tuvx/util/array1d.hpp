@@ -17,7 +17,7 @@ namespace tuvx
 
     /// @brief Construct an array of the given size.
     /// @param size Number of elements.
-    Array1D(std::size_t size)
+    explicit Array1D(std::size_t size)
         : data_(size)
     {
     }
@@ -41,7 +41,7 @@ namespace tuvx
     }
 
     /// @brief Number of elements.
-    std::size_t Size() const
+    [[nodiscard]] std::size_t Size() const
     {
       return data_.size();
     }
@@ -63,11 +63,11 @@ namespace tuvx
       return data_.end();
     }
 
-    std::vector<T> &AsVector()
+    [[nodiscard]] std::vector<T> &AsVector()
     {
       return data_;
     }
-    const std::vector<T> &AsVector() const
+    [[nodiscard]] const std::vector<T> &AsVector() const
     {
       return data_;
     }

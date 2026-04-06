@@ -12,7 +12,11 @@ Checks: >
   readability-*,
   -modernize-use-trailing-return-type,
   -readability-magic-numbers,
-  -cppcoreguidelines-avoid-magic-numbers
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
+  -misc-non-private-member-variables-in-classes,
+  -misc-include-cleaner,
+  -readability-identifier-length
 
 WarningsAsErrors: '*'
 
@@ -21,6 +25,8 @@ CheckOptions:
     value:           CamelCase
   - key:             readability-identifier-naming.FunctionCase
     value:           CamelCase
+  - key:             readability-identifier-naming.FunctionIgnoredRegexp
+    value:           '^(begin|end|operator.*)$'
   - key:             readability-identifier-naming.VariableCase
     value:           lower_case
   - key:             readability-identifier-naming.ParameterCase

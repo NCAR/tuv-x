@@ -29,7 +29,7 @@ add_custom_command(
 # Doxygen
 
 #This will be the main output of our command
-set(DOXYGEN_INPUT_DIR "${PROJECT_SOURCE_DIR}/src")
+set(DOXYGEN_INPUT_DIR "${PROJECT_SOURCE_DIR}/include")
 set(DOXYGEN_OUTPUT_DIR "${SPHINX_BUILD}/api")
 set(DOXYGEN_INDEX_FILE ${DOXYGEN_OUTPUT_DIR}/html/index.html)
 set(DOXYFILE_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)

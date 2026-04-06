@@ -10,7 +10,9 @@
 #include <tuvx/radiative_transfer/constituent.hpp>
 
 #include <cassert>
+#include <cstddef>
 #include <map>
+#include <string>
 #include <vector>
 
 namespace tuvx
