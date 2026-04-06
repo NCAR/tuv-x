@@ -1,72 +1,36 @@
 include(CMakePackageConfigHelpers)
 
-if (TUVX_BUILD_CLI)
-  # install the binary
-  install(
-    TARGETS 
-      tuv-x
-    EXPORT 
-      tuvx_Exports
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-  )
-endif()
-
-# install the static library
+# install the header-only library
 install(
-  TARGETS 
-   tuvx tuvx_object
-  EXPORT 
+  TARGETS
+    tuvx
+  EXPORT
     tuvx_Exports
-  LIBRARY DESTINATION ${INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
-  ARCHIVE DESTINATION ${INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}
-  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
-# install yaml-cpp (only if built from source via FetchContent, not if found via find_package)
-if(TARGET yaml-cpp)
-  get_target_property(yaml_cpp_imported yaml-cpp IMPORTED)
-  if(NOT yaml_cpp_imported)
-    install(
-      TARGETS 
-        yaml-cpp
-      EXPORT 
-        tuvx_Exports
-    )
-  endif()
-endif()
-
-# install the mod files
+# install headers
 install(
-  DIRECTORY 
-    ${TUVX_MOD_DIR}/
-  DESTINATION 
-    ${TUVX_INSTALL_MOD_DIR}
-  FILES_MATCHING PATTERN "*.mod"
+  DIRECTORY
+    ${PROJECT_SOURCE_DIR}/include/
+  DESTINATION
+    ${CMAKE_INSTALL_INCLUDEDIR}
 )
 
 # install the data files
 install(
-  DIRECTORY 
+  DIRECTORY
     ${PROJECT_SOURCE_DIR}/data/
-  DESTINATION 
+  DESTINATION
     ${INSTALL_PREFIX}/data
-)
-
-# install the example config files
-install(
-  DIRECTORY 
-    ${PROJECT_SOURCE_DIR}/examples/
-  DESTINATION 
-    ${INSTALL_PREFIX}/examples
 )
 
 # install the cmake config files
 set(cmake_config_install_location ${INSTALL_PREFIX}/cmake/tuvx-${PROJECT_VERSION})
 
 install(
-  EXPORT 
+  EXPORT
     tuvx_Exports
-  DESTINATION 
+  DESTINATION
     ${cmake_config_install_location}
   NAMESPACE musica::
 )
@@ -95,7 +59,6 @@ install(
 ######################################################################
 # uninstall target
 
-# https://gitlab.kitware.com/cmake/community/-/wikis/FAQ#can-i-do-make-uninstall-with-cmake
 if(NOT TARGET uninstall)
   configure_file(
     "${PROJECT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in"

@@ -6,6 +6,12 @@
 
 ---
 
+## Terminology: Radiator → Constituent
+
+The Fortran codebase uses "radiator" — borrowed from automotive engineering. In radiative transfer theory, the correct term is **constituent** (a species that absorbs or scatters radiation). All C++ code renames: `radiator.hpp` → `constituent.hpp`, `RadiatorState` → `ConstituentState`, test directories, etc. The rename happens incrementally as files are touched, not as a bulk pass.
+
+---
+
 ## Fortran Preservation Policy
 
 The original plan calls for removing Fortran source on the `cpp-rewrite` branch. **We are revising this.** Fortran source is the primary reference for translation work in Phases 1–8. Deleting it early means we'd constantly be doing `git show main:src/...` to read originals, which is awkward and error-prone.
@@ -28,7 +34,7 @@ fortran/                               # RENAMED from src/ — Fortran reference
   cross_sections/                      # 31 .F90 files
   quantum_yields/                      # 20 .F90 files
   spectral_weights/                    # 13 .F90 files
-  radiative_transfer/                  # solvers/, radiators/
+  radiative_transfer/                  # solvers/, constituents/ (renamed from radiators/)
   grids/                               # 4 .F90 files
   profiles/                            # 10 .F90 files
   linear_algebras/                     # 2 .F90 files
@@ -45,7 +51,7 @@ include/tuvx/                          # Public C++ headers (existing, reorganiz
     linear_algebra.hpp                 # EXISTING
     linear_algebra.inl                 # EXISTING
   radiative_transfer/
-    radiator.hpp                       # EXISTING
+    constituent.hpp                    # EXISTING (renamed from radiator.hpp)
     radiation_field.hpp                # EXISTING
     solvers/
       delta_eddington.hpp              # EXISTING (placeholder)
@@ -104,6 +110,7 @@ The current `CMakeLists.txt` enables languages `Fortran, CXX, C` and builds both
 - **Keep project name `tuv-x`** with alias `musica::tuvx`.
 - **Remove all Fortran-specific compiler flag logic** (NAG, Intel Fortran, gfortran flags).
 - **Remove the Fortran library target** (`musica::tuvx` currently links Fortran objects). Replace with a C++ header-only or static library target.
+- **Disable/remove the current `tuv-x` CLI target in Phase 0.** The existing executable is a Fortran/YAML entry point and should not remain in the C++-only scaffold.
 - **Rename `src/` to `fortran/`** — preserves all Fortran source as inert reference material. Not added to the build.
 - **Reclaim `src/`** as a clean directory for C++ implementation files (initially empty — most Phase 0 code is header-only).
 
@@ -142,6 +149,15 @@ option(TUVX_ENABLE_NETCDF  "Enable NetCDF-C support"     OFF)
 option(TUVX_BUILD_DOCS     "Build documentation"         OFF)
 ```
 
+### 1.5 Remove YAML/CLI Surfaces from the Phase 0 Build Graph
+
+Removing `yaml-cpp` is not just a dependency cleanup. It changes what can remain in-scope for Phase 0:
+
+- **Remove or disable `TUVX_BUILD_CLI`** for this phase. The current `tuv-x` executable depends on Fortran sources and the YAML bridge.
+- **Remove example-based tests that execute `tuv-x`** (`json`/`yaml` parity checks included). Those are validating the legacy front end, not the new C++ library scaffold.
+- **Remove packaging/install logic tied to the CLI, yaml-cpp, and Fortran module files.** The Phase 0 artifact should be the C++ library plus public headers only.
+- **Update workflows and Dockerfiles accordingly** so CI is not still installing or expecting `netcdf-fortran`, `yaml-cpp`, or the legacy CLI entry point.
+
 ---
 
 ## Step 2: Verify and Reorganize Existing C++ Code
@@ -163,7 +179,7 @@ Each file needs to be checked for:
 | `include/tuvx/util/array3d.hpp` | `Array3D<T>` | Same pattern as Array2D. No policy template yet. |
 | `include/tuvx/grid.hpp` | `Grid<ArrayPolicy>` | Already templated on `ArrayPolicy`, defaults to `Array2D<double>`. |
 | `include/tuvx/profile.hpp` | `Profile<ArrayPolicy>` | Already templated on `ArrayPolicy`, defaults to `Array2D<double>`. |
-| `include/tuvx/radiative_transfer/radiator.hpp` | `RadiatorState<ArrayPolicy>` | `Accumulate()` is a placeholder — returns first state. |
+| `include/tuvx/radiative_transfer/constituent.hpp` | `ConstituentState<ArrayPolicy>` (renamed from `RadiatorState`) | `Accumulate()` is a placeholder — returns first state. |
 | `include/tuvx/radiative_transfer/radiation_field.hpp` | `RadiationFieldComponents<ArrayPolicy>`, `RadiationField<ComponentPolicy>` | Fully implemented containers. |
 | `include/tuvx/linear_algebra/linear_algebra.hpp` | `TridiagonalMatrix<T>`, `Solve()` | Fully implemented Thomas algorithm. Uses `std::vector<T>` internally. |
 | `include/tuvx/radiative_transfer/solvers/delta_eddington.hpp` | `DeltaEddington` | Placeholder — fills output with incrementing values. |
@@ -186,14 +202,17 @@ These tests must compile and pass under the new build before proceeding:
 
 The Fortran-based unit tests (`grid_warehouse`, `heating_rates`, `la_sr_bands`, `spherical_geometry`, etc.) are **not compiled or run** — they depend on the Fortran build.
 
-The regression test (`test/regression/solvers/delta_eddington.cpp`) compiles but exercises the placeholder solver — it should pass with the current placeholder values.
+The mixed-language regression test under `test/regression/solvers/` is also **out of scope for Phase 0 as currently written**. It is built through the Fortran-oriented test helper and depends on a Fortran driver. Either:
+
+- disable it for Phase 0 alongside the other Fortran-backed tests, or
+- replace it with a pure-C++ regression harness before claiming Phase 0 validation coverage for the solver path.
 
 ### 2.3 Remove stubs and dead code
 
 - Delete `include/tuvx/cross_section.hpp` (empty stub)
 - Delete `include/tuvx/cross_section_params.hpp` (empty stub)
 - Delete `include/tuvx/util/config_yaml.h` and any associated `.c`/`.cpp` implementation (yaml-cpp wrapper)
-- Remove any CMake references to these files
+- Remove any CMake, test, packaging, workflow, and Docker references to these files and the YAML-backed CLI path
 
 ---
 
@@ -247,23 +266,24 @@ After the build system is solid and all existing tests pass, add the MICM-consis
 - `operator[]` returns a proxy whose `operator[]` returns another proxy
 - Same bulk ops pattern
 
+If this API lands in Phase 0, it needs dedicated GTests. The current constructor/access tests only validate `operator()` and contiguous iteration; they do **not** validate proxy access, row iteration helpers, views, or factory helpers.
+
 **Key decision: `operator()` vs `operator[]`.**
 The existing code uses `operator()(i, j)` for Array2D. The plan calls for `operator[][j]` chaining. We need to support both during transition (the plan's target API uses `[]` chaining). Add `operator[]` returning proxy objects; keep `operator()` as deprecated until all call sites are migrated.
 
 ### 3.4 Define `HostArrayPolicy`
 
-Create `include/tuvx/util/array_policy.hpp`:
+Do **not** assume a single `HostArrayPolicy` struct can be dropped into the current templates unchanged. The existing public types consume concrete container types by dimension:
 
-```cpp
-struct HostArrayPolicy {
-    using value_type = double;
-    // Memory: std::vector-backed
-    // Layout: row-major, innermost dimension contiguous for SIMD
-    // Access: standard operator[]
-};
-```
+- `Grid` and `Profile` currently expect a 2D container type
+- `ConstituentState` (formerly `RadiatorState`) and `RadiationFieldComponents` currently expect a 3D container type
 
-`DeviceArrayPolicy` (CUDA/HIP) is **deferred** — defined as a concept but not implemented until GPU work is needed. Phase 0 only needs `HostArrayPolicy`.
+Phase 0 should therefore choose one of these approaches explicitly:
+
+- **Defer policy naming** and keep concrete host container types (`Array1D`, `Array2D`, `Array3D`) as the template arguments for now, or
+- **Introduce dimension-specific host aliases/concepts** that match the existing contracts, then migrate the public types once the array refactor is complete.
+
+`DeviceArrayPolicy` (CUDA/HIP) remains **deferred**. Do not make Phase 0 acceptance depend on a single host-policy struct unless the surrounding templates are redesigned to consume it correctly.
 
 ---
 
@@ -327,7 +347,7 @@ CheckOptions:
   - key: readability-identifier-naming.ClassCase
     value: CamelCase
   - key: readability-identifier-naming.FunctionCase
-    value: camelBack
+    value: CamelCase
   - key: readability-identifier-naming.VariableCase
     value: lower_case
   - key: readability-identifier-naming.ConstantCase
@@ -338,7 +358,9 @@ CheckOptions:
     value: '_'
 ```
 
-**Risk**: Expanding clang-tidy checks will flag existing code. We need to either fix all existing headers to pass, or apply the expanded checks only to new code paths initially. **Recommendation**: Fix existing headers as part of Step 2 audit.
+**Risk**: Expanding clang-tidy checks will flag existing code. We need to either fix all existing headers to pass, or apply the expanded checks only to new code paths initially.
+
+**Resolved**: function naming stays `CamelCase` to match existing public API (`NumberOfColumns`, `Size1`, `AsVector`). The `.clang-tidy` config reflects this.
 
 ### 4.3 `.clang-format` review
 
@@ -403,6 +425,7 @@ Step 1.1  Modify CMakeLists.txt (remove Fortran, C++ only)
 Step 1.2  Modify dependencies.cmake
 Step 1.3  Modify test_util.cmake
 Step 1.4  Update CMake options
+Step 1.5  Remove YAML/CLI/example/packaging surfaces from the Phase 0 build graph
     │
     ▼
 Step 2.1  Audit existing headers (remove stubs, fix includes)
@@ -453,14 +476,20 @@ test/reference/
   phase1/                              # Delta Eddington solver outputs
   phase2/                              # Cross-section/quantum yield weight matrices
   phase3/                              # Photolysis rates, dose rates, heating rates
-  phase4/                              # Radiator accumulation, LA/SR bands
+  phase4/                              # Constituent accumulation, LA/SR bands
   phase5/                              # Data reader outputs (interpolated data)
   ...
 ```
 
 ### Phase 0 Validation
 
-Phase 0 is scaffolding — no new numerical code. Validation is simply: **all existing GTest unit tests pass under the new C++ build system.** The tridiagonal solver already has tests comparing against LAPACKE; those continue to pass.
+Phase 0 is scaffolding — no new numerical code. Validation is:
+
+- **all retained C++ GTest unit tests pass under the new C++ build system**
+- **new tests cover any Phase 0 array API additions beyond the current constructor/access surface**
+- **mixed-language Fortran/C++ regression tests are either explicitly disabled for Phase 0 or ported to pure C++ before being counted as validation**
+
+The tridiagonal solver already has tests comparing against LAPACKE; those continue to pass.
 
 Numerical reference data generation begins at Phase 1.
 
@@ -482,15 +511,29 @@ Phase 0 is done when:
 
 - [ ] `phase0-scaffolding` branch builds C++ only (no Fortran compilation)
 - [ ] Fortran source preserved in `fortran/` (renamed from `src/`, not built)
-- [ ] `Array1D<T>`, `Array2D<T>`, `Array3D<T>` exist with bulk operations API
-- [ ] `HostArrayPolicy` defined; `Grid`, `Profile`, etc. work with it
+- [ ] `Array1D<T>` exists; any Phase 0 bulk-operations API added to `Array1D<T>`, `Array2D<T>`, or `Array3D<T>` is covered by dedicated unit tests
+- [ ] `Grid`, `Profile`, `ConstituentState` (renamed from `RadiatorState`), and `RadiationField` continue to compile against host-side array container types; if a host policy abstraction is introduced, it matches the dimensional contracts of those types
 - [ ] All existing C++ unit tests pass
 - [ ] New `Array1D` unit tests pass
 - [ ] Benchmark compiles (with LAPACK optional)
+- [ ] CLI-, YAML-, and example-runner code paths are removed or explicitly disabled for Phase 0
 - [ ] CI runs on at least Ubuntu (GCC + Clang) and macOS
 - [ ] clang-tidy passes on all headers in `include/tuvx/`
 - [ ] clang-format config enforced
 - [ ] Codecov configured with 95% target
 - [ ] Public headers have Doxygen comments
 - [ ] README reflects C++ rewrite status
-- [ ] All existing GTest unit tests pass under the new build (no new numerical validation needed)
+- [ ] All retained GTest unit tests pass under the new build (no new numerical validation needed)
+- [ ] Mixed-language regression tests are either disabled for Phase 0 or replaced with pure-C++ equivalents
+
+---
+
+## Codex Review
+
+This plan was reviewed against the current repository state. The following adjustments are now reflected in the Phase 0 scope:
+
+- **Mixed-language regression tests are not assumed to survive the C++-only cutover.** The existing Delta-Eddington regression target is wired through the Fortran test helper, so it must be disabled or ported before it counts as Phase 0 coverage.
+- **Removing `yaml-cpp` also removes the current CLI path from scope.** The existing executable, example-runner tests, packaging rules, workflows, and Dockerfiles all still assume the YAML-backed Fortran front end. Phase 0 must retire or disable those surfaces, not just delete the dependency.
+- **`HostArrayPolicy` cannot be treated as a drop-in single type under the current public templates.** Existing types expect concrete array containers with different dimensionality; any host-policy abstraction must respect that or be deferred.
+- **The array API refactor needs direct tests.** Existing array tests only cover constructors, iteration, and `operator()`. New proxy access, row helpers, views, and factories must be validated explicitly if they are introduced in Phase 0.
+- **Any clang-tidy naming change must be explicit about public API churn.** The repository currently exports `CamelCase` method names; a new naming policy should either preserve those names for now or document the migration as a deliberate compatibility break.

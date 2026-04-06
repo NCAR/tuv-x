@@ -7,7 +7,7 @@
 #include <tuvx/grid.hpp>
 #include <tuvx/profile.hpp>
 #include <tuvx/radiative_transfer/radiation_field.hpp>
-#include <tuvx/radiative_transfer/radiator.hpp>
+#include <tuvx/radiative_transfer/constituent.hpp>
 
 #include <cassert>
 #include <map>
@@ -44,13 +44,13 @@ namespace tuvx
         typename T,
         typename GridPolicy,
         typename ProfilePolicy,
-        typename RadiatorStatePolicy,
+        typename ConstituentStatePolicy,
         typename RadiationFieldPolicy>
     void Solve(
         const std::vector<T>& solar_zenith_angles,
         const std::map<std::string, GridPolicy>& grids,
         const std::map<std::string, ProfilePolicy>& profiles,
-        const RadiatorStatePolicy& accumulated_radiator_states,
+        const ConstituentStatePolicy& accumulated_constituent_states,
         RadiationFieldPolicy& radiation_field) const;
   };
 

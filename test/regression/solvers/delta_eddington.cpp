@@ -64,7 +64,7 @@ void CheckInputs(
     const std::vector<double>& earth_sun_distances,
     const std::map<std::string, tuvx::Grid<tuvx::Array2D<double>>>& grids,
     const std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>>& profiles,
-    const tuvx::RadiatorState<tuvx::Array3D<double>>& accumulated_radiator_states)
+    const tuvx::ConstituentState<tuvx::Array3D<double>>& accumulated_constituent_states)
 {
   // Solar zenith angles have been converted to radians from degrees
   ASSERT_EQ(solar_zenith_angles.size(), 2);
@@ -106,37 +106,37 @@ void CheckInputs(
   ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155, 0), 729.9 * 1.0e-9, 1.0e-16);
 
   // optical depths are unitless
-  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size1(), 156);
-  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size2(), 120);
-  ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 0), 2896168.4, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 0), 4.83152e-4, 1.0e-10);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 0), 6.64755e-10, 1.0e-18);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 1), 2896168.4, 1.0e-3);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 1), 4.83152e-4, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 1), 6.64755e-10, 1.0e-18);
+  ASSERT_EQ(accumulated_constituent_states.optical_depth_.Size1(), 156);
+  ASSERT_EQ(accumulated_constituent_states.optical_depth_.Size2(), 120);
+  ASSERT_EQ(accumulated_constituent_states.optical_depth_.Size3(), 2);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(0, 0, 0), 2896168.4, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(83, 41, 0), 4.83152e-4, 1.0e-10);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(155, 119, 0), 6.64755e-10, 1.0e-18);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(0, 0, 1), 2896168.4, 1.0e-3);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(83, 41, 1), 4.83152e-4, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.optical_depth_(155, 119, 1), 6.64755e-10, 1.0e-18);
 
   // single scattering albedos are unitless
-  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size1(), 156);
-  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size2(), 120);
-  ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 0), 4.78487e-6, 1.0e-12);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 0), 0.5383450, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 0), 0.997822, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 1), 4.78487e-6, 1.0e-12);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 1), 0.5383450, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 1), 0.997822, 1.0e-8);
+  ASSERT_EQ(accumulated_constituent_states.single_scattering_albedo_.Size1(), 156);
+  ASSERT_EQ(accumulated_constituent_states.single_scattering_albedo_.Size2(), 120);
+  ASSERT_EQ(accumulated_constituent_states.single_scattering_albedo_.Size3(), 2);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(0, 0, 0), 4.78487e-6, 1.0e-12);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(83, 41, 0), 0.5383450, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(155, 119, 0), 0.997822, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(0, 0, 1), 4.78487e-6, 1.0e-12);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(83, 41, 1), 0.5383450, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.single_scattering_albedo_(155, 119, 1), 0.997822, 1.0e-8);
 
   // asymmetry parameters are unitless
-  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size1(), 156);
-  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size2(), 120);
-  ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 0), 2.12438e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 0), 2.13209e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 0), 0.0, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 1), 2.12438e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 1), 2.13209e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 1), 0.0, 1.0e-8);
+  ASSERT_EQ(accumulated_constituent_states.asymmetry_parameter_.Size1(), 156);
+  ASSERT_EQ(accumulated_constituent_states.asymmetry_parameter_.Size2(), 120);
+  ASSERT_EQ(accumulated_constituent_states.asymmetry_parameter_.Size3(), 2);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(0, 0, 0), 2.12438e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(83, 41, 0), 2.13209e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(155, 119, 0), 0.0, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(0, 0, 1), 2.12438e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(83, 41, 1), 2.13209e-2, 1.0e-8);
+  ASSERT_NEAR(accumulated_constituent_states.asymmetry_parameter_(155, 119, 1), 0.0, 1.0e-8);
 }
 
 SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
@@ -150,7 +150,7 @@ SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
   grids["wavelength [m]"] =
       CreateFixedGrid<GridPolicy>("m", input.n_wavelengths_, input.wavelength_mid_points_, input.wavelength_edges_);
   std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>> profiles;
-  tuvx::RadiatorState<tuvx::Array3D<double>> accumulated_radiator_states(
+  tuvx::ConstituentState<tuvx::Array3D<double>> accumulated_constituent_states(
       input.n_columns_, grids["altitude [m]"], grids["wavelength [m]"]);
   for (int i = 0; i < input.n_wavelengths_; i++)
   {
@@ -158,11 +158,11 @@ SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
     {
       for (int k = 0; k < input.n_columns_; k++)
       {
-        accumulated_radiator_states.optical_depth_(i, j, k) =
+        accumulated_constituent_states.optical_depth_(i, j, k) =
             input.optical_depths_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
-        accumulated_radiator_states.single_scattering_albedo_(i, j, k) =
+        accumulated_constituent_states.single_scattering_albedo_(i, j, k) =
             input.single_scattering_albedos_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
-        accumulated_radiator_states.asymmetry_parameter_(i, j, k) =
+        accumulated_constituent_states.asymmetry_parameter_(i, j, k) =
             input.asymmetry_parameters_[i * input.n_levels_ * input.n_columns_ + j * input.n_columns_ + k];
       }
     }
@@ -170,8 +170,8 @@ SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
   tuvx::RadiationField<tuvx::RadiationFieldComponents<tuvx::Array3D<double>>> radiation_field(
       input.n_columns_, grids["altitude [m]"], grids["wavelength [m]"]);
   tuvx::DeltaEddington solver;
-  CheckInputs(solar_zenith_angles, earth_sun_distances, grids, profiles, accumulated_radiator_states);
-  solver.Solve(solar_zenith_angles, grids, profiles, accumulated_radiator_states, radiation_field);
+  CheckInputs(solar_zenith_angles, earth_sun_distances, grids, profiles, accumulated_constituent_states);
+  solver.Solve(solar_zenith_angles, grids, profiles, accumulated_constituent_states, radiation_field);
   SolverOutput output;
   output.n_wavelengths_ = input.n_wavelengths_;
   output.n_levels_ = input.n_levels_;

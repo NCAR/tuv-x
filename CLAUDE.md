@@ -57,6 +57,10 @@ At the end of each planning session, before implementation begins, share a Zen p
 - Capture intermediate outputs (not just final rates) to localize divergences
 - Generate reference data *before* implementing each phase's C++ code
 
+## Terminology
+
+- **Radiator → Constituent**: The Fortran codebase uses "radiator" (a component of a car engine). In radiative transfer theory the standard term is "constituent." Rename all occurrences — types, files, directories, tests, docs — as code is touched during each phase. Do not do a bulk rename pass; rename incrementally as each file is modified.
+
 ## Push
 
 Use `~/bin/push-ncar` instead of `git push` (requires NCAR SSH key).
