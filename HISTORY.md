@@ -1,13 +1,13 @@
 # TUV-x C++ Rewrite History
 
-A record of the collaboration between a human physicist and AI agents, rewriting a Fortran photolysis rate calculator as a modern C++ library.
+A chronicle of collaboration between a physicist and AI coding agents — Claude Opus 4.6 (Anthropic) and Codex (OpenAI) — rewriting a Fortran radiative transfer code as a modern C++ library.
 
 Daily journal entries are in [`journal/`](journal/). Each file covers one day's sessions.
 
 | Date | Journal | Summary |
 |------|---------|---------|
 | 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Session 1: Project setup, branching strategy, Phase 0 plan, validation strategy |
-| 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Session 2: Phase 0 implementation, CI/CD, Codex review, AGENTS.md |
+| 5 Apr 2026 | [2026-04-05](journal/2026-04-05.md) | Session 2: Phase 0 implementation, CI/CD, Codex review, CI fixes, PR, MUSICA board |
 
 ---
 
@@ -18,6 +18,6 @@ Claude API usage for this project, tracked per session. LLM time is actual infer
 | Date | Model | LLM Time | Wall Time | Turns | Session Summary |
 |------|-------|----------|-----------|-------|-----------------|
 | 5 Apr 2026 | Opus 4.6 | ~6 min | TBD | ~25 | Branching strategy, Phase 0 plan, Fortran preservation, validation strategy, CLAUDE.md |
-| 5 Apr 2026 | Opus 4.6 | ~28 min | TBD | ~11 | Phase 0 implementation, CI/CD, Codex Review II, AGENTS.md |
+| 5 Apr 2026 | Opus 4.6 | ~50 min | TBD | ~23 | Phase 0 implementation, CI/CD, Codex Review II, CI fixes, AGENTS.md, MUSICA project board |
 
-**Running totals:** ~34 min LLM time
+**Running totals:** ~56 min LLM time
