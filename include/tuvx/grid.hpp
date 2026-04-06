@@ -37,8 +37,7 @@ namespace tuvx
     Grid(std::string units, std::size_t number_of_columns, std::size_t number_of_sections)
         : units_(std::move(units)),
           mid_points_(number_of_sections, number_of_columns),
-          edges_(number_of_sections + 1, number_of_columns),
-          is_constant_(false)
+          edges_(number_of_sections + 1, number_of_columns)
     {
     }
 

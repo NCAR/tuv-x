@@ -18,7 +18,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y clang-tidy
 
     - name: Generate compilation database
-      run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+      run: cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DTUVX_ENABLE_TESTS=ON
 
     - name: Run clang-tidy on headers
       run: |

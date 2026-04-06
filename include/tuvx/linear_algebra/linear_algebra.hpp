@@ -47,7 +47,7 @@ namespace tuvx
   /// For now, this function simply calls printvec() on the three diagonals.
   /// @param A Tridiagonal matrix to print
   template<typename T>
-  void Print(const TridiagonalMatrix<T> &A);
+  void Print(const TridiagonalMatrix<T> &x);
 
   /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b).
   /// store solution in b.
@@ -61,7 +61,7 @@ namespace tuvx
   /// @param x Vector to multiply the matrix with
   /// @returns Dot product between A and x
   template<typename T>
-  std::vector<T> Dot(const TridiagonalMatrix<T> &A, const std::vector<T> &b);
+  std::vector<T> Dot(const TridiagonalMatrix<T> &A, const std::vector<T> &x);
 
   /// @brief Computes the relative error between two vectors. Used for computing
   /// approximation errors.
