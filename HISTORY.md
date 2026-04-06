@@ -1,6 +1,6 @@
 # TUV-x C++ Rewrite History
 
-A record of the collaboration between a human scientist and AI agents, rewriting a Fortran photolysis rate calculator as a modern C++ library.
+A record of the collaboration between a human physicist and AI agents, rewriting a Fortran photolysis rate calculator as a modern C++ library.
 
 Daily journal entries are in [`journal/`](journal/). Each file covers one day's sessions.
 
