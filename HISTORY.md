@@ -16,6 +16,6 @@ Claude API usage for this project, tracked per session. LLM time is actual infer
 
 | Date | Model | LLM Time | Wall Time | Turns | Session Summary |
 |------|-------|----------|-----------|-------|-----------------|
-| 5 Apr 2026 | Opus 4.6 | TBD | TBD | ~25 | Branching strategy, Phase 0 plan, Fortran preservation, validation strategy, CLAUDE.md |
+| 5 Apr 2026 | Opus 4.6 | ~6 min | TBD | ~25 | Branching strategy, Phase 0 plan, Fortran preservation, validation strategy, CLAUDE.md |
 
-**Running totals:** TBD
+**Running totals:** ~6 min LLM time
