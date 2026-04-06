@@ -67,7 +67,8 @@ if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
         NAME coverage
         EXECUTABLE "ctest"
         EXCLUDE "${PROJECT_SOURCE_DIR}/test/*"
-        BASE_DIRECTORY "${PROJECT_SOURCE_DIR}/src")
+        BASE_DIRECTORY "${PROJECT_SOURCE_DIR}/include"
+        LCOV_ARGS --ignore-errors mismatch)
   endif()
 
   enable_testing()
