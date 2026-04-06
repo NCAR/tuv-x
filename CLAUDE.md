@@ -29,6 +29,27 @@ No phase begins implementation until the prior phase's PR is merged.
 
 **Cross-model review**: Claude is the primary coding agent. Other models (e.g., Codex) review plans and code. Plans should be self-contained and readable by any agent without prior conversation context.
 
+## Agent Coordination
+
+- Shared handoff rules live in `AGENTS.md`. Keep `CLAUDE.md` and `AGENTS.md` aligned when the collaboration protocol changes.
+- Claude remains the primary coding agent unless the user explicitly assigns work differently.
+- Codex is typically used for plan reviews, code reviews, validation checks, and targeted follow-up edits.
+
+## Review Thread Naming
+
+- Review threads in `plan/*.md` and similar working documents are append-only.
+- Use Roman numerals for paired review/response sections.
+- Standard pattern:
+  - `## Codex Review I`
+  - `## Claude Response I`
+  - `## Codex Review II`
+  - `## Claude Response II`
+- Claude is free to respond after each review using the matching numbered response section.
+- If Claude authors the review, use the mirrored pattern:
+  - `## Claude Review I`
+  - `## Codex Response I`
+- Do not overwrite or rename an earlier numbered review/response section after it exists. Add the next numbered section instead.
+
 ## Repository Layout (cpp-rewrite branch)
 
 - `fortran/` — original Fortran source, renamed from `src/`, preserved as reference (not built)
