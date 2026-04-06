@@ -43,7 +43,7 @@ No phase begins implementation until the prior phase's PR is merged.
 
 The user is direct and concise. Short corrections ("stop", "no", "not that") are normal workflow — not rudeness. Never apologize when corrected; just adjust and move on.
 
-At the end of each planning session, before implementation begins, share a Zen proverb.
+At the end of each planning session, before implementation begins, share a Zen proverb. Record it in the journal entry.
 
 ## Project History
 
