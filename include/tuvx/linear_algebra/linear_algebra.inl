@@ -5,18 +5,18 @@ namespace tuvx
 
   template<typename T>
   inline TridiagonalMatrix<T>::TridiagonalMatrix(std::size_t size)
+      : size_(size),
+        main_diagonal_(size),
+        upper_diagonal_(size - 1),
+        lower_diagonal_(size - 1)
   {
-    this->size_ = size;
-    this->main_diagonal_ = std::vector<T>(size);
-    this->upper_diagonal_ = std::vector<T>(size - 1);
-    this->lower_diagonal_ = std::vector<T>(size - 1);
   }
 
   template<typename T>
-  inline std::vector<T> Dot(const TridiagonalMatrix<T> &A, const std::vector<T> &x)
+  inline Array1D<T> Dot(const TridiagonalMatrix<T> &A, const Array1D<T> &x)
   {
-    std::size_t size = x.size();
-    std::vector<T> v(size);
+    std::size_t size = x.Size();
+    Array1D<T> v(size);
     v[0] = A.main_diagonal_[0] * x[0] + A.upper_diagonal_[0] * x[1];
 
     std::size_t i = 0;
@@ -29,10 +29,10 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void Solve(TridiagonalMatrix<T> &A, std::vector<T> &b)
+  inline void Solve(TridiagonalMatrix<T> &A, Array1D<T> &b)
   {
     T temp;
-    std::size_t n = b.size();
+    std::size_t n = b.Size();
     // forward pass
     for (std::size_t i = 1; i < n; i++)
     {
@@ -53,13 +53,11 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(std::vector<T> &x, const unsigned &seed)
+  inline void FillRandom(Array1D<T> &x, const unsigned &seed)
   {
-    // sample from normal distribution
-
     std::mt19937 random_device(seed);
     std::normal_distribution<double> distribution(5.0, 1.0);
-    for (std::size_t i = 0; i < x.size(); i++)
+    for (std::size_t i = 0; i < x.Size(); i++)
     {
       x[i] = (T)distribution(random_device);
     }
@@ -74,7 +72,6 @@ namespace tuvx
 
     if (make_diagonally_dominant)
     {
-      // make diagonally dominant (diagonal value greater than sum of its row)
       std::size_t i = 0;
       A.main_diagonal_[i] += A.upper_diagonal_[i];
       for (i = 1; i < A.size_ - 1; i++)
@@ -86,23 +83,23 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void Print(const std::vector<T> &x)
+  inline void Print(const Array1D<T> &x)
   {
     std::cout << std::endl;
-    for (std::size_t i = 0; i < x.size(); i++)
+    for (std::size_t i = 0; i < x.Size(); i++)
     {
-      std::cout << x.at(i) << std::endl;
+      std::cout << x[i] << std::endl;
     }
     std::cout << std::endl;
   }
 
   template<typename T>
-  T ComputeError(const std::vector<T> &x, const std::vector<T> &x_approx)
+  T ComputeError(const Array1D<T> &x, const Array1D<T> &x_approx)
   {
     T error = 0;
-    for (std::size_t i = 0; i < x.size(); i++)
+    for (std::size_t i = 0; i < x.Size(); i++)
     {
-      error += (std::abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.size();
+      error += (std::abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.Size();
     }
     return error;
   }

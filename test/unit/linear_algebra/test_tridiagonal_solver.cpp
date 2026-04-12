@@ -6,7 +6,6 @@
 #include <cstddef>
 #include <cstdlib>
 #include <limits>
-#include <vector>
 
 #ifdef TUVX_COMPILE_WITH_INTEL
   #include <mkl_lapacke.h>
@@ -23,18 +22,14 @@ const bool MAKE_DIAGONALLY_DOMINANT = true;
 
 const unsigned RANDOM_NUMBER_SEED = 1;
 /// @brief Tridiagonal Solver Test for single Precision Floats.
-/// Generate random tridiagonal matrix $A$ and vector $x$,
-/// compute $b=A \cdot x$, and check if solution is reconstructed
-/// accurately using L2 norm (single precision). Check for different
-/// sizes to check consistency
 TEST(TridiagSolveTest, SinglePrecision)
 {
   float error = 0;
 
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
-    std::vector<float> x(SYSTEM_SIZE);
-    std::vector<float> b(SYSTEM_SIZE);
+    tuvx::Array1D<float> x(SYSTEM_SIZE);
+    tuvx::Array1D<float> b(SYSTEM_SIZE);
     tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
 
     tuvx::FillRandom<float>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
@@ -50,18 +45,14 @@ TEST(TridiagSolveTest, SinglePrecision)
   EXPECT_LE(error, TOL_SP);
 }
 
-/// @brief Generate random tridiagonal matrix $A$ and vector $x$,
-/// Tridiagonal Solver Test for Double Precision Floats.
-/// compute $b=A \cdot x$, and check if solution is reconstructed
-/// accurately using L2 norm (double precision). Check for different
-/// sizes to check consistency
+/// @brief Tridiagonal Solver Test for Double Precision Floats.
 TEST(TridiagSolveTest, DoublePrecision)
 {
   double error = 0;
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
-    std::vector<double> x(SYSTEM_SIZE);
-    std::vector<double> b(SYSTEM_SIZE);
+    tuvx::Array1D<double> x(SYSTEM_SIZE);
+    tuvx::Array1D<double> b(SYSTEM_SIZE);
     tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
 
     tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
@@ -76,18 +67,14 @@ TEST(TridiagSolveTest, DoublePrecision)
 }
 
 /// @brief LAPACKE Tridiagonal Solver Test for single Precision Floats.
-/// Generate random tridiagonal matrix $A$ and vector $x$,
-/// compute $b=A \cdot x$, and check if solution is reconstructed
-/// accurately using L2 norm (single precision). Check for different
-/// sizes to check consistency
 TEST(LapackeTest, SinglePrecision)
 {
   float error = 0;
 
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
-    std::vector<float> x(SYSTEM_SIZE);
-    std::vector<float> b(SYSTEM_SIZE);
+    tuvx::Array1D<float> x(SYSTEM_SIZE);
+    tuvx::Array1D<float> b(SYSTEM_SIZE);
     tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
 
     tuvx::FillRandom<float>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
@@ -98,10 +85,10 @@ TEST(LapackeTest, SinglePrecision)
         LAPACK_ROW_MAJOR,
         SYSTEM_SIZE,
         1,
-        A.lower_diagonal_.data(),
-        A.main_diagonal_.data(),
-        A.upper_diagonal_.data(),
-        b.data(),
+        A.lower_diagonal_.AsVector().data(),
+        A.main_diagonal_.AsVector().data(),
+        A.upper_diagonal_.AsVector().data(),
+        b.AsVector().data(),
         1);
 
     error += tuvx::ComputeError<float>(x, b);
@@ -111,17 +98,13 @@ TEST(LapackeTest, SinglePrecision)
 }
 
 /// @brief LAPACKE Tridiagonal Solver Test for double Precision Floats.
-/// Generate random tridiagonal matrix $A$ and vector $x$,
-/// compute $b=A \cdot x$, and check if solution is reconstructed
-/// accurately using L2 norm (double precision). Check for different
-/// sizes to check consistency
 TEST(LapackeTest, DoublePrecision)
 {
   double error = 0;
   for (std::size_t j = 0; j < NUMBER_OF_RUNS; j++)
   {
-    std::vector<double> x(SYSTEM_SIZE);
-    std::vector<double> b(SYSTEM_SIZE);
+    tuvx::Array1D<double> x(SYSTEM_SIZE);
+    tuvx::Array1D<double> b(SYSTEM_SIZE);
     tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
 
     tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
@@ -132,10 +115,10 @@ TEST(LapackeTest, DoublePrecision)
         LAPACK_ROW_MAJOR,
         SYSTEM_SIZE,
         1,
-        A.lower_diagonal_.data(),
-        A.main_diagonal_.data(),
-        A.upper_diagonal_.data(),
-        b.data(),
+        A.lower_diagonal_.AsVector().data(),
+        A.main_diagonal_.AsVector().data(),
+        A.upper_diagonal_.AsVector().data(),
+        b.AsVector().data(),
         1);
 
     error += tuvx::ComputeError<double>(x, b);
