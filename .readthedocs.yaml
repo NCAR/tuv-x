@@ -1,5 +1,3 @@
-# Minimal config to prevent RTD build failures.
-# Documentation will be rebuilt from scratch in a later phase.
 version: 2
 
 build:
@@ -7,4 +5,9 @@ build:
   tools:
     python: "3.12"
 
-# No Sphinx or other doc build — just succeed quietly
+python:
+  install:
+    - requirements: docs/requirements.txt
+
+sphinx:
+  configuration: docs/source/conf.py
