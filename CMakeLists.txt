@@ -41,11 +41,7 @@ include(GNUInstallDirs)
 set(INSTALL_PREFIX "tuvx-${PROJECT_VERSION}")
 
 ################################################################################
-# TUV-x docs (can be built standalone without library dependencies)
-
-if(TUVX_BUILD_DOCS)
-  add_subdirectory(docs)
-endif()
+# Dependencies and library (docs build deferred until new documentation is written)
 
 if(NOT TUVX_BUILD_DOCS)
 
@@ -75,13 +71,6 @@ if(PROJECT_IS_TOP_LEVEL AND TUVX_ENABLE_TESTS)
 
   enable_testing()
   add_subdirectory(test)
-endif()
-
-################################################################################
-# Packaging
-
-if(PROJECT_IS_TOP_LEVEL)
-  add_subdirectory(packaging)
 endif()
 
 ################################################################################
