@@ -10,16 +10,19 @@ Shared collaboration rules for Claude, Codex, and any other agent working in thi
 - **Codex**: review-focused secondary agent by default; may make scoped follow-up edits when asked
 - **User**: final authority on scope, sequencing, naming, and merge decisions
 
+## Auxiliary Repository
+
+**TUV-x-cpp** (`../TUV-x-cpp`) contains plans, journals, Fortran reference, and legacy infrastructure. This repo (TUV-x) is the lean C++ codebase for CI/CD and PR review.
+
 ## Planning And Implementation Boundary
 
 - Do not move from planning into implementation unless the user explicitly says to proceed.
-- Original prompts under `.github/prompts/` are reference inputs and must not be edited.
-- Revised, working plans live under `plan/phaseN.md` and should stay self-contained.
+- Revised, working plans live in TUV-x-cpp under `plan/phaseN.md` and should stay self-contained.
 
 ## Handoff Rules
 
-- Leave the repository in a state that another agent can understand without chat history.
-- When work changes plan status, assumptions, or scope, update the active `plan/phaseN.md` before ending the session.
+- Leave both repositories in a state that another agent can understand without chat history.
+- When work changes plan status, assumptions, or scope, update the active plan in TUV-x-cpp before ending the session.
 - Preserve prior agent notes. Append new review/response sections instead of rewriting history unless the user asks for consolidation.
 - Record what was validated, what was not validated, and any blockers that remain.
 

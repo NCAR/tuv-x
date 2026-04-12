@@ -2,32 +2,34 @@
 
 ## Project
 
-TUV-x — photolysis rate constant calculator. Rewriting from Fortran to C++.
+TUV-x — photolysis rate constant calculator. C++ rewrite.
 
-## Planning
+## Auxiliary Repository
 
-- **Original plan**: `.github/prompts/plan-tuvXCppSolverRewrite.prompt.md` (master plan, do not modify)
-- **Original phase prompts**: `.github/prompts/phase0-scaffolding.prompt.md` through `phase8-musicaIntegration.prompt.md` (do not modify)
-- **Revised plans**: `plan/phase0.md`, `plan/phase1.md`, etc. — detailed, actionable plans revised from the originals
-- Each phase gets its own branch off `cpp-rewrite` (e.g., `phase0-scaffolding`, `phase1-delta-eddington`)
+**[TUV-x-cpp](https://github.com/NCAR/tuv-x-cpp)** (`../TUV-x-cpp`) is the companion sandbox repo containing:
+- `fortran/` — original Fortran source (reference, not built)
+- `plan/` — revised phase plans and review threads
+- `journal/` — session narratives
+- `HISTORY.md` — journal index and AI Compute Log
+- `docs/`, `tutorial/`, `examples/`, `docker/`, `packaging/`, `etc/`, `tool/` — legacy infrastructure
+
+Use TUV-x-cpp for planning, journaling, and Fortran reference. This repo (TUV-x) is the lean C++ codebase for CI/CD and PR review — reviewers need only clone this repo.
 
 ## Workflow
 
-**Never proceed to implementation after planning unless explicitly instructed.** The user has follow-up questions and wants to review plans thoroughly before execution begins. Planning and implementation are separate activities — do not blur them.
+**Never proceed to implementation after planning unless explicitly instructed.**
 
 **Phase lifecycle:**
-1. **Plan** — write/revise `plan/phaseN.md`, discuss until the user is satisfied
-2. **Test plan** — define what tests will be written, what they validate, what tolerances apply. Part of the plan, not implementation.
-3. **Generate reference data** — build/run Fortran, capture outputs as CSV in `test/reference/phaseN/`
+1. **Plan** — write/revise plans in TUV-x-cpp `plan/phaseN.md`, discuss until satisfied
+2. **Test plan** — define tests, tolerances. Part of the plan, not implementation.
+3. **Generate reference data** — capture outputs as CSV in `test/reference/phaseN/` (stays in this repo)
 4. **Implement** — only when explicitly told to proceed, on the phase branch
-4. **PR + human review** — open a GitHub PR to merge the phase branch into `cpp-rewrite`. Full stop. The user reviews the PR on GitHub before any merge.
-5. **Next phase** — only after the PR is merged
+5. **PR + human review** — GitHub PR to merge the phase branch into `cpp-rewrite`. User reviews before merge.
+6. **Next phase** — only after the PR is merged
 
 No phase begins implementation until the prior phase's PR is merged.
 
-**Session continuity**: Each `plan/phaseN.md` must contain enough context to initialize a fresh session — goals, current state, what's done, what remains. If implementation is interrupted mid-session, update the plan file with progress before ending.
-
-**Cross-model review**: Claude is the primary coding agent. Other models (e.g., Codex) review plans and code. Plans should be self-contained and readable by any agent without prior conversation context.
+**Session continuity**: Plans in TUV-x-cpp must contain enough context to initialize a fresh session. If implementation is interrupted, update the plan file with progress before ending.
 
 ## Agent Coordination
 
@@ -37,38 +39,29 @@ No phase begins implementation until the prior phase's PR is merged.
 
 ## Review Thread Naming
 
-- Review threads in `plan/*.md` and similar working documents are append-only.
+- Review threads in TUV-x-cpp `plan/*.md` are append-only.
 - Use Roman numerals for paired review/response sections.
-- Standard pattern:
-  - `## Codex Review I`
-  - `## Claude Response I`
-  - `## Codex Review II`
-  - `## Claude Response II`
-- Claude is free to respond after each review using the matching numbered response section.
-- If Claude authors the review, use the mirrored pattern:
-  - `## Claude Review I`
-  - `## Codex Response I`
-- Do not overwrite or rename an earlier numbered review/response section after it exists. Add the next numbered section instead.
+- Standard pattern: `## Codex Review I` / `## Claude Response I`, etc.
+- Do not overwrite or rename an earlier numbered section. Add the next one instead.
 
-## Repository Layout (cpp-rewrite branch)
+## Repository Layout
 
-- `fortran/` — original Fortran source, renamed from `src/`, preserved as reference (not built)
 - `include/tuvx/` — public C++ headers
 - `src/` — C++ implementation files (.cpp)
-- `test/` — C++ tests
+- `test/` — C++ tests (including `test/reference/` baseline data)
 - `benchmark/` — Google Benchmark files
 - `data/` — NetCDF reference data
-- `plan/` — revised implementation plans
+- `cmake/`, `CMakeLists.txt` — build system
 
 ## Communication Style
 
-The user is direct and concise. Short corrections ("stop", "no", "not that") are normal workflow — not rudeness. Never apologize when corrected; just adjust and move on.
+The user is direct and concise. Short corrections are normal workflow — not rudeness. Never apologize when corrected; just adjust and move on.
 
-At the end of each planning session, before implementation begins, share a Zen proverb. Record it in the journal entry.
+At the end of each planning session, share a Zen proverb. Record it in the journal entry (in TUV-x-cpp).
 
 ## Project History
 
-[HISTORY.md](HISTORY.md) is the index — a journal table and the AI Compute Log. Daily narratives go in `journal/YYYY-MM-DD.md` (one file per day, one entry per session). Update at the end of each session with what was attempted, what broke, what worked, and what was learned. Add an entry to the AI Compute Log table in HISTORY.md with LLM inference time from `durationMs` fields in `~/.claude/projects/-Users-fillmore-EarthSystem-TUV-x/<session>.jsonl`.
+Journals and history live in TUV-x-cpp. Update `HISTORY.md` and `journal/YYYY-MM-DD.md` there at the end of each session.
 
 ## Validation
 
@@ -80,7 +73,7 @@ At the end of each planning session, before implementation begins, share a Zen p
 
 ## Terminology
 
-- **Radiator → Constituent**: The Fortran codebase uses "radiator" (a component of a car engine). In radiative transfer theory the standard term is "constituent." Rename all occurrences — types, files, directories, tests, docs — as code is touched during each phase. Do not do a bulk rename pass; rename incrementally as each file is modified.
+- **Radiator → Constituent**: The Fortran codebase uses "radiator." In radiative transfer theory the standard term is "constituent." Rename incrementally as each file is modified during each phase.
 
 ## Push
 
