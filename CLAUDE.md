@@ -48,9 +48,8 @@ No phase begins implementation until the prior phase's PR is merged.
 
 - `include/tuvx/` — public C++ headers
 - `src/` — C++ implementation files (.cpp)
-- `test/` — C++ tests (including `test/reference/` baseline data)
+- `test/` — C++ tests
 - `benchmark/` — Google Benchmark files
-- `data/` — NetCDF reference data
 - `cmake/`, `CMakeLists.txt` — build system
 
 ## Communication Style
