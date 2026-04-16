@@ -2,11 +2,11 @@
 // SPDX-License-Identifier: Apache-2.0
 namespace tuvx {
 
-  template <typename T, typename GridPolicy, typename ProfilePolicy, typename RadiatorStatePolicy, typename RadiationFieldPolicy>
+  template <typename T, typename GridPolicy, typename ProfilePolicy, typename ConstituentStatePolicy, typename RadiationFieldPolicy>
   inline void DeltaEddington::Solve(const std::vector<T>& solar_zenith_angles,
                              const std::map<std::string, GridPolicy>& grids,
                              const std::map<std::string, ProfilePolicy>& profiles,
-                             const RadiatorStatePolicy& accumulated_radiator_state,
+                             const ConstituentStatePolicy& accumulated_constituent_state,
                              RadiationFieldPolicy& radiation_field) const {
     // Solve the radiative transfer equation.
     // 

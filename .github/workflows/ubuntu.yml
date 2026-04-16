@@ -1,9 +1,10 @@
 name: Ubuntu
 
-on: 
+on:
   push:
     branches:
       - main
+      - cpp-rewrite
   pull_request:
   workflow_dispatch:
 
@@ -14,28 +15,38 @@ concurrency:
 jobs:
   gcc:
     runs-on: ubuntu-24.04
-    continue-on-error: true
     strategy:
+      fail-fast: false
       matrix:
         gcc_version: [12, 13, 14]
+        build_type: [Debug, Release]
     env:
       CXX: g++-${{ matrix.gcc_version }}
       CC: gcc-${{ matrix.gcc_version }}
-      FC: gfortran-${{ matrix.gcc_version }}
     steps:
     - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libnetcdf-dev netcdf-bin libnetcdff-dev liblapack-dev liblapacke-dev
-        sudo apt-get install -y python3-numpy python3-scipy python3-netcdf4
-    - name: Run Cmake 
-      run: cmake -S . -B build -D CMAKE_POLICY_VERSION_MINIMUM=3.5
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
     - name: Build
-      run: cmake --build build 
-    - name: Run tests
-      run: |
-        cd build
-        ctest --rerun-failed --output-on-failure . --verbose
+      run: cmake --build build
+    - name: Test
+      run: ctest --test-dir build --output-on-failure
+
+  clang:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        clang_version: [17, 18]
+        build_type: [Debug, Release]
+    env:
+      CXX: clang++-${{ matrix.clang_version }}
+      CC: clang-${{ matrix.clang_version }}
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    - name: Build
+      run: cmake --build build
+    - name: Test
+      run: ctest --test-dir build --output-on-failure

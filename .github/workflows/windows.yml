@@ -1,9 +1,10 @@
 name: Windows
 
-on: 
+on:
   push:
     branches:
       - main
+      - cpp-rewrite
   pull_request:
   workflow_dispatch:
 
@@ -12,17 +13,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gnu:
+  msvc:
     runs-on: windows-latest
-    continue-on-error: true 
     strategy:
+      fail-fast: false
       matrix:
         build_type: [Debug, Release]
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    - name: Build
+      run: cmake --build build --config ${{ matrix.build_type }}
+    - name: Test
+      run: ctest --test-dir build -C ${{ matrix.build_type }} --output-on-failure
 
+  mingw:
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        build_type: [Debug, Release]
+    steps:
+    - uses: actions/checkout@v4
     - name: Setup MSYS2
       uses: msys2/setup-msys2@v2
       with:
@@ -31,32 +44,15 @@ jobs:
           base-devel
           mingw-w64-x86_64-toolchain
           mingw-w64-x86_64-gcc
-          mingw-w64-x86_64-gcc-fortran
           mingw-w64-x86_64-cmake
-          mingw-w64-x86_64-netcdf
-          mingw-w64-x86_64-netcdf-fortran
         msystem: MINGW64
-    
-    - name: Check package versions
+    - name: Configure
       shell: msys2 {0}
-      run: |
-        cmake --version
-        gcc --version
-        g++ --version
-        gfortran --version
-        make --version
-        pkg-config --version
-
-    - name: Configure with CMake
-      shell: msys2 {0}
-      run: |
-        cmake -G "MinGW Makefiles" -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} -D CMAKE_POLICY_VERSION_MINIMUM=3.5
-
-    - name: Build the project
+      run: cmake -G "MinGW Makefiles" -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    - name: Build
       shell: msys2 {0}
       run: cmake --build build
-    
-    - name: Run the tests
-      working-directory: build
+    - name: Test
       shell: msys2 {0}
-      run: ctest -C ${{ matrix.build_type }} --output-on-failure 
+      working-directory: build
+      run: ctest -C ${{ matrix.build_type }} --output-on-failure

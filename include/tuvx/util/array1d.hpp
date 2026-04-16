@@ -8,42 +8,42 @@
 namespace tuvx
 {
 
-  /// @brief 2D array with row-major storage.
+  /// @brief 1D array backed by contiguous storage.
   template<typename T = double>
-  class Array2D
+  class Array1D
   {
    public:
-    Array2D() = default;
+    Array1D() = default;
 
-    /// @brief Construct an array with the given dimensions.
-    /// @param dim1 Size of the first dimension (rows).
-    /// @param dim2 Size of the second dimension (columns).
-    Array2D(std::size_t dim1, std::size_t dim2)
-        : dim1_(dim1),
-          dim2_(dim2),
-          data_(dim1 * dim2)
+    /// @brief Construct an array of the given size.
+    /// @param size Number of elements.
+    explicit Array1D(std::size_t size)
+        : data_(size)
     {
     }
 
-    T &operator()(std::size_t i, std::size_t j)
+    /// @brief Construct an array of the given size filled with a value.
+    /// @param size Number of elements.
+    /// @param fill_value Value to fill the array with.
+    Array1D(std::size_t size, T fill_value)
+        : data_(size, fill_value)
     {
-      return data_[i * dim2_ + j];
     }
 
-    const T &operator()(std::size_t i, std::size_t j) const
+    T &operator[](std::size_t i)
     {
-      return data_[i * dim2_ + j];
+      return data_[i];
     }
 
-    /// @brief Size of the first dimension (rows).
-    [[nodiscard]] std::size_t Size1() const
+    const T &operator[](std::size_t i) const
     {
-      return dim1_;
+      return data_[i];
     }
-    /// @brief Size of the second dimension (columns).
-    [[nodiscard]] std::size_t Size2() const
+
+    /// @brief Number of elements.
+    [[nodiscard]] std::size_t Size() const
     {
-      return dim2_;
+      return data_.size();
     }
 
     typename std::vector<T>::iterator begin()
@@ -73,8 +73,7 @@ namespace tuvx
     }
 
    private:
-    std::size_t dim1_ = 0;
-    std::size_t dim2_ = 0;
     std::vector<T> data_;
   };
+
 }  // namespace tuvx

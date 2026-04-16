@@ -1,9 +1,10 @@
 name: Mac
 
-on: 
+on:
   push:
     branches:
       - main
+      - cpp-rewrite
   pull_request:
   workflow_dispatch:
 
@@ -12,27 +13,36 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gnu:
+  apple-clang:
     runs-on: macos-latest
-    continue-on-error: true 
     strategy:
+      fail-fast: false
       matrix:
-        gcc_version: [13, 14, 15]
+        build_type: [Debug, Release]
+    steps:
+    - uses: actions/checkout@v4
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    - name: Build
+      run: cmake --build build
+    - name: Test
+      run: ctest --test-dir build --output-on-failure
+
+  gcc:
+    runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        gcc_version: [14]
         build_type: [Debug, Release]
     env:
-      FC: gfortran-${{ matrix.gcc_version }}
-
+      CXX: g++-${{ matrix.gcc_version }}
+      CC: gcc-${{ matrix.gcc_version }}
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: brew install netcdf netcdf-fortran
-
-      - name: Run Cmake
-        run: cmake -S . -B build -D CMAKE_BUILD_TYPE=${{ matrix.build_type }}
-
-      - name: Build
-        run: cmake --build build  --verbose
-      
-      - name: Test
-        run: ctest -C ${{ matrix.build_type }} --output-on-failure
+    - uses: actions/checkout@v4
+    - name: Configure
+      run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+    - name: Build
+      run: cmake --build build
+    - name: Test
+      run: ctest --test-dir build --output-on-failure
