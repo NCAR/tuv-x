@@ -1,15 +1,6 @@
 include(FetchContent)
 
 ################################################################################
-# LAPACK
-
-if(TUVX_ENABLE_LAPACK)
-  find_package(LAPACK)
-  find_package(LAPACKE)
-  find_package(BLAS)
-endif()
-
-################################################################################
 # Memory check
 
 if(TUVX_ENABLE_MEMCHECK)

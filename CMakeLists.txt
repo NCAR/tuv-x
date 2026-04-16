@@ -6,10 +6,6 @@ cmake_minimum_required(VERSION 3.21)
 # project and version must be on the same line so that the docs can extract it
 project(tuv-x VERSION 0.15.0 LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${PROJECT_SOURCE_DIR}/cmake")
 
@@ -31,19 +27,11 @@ option(TUVX_ENABLE_TESTS     "Build unit tests"              ON)
 option(TUVX_ENABLE_BENCHMARK "Build benchmarks"              OFF)
 option(TUVX_ENABLE_COVERAGE  "Enable code coverage output"   OFF)
 option(TUVX_ENABLE_MEMCHECK  "Enable Valgrind memcheck"      OFF)
-option(TUVX_ENABLE_LAPACK    "Enable LAPACK for benchmarks"  OFF)
 option(TUVX_ENABLE_NETCDF    "Enable NetCDF-C support"       OFF)
 option(TUVX_BUILD_DOCS       "Build the documentation"       OFF)
 
-# Set up include and lib directories
 set(TUVX_LIB_DIR "${PROJECT_BINARY_DIR}/lib")
 include(GNUInstallDirs)
-set(INSTALL_PREFIX "tuvx-${PROJECT_VERSION}")
-
-################################################################################
-# Dependencies and library (docs build deferred until new documentation is written)
-
-if(NOT TUVX_BUILD_DOCS)
 
 ################################################################################
 # Dependencies
@@ -54,6 +42,13 @@ include(cmake/dependencies.cmake)
 # TUV-x library target
 
 add_subdirectory(src)
+
+################################################################################
+# Documentation
+
+if(TUVX_BUILD_DOCS)
+  add_subdirectory(docs)
+endif()
 
 ################################################################################
 # TUV-x tests
@@ -76,10 +71,8 @@ endif()
 ################################################################################
 # Benchmarking
 
-if(TUVX_ENABLE_BENCHMARK AND TUVX_ENABLE_LAPACK)
+if(TUVX_ENABLE_BENCHMARK)
   add_subdirectory(benchmark)
 endif()
-
-endif() # NOT TUVX_BUILD_DOCS
 
 ################################################################################

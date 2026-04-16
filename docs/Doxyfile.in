@@ -1,0 +1,22 @@
+PROJECT_NAME           = "TUV-x"
+PROJECT_NUMBER         = @PROJECT_VERSION@
+PROJECT_BRIEF          = "Tropospheric ultraviolet-extended photolysis rate calculator"
+
+OUTPUT_DIRECTORY       = @DOXYGEN_OUTPUT_DIR@
+STRIP_FROM_PATH        = @DOXY_INCLUDE_STRIP@
+
+INPUT                  = @DOXYGEN_INPUT_DIR@
+RECURSIVE              = YES
+FILE_PATTERNS          = *.hpp *.h *.inl *.cpp
+
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+BUILTIN_STL_SUPPORT    = YES
+
+GENERATE_HTML          = NO
+GENERATE_LATEX         = NO
+GENERATE_XML           = YES
+
+QUIET                  = YES
+WARN_IF_UNDOCUMENTED   = NO

@@ -4,6 +4,13 @@ TUV-x
 TUV-x is a photolysis rate constant calculator being rewritten from Fortran to C++.
 Documentation will be expanded as the API stabilizes through each implementation phase.
 
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
+
+   getting_started
+   api/index
+
 Current C++ Components
 ----------------------
 
@@ -22,12 +29,3 @@ Current C++ Components
 - ``ConstituentState`` — optical properties (optical depth, single-scattering albedo, asymmetry parameter)
 - ``RadiationField`` — actinic flux, irradiance, and heating rate storage
 - ``DeltaEddington`` — two-stream radiative transfer solver (Toon et al., 1989)
-
-Building
---------
-
-.. code-block:: bash
-
-   cmake -S . -B build -DTUVX_ENABLE_TESTS=ON
-   cmake --build build
-   ctest --test-dir build --output-on-failure

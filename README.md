@@ -16,9 +16,7 @@ Copyright (C) 2020-2026 University Corporation for Atmospheric Research
 
 ## C++ Rewrite (In Progress)
 
-TUV-x is being rewritten from Fortran to C++ as a header-only library.
-The original Fortran source is preserved in the `fortran/` directory for
-reference during the translation.
+TUV-x is being rewritten from Fortran to C++.
 
 ### Building
 
@@ -37,8 +35,7 @@ ctest --test-dir build --output-on-failure
 | Option | Default | Description |
 |--------|---------|-------------|
 | `TUVX_ENABLE_TESTS` | ON | Build unit tests (requires GTest, fetched automatically) |
-| `TUVX_ENABLE_BENCHMARK` | OFF | Build benchmarks (requires LAPACK) |
-| `TUVX_ENABLE_LAPACK` | OFF | Enable LAPACK for benchmarks |
+| `TUVX_ENABLE_BENCHMARK` | OFF | Build benchmarks (requires Google Benchmark, fetched automatically) |
 | `TUVX_ENABLE_COVERAGE` | OFF | Enable code coverage (lcov) |
 | `TUVX_ENABLE_MEMCHECK` | OFF | Enable Valgrind memcheck |
 | `TUVX_ENABLE_NETCDF` | OFF | Enable NetCDF-C support |
@@ -48,7 +45,7 @@ ctest --test-dir build --output-on-failure
 
 ### Using TUV-x as a Library
 
-TUV-x provides a header-only interface library via the `musica::tuvx` CMake target:
+TUV-x is exposed via the `musica::tuvx` CMake target:
 
 ```cmake
 find_package(tuvx REQUIRED)
@@ -66,12 +63,10 @@ target_link_libraries(my_app PRIVATE musica::tuvx)
 | Directory | Contents |
 |-----------|----------|
 | `include/tuvx/` | Public C++ headers |
-| `src/` | C++ implementation files (currently header-only) |
-| `test/` | C++ unit and regression tests |
+| `src/` | C++ implementation files |
+| `test/` | C++ unit tests |
 | `benchmark/` | Google Benchmark files |
-| `fortran/` | Original Fortran source (reference only, not built) |
-| `data/` | NetCDF reference data |
-| `plan/` | Implementation plans for the C++ rewrite |
+| `docs/` | Sphinx + Doxygen documentation sources |
 
 # Citation
 
