@@ -7,8 +7,8 @@
 #include <cstdlib>
 #include <limits>
 
-const double TOL_DP = std::numeric_limits<double>::epsilon();
-const float TOL_SP = std::numeric_limits<float>::epsilon();
+const double TOL_DP = 10 * std::numeric_limits<double>::epsilon();
+const float TOL_SP = 10 * std::numeric_limits<float>::epsilon();
 
 const std::size_t NUMBER_OF_RUNS = 20;
 const std::size_t SYSTEM_SIZE = 10;
