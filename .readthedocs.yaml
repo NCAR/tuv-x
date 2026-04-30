@@ -1,19 +1,16 @@
-# Read the Docs configuration file
-# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
----
-# Required
 version: 2
 
-conda:
-  environment: environment.yml
-
-# Set the OS, Python version, and other tools you might need
 build:
   os: ubuntu-24.04
   tools:
-    python: "mambaforge-22.9"
+    python: "3.12"
+  apt_packages:
+    - cmake
+    - doxygen
 
-# Build documentation in the "docs/" directory with Sphinx
+python:
+  install:
+    - requirements: docs/requirements.txt
+
 sphinx:
   configuration: docs/source/conf.py
-

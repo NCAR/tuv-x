@@ -1,6 +1,5 @@
-Jinja2<3.1
+breathe
 sphinx
 pydata-sphinx-theme
-matplotlib
+sphinx-copybutton
 sphinx-design
-Pillow

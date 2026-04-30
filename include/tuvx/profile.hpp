@@ -7,6 +7,7 @@
 
 #include <cstddef>
 #include <string>
+#include <utility>
 
 namespace tuvx
 {
@@ -28,15 +29,15 @@ namespace tuvx
     /// @param number_of_columns Number of columns.
     /// @param grid Grid that the profile is defined on.
     template<typename GridPolicy>
-    Profile(const std::string& units, std::size_t number_of_columns, const GridPolicy& grid)
-        : units_(units),
+    Profile(std::string units, std::size_t number_of_columns, const GridPolicy& grid)
+        : units_(std::move(units)),
           mid_point_values_(grid.mid_points_.Size1(), number_of_columns),
           edge_values_(grid.edges_.Size1(), number_of_columns)
     {
     }
 
-    /// Units of the profile.
-    std::string Units() const
+    /// @brief Units of the profile.
+    [[nodiscard]] std::string Units() const
     {
       return units_;
     }
