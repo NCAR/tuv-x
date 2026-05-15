@@ -46,7 +46,8 @@ endif()
 # NetCDF library
 
 if(NOT TUVX_DOCS_ONLY)
-  find_package(NetCDF REQUIRED COMPONENTS C Fortran)
+  find_package(netCDF CONFIG REQUIRED)
+  find_package(netCDF-Fortran CONFIG REQUIRED)
 endif()
 
 # ##############################################################################
