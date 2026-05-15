@@ -1,4 +1,3 @@
-find_package(PkgConfig REQUIRED)
 include(FetchContent)
 
 # ##############################################################################
@@ -47,8 +46,7 @@ endif()
 # NetCDF library
 
 if(NOT TUVX_DOCS_ONLY)
-  pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
-  pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
+  find_package(NetCDF REQUIRED COMPONENTS C Fortran)
 endif()
 
 # ##############################################################################
