@@ -1,14 +1,11 @@
 ################################################################################
-# Test utilities
+# C++ radiative transfer unit tests
 
 include(test_util)
 
 ################################################################################
-# tests
 
-create_standard_test(NAME radiative_transfer SOURCES radiative_transfer_core.F90
-                                                     radiative_transfer_test.F90)
-
-create_standard_test(NAME radiative_transfer_mpi SOURCES mpi.F90)
+create_standard_cxx_test(NAME spherical_geometry SOURCES test_spherical_geometry.cpp)
+create_standard_cxx_test(NAME delta_eddington    SOURCES test_delta_eddington.cpp)
 
 ################################################################################
