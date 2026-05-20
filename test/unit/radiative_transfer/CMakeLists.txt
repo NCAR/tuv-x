@@ -1,16 +1,11 @@
 ################################################################################
-# C++ unit tests
+# C++ radiative transfer unit tests
 
 include(test_util)
 
-add_subdirectory(linear_algebra)
-add_subdirectory(util)
-add_subdirectory(radiative_transfer)
-
 ################################################################################
-# TUV-x tests
 
-create_standard_cxx_test(NAME cxx_grid SOURCES grid.cpp)
-create_standard_cxx_test(NAME cxx_profile SOURCES profile.cpp)
+create_standard_cxx_test(NAME spherical_geometry SOURCES test_spherical_geometry.cpp)
+create_standard_cxx_test(NAME delta_eddington    SOURCES test_delta_eddington.cpp)
 
 ################################################################################
