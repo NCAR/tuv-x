@@ -1,6 +1,0 @@
-xx yy         # first data record, number of data records
-
-------------------------------------------------
-lambda     sigma (cm^2)
- (nm)		
-------------------------------------------------
