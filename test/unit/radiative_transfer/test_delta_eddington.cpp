@@ -17,9 +17,9 @@
 // Returns grids, profiles, constituent state, and radiation field.
 struct DeltaEddingtonFixture
 {
-  static constexpr std::size_t kNColumns    = 1;
-  static constexpr std::size_t kNLayers     = 3;
-  static constexpr std::size_t kNWavelengths = 1;
+  static constexpr std::size_t n_columns    = 1;
+  static constexpr std::size_t n_layers     = 3;
+  static constexpr std::size_t n_wavelengths = 1;
 
   tuvx::Grid<tuvx::Array2D<double>> altitude_grid;
   tuvx::Grid<tuvx::Array2D<double>> wavelength_grid;
@@ -31,19 +31,19 @@ struct DeltaEddingtonFixture
   std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>> profiles;
 
   explicit DeltaEddingtonFixture(double albedo = 0.0)
-      : altitude_grid("m", kNColumns, kNLayers),
-        wavelength_grid("m", kNWavelengths),
-        surface_albedo("1", kNColumns, altitude_grid),  // dummy grid, overridden below
-        constituent_state(kNColumns, altitude_grid, wavelength_grid),
-        radiation_field(kNColumns, altitude_grid, wavelength_grid)
+      : altitude_grid("m", n_columns, n_layers),
+        wavelength_grid("m", n_wavelengths),
+        surface_albedo("1", n_columns, altitude_grid),  // dummy grid, overridden below
+        constituent_state(n_columns, altitude_grid, wavelength_grid),
+        radiation_field(n_columns, altitude_grid, wavelength_grid)
   {
     // Altitude edges: ground=0, 1 km, 2 km, 3 km (bottom-to-top)
-    for (std::size_t lev = 0; lev <= kNLayers; ++lev)
+    for (std::size_t lev = 0; lev <= n_layers; ++lev)
     {
       altitude_grid.edges_(lev, 0) = static_cast<double>(lev) * 1000.0;
     }
     // Altitude mid-points
-    for (std::size_t lay = 0; lay < kNLayers; ++lay)
+    for (std::size_t lay = 0; lay < n_layers; ++lay)
     {
       altitude_grid.mid_points_(lay, 0) = (static_cast<double>(lay) + 0.5) * 1000.0;
     }
@@ -55,7 +55,7 @@ struct DeltaEddingtonFixture
 
     // Resize surface albedo to [n_wavelengths × n_columns]
     surface_albedo = tuvx::Profile<tuvx::Array2D<double>>(
-        "1", kNColumns, wavelength_grid);
+        "1", n_columns, wavelength_grid);
     surface_albedo.mid_point_values_(0, 0) = albedo;
 
     grids["altitude [m]"]    = altitude_grid;
@@ -66,9 +66,9 @@ struct DeltaEddingtonFixture
   void SetTransparentAtmosphere()
   {
     // Zero optical depth, zero SSA, zero asymmetry
-    for (std::size_t wl = 0; wl < kNWavelengths; ++wl)
+    for (std::size_t wl = 0; wl < n_wavelengths; ++wl)
     {
-      for (std::size_t lay = 0; lay < kNLayers; ++lay)
+      for (std::size_t lay = 0; lay < n_layers; ++lay)
       {
         constituent_state.optical_depth_(wl, lay, 0)              = 0.0;
         constituent_state.single_scattering_albedo_(wl, lay, 0)   = 0.0;
@@ -90,20 +90,20 @@ TEST(DeltaEddington, TransparentAtmosphereOverheadSun)
   const std::vector<double> sza = { 0.0 };  // overhead sun
   solver.Solve(sza, fix.grids, fix.profiles, fix.constituent_state, fix.radiation_field);
 
-  constexpr double kTol = 1.0e-8;
-  constexpr std::size_t n_levels = DeltaEddingtonFixture::kNLayers + 1;
+  constexpr double tolerance = 1.0e-8;
+  constexpr std::size_t n_levels = DeltaEddingtonFixture::n_layers + 1;
   for (std::size_t lev = 0; lev < n_levels; ++lev)
   {
     // Direct irradiance = mu = 1 at all levels (no absorption)
     EXPECT_NEAR(
-        fix.radiation_field.spectral_irradiance_.direct_(0, lev, 0), 1.0, kTol)
+        fix.radiation_field.spectral_irradiance_.direct_(0, lev, 0), 1.0, tolerance)
         << "direct irradiance at level " << lev;
     // No diffuse
     EXPECT_NEAR(
-        fix.radiation_field.spectral_irradiance_.upwelling_(0, lev, 0), 0.0, kTol)
+        fix.radiation_field.spectral_irradiance_.upwelling_(0, lev, 0), 0.0, tolerance)
         << "upwelling irradiance at level " << lev;
     EXPECT_NEAR(
-        fix.radiation_field.spectral_irradiance_.downwelling_(0, lev, 0), 0.0, kTol)
+        fix.radiation_field.spectral_irradiance_.downwelling_(0, lev, 0), 0.0, tolerance)
         << "downwelling irradiance at level " << lev;
   }
 }
@@ -119,10 +119,10 @@ TEST(DeltaEddington, TransparentAtmosphereWithAlbedo)
   const std::vector<double> sza = { 0.0 };
   solver.Solve(sza, fix.grids, fix.profiles, fix.constituent_state, fix.radiation_field);
 
-  constexpr double kTol = 1.0e-8;
+  constexpr double tolerance = 1.0e-8;
   // Ground level (index 0 in bottom-to-top convention): direct = mu = 1
   EXPECT_NEAR(
-      fix.radiation_field.spectral_irradiance_.direct_(0, 0, 0), 1.0, kTol);
+      fix.radiation_field.spectral_irradiance_.direct_(0, 0, 0), 1.0, tolerance);
 }
 
 // Radiation field output dimensions must match what the grids imply.
@@ -137,11 +137,11 @@ TEST(DeltaEddington, OutputDimensions)
 
   // [wavelengths × levels × columns]
   EXPECT_EQ(fix.radiation_field.spectral_irradiance_.direct_.Size1(),
-            DeltaEddingtonFixture::kNWavelengths);
+            DeltaEddingtonFixture::n_wavelengths);
   EXPECT_EQ(fix.radiation_field.spectral_irradiance_.direct_.Size2(),
-            DeltaEddingtonFixture::kNLayers + 1);
+            DeltaEddingtonFixture::n_layers + 1);
   EXPECT_EQ(fix.radiation_field.spectral_irradiance_.direct_.Size3(),
-            DeltaEddingtonFixture::kNColumns);
+            DeltaEddingtonFixture::n_columns);
 }
 
 // For a purely absorbing atmosphere (SSA=0, g=0, tau>0) with overhead sun,
@@ -151,7 +151,7 @@ TEST(DeltaEddington, DirectBeamDecaysWithOpticalDepth)
   DeltaEddingtonFixture fix(0.0);
 
   // Set moderate absorption, no scattering
-  for (std::size_t lay = 0; lay < DeltaEddingtonFixture::kNLayers; ++lay)
+  for (std::size_t lay = 0; lay < DeltaEddingtonFixture::n_layers; ++lay)
   {
     fix.constituent_state.optical_depth_(0, lay, 0)            = 0.5;
     fix.constituent_state.single_scattering_albedo_(0, lay, 0) = 0.0;
@@ -163,8 +163,7 @@ TEST(DeltaEddington, DirectBeamDecaysWithOpticalDepth)
   solver.Solve(sza, fix.grids, fix.profiles, fix.constituent_state, fix.radiation_field);
 
   // TOA level (index n_layers in bottom-to-top) should have the most direct beam
-  constexpr std::size_t n_layers = DeltaEddingtonFixture::kNLayers;
-  const double toa_direct = fix.radiation_field.spectral_irradiance_.direct_(0, n_layers, 0);
+  const double toa_direct = fix.radiation_field.spectral_irradiance_.direct_(0, DeltaEddingtonFixture::n_layers, 0);
   EXPECT_NEAR(toa_direct, 1.0, 1.0e-8);  // mu * exp(0) = 1
 
   // Ground level (index 0) should have the least
@@ -172,7 +171,7 @@ TEST(DeltaEddington, DirectBeamDecaysWithOpticalDepth)
   EXPECT_LT(ground_direct, toa_direct);
 
   // Should decrease monotonically from top to bottom
-  for (std::size_t lev = 1; lev <= n_layers; ++lev)
+  for (std::size_t lev = 1; lev <= DeltaEddingtonFixture::n_layers; ++lev)
   {
     const double above = fix.radiation_field.spectral_irradiance_.direct_(0, lev, 0);
     const double below = fix.radiation_field.spectral_irradiance_.direct_(0, lev - 1, 0);

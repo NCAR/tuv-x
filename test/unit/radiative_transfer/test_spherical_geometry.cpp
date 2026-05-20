@@ -66,7 +66,7 @@ TEST(SphericalGeometry, SlantOpticalDepthBelowTangentHeight)
   std::vector<double> slpath = { 1.0 };
   // Simulate a level below the tangent height by passing nid = -1
   double result = tuvx::SlantOpticalDepth(0, -1, slpath, taun);
-  EXPECT_DOUBLE_EQ(result, 1.0e36);
+  EXPECT_TRUE(std::isinf(result));
 }
 
 // For overhead sun, slant_optical_depth at level 0 with nid=0 should be 0.

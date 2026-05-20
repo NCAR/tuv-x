@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <ranges>
 #include <vector>
 
 namespace tuvx
@@ -35,9 +36,9 @@ namespace tuvx
       const ConstituentStatePolicy&               constituent_states,
       RadiationFieldPolicy&                       radiation_field) const
   {
-    constexpr double kLargest = 1.0e36;
-    constexpr double kPrecis  = 1.0e-7;
-    constexpr double kEps     = 1.0e-3;
+    constexpr double largest   = 1.0e36;
+    constexpr double precision = 1.0e-7;
+    constexpr double epsilon   = 1.0e-3;
 
     const std::size_t n_columns = solar_zenith_angles.size();
 
@@ -48,200 +49,207 @@ namespace tuvx
     const std::size_t n_layers      = vertical_grid.NumberOfSections();
     const std::size_t n_levels      = n_layers + 1;
     const std::size_t n_wavelengths = wavelength_grid.NumberOfSections();
-    const std::size_t mrows         = 2 * n_layers;
+    const std::size_t system_size   = 2 * n_layers;
 
     for (std::size_t col = 0; col < n_columns; ++col)
     {
-      const double mu = std::cos(static_cast<double>(solar_zenith_angles[col]));
+      const double cosine_solar_zenith = std::cos(static_cast<double>(solar_zenith_angles[col]));
 
-      // Collect altitude edges for this column (bottom-to-top)
       const std::size_t grid_col = (vertical_grid.NumberOfColumns() == 1) ? 0 : col;
       std::vector<double> altitude_edges(n_levels);
-      for (std::size_t lev = 0; lev < n_levels; ++lev)
-      {
-        altitude_edges[lev] = vertical_grid.edges_(lev, grid_col);
-      }
+      std::ranges::transform(
+          std::views::iota(std::size_t{ 0 }, n_levels),
+          altitude_edges.begin(),
+          [&](std::size_t lev) { return vertical_grid.edges_(lev, grid_col); });
 
-      SphericalGeometry sph_geom;
-      sph_geom.SetParameters(static_cast<double>(solar_zenith_angles[col]), altitude_edges);
+      SphericalGeometry geometry;
+      geometry.SetParameters(solar_zenith_angles[col], altitude_edges);
 
-      const std::size_t alb_col = (surface_albedo.mid_point_values_.Size2() == 1) ? 0 : col;
+      const std::size_t albedo_column = (surface_albedo.mid_point_values_.Size2() == 1) ? 0 : col;
 
       for (std::size_t wl = 0; wl < n_wavelengths; ++wl)
       {
-        const double rsfc = surface_albedo.mid_point_values_(wl, alb_col);
+        const double surface_reflectivity = surface_albedo.mid_point_values_(wl, albedo_column);
 
-        // Unpack optical properties for this column+wavelength (top-to-bottom)
-        std::vector<double> tauu(n_layers), omu(n_layers), gu(n_layers);
-        for (std::size_t layer = 0; layer < n_layers; ++layer)
-        {
-          tauu[layer] = constituent_states.optical_depth_(wl, layer, col);
-          omu[layer]  = constituent_states.single_scattering_albedo_(wl, layer, col);
-          gu[layer]   = constituent_states.asymmetry_parameter_(wl, layer, col);
-        }
-
-        // ── Delta-scaling ─────────────────────────────────────────────────
-        std::vector<double> gi(n_layers), omi(n_layers), taun(n_layers);
+        // ── Delta-scaling (Toon et al. 1989, Section 3) ───────────────────
+        std::vector<double> scaled_asymmetry(n_layers);
+        std::vector<double> scaled_single_scattering_albedo(n_layers);
+        std::vector<double> scaled_optical_depth(n_layers);
         for (std::size_t i = 0; i < n_layers; ++i)
         {
-          const double f = gu[i] * gu[i];
-          const double denom_g = 1.0 - f;
-          gi[i]   = (denom_g > 0.0) ? (gu[i] - f) / denom_g : 0.0;
-          const double denom_o = 1.0 - omu[i] * f;
-          omi[i]  = (denom_o > 0.0) ? (1.0 - f) * omu[i] / denom_o : 0.0;
-          taun[i] = (1.0 - omu[i] * f) * tauu[i];
+          const double g     = constituent_states.asymmetry_parameter_(wl, i, col);
+          const double omega = constituent_states.single_scattering_albedo_(wl, i, col);
+          const double tau   = constituent_states.optical_depth_(wl, i, col);
+          const double f            = g * g;
+          const double denom_g      = 1.0 - f;
+          const double denom_omega  = 1.0 - omega * f;
+          scaled_asymmetry[i]                = (denom_g > 0.0) ? (g - f) / denom_g : 0.0;
+          scaled_single_scattering_albedo[i] = (denom_omega > 0.0) ? (1.0 - f) * omega / denom_omega : 0.0;
+          scaled_optical_depth[i]            = denom_omega * tau;
         }
 
         // ── Cumulative and slant optical depths ───────────────────────────
-        std::vector<double> tauc(n_levels, 0.0);
-        std::vector<double> tausla(n_levels, 0.0);
-        // mu2[level]: effective cosine of the direct beam in the layer below
-        // that level; initialised to near-zero (large slant path).
-        std::vector<double> mu2(n_levels, 1.0 / std::sqrt(kLargest));
+        std::vector<double> cumulative_optical_depth(n_levels, 0.0);
+        std::vector<double> slant_optical_depths(n_levels, 0.0);
+        // effective_cosine[level]: effective cosine of the direct beam in the
+        // layer below that level; initialised to near-zero (large slant path).
+        std::vector<double> effective_cosine(n_levels, 1.0 / std::sqrt(largest));
 
-        if (mu < 0.0)
+        // For a below-horizon sun, the slant path at TOA is non-zero because the
+        // beam arrives from below; compute the initial slant optical depth there.
+        if (cosine_solar_zenith < 0.0)
         {
-          tausla[0] = SlantOpticalDepth(0, sph_geom.nid_[0], sph_geom.dsdh_[0], taun);
+          slant_optical_depths[0] = SlantOpticalDepth(
+              0, geometry.nid_[0], geometry.dsdh_[0], scaled_optical_depth);
         }
 
         // Per-layer intermediate arrays
-        std::vector<double> lam(n_layers), bgam(n_layers), mu1(n_layers);
+        std::vector<double> lambda(n_layers), gamma_ratio(n_layers), diffuse_cosine(n_layers);
         std::vector<double> e1(n_layers), e2(n_layers), e3(n_layers), e4(n_layers);
-        std::vector<double> cup(n_layers), cdn(n_layers);
-        std::vector<double> cuptn(n_layers), cdntn(n_layers);
+        std::vector<double> c_plus_top(n_layers), c_minus_top(n_layers);
+        std::vector<double> c_plus_bottom(n_layers), c_minus_bottom(n_layers);
 
         for (std::size_t i = 0; i < n_layers; ++i)
         {
           // Clamp to avoid singularities (Toon et al. eq. 16)
-          double g  = gi[i];
-          double om = omi[i];
-          const double tempg = std::min(std::abs(g), 1.0 - kPrecis);
-          g  = std::copysign(tempg, g);
-          om = std::min(om, 1.0 - kPrecis);
+          double g     = scaled_asymmetry[i];
+          double omega = scaled_single_scattering_albedo[i];
+          g     = std::copysign(std::min(std::abs(g), 1.0 - precision), g);
+          omega = std::min(omega, 1.0 - precision);
 
-          tauc[i + 1] = tauc[i] + taun[i];
+          cumulative_optical_depth[i + 1] = cumulative_optical_depth[i] + scaled_optical_depth[i];
 
-          tausla[i + 1] = SlantOpticalDepth(
-              i + 1, sph_geom.nid_[i + 1], sph_geom.dsdh_[i + 1], taun);
+          slant_optical_depths[i + 1] = SlantOpticalDepth(
+              i + 1, geometry.nid_[i + 1], geometry.dsdh_[i + 1], scaled_optical_depth);
 
-          if (sph_geom.nid_[i + 1] >= 0)
+          if (geometry.nid_[i + 1] >= 0)
           {
-            const double delta_tausla = tausla[i + 1] - tausla[i];
-            if (delta_tausla == 0.0)
+            const double delta_slant = slant_optical_depths[i + 1] - slant_optical_depths[i];
+            if (delta_slant == 0.0)
             {
-              mu2[i + 1] = std::sqrt(kLargest);
+              effective_cosine[i + 1] = std::sqrt(largest);
             }
             else
             {
-              mu2[i + 1] = (tauc[i + 1] - tauc[i]) / delta_tausla;
-              mu2[i + 1] = std::copysign(
-                  std::max(std::abs(mu2[i + 1]), 1.0 / std::sqrt(kLargest)), mu2[i + 1]);
+              effective_cosine[i + 1] =
+                  (cumulative_optical_depth[i + 1] - cumulative_optical_depth[i]) / delta_slant;
+              effective_cosine[i + 1] = std::copysign(
+                  std::max(std::abs(effective_cosine[i + 1]), 1.0 / std::sqrt(largest)),
+                  effective_cosine[i + 1]);
             }
           }
 
           // Eddington gamma coefficients (Toon et al. 1989, Table 1, row 2)
-          const double gam1 =  (7.0 - om * (4.0 + 3.0 * g)) / 4.0;
-          const double gam2 = -(1.0 - om * (4.0 - 3.0 * g)) / 4.0;
-          const double gam3 =  (2.0 - 3.0 * g * mu) / 4.0;
-          const double gam4 = 1.0 - gam3;
-          mu1[i] = 0.5;
+          const double gamma1 =  (7.0 - omega * (4.0 + 3.0 * g)) / 4.0;
+          const double gamma2 = -(1.0 - omega * (4.0 - 3.0 * g)) / 4.0;
+          const double gamma3 =  (2.0 - 3.0 * g * cosine_solar_zenith) / 4.0;
+          const double gamma4 = 1.0 - gamma3;
+          diffuse_cosine[i] = 0.5;  // Eddington approximation: <cos theta> = 1/2
 
-          lam[i]  = std::sqrt(gam1 * gam1 - gam2 * gam2);
-          bgam[i] = (gam2 != 0.0) ? (gam1 - lam[i]) / gam2 : 0.0;
+          lambda[i]     = std::sqrt(gamma1 * gamma1 - gamma2 * gamma2);
+          gamma_ratio[i] = (gamma2 != 0.0) ? (gamma1 - lambda[i]) / gamma2 : 0.0;
 
-          const double expon = std::exp(-lam[i] * taun[i]);
-          e1[i] = 1.0 + bgam[i] * expon;
-          e2[i] = 1.0 - bgam[i] * expon;
-          e3[i] = bgam[i] + expon;
-          e4[i] = bgam[i] - expon;
+          const double exp_decay = std::exp(-lambda[i] * scaled_optical_depth[i]);
+          e1[i] = 1.0 + gamma_ratio[i] * exp_decay;
+          e2[i] = 1.0 - gamma_ratio[i] * exp_decay;
+          e3[i] = gamma_ratio[i] + exp_decay;
+          e4[i] = gamma_ratio[i] - exp_decay;
 
           // Solar source functions C+ and C- (Toon et al. eqs. 23–24)
-          const double expon0 = std::exp(-tausla[i]);
-          const double expon1 = std::exp(-tausla[i + 1]);
+          const double beam_at_top    = std::exp(-slant_optical_depths[i]);
+          const double beam_at_bottom = std::exp(-slant_optical_depths[i + 1]);
 
-          double divisr = lam[i] * lam[i] - 1.0 / (mu2[i + 1] * mu2[i + 1]);
-          divisr = std::copysign(std::max(kEps, std::abs(divisr)), divisr);
+          double divisor = lambda[i] * lambda[i] - 1.0 / (effective_cosine[i + 1] * effective_cosine[i + 1]);
+          divisor = std::copysign(std::max(epsilon, std::abs(divisor)), divisor);
 
-          const double up = om * ((gam1 - 1.0 / mu2[i + 1]) * gam3 + gam4 * gam2) / divisr;
-          const double dn = om * ((gam1 + 1.0 / mu2[i + 1]) * gam4 + gam2 * gam3) / divisr;
+          const double upward_amplitude   = omega * ((gamma1 - 1.0 / effective_cosine[i + 1]) * gamma3 + gamma4 * gamma2) / divisor;
+          const double downward_amplitude = omega * ((gamma1 + 1.0 / effective_cosine[i + 1]) * gamma4 + gamma2 * gamma3) / divisor;
 
-          cup[i]   = up * expon0;
-          cdn[i]   = dn * expon0;
-          cuptn[i] = up * expon1;
-          cdntn[i] = dn * expon1;
+          c_plus_top[i]    = upward_amplitude * beam_at_top;
+          c_minus_top[i]   = downward_amplitude * beam_at_top;
+          c_plus_bottom[i] = upward_amplitude * beam_at_bottom;
+          c_minus_bottom[i] = downward_amplitude * beam_at_bottom;
         }
 
         // ── Assemble tridiagonal system (Toon et al. eqs. 39–43) ──────────
-        const double ssfc = rsfc * mu * std::exp(-tausla[n_layers]);
+        const double surface_solar_source =
+            surface_reflectivity * cosine_solar_zenith * std::exp(-slant_optical_depths[n_layers]);
 
-        TridiagonalMatrix<double> tri(mrows);
-        Array1D<double>           rhs(mrows);
+        TridiagonalMatrix<double> tridiagonal(system_size);
+        Array1D<double>           rhs(system_size);
 
         // Top boundary: zero diffuse incidence (Toon et al. eq. 39)
-        tri.main_diagonal_[0]  = e1[0];
-        tri.upper_diagonal_[0] = -e2[0];
-        rhs[0]                 = -cdn[0];  // fdn0 = 0
+        tridiagonal.main_diagonal_[0]  = e1[0];
+        tridiagonal.upper_diagonal_[0] = -e2[0];
+        rhs[0]                         = -c_minus_top[0];
 
         // Interior rows: flux continuity at layer interfaces
         for (std::size_t k = 0; k < n_layers - 1; ++k)
         {
-          const std::size_t row_e = 2 * k + 1;
-          tri.lower_diagonal_[row_e - 1] = e2[k + 1] * e1[k] - e3[k] * e4[k + 1];
-          tri.main_diagonal_[row_e]      = e2[k] * e2[k + 1] - e4[k] * e4[k + 1];
-          tri.upper_diagonal_[row_e]     = e1[k + 1] * e4[k + 1] - e2[k + 1] * e3[k + 1];
-          rhs[row_e] = (cup[k + 1] - cuptn[k]) * e2[k + 1]
-                     - (cdn[k + 1] - cdntn[k]) * e4[k + 1];
+          const std::size_t even_row = 2 * k + 1;
+          tridiagonal.lower_diagonal_[even_row - 1] = e2[k + 1] * e1[k] - e3[k] * e4[k + 1];
+          tridiagonal.main_diagonal_[even_row]      = e2[k] * e2[k + 1] - e4[k] * e4[k + 1];
+          tridiagonal.upper_diagonal_[even_row]     = e1[k + 1] * e4[k + 1] - e2[k + 1] * e3[k + 1];
+          rhs[even_row] = (c_plus_top[k + 1] - c_plus_bottom[k]) * e2[k + 1]
+                        - (c_minus_top[k + 1] - c_minus_bottom[k]) * e4[k + 1];
 
-          const std::size_t row_o = 2 * k + 2;
-          tri.lower_diagonal_[row_o - 1] = e2[k] * e3[k] - e4[k] * e1[k];
-          tri.main_diagonal_[row_o]      = e1[k] * e1[k + 1] - e3[k] * e3[k + 1];
-          tri.upper_diagonal_[row_o]     = e3[k] * e4[k + 1] - e1[k] * e2[k + 1];
-          rhs[row_o] = e3[k] * (cup[k + 1] - cuptn[k])
-                     + e1[k] * (cdntn[k] - cdn[k + 1]);
+          const std::size_t odd_row = 2 * k + 2;
+          tridiagonal.lower_diagonal_[odd_row - 1] = e2[k] * e3[k] - e4[k] * e1[k];
+          tridiagonal.main_diagonal_[odd_row]      = e1[k] * e1[k + 1] - e3[k] * e3[k + 1];
+          tridiagonal.upper_diagonal_[odd_row]     = e3[k] * e4[k + 1] - e1[k] * e2[k + 1];
+          rhs[odd_row] = e3[k] * (c_plus_top[k + 1] - c_plus_bottom[k])
+                       + e1[k] * (c_minus_bottom[k] - c_minus_top[k + 1]);
         }
 
         // Bottom boundary: surface albedo condition (Toon et al. eq. 43)
-        tri.lower_diagonal_[mrows - 2] = e1[n_layers - 1] - rsfc * e3[n_layers - 1];
-        tri.main_diagonal_[mrows - 1]  = e2[n_layers - 1] - rsfc * e4[n_layers - 1];
-        rhs[mrows - 1] = ssfc - cuptn[n_layers - 1] + rsfc * cdntn[n_layers - 1];
+        tridiagonal.lower_diagonal_[system_size - 2] =
+            e1[n_layers - 1] - surface_reflectivity * e3[n_layers - 1];
+        tridiagonal.main_diagonal_[system_size - 1] =
+            e2[n_layers - 1] - surface_reflectivity * e4[n_layers - 1];
+        rhs[system_size - 1] =
+            surface_solar_source - c_plus_bottom[n_layers - 1] + surface_reflectivity * c_minus_bottom[n_layers - 1];
 
-        tuvx::Solve(tri, rhs);  // solution overwrites rhs (renamed y below for clarity)
-        const Array1D<double>& y = rhs;
+        tuvx::Solve(tridiagonal, rhs);
+        const Array1D<double>& solution = rhs;
 
         // ── Back-substitute: compute fluxes (internal top-to-bottom order) ─
-        std::vector<double> edr(n_levels), eup_v(n_levels), edn_v(n_levels);
-        std::vector<double> fdr(n_levels), fup_v(n_levels), fdn_v(n_levels);
+        std::vector<double> direct_irradiance(n_levels);
+        std::vector<double> upwelling_irradiance(n_levels);
+        std::vector<double> downwelling_irradiance(n_levels);
+        std::vector<double> direct_actinic_flux(n_levels);
+        std::vector<double> upwelling_actinic_flux(n_levels);
+        std::vector<double> downwelling_actinic_flux(n_levels);
 
         // Level 0 = TOA
-        fdr[0]   = std::exp(-tausla[0]);
-        edr[0]   = mu * fdr[0];
-        edn_v[0] = 0.0;
-        eup_v[0] = y[0] * e3[0] - y[1] * e4[0] + cup[0];
-        fdn_v[0] = edn_v[0] / mu1[0];
-        fup_v[0] = eup_v[0] / mu1[0];
+        direct_actinic_flux[0]      = std::exp(-slant_optical_depths[0]);
+        direct_irradiance[0]        = cosine_solar_zenith * direct_actinic_flux[0];
+        downwelling_irradiance[0]   = 0.0;
+        upwelling_irradiance[0]     = solution[0] * e3[0] - solution[1] * e4[0] + c_plus_top[0];
+        downwelling_actinic_flux[0] = downwelling_irradiance[0] / diffuse_cosine[0];
+        upwelling_actinic_flux[0]   = upwelling_irradiance[0] / diffuse_cosine[0];
 
         for (std::size_t lev = 1; lev <= n_layers; ++lev)
         {
-          const std::size_t j       = lev - 1;  // 0-based layer
-          const std::size_t row_idx = 2 * j;    // index into y
-          fdr[lev]   = std::exp(-tausla[lev]);
-          edr[lev]   = mu * fdr[lev];
-          edn_v[lev] = y[row_idx] * e3[j] + y[row_idx + 1] * e4[j] + cdntn[j];
-          eup_v[lev] = y[row_idx] * e1[j] + y[row_idx + 1] * e2[j] + cuptn[j];
-          fdn_v[lev] = edn_v[lev] / mu1[j];
-          fup_v[lev] = eup_v[lev] / mu1[j];
+          const std::size_t layer   = lev - 1;
+          const std::size_t row_idx = 2 * layer;
+          direct_actinic_flux[lev]      = std::exp(-slant_optical_depths[lev]);
+          direct_irradiance[lev]        = cosine_solar_zenith * direct_actinic_flux[lev];
+          downwelling_irradiance[lev]   = solution[row_idx] * e3[layer] + solution[row_idx + 1] * e4[layer] + c_minus_bottom[layer];
+          upwelling_irradiance[lev]     = solution[row_idx] * e1[layer] + solution[row_idx + 1] * e2[layer] + c_plus_bottom[layer];
+          downwelling_actinic_flux[lev] = downwelling_irradiance[lev] / diffuse_cosine[layer];
+          upwelling_actinic_flux[lev]   = upwelling_irradiance[lev] / diffuse_cosine[layer];
         }
 
         // ── Write results reversed to bottom-to-top convention ─────────────
         for (std::size_t lev = 0; lev <= n_layers; ++lev)
         {
-          const std::size_t out = n_layers - lev;  // flip: internal 0→out n_layers
-          radiation_field.spectral_irradiance_.direct_(wl, out, col)      = edr[lev];
-          radiation_field.spectral_irradiance_.upwelling_(wl, out, col)   = eup_v[lev];
-          radiation_field.spectral_irradiance_.downwelling_(wl, out, col) = edn_v[lev];
-          radiation_field.actinic_flux_.direct_(wl, out, col)             = fdr[lev];
-          radiation_field.actinic_flux_.upwelling_(wl, out, col)          = fup_v[lev];
-          radiation_field.actinic_flux_.downwelling_(wl, out, col)        = fdn_v[lev];
+          const std::size_t out_level = n_layers - lev;
+          radiation_field.spectral_irradiance_.direct_(wl, out_level, col)      = direct_irradiance[lev];
+          radiation_field.spectral_irradiance_.upwelling_(wl, out_level, col)   = upwelling_irradiance[lev];
+          radiation_field.spectral_irradiance_.downwelling_(wl, out_level, col) = downwelling_irradiance[lev];
+          radiation_field.actinic_flux_.direct_(wl, out_level, col)             = direct_actinic_flux[lev];
+          radiation_field.actinic_flux_.upwelling_(wl, out_level, col)          = upwelling_actinic_flux[lev];
+          radiation_field.actinic_flux_.downwelling_(wl, out_level, col)        = downwelling_actinic_flux[lev];
         }
       }  // wavelength loop
     }  // column loop
