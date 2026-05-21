@@ -6,8 +6,8 @@
 
 #include <tuvx/grid.hpp>
 #include <tuvx/profile.hpp>
-#include <tuvx/radiative_transfer/radiation_field.hpp>
 #include <tuvx/radiative_transfer/constituent.hpp>
+#include <tuvx/radiative_transfer/radiation_field.hpp>
 
 #include <cassert>
 #include <cstddef>
