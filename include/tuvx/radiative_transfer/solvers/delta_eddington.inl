@@ -122,7 +122,7 @@ namespace tuvx
           slant_optical_depths[i + 1] = SlantOpticalDepth(
               i + 1, geometry.nid_[i + 1], geometry.dsdh_[i + 1], scaled_optical_depth);
 
-          if (geometry.nid_[i + 1] >= 0)
+          if (geometry.nid_[i + 1].has_value())
           {
             const double delta_slant = slant_optical_depths[i + 1] - slant_optical_depths[i];
             if (delta_slant == 0.0)

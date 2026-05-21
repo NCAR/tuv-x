@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstddef>
 #include <limits>
+#include <optional>
 #include <vector>
 
 namespace tuvx
@@ -33,8 +34,8 @@ namespace tuvx
   struct SphericalGeometry
   {
     /// Number of layers crossed by the direct beam at each level (0 = TOA).
-    /// A value < 0 means the level is below the tangent height (no direct beam).
-    std::vector<int> nid_;
+    /// @c std::nullopt means the level is below the tangent height (no direct beam).
+    std::vector<std::optional<std::size_t>> nid_;
 
     /// Slant-path / vertical-depth ratio for each (level, layer) pair.
     /// @c dsdh_[level][layer] is the ratio for the direct beam reaching @c level
@@ -54,14 +55,14 @@ namespace tuvx
   ///
   /// @param level Level index (0 = TOA). Layers 0..level-1 lie above this level.
   /// @param n_layers_crossed Layers crossed by the beam (SphericalGeometry::nid_
-  ///        at this level). Negative → level below tangent height; returns infinity.
+  ///        at this level). @c std::nullopt → level below tangent height; returns infinity.
   /// @param slant_path Per-layer slant/vertical ratios at this level
   ///        (SphericalGeometry::dsdh_[level]), ordered top-to-bottom, 0-based.
   /// @param optical_depth Scaled layer optical depths, ordered top-to-bottom.
   /// @return Total slant-path optical depth.
   double SlantOpticalDepth(
       std::size_t level,
-      int n_layers_crossed,
+      std::optional<std::size_t> n_layers_crossed,
       const std::vector<double>& slant_path,
       const std::vector<double>& optical_depth);
 
@@ -87,55 +88,54 @@ namespace tuvx
       altitude_from_toa[idx] = altitude_edges[n_layers - idx] - surface_elevation;
     }
 
-    nid_.assign(n_layers + 1, 0);
+    nid_.assign(n_layers + 1, std::nullopt);
     dsdh_.assign(n_layers + 1, std::vector<double>(n_layers, 0.0));
 
     // Returns the number of layers the direct beam crosses to reach 'level',
-    // or -1 if the level is below the tangent height. Captures shared geometry.
-    auto find_layers_crossed = [&](std::size_t level) -> int
+    // or nullopt if the level is below the tangent height. Captures shared geometry.
+    auto find_layers_crossed = [&](std::size_t level) -> std::optional<std::size_t>
     {
       const double impact_parameter = (earth_radius_at_surface + altitude_from_toa[level]) * sin_sza;
       if (!above_horizon && impact_parameter < earth_radius_at_surface)
       {
-        return -1;
+        return std::nullopt;
       }
       if (above_horizon)
       {
-        return static_cast<int>(level);
+        return level;
       }
       for (std::size_t j = 1; j <= n_layers; ++j)
       {
         if (impact_parameter <  altitude_from_toa[j - 1] + earth_radius_at_surface &&
             impact_parameter >= altitude_from_toa[j]     + earth_radius_at_surface)
         {
-          return static_cast<int>(j);
+          return j;
         }
       }
-      return -1;
+      return std::nullopt;
     };
 
     // Fills dsdh_[level] with slant/vertical-depth ratios. Reads nid_[level].
     auto compute_slant_ratios = [&](std::size_t level)
     {
-      const double impact_parameter = (earth_radius_at_surface + altitude_from_toa[level]) * sin_sza;
-      const int    layers_crossed   = nid_[level];
-      for (int j = 1; j <= layers_crossed; ++j)
+      const double      impact_parameter = (earth_radius_at_surface + altitude_from_toa[level]) * sin_sza;
+      const std::size_t layers_crossed   = nid_[level].value();
+      for (std::size_t j = 1; j <= layers_crossed; ++j)
       {
-        const auto   jj              = static_cast<std::size_t>(j);
-        const double radius_upper    = earth_radius_at_surface + altitude_from_toa[jj - 1];
-        const double radius_lower    = earth_radius_at_surface + altitude_from_toa[jj];
-        const double layer_thickness = altitude_from_toa[jj - 1] - altitude_from_toa[jj];
+        const double radius_upper    = earth_radius_at_surface + altitude_from_toa[j - 1];
+        const double radius_lower    = earth_radius_at_surface + altitude_from_toa[j];
+        const double layer_thickness = altitude_from_toa[j - 1] - altitude_from_toa[j];
         const double upper_term      = std::max(0.0, radius_upper * radius_upper - impact_parameter * impact_parameter);
         const double lower_term      = std::max(0.0, radius_lower * radius_lower - impact_parameter * impact_parameter);
         // The tangent-ray layer contributes negatively when SZA > 90°: the beam
         // enters and exits on the same side of the layer.
         const double path_sign =
-            (j == layers_crossed && layers_crossed == static_cast<int>(level) && !above_horizon)
+            (j == layers_crossed && layers_crossed == level && !above_horizon)
             ? -1.0 : 1.0;
         const double slant_path_length = path_sign * (std::sqrt(upper_term) - std::sqrt(lower_term));
         if (layer_thickness > 0.0)
         {
-          dsdh_[level][jj - 1] = slant_path_length / layer_thickness;
+          dsdh_[level][j - 1] = slant_path_length / layer_thickness;
         }
       }
     };
@@ -143,7 +143,7 @@ namespace tuvx
     for (std::size_t i = 0; i <= n_layers; ++i)
     {
       nid_[i] = find_layers_crossed(i);
-      if (nid_[i] >= 0)
+      if (nid_[i].has_value())
       {
         compute_slant_ratios(i);
       }
@@ -151,25 +151,24 @@ namespace tuvx
   }
 
   inline double SlantOpticalDepth(
-      std::size_t               level,
-      int                       n_layers_crossed,
+      std::size_t                level,
+      std::optional<std::size_t> n_layers_crossed,
       const std::vector<double>& slant_path,
       const std::vector<double>& optical_depth)
   {
-    if (n_layers_crossed < 0)
+    if (!n_layers_crossed.has_value())
     {
       return std::numeric_limits<double>::infinity();
     }
-    double    result             = 0.0;
-    const int direct_path_layers = std::min(n_layers_crossed, static_cast<int>(level));
-    for (int j = 0; j < direct_path_layers; ++j)
+    double            result             = 0.0;
+    const std::size_t direct_path_layers = std::min(n_layers_crossed.value(), level);
+    for (std::size_t j = 0; j < direct_path_layers; ++j)
     {
-      result += optical_depth[static_cast<std::size_t>(j)] * slant_path[static_cast<std::size_t>(j)];
+      result += optical_depth[j] * slant_path[j];
     }
-    for (int j = direct_path_layers; j < n_layers_crossed; ++j)
+    for (std::size_t j = direct_path_layers; j < n_layers_crossed.value(); ++j)
     {
-      result +=
-          2.0 * optical_depth[static_cast<std::size_t>(j)] * slant_path[static_cast<std::size_t>(j)];
+      result += 2.0 * optical_depth[j] * slant_path[j];
     }
     return result;
   }

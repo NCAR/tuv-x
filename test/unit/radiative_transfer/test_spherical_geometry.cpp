@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 
 #include <cmath>
+#include <optional>
 #include <vector>
 
 // For overhead sun (SZA = 0), dsdh(level, layer) is analytically exactly 1.0
@@ -22,7 +23,7 @@ TEST(SphericalGeometry, OverheadSunDsdh)
   // At SZA=0, nid[i] = i for all levels
   for (std::size_t i = 0; i <= n_layers; ++i)
   {
-    EXPECT_EQ(geom.nid_[i], static_cast<int>(i)) << "level " << i;
+    EXPECT_EQ(geom.nid_[i], std::optional<std::size_t>(i)) << "level " << i;
   }
   // dsdh[i][j] = 1.0 for j < i (layers above level i)
   for (std::size_t i = 1; i <= n_layers; ++i)
@@ -59,13 +60,12 @@ TEST(SphericalGeometry, SlantOpticalDepthOverheadSun)
       tuvx::SlantOpticalDepth(3, geom.nid_[3], geom.dsdh_[3], taun), 0.6, 1.0e-10);
 }
 
-// nid < 0 (below tangent height) returns the sentinel infinity value.
+// nullopt nid (below tangent height) returns infinity.
 TEST(SphericalGeometry, SlantOpticalDepthBelowTangentHeight)
 {
   std::vector<double> taun   = { 0.1 };
   std::vector<double> slpath = { 1.0 };
-  // Simulate a level below the tangent height by passing nid = -1
-  double result = tuvx::SlantOpticalDepth(0, -1, slpath, taun);
+  double result = tuvx::SlantOpticalDepth(0, std::nullopt, slpath, taun);
   EXPECT_TRUE(std::isinf(result));
 }
 
@@ -75,5 +75,5 @@ TEST(SphericalGeometry, SlantOpticalDepthAtToa)
   std::vector<double> taun   = { 0.5, 0.3 };
   std::vector<double> slpath = { 1.0, 1.0 };
   // nid[0] = 0 for overhead sun → no layers crossed → path = 0
-  EXPECT_DOUBLE_EQ(tuvx::SlantOpticalDepth(0, 0, slpath, taun), 0.0);
+  EXPECT_DOUBLE_EQ(tuvx::SlantOpticalDepth(0, std::size_t{ 0 }, slpath, taun), 0.0);
 }
