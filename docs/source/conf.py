@@ -69,13 +69,19 @@ breathe_projects = {
     'tuvx': DOXYGEN_XML_DIR,
 }
 
+templates_path = ['_templates']
 exclude_patterns = []
 
 html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'github_url': 'https://github.com/NCAR/tuv-x',
     'navbar_end': ['navbar-icon-links'],
+    'pygment_light_style': 'tango',
+    'pygment_dark_style': 'monokai',
 }
+
+html_css_files = ['custom.css']
+html_static_path = ['_static']
 
 
 def setup(app):
