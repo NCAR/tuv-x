@@ -74,13 +74,13 @@ namespace tuvx
     static constexpr double earth_radius = 6.371e6;
     static constexpr double half_pi      = M_PI / 2.0;
 
-    const std::size_t n_layers         = altitude_edges.size() - 1;
-    const double      surface_elevation = altitude_edges[0];
+    const std::size_t n_layers               = altitude_edges.size() - 1;
+    const double      surface_elevation      = altitude_edges[0];
     const double      earth_radius_at_surface = earth_radius + surface_elevation;
-    const bool        above_horizon    = (solar_zenith_angle <= half_pi);
-    const double      sin_sza          = std::sin(solar_zenith_angle);
+    const bool        above_horizon          = (solar_zenith_angle <= half_pi);
+    const double      sin_sza               = std::sin(solar_zenith_angle);
 
-    // Reorder altitudes top-to-bottom: altitude_from_toa[0] = TOA, [n_layers] = ground level
+    // Reorder altitudes top-to-bottom: altitude_from_toa[0] = TOA, [n_layers] = ground
     std::vector<double> altitude_from_toa(n_layers + 1);
     for (std::size_t idx = 0; idx <= n_layers; ++idx)
     {
@@ -90,55 +90,63 @@ namespace tuvx
     nid_.assign(n_layers + 1, 0);
     dsdh_.assign(n_layers + 1, std::vector<double>(n_layers, 0.0));
 
-    for (std::size_t i = 0; i <= n_layers; ++i)
+    // Returns the number of layers the direct beam crosses to reach 'level',
+    // or -1 if the level is below the tangent height. Captures shared geometry.
+    auto find_layers_crossed = [&](std::size_t level) -> int
     {
-      const double impact_parameter = (earth_radius_at_surface + altitude_from_toa[i]) * sin_sza;
-
-      // Sentinel: -1 means this level is below the tangent height (no direct beam)
-      int layers_crossed = 0;
+      const double impact_parameter = (earth_radius_at_surface + altitude_from_toa[level]) * sin_sza;
       if (!above_horizon && impact_parameter < earth_radius_at_surface)
       {
-        layers_crossed = -1;
+        return -1;
       }
-      else
+      if (above_horizon)
       {
-        layers_crossed = static_cast<int>(i);
-        if (!above_horizon)
+        return static_cast<int>(level);
+      }
+      for (std::size_t j = 1; j <= n_layers; ++j)
+      {
+        if (impact_parameter <  altitude_from_toa[j - 1] + earth_radius_at_surface &&
+            impact_parameter >= altitude_from_toa[j]     + earth_radius_at_surface)
         {
-          layers_crossed = -1;
-          for (std::size_t j = 1; j <= n_layers; ++j)
-          {
-            if (impact_parameter < altitude_from_toa[j - 1] + earth_radius_at_surface &&
-                impact_parameter >= altitude_from_toa[j] + earth_radius_at_surface)
-            {
-              layers_crossed = static_cast<int>(j);
-            }
-          }
-        }
-        for (int j = 1; j <= layers_crossed; ++j)
-        {
-          double       path_sign     = 1.0;
-          const double radius_upper  = earth_radius_at_surface + altitude_from_toa[j - 1];
-          const double radius_lower  = earth_radius_at_surface + altitude_from_toa[static_cast<std::size_t>(j)];
-          const double layer_thickness = altitude_from_toa[j - 1] - altitude_from_toa[static_cast<std::size_t>(j)];
-          const double upper_term    = std::max(0.0, radius_upper * radius_upper - impact_parameter * impact_parameter);
-          const double lower_term    = std::max(0.0, radius_lower * radius_lower - impact_parameter * impact_parameter);
-
-          // For the tangent-ray layer when zenith > 90°, the beam enters and
-          // exits on the same side, so the path contribution is subtracted.
-          if (j == layers_crossed && layers_crossed == static_cast<int>(i) && !above_horizon)
-          {
-            path_sign = -1.0;
-          }
-
-          const double slant_path_length = path_sign * (std::sqrt(upper_term) - std::sqrt(lower_term));
-          if (layer_thickness > 0.0)
-          {
-            dsdh_[i][static_cast<std::size_t>(j) - 1] = slant_path_length / layer_thickness;
-          }
+          return static_cast<int>(j);
         }
       }
-      nid_[i] = layers_crossed;
+      return -1;
+    };
+
+    // Fills dsdh_[level] with slant/vertical-depth ratios. Reads nid_[level].
+    auto compute_slant_ratios = [&](std::size_t level)
+    {
+      const double impact_parameter = (earth_radius_at_surface + altitude_from_toa[level]) * sin_sza;
+      const int    layers_crossed   = nid_[level];
+      for (int j = 1; j <= layers_crossed; ++j)
+      {
+        const auto   jj              = static_cast<std::size_t>(j);
+        const double radius_upper    = earth_radius_at_surface + altitude_from_toa[jj - 1];
+        const double radius_lower    = earth_radius_at_surface + altitude_from_toa[jj];
+        const double layer_thickness = altitude_from_toa[jj - 1] - altitude_from_toa[jj];
+        const double upper_term      = std::max(0.0, radius_upper * radius_upper - impact_parameter * impact_parameter);
+        const double lower_term      = std::max(0.0, radius_lower * radius_lower - impact_parameter * impact_parameter);
+        // The tangent-ray layer contributes negatively when SZA > 90°: the beam
+        // enters and exits on the same side of the layer.
+        const double path_sign =
+            (j == layers_crossed && layers_crossed == static_cast<int>(level) && !above_horizon)
+            ? -1.0 : 1.0;
+        const double slant_path_length = path_sign * (std::sqrt(upper_term) - std::sqrt(lower_term));
+        if (layer_thickness > 0.0)
+        {
+          dsdh_[level][jj - 1] = slant_path_length / layer_thickness;
+        }
+      }
+    };
+
+    for (std::size_t i = 0; i <= n_layers; ++i)
+    {
+      nid_[i] = find_layers_crossed(i);
+      if (nid_[i] >= 0)
+      {
+        compute_slant_ratios(i);
+      }
     }
   }
 
