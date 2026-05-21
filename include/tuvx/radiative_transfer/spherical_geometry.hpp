@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstddef>
 #include <limits>
+#include <numbers>
 #include <optional>
 #include <vector>
 
@@ -60,7 +61,7 @@ namespace tuvx
   ///        (SphericalGeometry::dsdh_[level]), ordered top-to-bottom, 0-based.
   /// @param optical_depth Scaled layer optical depths, ordered top-to-bottom.
   /// @return Total slant-path optical depth.
-  double SlantOpticalDepth(
+  [[nodiscard]] double SlantOpticalDepth(
       std::size_t level,
       std::optional<std::size_t> n_layers_crossed,
       const std::vector<double>& slant_path,
@@ -73,7 +74,7 @@ namespace tuvx
       const std::vector<double>& altitude_edges)
   {
     static constexpr double earth_radius = 6.371e6;
-    static constexpr double half_pi      = M_PI / 2.0;
+    static constexpr double half_pi      = std::numbers::pi / 2.0;
 
     const std::size_t n_layers               = altitude_edges.size() - 1;
     const double      surface_elevation      = altitude_edges[0];

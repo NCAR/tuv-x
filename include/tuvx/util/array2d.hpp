@@ -63,6 +63,15 @@ namespace tuvx
       return data_.end();
     }
 
+    T* Data()
+    {
+      return data_.data();
+    }
+    const T* Data() const
+    {
+      return data_.data();
+    }
+
     [[nodiscard]] std::vector<T> &AsVector()
     {
       return data_;

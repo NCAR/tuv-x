@@ -1,4 +1,5 @@
 
+#include <cmath>
 #include <random>
 namespace tuvx
 {
@@ -53,7 +54,7 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(Array1D<T> &x, const unsigned &seed)
+  inline void FillRandom(Array1D<T> &x, unsigned seed)
   {
     std::mt19937 random_device(seed);
     std::normal_distribution<double> distribution(5.0, 1.0);
@@ -64,11 +65,11 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, const bool &make_diagonally_dominant)
+  inline void FillRandom(TridiagonalMatrix<T> &A, unsigned seed, bool make_diagonally_dominant)
   {
     FillRandom<T>(A.main_diagonal_, seed);
-    FillRandom<T>(A.lower_diagonal_, seed);
-    FillRandom<T>(A.upper_diagonal_, seed);
+    FillRandom<T>(A.lower_diagonal_, seed + 1);
+    FillRandom<T>(A.upper_diagonal_, seed + 2);
 
     if (make_diagonally_dominant)
     {
@@ -99,9 +100,13 @@ namespace tuvx
     T error = 0;
     for (std::size_t i = 0; i < x.Size(); i++)
     {
-      error += (std::abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.Size();
+      const T denom = std::max(std::abs(x[i]), std::abs(x_approx[i]));
+      if (denom > T{ 0 })
+      {
+        error += std::abs(x[i] - x_approx[i]) / denom;
+      }
     }
-    return error;
+    return error / static_cast<T>(x.Size());
   }
 
   template<typename T>

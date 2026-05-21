@@ -31,7 +31,7 @@ namespace tuvx
     /// @param vertical_grid Vertical grid.
     /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
-    RadiationFieldComponents(std::size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
+    RadiationFieldComponents(std::size_t number_of_columns, const GridPolicy& vertical_grid, const GridPolicy& wavelength_grid)
         : direct_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(), number_of_columns),
           upwelling_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(), number_of_columns),
           downwelling_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfEdges(), number_of_columns)
@@ -53,7 +53,7 @@ namespace tuvx
     /// @param vertical_grid Vertical grid.
     /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
-    RadiationField(std::size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
+    RadiationField(std::size_t number_of_columns, const GridPolicy& vertical_grid, const GridPolicy& wavelength_grid)
         : spectral_irradiance_(number_of_columns, vertical_grid, wavelength_grid),
           actinic_flux_(number_of_columns, vertical_grid, wavelength_grid)
     {

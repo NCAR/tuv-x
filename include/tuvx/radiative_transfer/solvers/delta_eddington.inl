@@ -63,7 +63,7 @@ namespace tuvx
           [&](std::size_t lev) { return vertical_grid.edges_(lev, grid_col); });
 
       SphericalGeometry geometry;
-      geometry.SetParameters(solar_zenith_angles[col], altitude_edges);
+      geometry.SetParameters(static_cast<double>(solar_zenith_angles[col]), altitude_edges);
 
       const std::size_t albedo_column = (surface_albedo.mid_point_values_.Size2() == 1) ? 0 : col;
 
