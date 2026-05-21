@@ -20,3 +20,6 @@ GENERATE_XML           = YES
 
 QUIET                  = YES
 WARN_IF_UNDOCUMENTED   = NO
+
+ALIASES += "rst=\verbatim embed:rst:leading-asterisk"
+ALIASES += "endrst=\endverbatim"

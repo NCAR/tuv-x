@@ -10,6 +10,7 @@ Documentation will be expanded as the API stabilizes through each implementation
 
    getting_started
    api/index
+   citing_and_bibliography/index
 
 Current C++ Components
 ----------------------

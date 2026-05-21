@@ -20,6 +20,12 @@ namespace tuvx
 
   /// @brief Radiative flux calculator that applies the delta-Eddington Approximation.
   ///
+  /// \rst
+  /// Solves the two-stream radiative transfer equations following :cite:`Toon1989`.
+  /// Spherical-geometry corrections use the slant-path formulation of
+  /// :cite:`DahlbackStamnes1991`.
+  /// \endrst
+  ///
   /// [DEV NOTES] We can determine whether this should be a class or a set of functions
   class DeltaEddington
   {

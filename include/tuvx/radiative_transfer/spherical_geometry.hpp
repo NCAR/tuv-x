@@ -18,8 +18,11 @@ namespace tuvx
   ///
   /// Computes the ratio of slant-path length to vertical layer depth for the
   /// direct solar beam through each atmospheric layer, accounting for Earth's
-  /// curvature. Based on Dahlback and Stamnes (1991),
-  /// doi:10.1016/0032-0633(91)90061-E.
+  /// curvature.
+  ///
+  /// \rst
+  /// Algorithm from :cite:`DahlbackStamnes1991`.
+  /// \endrst
   ///
   /// Index conventions:
   ///   - Level index 0 = top of atmosphere (TOA); level n_layers = ground.

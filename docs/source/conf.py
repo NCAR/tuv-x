@@ -58,7 +58,11 @@ extensions = [
     'breathe',
     'sphinx_copybutton',
     'sphinx_design',
+    'sphinxcontrib.bibtex',
 ]
+
+bibtex_bibfiles = ['references.bib']
+suppress_warnings = ['bibtex.missing_field']
 
 breathe_default_project = 'tuvx'
 breathe_projects = {
