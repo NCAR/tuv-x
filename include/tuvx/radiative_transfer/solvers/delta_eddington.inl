@@ -36,9 +36,9 @@ namespace tuvx
       const ConstituentStatePolicy&               constituent_states,
       RadiationFieldPolicy&                       radiation_field) const
   {
-    constexpr double largest   = 1.0e36;
-    constexpr double precision = 1.0e-7;
-    constexpr double epsilon   = 1.0e-3;
+    constexpr double large_cosine_sentinel = 1.0e36;  // sqrt-safe large value for effective_cosine
+    constexpr double singularity_guard     = 1.0e-7;  // keeps g < 1 and omega < 1 (Toon eq. 16)
+    constexpr double source_divisor_floor  = 1.0e-3;  // prevents near-resonance zero divisor (Toon eqs. 23-24)
 
     const std::size_t n_columns = solar_zenith_angles.size();
 
@@ -93,7 +93,7 @@ namespace tuvx
         std::vector<double> slant_optical_depths(n_levels, 0.0);
         // effective_cosine[level]: effective cosine of the direct beam in the
         // layer below that level; initialised to near-zero (large slant path).
-        std::vector<double> effective_cosine(n_levels, 1.0 / std::sqrt(largest));
+        std::vector<double> effective_cosine(n_levels, 1.0 / std::sqrt(large_cosine_sentinel));
 
         // For a below-horizon sun, the slant path at TOA is non-zero because the
         // beam arrives from below; compute the initial slant optical depth there.
@@ -114,8 +114,8 @@ namespace tuvx
           // Clamp to avoid singularities (Toon et al. eq. 16)
           double g     = scaled_asymmetry[i];
           double omega = scaled_single_scattering_albedo[i];
-          g     = std::copysign(std::min(std::abs(g), 1.0 - precision), g);
-          omega = std::min(omega, 1.0 - precision);
+          g     = std::copysign(std::min(std::abs(g), 1.0 - singularity_guard), g);
+          omega = std::min(omega, 1.0 - singularity_guard);
 
           cumulative_optical_depth[i + 1] = cumulative_optical_depth[i] + scaled_optical_depth[i];
 
@@ -127,14 +127,14 @@ namespace tuvx
             const double delta_slant = slant_optical_depths[i + 1] - slant_optical_depths[i];
             if (delta_slant == 0.0)
             {
-              effective_cosine[i + 1] = std::sqrt(largest);
+              effective_cosine[i + 1] = std::sqrt(large_cosine_sentinel);
             }
             else
             {
               effective_cosine[i + 1] =
                   (cumulative_optical_depth[i + 1] - cumulative_optical_depth[i]) / delta_slant;
               effective_cosine[i + 1] = std::copysign(
-                  std::max(std::abs(effective_cosine[i + 1]), 1.0 / std::sqrt(largest)),
+                  std::max(std::abs(effective_cosine[i + 1]), 1.0 / std::sqrt(large_cosine_sentinel)),
                   effective_cosine[i + 1]);
             }
           }
@@ -160,7 +160,7 @@ namespace tuvx
           const double beam_at_bottom = std::exp(-slant_optical_depths[i + 1]);
 
           double divisor = lambda[i] * lambda[i] - 1.0 / (effective_cosine[i + 1] * effective_cosine[i + 1]);
-          divisor = std::copysign(std::max(epsilon, std::abs(divisor)), divisor);
+          divisor = std::copysign(std::max(source_divisor_floor, std::abs(divisor)), divisor);
 
           const double upward_amplitude   = omega * ((gamma1 - 1.0 / effective_cosine[i + 1]) * gamma3 + gamma4 * gamma2) / divisor;
           const double downward_amplitude = omega * ((gamma1 + 1.0 / effective_cosine[i + 1]) * gamma4 + gamma2 * gamma3) / divisor;
