@@ -17,6 +17,7 @@
 #include <gtest/gtest.h>
 
 #include <cstdlib>
+#include <format>
 #include <fstream>
 #include <map>
 #include <sstream>
@@ -25,18 +26,21 @@
 
 // ── CSV reader ────────────────────────────────────────────────────────────────
 
+namespace
+{
+
 struct ReferenceLevel
 {
-  std::size_t level;
-  double      direct_irradiance;
-  double      upwelling_irradiance;
-  double      downwelling_irradiance;
-  double      direct_actinic_flux;
-  double      upwelling_actinic_flux;
-  double      downwelling_actinic_flux;
+  std::size_t level_                    = 0;
+  double      direct_irradiance_        = 0.0;
+  double      upwelling_irradiance_     = 0.0;
+  double      downwelling_irradiance_   = 0.0;
+  double      direct_actinic_flux_      = 0.0;
+  double      upwelling_actinic_flux_   = 0.0;
+  double      downwelling_actinic_flux_ = 0.0;
 };
 
-static std::vector<ReferenceLevel> LoadReference(const std::string& path)
+std::vector<ReferenceLevel> LoadReference(const std::string& path)
 {
   std::ifstream file(path);
   EXPECT_TRUE(file.is_open()) << "Cannot open reference file: " << path;
@@ -56,13 +60,13 @@ static std::vector<ReferenceLevel> LoadReference(const std::string& path)
     std::istringstream ss(line);
     std::string token;
     ReferenceLevel row{};
-    std::getline(ss, token, ','); row.level                    = std::stoul(token);
-    std::getline(ss, token, ','); row.direct_irradiance        = std::stod(token);
-    std::getline(ss, token, ','); row.upwelling_irradiance     = std::stod(token);
-    std::getline(ss, token, ','); row.downwelling_irradiance   = std::stod(token);
-    std::getline(ss, token, ','); row.direct_actinic_flux      = std::stod(token);
-    std::getline(ss, token, ','); row.upwelling_actinic_flux   = std::stod(token);
-    std::getline(ss, token, ','); row.downwelling_actinic_flux = std::stod(token);
+    std::getline(ss, token, ','); row.level_                    = std::stoul(token);
+    std::getline(ss, token, ','); row.direct_irradiance_        = std::stod(token);
+    std::getline(ss, token, ','); row.upwelling_irradiance_     = std::stod(token);
+    std::getline(ss, token, ','); row.downwelling_irradiance_   = std::stod(token);
+    std::getline(ss, token, ','); row.direct_actinic_flux_      = std::stod(token);
+    std::getline(ss, token, ','); row.upwelling_actinic_flux_   = std::stod(token);
+    std::getline(ss, token, ','); row.downwelling_actinic_flux_ = std::stod(token);
     rows.push_back(row);
   }
   return rows;
@@ -72,112 +76,113 @@ static std::vector<ReferenceLevel> LoadReference(const std::string& path)
 
 struct RegressionAtmosphere
 {
-  static constexpr std::size_t n_columns    = 1;
-  static constexpr std::size_t n_layers     = 3;
-  static constexpr std::size_t n_wavelengths = 1;
+  static constexpr std::size_t N_COLUMNS    = 1;
+  static constexpr std::size_t N_LAYERS     = 3;
+  static constexpr std::size_t N_WAVELENGTHS = 1;
 
   // Optical properties: top-to-bottom
-  static constexpr double optical_depth_per_layer       = 0.5;
-  static constexpr double single_scattering_albedo_value = 0.9;
-  static constexpr double asymmetry_parameter_value      = 0.85;
-  static constexpr double surface_albedo_value           = 0.1;
+  static constexpr double OPTICAL_DEPTH_PER_LAYER        = 0.5;
+  static constexpr double SINGLE_SCATTERING_ALBEDO_VALUE = 0.9;
+  static constexpr double ASYMMETRY_PARAMETER_VALUE      = 0.85;
+  static constexpr double SURFACE_ALBEDO_VALUE           = 0.1;
 
-  tuvx::Grid<tuvx::Array2D<double>>    altitude_grid;
-  tuvx::Grid<tuvx::Array2D<double>>    wavelength_grid;
-  tuvx::Profile<tuvx::Array2D<double>> surface_albedo;
-  tuvx::ConstituentState<tuvx::Array3D<double>> constituent_state;
-  tuvx::RadiationField<tuvx::RadiationFieldComponents<tuvx::Array3D<double>>> radiation_field;
+  tuvx::Grid<tuvx::Array2D<double>>    altitude_grid_;
+  tuvx::Grid<tuvx::Array2D<double>>    wavelength_grid_;
+  tuvx::Profile<tuvx::Array2D<double>> surface_albedo_;
+  tuvx::ConstituentState<tuvx::Array3D<double>> constituent_state_;
+  tuvx::RadiationField<tuvx::RadiationFieldComponents<tuvx::Array3D<double>>> radiation_field_;
 
-  std::map<std::string, tuvx::Grid<tuvx::Array2D<double>>>    grids;
-  std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>> profiles;
+  std::map<std::string, tuvx::Grid<tuvx::Array2D<double>>>    grids_;
+  std::map<std::string, tuvx::Profile<tuvx::Array2D<double>>> profiles_;
 
   RegressionAtmosphere()
-      : altitude_grid("m", n_columns, n_layers),
-        wavelength_grid("m", n_wavelengths),
-        surface_albedo("1", n_columns, altitude_grid),
-        constituent_state(n_columns, altitude_grid, wavelength_grid),
-        radiation_field(n_columns, altitude_grid, wavelength_grid)
+      : altitude_grid_("m", N_COLUMNS, N_LAYERS),
+        wavelength_grid_("m", N_WAVELENGTHS),
+        surface_albedo_("1", N_COLUMNS, altitude_grid_),
+        constituent_state_(N_COLUMNS, altitude_grid_, wavelength_grid_),
+        radiation_field_(N_COLUMNS, altitude_grid_, wavelength_grid_)
   {
     // Altitude edges: 0, 1, 2, 3 km (bottom-to-top)
-    for (std::size_t lev = 0; lev <= n_layers; ++lev)
+    for (std::size_t lev = 0; lev <= N_LAYERS; ++lev)
     {
-      altitude_grid.edges_(lev, 0) = static_cast<double>(lev) * 1000.0;
+      altitude_grid_.edges_(lev, 0) = static_cast<double>(lev) * 1000.0;
     }
-    for (std::size_t lay = 0; lay < n_layers; ++lay)
+    for (std::size_t lay = 0; lay < N_LAYERS; ++lay)
     {
-      altitude_grid.mid_points_(lay, 0) = (static_cast<double>(lay) + 0.5) * 1000.0;
+      altitude_grid_.mid_points_(lay, 0) = (static_cast<double>(lay) + 0.5) * 1000.0;
     }
 
-    wavelength_grid.edges_(0, 0)     = 300e-9;
-    wavelength_grid.edges_(1, 0)     = 301e-9;
-    wavelength_grid.mid_points_(0, 0) = 300.5e-9;
+    wavelength_grid_.edges_(0, 0)      = 300e-9;
+    wavelength_grid_.edges_(1, 0)      = 301e-9;
+    wavelength_grid_.mid_points_(0, 0) = 300.5e-9;
 
-    surface_albedo = tuvx::Profile<tuvx::Array2D<double>>("1", n_columns, wavelength_grid);
-    surface_albedo.mid_point_values_(0, 0) = surface_albedo_value;
+    surface_albedo_ = tuvx::Profile<tuvx::Array2D<double>>("1", N_COLUMNS, wavelength_grid_);
+    surface_albedo_.mid_point_values_(0, 0) = SURFACE_ALBEDO_VALUE;
 
     // Uniform optical properties, top-to-bottom
-    for (std::size_t lay = 0; lay < n_layers; ++lay)
+    for (std::size_t lay = 0; lay < N_LAYERS; ++lay)
     {
-      constituent_state.optical_depth_(0, lay, 0)            = optical_depth_per_layer;
-      constituent_state.single_scattering_albedo_(0, lay, 0) = single_scattering_albedo_value;
-      constituent_state.asymmetry_parameter_(0, lay, 0)      = asymmetry_parameter_value;
+      constituent_state_.optical_depth_(0, lay, 0)            = OPTICAL_DEPTH_PER_LAYER;
+      constituent_state_.single_scattering_albedo_(0, lay, 0) = SINGLE_SCATTERING_ALBEDO_VALUE;
+      constituent_state_.asymmetry_parameter_(0, lay, 0)      = ASYMMETRY_PARAMETER_VALUE;
     }
 
-    grids["altitude [m]"]       = altitude_grid;
-    grids["wavelength [m]"]     = wavelength_grid;
-    profiles["surface albedo [1]"] = surface_albedo;
+    grids_["altitude [m]"]          = altitude_grid_;
+    grids_["wavelength [m]"]        = wavelength_grid_;
+    profiles_["surface albedo [1]"] = surface_albedo_;
   }
 };
 
 // ── Helper ────────────────────────────────────────────────────────────────────
 
-static std::string ReferenceFile(double sza_rad)
+std::string ReferenceFile(double sza_rad)
 {
-  // Locate the reference directory relative to this source file.
-  // CMAKE_CURRENT_SOURCE_DIR is injected via a compile definition.
   const char* src_dir = std::getenv("TUVX_REGRESSION_REFERENCE_DIR");
-  std::string dir = src_dir ? src_dir : TUVX_REGRESSION_REFERENCE_DIR;
-  char buf[64];
-  std::snprintf(buf, sizeof(buf), "delta_eddington_sza_%.4f.csv", sza_rad);
-  return dir + "/" + buf;
+  const std::string DIR = (src_dir != nullptr) ? src_dir : TUVX_REGRESSION_REFERENCE_DIR;
+  return DIR + "/" + std::format("delta_eddington_sza_{:.4f}.csv", sza_rad);
+}
+
+void CheckReferenceLevel(
+    const tuvx::RadiationField<tuvx::RadiationFieldComponents<tuvx::Array3D<double>>>& field,
+    const ReferenceLevel& ref,
+    double tolerance,
+    double sza_rad)
+{
+  const std::size_t LEV = ref.level_;
+  EXPECT_NEAR(field.spectral_irradiance_.direct_(0, LEV, 0), ref.direct_irradiance_, tolerance)
+      << "direct_irradiance mismatch at level " << LEV << " sza=" << sza_rad;
+  EXPECT_NEAR(field.spectral_irradiance_.upwelling_(0, LEV, 0), ref.upwelling_irradiance_, tolerance)
+      << "upwelling_irradiance mismatch at level " << LEV << " sza=" << sza_rad;
+  EXPECT_NEAR(field.spectral_irradiance_.downwelling_(0, LEV, 0), ref.downwelling_irradiance_, tolerance)
+      << "downwelling_irradiance mismatch at level " << LEV << " sza=" << sza_rad;
+  EXPECT_NEAR(field.actinic_flux_.direct_(0, LEV, 0), ref.direct_actinic_flux_, tolerance)
+      << "direct_actinic_flux mismatch at level " << LEV << " sza=" << sza_rad;
+  EXPECT_NEAR(field.actinic_flux_.upwelling_(0, LEV, 0), ref.upwelling_actinic_flux_, tolerance)
+      << "upwelling_actinic_flux mismatch at level " << LEV << " sza=" << sza_rad;
+  EXPECT_NEAR(field.actinic_flux_.downwelling_(0, LEV, 0), ref.downwelling_actinic_flux_, tolerance)
+      << "downwelling_actinic_flux mismatch at level " << LEV << " sza=" << sza_rad;
 }
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 
-static void RunRegressionTest(double sza_rad, double tolerance)
+void RunRegressionTest(double sza_rad, double tolerance)
 {
-  const std::string path = ReferenceFile(sza_rad);
-  const auto reference   = LoadReference(path);
-  ASSERT_FALSE(reference.empty()) << "No rows loaded from " << path;
+  const std::string PATH = ReferenceFile(sza_rad);
+  const auto REFERENCE   = LoadReference(PATH);
+  ASSERT_FALSE(REFERENCE.empty()) << "No rows loaded from " << PATH;
 
   RegressionAtmosphere atm;
   tuvx::DeltaEddington solver;
-  const std::vector<double> sza_vec = { sza_rad };
-  solver.Solve(sza_vec, atm.grids, atm.profiles, atm.constituent_state, atm.radiation_field);
+  const std::vector<double> SZA_VEC = { sza_rad };
+  solver.Solve(SZA_VEC, atm.grids_, atm.profiles_, atm.constituent_state_, atm.radiation_field_);
 
-  for (const auto& ref : reference)
+  for (const auto& ref : REFERENCE)
   {
-    const std::size_t lev = ref.level;
-    EXPECT_NEAR(atm.radiation_field.spectral_irradiance_.direct_(0, lev, 0),
-                ref.direct_irradiance, tolerance)
-        << "direct_irradiance mismatch at level " << lev << " sza=" << sza_rad;
-    EXPECT_NEAR(atm.radiation_field.spectral_irradiance_.upwelling_(0, lev, 0),
-                ref.upwelling_irradiance, tolerance)
-        << "upwelling_irradiance mismatch at level " << lev << " sza=" << sza_rad;
-    EXPECT_NEAR(atm.radiation_field.spectral_irradiance_.downwelling_(0, lev, 0),
-                ref.downwelling_irradiance, tolerance)
-        << "downwelling_irradiance mismatch at level " << lev << " sza=" << sza_rad;
-    EXPECT_NEAR(atm.radiation_field.actinic_flux_.direct_(0, lev, 0),
-                ref.direct_actinic_flux, tolerance)
-        << "direct_actinic_flux mismatch at level " << lev << " sza=" << sza_rad;
-    EXPECT_NEAR(atm.radiation_field.actinic_flux_.upwelling_(0, lev, 0),
-                ref.upwelling_actinic_flux, tolerance)
-        << "upwelling_actinic_flux mismatch at level " << lev << " sza=" << sza_rad;
-    EXPECT_NEAR(atm.radiation_field.actinic_flux_.downwelling_(0, lev, 0),
-                ref.downwelling_actinic_flux, tolerance)
-        << "downwelling_actinic_flux mismatch at level " << lev << " sza=" << sza_rad;
+    CheckReferenceLevel(atm.radiation_field_, ref, tolerance, sza_rad);
   }
 }
+
+} // namespace
 
 TEST(DeltaEddingtonRegression, Sza0_0)
 {

@@ -15,6 +15,7 @@
 #include <gtest/gtest.h>
 
 #include <cstdlib>
+#include <format>
 #include <fstream>
 #include <limits>
 #include <optional>
@@ -24,15 +25,20 @@
 
 // ── CSV reader ────────────────────────────────────────────────────────────────
 
+namespace
+{
+
 struct ReferenceLevel
 {
-  std::size_t              level;
-  std::optional<std::size_t> nid;          // nullopt if CSV contains -1
-  std::vector<double>      dsdh;
-  double                   slant_od;       // Inf if CSV contains "Inf"
+  std::size_t              level_   = 0;
+  std::optional<std::size_t> nid_   = std::nullopt;
+  std::vector<double>      dsdh_    = {};
+  double                   slant_od_ = 0.0;
 };
 
-static std::vector<ReferenceLevel> LoadReference(const std::string& path, std::size_t n_layers)
+std::vector<ReferenceLevel> LoadReference(
+    const std::string& path,
+    std::size_t n_layers)
 {
   std::ifstream file(path);
   EXPECT_TRUE(file.is_open()) << "Cannot open reference file: " << path;
@@ -54,81 +60,96 @@ static std::vector<ReferenceLevel> LoadReference(const std::string& path, std::s
     std::istringstream ss(line);
     std::string token;
     ReferenceLevel row{};
-    row.dsdh.resize(n_layers);
+    row.dsdh_.resize(n_layers);
 
     std::getline(ss, token, ',');
-    row.level = std::stoul(token);
+    row.level_ = std::stoul(token);
 
     std::getline(ss, token, ',');
-    const int nid_int = std::stoi(token);
-    row.nid = (nid_int < 0) ? std::nullopt : std::optional<std::size_t>(static_cast<std::size_t>(nid_int));
+    const int NID_INT = std::stoi(token);
+    row.nid_ = (NID_INT < 0) ? std::nullopt : std::optional<std::size_t>(static_cast<std::size_t>(NID_INT));
 
     for (std::size_t j = 0; j < n_layers; ++j)
     {
       std::getline(ss, token, ',');
-      row.dsdh[j] = std::stod(token);
+      row.dsdh_[j] = std::stod(token);
     }
 
     std::getline(ss, token, ',');
-    row.slant_od = (token.find("Inf") != std::string::npos)
-                       ? std::numeric_limits<double>::infinity()
-                       : std::stod(token);
+    row.slant_od_ = (token.find("Inf") != std::string::npos)
+                        ? std::numeric_limits<double>::infinity()
+                        : std::stod(token);
 
     rows.push_back(row);
   }
   return rows;
 }
 
-// ── Helper ────────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-static std::string ReferenceFile(double sza_rad)
+std::string ReferenceFile(double sza_rad)
 {
   const char* src_dir = std::getenv("TUVX_REGRESSION_REFERENCE_DIR");
-  std::string dir     = src_dir ? src_dir : TUVX_REGRESSION_REFERENCE_DIR;
-  char        buf[64];
-  std::snprintf(buf, sizeof(buf), "spherical_geometry_sza_%.4f.csv", sza_rad);
-  return dir + "/" + buf;
+  const std::string DIR = (src_dir != nullptr) ? src_dir : TUVX_REGRESSION_REFERENCE_DIR;
+  return DIR + "/" + std::format("spherical_geometry_sza_{:.4f}.csv", sza_rad);
+}
+
+void CheckReferenceLevel(
+    const tuvx::SphericalGeometry& geom,
+    const ReferenceLevel& ref,
+    const std::vector<double>& taun,
+    std::size_t n_layers,
+    double dsdh_tol,
+    double slant_od_tol,
+    double sza_rad)
+{
+  const std::size_t LEV = ref.level_;
+  EXPECT_EQ(geom.nid_[LEV], ref.nid_)
+      << "nid mismatch at level " << LEV << " sza=" << sza_rad;
+
+  for (std::size_t j = 0; j < n_layers; ++j)
+  {
+    EXPECT_NEAR(geom.dsdh_[LEV][j], ref.dsdh_[j], dsdh_tol)
+        << "dsdh[" << LEV << "][" << j << "] mismatch sza=" << sza_rad;
+  }
+
+  const double SLANT_OD = tuvx::SlantOpticalDepth(LEV, geom.nid_[LEV], geom.dsdh_[LEV], taun);
+  if (std::isinf(ref.slant_od_))
+  {
+    EXPECT_TRUE(std::isinf(SLANT_OD))
+        << "expected Inf at level " << LEV << " sza=" << sza_rad;
+  }
+  else
+  {
+    EXPECT_NEAR(SLANT_OD, ref.slant_od_, slant_od_tol)
+        << "slant_od mismatch at level " << LEV << " sza=" << sza_rad;
+  }
 }
 
 // ── Test runner ───────────────────────────────────────────────────────────────
 
-static void RunRegressionTest(double sza_rad, double dsdh_tol, double slant_od_tol)
+void RunRegressionTest(double sza_rad, double dsdh_tol, double slant_od_tol)
 {
-  static constexpr std::size_t n_layers = 3;
+  static constexpr std::size_t N_LAYERS = 3;
 
-  const std::vector<double> alt_edges = { 0.0, 1000.0, 2000.0, 3000.0 };
-  const std::vector<double> taun      = { 0.1, 0.2, 0.3 };
+  const std::vector<double> ALT_EDGES = { 0.0, 1000.0, 2000.0, 3000.0 };
+  const std::vector<double> TAUN      = { 0.1, 0.2, 0.3 };
 
   tuvx::SphericalGeometry geom;
-  geom.SetParameters(sza_rad, alt_edges);
+  geom.SetParameters(sza_rad, ALT_EDGES);
 
-  const std::string path      = ReferenceFile(sza_rad);
-  const auto        reference = LoadReference(path, n_layers);
-  ASSERT_EQ(reference.size(), n_layers + 1) << "Expected " << n_layers + 1 << " rows in " << path;
+  const std::string PATH      = ReferenceFile(sza_rad);
+  const auto        REFERENCE = LoadReference(PATH, N_LAYERS);
+  ASSERT_EQ(REFERENCE.size(), N_LAYERS + 1)
+      << "Expected " << N_LAYERS + 1 << " rows in " << PATH;
 
-  for (const auto& ref : reference)
+  for (const auto& ref : REFERENCE)
   {
-    const std::size_t lev = ref.level;
-    EXPECT_EQ(geom.nid_[lev], ref.nid) << "nid mismatch at level " << lev << " sza=" << sza_rad;
-
-    for (std::size_t j = 0; j < n_layers; ++j)
-    {
-      EXPECT_NEAR(geom.dsdh_[lev][j], ref.dsdh[j], dsdh_tol)
-          << "dsdh[" << lev << "][" << j << "] mismatch sza=" << sza_rad;
-    }
-
-    const double slant_od = tuvx::SlantOpticalDepth(lev, geom.nid_[lev], geom.dsdh_[lev], taun);
-    if (std::isinf(ref.slant_od))
-    {
-      EXPECT_TRUE(std::isinf(slant_od)) << "expected Inf at level " << lev << " sza=" << sza_rad;
-    }
-    else
-    {
-      EXPECT_NEAR(slant_od, ref.slant_od, slant_od_tol)
-          << "slant_od mismatch at level " << lev << " sza=" << sza_rad;
-    }
+    CheckReferenceLevel(geom, ref, TAUN, N_LAYERS, dsdh_tol, slant_od_tol, sza_rad);
   }
 }
+
+} // namespace
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
 

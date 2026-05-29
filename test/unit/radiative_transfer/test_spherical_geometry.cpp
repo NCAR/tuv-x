@@ -19,14 +19,14 @@ TEST(SphericalGeometry, OverheadSunDsdh)
   tuvx::SphericalGeometry geom;
   geom.SetParameters(0.0, edges);  // SZA = 0 rad
 
-  const std::size_t n_layers = edges.size() - 1;
+  const std::size_t N_LAYERS = edges.size() - 1;
   // At SZA=0, nid[i] = i for all levels
-  for (std::size_t i = 0; i <= n_layers; ++i)
+  for (std::size_t i = 0; i <= N_LAYERS; ++i)
   {
     EXPECT_EQ(geom.nid_[i], std::optional<std::size_t>(i)) << "level " << i;
   }
   // dsdh[i][j] = 1.0 for j < i (layers above level i)
-  for (std::size_t i = 1; i <= n_layers; ++i)
+  for (std::size_t i = 1; i <= N_LAYERS; ++i)
   {
     for (std::size_t j = 0; j < i; ++j)
     {

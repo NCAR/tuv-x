@@ -94,7 +94,7 @@ namespace tuvx
 
    private:
     /// Units of the grid.
-    std::string units_;
+    std::string units_{};
     /// True if the grid dimensions are constant across columns.
     bool is_constant_ = false;
   };

@@ -44,7 +44,7 @@ namespace tuvx
 
    private:
     /// Units of the profile.
-    std::string units_;
+    std::string units_{};
   };
 
 }  // namespace tuvx
