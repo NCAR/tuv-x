@@ -15,8 +15,8 @@
 #include <gtest/gtest.h>
 
 #include <cstdlib>
-#include <format>
 #include <fstream>
+#include <iomanip>
 #include <limits>
 #include <optional>
 #include <sstream>
@@ -91,7 +91,9 @@ std::string ReferenceFile(double sza_rad)
 {
   const char* src_dir = std::getenv("TUVX_REGRESSION_REFERENCE_DIR");
   const std::string DIR = (src_dir != nullptr) ? src_dir : TUVX_REGRESSION_REFERENCE_DIR;
-  return DIR + "/" + std::format("spherical_geometry_sza_{:.4f}.csv", sza_rad);
+  std::ostringstream oss;
+  oss << std::fixed << std::setprecision(4) << sza_rad;
+  return DIR + "/spherical_geometry_sza_" + oss.str() + ".csv";
 }
 
 void CheckReferenceLevel(
