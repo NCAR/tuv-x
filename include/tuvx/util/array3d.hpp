@@ -75,11 +75,11 @@ namespace tuvx
       return data_.end();
     }
 
-    T* Data()
+    T *Data()
     {
       return data_.data();
     }
-    const T* Data() const
+    const T *Data() const
     {
       return data_.data();
     }
@@ -98,7 +98,6 @@ namespace tuvx
     std::size_t dim2_ = 0;
     std::size_t dim3_ = 0;
     std::vector<T> data_{};
-
   };
 
 }  // namespace tuvx

@@ -47,9 +47,7 @@ namespace tuvx
     /// @param solar_zenith_angle Solar zenith angle [radians].
     /// @param altitude_edges Altitude at each grid edge [m], ordered
     ///        bottom-to-top (index 0 = ground, index n_layers = TOA).
-    void SetParameters(
-        double solar_zenith_angle,
-        const std::vector<double>& altitude_edges);
+    void SetParameters(double solar_zenith_angle, const std::vector<double>& altitude_edges);
   };
 
   /// @brief Total slant-path optical depth from TOA to a given level.
@@ -63,7 +61,7 @@ namespace tuvx
   ///        (SphericalGeometry::dsdh_[level]), ordered top-to-bottom, 0-based.
   /// @param optical_depth Scaled layer optical depths, ordered top-to-bottom.
   /// @return Total slant-path optical depth.
-  [[nodiscard]] double SlantOpticalDepth( // NOLINT(readability-identifier-naming)
+  [[nodiscard]] double SlantOpticalDepth(  // NOLINT(readability-identifier-naming)
       std::size_t level,
       std::optional<std::size_t> n_layers_crossed,
       const std::vector<double>& slant_path,
@@ -71,18 +69,16 @@ namespace tuvx
 
   // ── Inline implementations ────────────────────────────────────────────────
 
-  inline void SphericalGeometry::SetParameters(
-      double solar_zenith_angle,
-      const std::vector<double>& altitude_edges)
+  inline void SphericalGeometry::SetParameters(double solar_zenith_angle, const std::vector<double>& altitude_edges)
   {
     static constexpr double EARTH_RADIUS = 6.371e6;
-    static constexpr double HALF_PI      = std::numbers::pi / 2.0;
+    static constexpr double HALF_PI = std::numbers::pi / 2.0;
 
-    const std::size_t N_LAYERS                = altitude_edges.size() - 1;
-    const double      SURFACE_ELEVATION       = altitude_edges[0];
-    const double      EARTH_RADIUS_AT_SURFACE = EARTH_RADIUS + SURFACE_ELEVATION;
-    const bool        ABOVE_HORIZON           = (solar_zenith_angle <= HALF_PI);
-    const double      SIN_SZA                 = std::sin(solar_zenith_angle);
+    const std::size_t N_LAYERS = altitude_edges.size() - 1;
+    const double SURFACE_ELEVATION = altitude_edges[0];
+    const double EARTH_RADIUS_AT_SURFACE = EARTH_RADIUS + SURFACE_ELEVATION;
+    const bool ABOVE_HORIZON = (solar_zenith_angle <= HALF_PI);
+    const double SIN_SZA = std::sin(solar_zenith_angle);
 
     // Reorder altitudes top-to-bottom: altitude_from_toa[0] = TOA, [n_layers] = ground
     std::vector<double> altitude_from_toa(N_LAYERS + 1);
@@ -109,8 +105,8 @@ namespace tuvx
       }
       for (std::size_t j = 1; j <= N_LAYERS; ++j)
       {
-        if (IMPACT_PARAMETER <  altitude_from_toa[j - 1] + EARTH_RADIUS_AT_SURFACE &&
-            IMPACT_PARAMETER >= altitude_from_toa[j]     + EARTH_RADIUS_AT_SURFACE)
+        if (IMPACT_PARAMETER < altitude_from_toa[j - 1] + EARTH_RADIUS_AT_SURFACE &&
+            IMPACT_PARAMETER >= altitude_from_toa[j] + EARTH_RADIUS_AT_SURFACE)
         {
           return j;
         }
@@ -121,20 +117,18 @@ namespace tuvx
     // Fills dsdh_[level] with slant/vertical-depth ratios. Reads nid_[level].
     auto compute_slant_ratios = [&](std::size_t level)
     {
-      const double      IMPACT_PARAMETER = (EARTH_RADIUS_AT_SURFACE + altitude_from_toa[level]) * SIN_SZA;
-      const std::size_t LAYERS_CROSSED   = nid_[level].value();
+      const double IMPACT_PARAMETER = (EARTH_RADIUS_AT_SURFACE + altitude_from_toa[level]) * SIN_SZA;
+      const std::size_t LAYERS_CROSSED = nid_[level].value();
       for (std::size_t j = 1; j <= LAYERS_CROSSED; ++j)
       {
-        const double RADIUS_UPPER    = EARTH_RADIUS_AT_SURFACE + altitude_from_toa[j - 1];
-        const double RADIUS_LOWER    = EARTH_RADIUS_AT_SURFACE + altitude_from_toa[j];
+        const double RADIUS_UPPER = EARTH_RADIUS_AT_SURFACE + altitude_from_toa[j - 1];
+        const double RADIUS_LOWER = EARTH_RADIUS_AT_SURFACE + altitude_from_toa[j];
         const double LAYER_THICKNESS = altitude_from_toa[j - 1] - altitude_from_toa[j];
-        const double UPPER_TERM      = std::max(0.0, (RADIUS_UPPER * RADIUS_UPPER) - (IMPACT_PARAMETER * IMPACT_PARAMETER));
-        const double LOWER_TERM      = std::max(0.0, (RADIUS_LOWER * RADIUS_LOWER) - (IMPACT_PARAMETER * IMPACT_PARAMETER));
+        const double UPPER_TERM = std::max(0.0, (RADIUS_UPPER * RADIUS_UPPER) - (IMPACT_PARAMETER * IMPACT_PARAMETER));
+        const double LOWER_TERM = std::max(0.0, (RADIUS_LOWER * RADIUS_LOWER) - (IMPACT_PARAMETER * IMPACT_PARAMETER));
         // The tangent-ray layer contributes negatively when SZA > 90°: the beam
         // enters and exits on the same side of the layer.
-        const double PATH_SIGN =
-            (j == LAYERS_CROSSED && LAYERS_CROSSED == level && !ABOVE_HORIZON)
-            ? -1.0 : 1.0;
+        const double PATH_SIGN = (j == LAYERS_CROSSED && LAYERS_CROSSED == level && !ABOVE_HORIZON) ? -1.0 : 1.0;
         const double SLANT_PATH_LENGTH = PATH_SIGN * (std::sqrt(UPPER_TERM) - std::sqrt(LOWER_TERM));
         if (LAYER_THICKNESS > 0.0)
         {
@@ -153,8 +147,8 @@ namespace tuvx
     }
   }
 
-  inline double SlantOpticalDepth( // NOLINT(readability-identifier-naming)
-      std::size_t                level,
+  inline double SlantOpticalDepth(  // NOLINT(readability-identifier-naming)
+      std::size_t level,
       std::optional<std::size_t> n_layers_crossed,
       const std::vector<double>& slant_path,
       const std::vector<double>& optical_depth)
@@ -163,7 +157,7 @@ namespace tuvx
     {
       return std::numeric_limits<double>::infinity();
     }
-    double            result             = 0.0;
+    double result = 0.0;
     const std::size_t DIRECT_PATH_LAYERS = std::min(n_layers_crossed.value(), level);
     for (std::size_t j = 0; j < DIRECT_PATH_LAYERS; ++j)
     {

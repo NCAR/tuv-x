@@ -63,11 +63,11 @@ namespace tuvx
       return data_.end();
     }
 
-    T* Data()
+    T *Data()
     {
       return data_.data();
     }
-    const T* Data() const
+    const T *Data() const
     {
       return data_.data();
     }

@@ -66,9 +66,7 @@ namespace tuvx
   /// @param x True solution
   /// @param x_approx Approximated solution
   template<typename T>
-  [[nodiscard]] T ComputeError(
-      const Array1D<T> &x,
-      const Array1D<T> &x_approx);
+  [[nodiscard]] T ComputeError(const Array1D<T> &x, const Array1D<T> &x_approx);
 
 }  // namespace tuvx
 #include "linear_algebra.inl"
