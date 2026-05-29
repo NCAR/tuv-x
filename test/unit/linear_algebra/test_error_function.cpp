@@ -22,7 +22,7 @@ TEST(ErrorFunctionTest, DoublePrecision)
   tuvx::Array1D<double> x1(SIZE);
   tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
   x1 = x;
-  double error = tuvx::ComputeError<double>(x, x1);
+  auto error = tuvx::ComputeError<double>(x, x1);
   EXPECT_EQ(error, 0.0);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
@@ -30,7 +30,7 @@ TEST(ErrorFunctionTest, DoublePrecision)
 
   x[0] += 0.1;
   error = tuvx::ComputeError<double>(x, x1);
-  EXPECT_LE(error - 0.1 / SIZE, TOL_SP);
+  EXPECT_LE(error - (0.1 / SIZE), TOL_SP);
 }
 
 /// @brief Test the correctness of the error function used for
@@ -42,13 +42,13 @@ TEST(ErrorFunctionTest, SinglePrecision)
   tuvx::Array1D<float> x1(SIZE);
   tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
   x1 = x;
-  float error = tuvx::ComputeError<float>(x, x1);
-  EXPECT_EQ(error, 0.0f);
+  auto error = tuvx::ComputeError<float>(x, x1);
+  EXPECT_EQ(error, 0.0F);
 
   // L1 norm between x and (x[1]+0.1) should be 0.1/size;
   x1 = x;
 
-  x[0] += 0.1f;
+  x[0] += 0.1F;
   error = tuvx::ComputeError(x, x1);
-  EXPECT_LE(error - 0.1f / SIZE, TOL_SP);
+  EXPECT_LE(error - (0.1F / SIZE), TOL_SP);
 }

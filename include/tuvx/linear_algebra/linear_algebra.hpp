@@ -3,7 +3,6 @@
 #include <tuvx/util/array1d.hpp>
 
 #include <algorithm>
-#include <functional>
 #include <iostream>
 #include <random>
 
@@ -14,7 +13,7 @@ namespace tuvx
   template<typename T>
   struct TridiagonalMatrix
   {
-    std::size_t size_;
+    std::size_t size_ = 0;
     Array1D<T> upper_diagonal_;  // upper diagonal
     Array1D<T> lower_diagonal_;  // lower diagonal
     Array1D<T> main_diagonal_;   // main diagonal
@@ -29,14 +28,14 @@ namespace tuvx
   /// @param x Array to fill
   /// @param seed Seed for random number generation
   template<typename T>
-  void FillRandom(Array1D<T> &x, const unsigned &seed);
+  void FillRandom(Array1D<T> &x, unsigned seed);
 
   /// @brief Fills a matrix with uniformly distributed random values.
   /// @param A Tridiagonal matrix to fill
   /// @param seed Seed for random number generation
   /// @param make_diagonally_dominant Make the tridiagonal matrix diagonally dominant
   template<typename T>
-  void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, const bool &make_diagonally_dominant = false);
+  void FillRandom(TridiagonalMatrix<T> &A, unsigned seed, bool make_diagonally_dominant = false);
 
   /// @brief Displays the data stored inside an Array1D
   /// @param x Array to print
@@ -49,9 +48,10 @@ namespace tuvx
   void Print(const TridiagonalMatrix<T> &x);
 
   /// @brief Thomas' algorithm for solving tridiagonal linear system (A x = b).
-  /// Solution is stored in b.
-  /// @param A Tridiagonal coefficient matrix
-  /// @param b Right hand side vector of the tridiagonal system.
+  /// On entry b holds the right-hand side; on exit b holds the solution.
+  /// @warning A is modified in place (main diagonal overwritten during the forward sweep).
+  /// @param A Tridiagonal coefficient matrix (MODIFIED).
+  /// @param b On entry: right-hand side. On exit: solution.
   template<typename T>
   void Solve(TridiagonalMatrix<T> &A, Array1D<T> &b);
 
@@ -60,13 +60,15 @@ namespace tuvx
   /// @param x Array to multiply the matrix with
   /// @returns Dot product between A and x
   template<typename T>
-  Array1D<T> Dot(const TridiagonalMatrix<T> &A, const Array1D<T> &x);
+  [[nodiscard]] Array1D<T> Dot(const TridiagonalMatrix<T> &A, const Array1D<T> &x);
 
-  /// @brief Computes the relative error between two arrays.
+  /// @brief Computes the mean relative error between two arrays.
   /// @param x True solution
   /// @param x_approx Approximated solution
   template<typename T>
-  T ComputeError(const Array1D<T> &x, const Array1D<T> &x_approx);
+  [[nodiscard]] T ComputeError(
+      const Array1D<T> &x,
+      const Array1D<T> &x_approx);
 
 }  // namespace tuvx
 #include "linear_algebra.inl"

@@ -58,20 +58,30 @@ extensions = [
     'breathe',
     'sphinx_copybutton',
     'sphinx_design',
+    'sphinxcontrib.bibtex',
 ]
+
+bibtex_bibfiles = ['references.bib']
+suppress_warnings = ['bibtex.missing_field']
 
 breathe_default_project = 'tuvx'
 breathe_projects = {
     'tuvx': DOXYGEN_XML_DIR,
 }
 
+templates_path = ['_templates']
 exclude_patterns = []
 
 html_theme = 'pydata_sphinx_theme'
 html_theme_options = {
     'github_url': 'https://github.com/NCAR/tuv-x',
     'navbar_end': ['navbar-icon-links'],
+    'pygment_light_style': 'tango',
+    'pygment_dark_style': 'monokai',
 }
+
+html_css_files = ['custom.css']
+html_static_path = ['_static']
 
 
 def setup(app):

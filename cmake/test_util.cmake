@@ -40,6 +40,29 @@ function(create_standard_cxx_test)
 endfunction(create_standard_cxx_test)
 
 ################################################################################
+# Build and add a C++ regression test, injecting the reference-data directory
+
+function(create_regression_cxx_test)
+  set(prefix TEST)
+  set(optionalValues SKIP_MEMCHECK)
+  set(singleValues NAME)
+  set(multiValues SOURCES LIBRARIES)
+
+  include(CMakeParseArguments)
+  cmake_parse_arguments(${prefix} "${optionalValues}" "${singleValues}" "${multiValues}" ${ARGN})
+
+  create_standard_cxx_test(
+      NAME      ${TEST_NAME}
+      SOURCES   ${TEST_SOURCES}
+      LIBRARIES ${TEST_LIBRARIES}
+  )
+
+  target_compile_definitions(test_${TEST_NAME} PRIVATE
+      TUVX_REGRESSION_REFERENCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/reference"
+  )
+endfunction(create_regression_cxx_test)
+
+################################################################################
 # Add a test (with optional memcheck)
 
 function(add_tuvx_test test_name test_binary test_args working_dir)

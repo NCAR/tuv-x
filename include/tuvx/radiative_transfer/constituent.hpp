@@ -7,6 +7,7 @@
 #include <tuvx/grid.hpp>
 #include <tuvx/util/array3d.hpp>
 
+#include <cassert>
 #include <cstddef>
 #include <vector>
 
@@ -33,7 +34,7 @@ namespace tuvx
     /// @param vertical_grid Vertical grid.
     /// @param wavelength_grid Wavelength grid.
     template<typename GridPolicy>
-    ConstituentState(std::size_t number_of_columns, GridPolicy& vertical_grid, GridPolicy& wavelength_grid)
+    ConstituentState(std::size_t number_of_columns, const GridPolicy& vertical_grid, const GridPolicy& wavelength_grid)
         : optical_depth_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns),
           single_scattering_albedo_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns),
           asymmetry_parameter_(wavelength_grid.NumberOfSections(), vertical_grid.NumberOfSections(), number_of_columns)
@@ -47,6 +48,7 @@ namespace tuvx
     static ConstituentStatePolicy Accumulate(const std::vector<ConstituentStatePolicy>& states)
     {
       // [DEV NOTES] Placeholder for the ConstituentState::Accumulate method
+      assert(!states.empty());
       return states[0];
     }
   };

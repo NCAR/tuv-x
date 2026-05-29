@@ -1,4 +1,5 @@
 
+#include <cmath>
 #include <random>
 namespace tuvx
 {
@@ -17,14 +18,14 @@ namespace tuvx
   {
     std::size_t size = x.Size();
     Array1D<T> v(size);
-    v[0] = A.main_diagonal_[0] * x[0] + A.upper_diagonal_[0] * x[1];
+    v[0] = (A.main_diagonal_[0] * x[0]) + (A.upper_diagonal_[0] * x[1]);
 
     std::size_t i = 0;
     for (i = 1; i < size - 1; i++)
     {
-      v[i] = A.main_diagonal_[i] * x[i] + A.upper_diagonal_[i] * x[i + 1] + A.lower_diagonal_[i - 1] * x[i - 1];
+      v[i] = (A.main_diagonal_[i] * x[i]) + (A.upper_diagonal_[i] * x[i + 1]) + (A.lower_diagonal_[i - 1] * x[i - 1]);
     }
-    v[i] = A.main_diagonal_[i] * x[i] + A.lower_diagonal_[i - 1] * x[i - 1];
+    v[i] = (A.main_diagonal_[i] * x[i]) + (A.lower_diagonal_[i - 1] * x[i - 1]);
     return v;
   }
 
@@ -44,7 +45,7 @@ namespace tuvx
     b[n - 1] = b[n - 1] / A.main_diagonal_[n - 1];
     for (std::size_t i = n - 2;; i--)
     {
-      b[i] = (b[i] - A.upper_diagonal_[i] * b[i + 1]) / A.main_diagonal_[i];
+      b[i] = (b[i] - (A.upper_diagonal_[i] * b[i + 1])) / A.main_diagonal_[i];
       if (i == 0)
       {
         break;
@@ -53,22 +54,22 @@ namespace tuvx
   }
 
   template<typename T>
-  inline void FillRandom(Array1D<T> &x, const unsigned &seed)
+  inline void FillRandom(Array1D<T> &x, unsigned seed)
   {
     std::mt19937 random_device(seed);
     std::normal_distribution<double> distribution(5.0, 1.0);
     for (std::size_t i = 0; i < x.Size(); i++)
     {
-      x[i] = (T)distribution(random_device);
+      x[i] = static_cast<T>(distribution(random_device));
     }
   }
 
   template<typename T>
-  inline void FillRandom(TridiagonalMatrix<T> &A, const unsigned &seed, const bool &make_diagonally_dominant)
+  inline void FillRandom(TridiagonalMatrix<T> &A, unsigned seed, bool make_diagonally_dominant)
   {
     FillRandom<T>(A.main_diagonal_, seed);
-    FillRandom<T>(A.lower_diagonal_, seed);
-    FillRandom<T>(A.upper_diagonal_, seed);
+    FillRandom<T>(A.lower_diagonal_, seed + 1);
+    FillRandom<T>(A.upper_diagonal_, seed + 2);
 
     if (make_diagonally_dominant)
     {
@@ -94,14 +95,20 @@ namespace tuvx
   }
 
   template<typename T>
-  T ComputeError(const Array1D<T> &x, const Array1D<T> &x_approx)
+  T ComputeError(
+      const Array1D<T> &x,
+      const Array1D<T> &x_approx)
   {
     T error = 0;
     for (std::size_t i = 0; i < x.Size(); i++)
     {
-      error += (std::abs(x[i] - x_approx[i]) / std::max(x[i], x_approx[i])) / (T)x.Size();
+      const T DENOM = std::max(std::abs(x[i]), std::abs(x_approx[i]));
+      if (DENOM > T{ 0 })
+      {
+        error += std::abs(x[i] - x_approx[i]) / DENOM;
+      }
     }
-    return error;
+    return error / static_cast<T>(x.Size());
   }
 
   template<typename T>

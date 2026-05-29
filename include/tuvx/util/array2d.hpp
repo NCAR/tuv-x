@@ -27,12 +27,12 @@ namespace tuvx
 
     T &operator()(std::size_t i, std::size_t j)
     {
-      return data_[i * dim2_ + j];
+      return data_[(i * dim2_) + j];
     }
 
     const T &operator()(std::size_t i, std::size_t j) const
     {
-      return data_[i * dim2_ + j];
+      return data_[(i * dim2_) + j];
     }
 
     /// @brief Size of the first dimension (rows).
@@ -63,6 +63,15 @@ namespace tuvx
       return data_.end();
     }
 
+    T* Data()
+    {
+      return data_.data();
+    }
+    const T* Data() const
+    {
+      return data_.data();
+    }
+
     [[nodiscard]] std::vector<T> &AsVector()
     {
       return data_;
@@ -75,6 +84,7 @@ namespace tuvx
    private:
     std::size_t dim1_ = 0;
     std::size_t dim2_ = 0;
-    std::vector<T> data_;
+    std::vector<T> data_{};
+
   };
 }  // namespace tuvx

@@ -37,14 +37,14 @@ namespace tuvx
     }
 
     /// @brief Units of the profile.
-    [[nodiscard]] std::string Units() const
+    [[nodiscard]] const std::string& Units() const
     {
       return units_;
     }
 
    private:
     /// Units of the profile.
-    std::string units_;
+    std::string units_{};
   };
 
 }  // namespace tuvx

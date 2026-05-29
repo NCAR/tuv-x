@@ -16,3 +16,10 @@ Radiative Transfer
 .. doxygenclass:: tuvx::DeltaEddington
    :project: tuvx
    :members:
+
+.. doxygenstruct:: tuvx::SphericalGeometry
+   :project: tuvx
+   :members:
+
+.. doxygenfunction:: tuvx::SlantOpticalDepth
+   :project: tuvx

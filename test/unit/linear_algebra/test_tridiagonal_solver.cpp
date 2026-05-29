@@ -25,12 +25,12 @@ TEST(TridiagSolveTest, SinglePrecision)
   {
     tuvx::Array1D<float> x(SYSTEM_SIZE);
     tuvx::Array1D<float> b(SYSTEM_SIZE);
-    tuvx::TridiagonalMatrix<float> A(SYSTEM_SIZE);
+    tuvx::TridiagonalMatrix<float> tridiag(SYSTEM_SIZE);
 
-    tuvx::FillRandom<float>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<float>(tridiag, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
     tuvx::FillRandom<float>(x, RANDOM_NUMBER_SEED);
-    b = tuvx::Dot<float>(A, x);
-    tuvx::Solve<float>(A, b);
+    b = tuvx::Dot<float>(tridiag, x);
+    tuvx::Solve<float>(tridiag, b);
 
     error += tuvx::ComputeError<float>(x, b);
   }
@@ -48,12 +48,12 @@ TEST(TridiagSolveTest, DoublePrecision)
   {
     tuvx::Array1D<double> x(SYSTEM_SIZE);
     tuvx::Array1D<double> b(SYSTEM_SIZE);
-    tuvx::TridiagonalMatrix<double> A(SYSTEM_SIZE);
+    tuvx::TridiagonalMatrix<double> tridiag(SYSTEM_SIZE);
 
-    tuvx::FillRandom<double>(A, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
+    tuvx::FillRandom<double>(tridiag, RANDOM_NUMBER_SEED, MAKE_DIAGONALLY_DOMINANT);
     tuvx::FillRandom<double>(x, RANDOM_NUMBER_SEED);
-    b = tuvx::Dot<double>(A, x);
-    tuvx::Solve<double>(A, b);
+    b = tuvx::Dot<double>(tridiag, x);
+    tuvx::Solve<double>(tridiag, b);
 
     error += tuvx::ComputeError<double>(x, b);
   }
