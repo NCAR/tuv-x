@@ -36,7 +36,7 @@ CheckOptions:
   - key:             readability-identifier-naming.MemberSuffix
     value:           _
   - key:             readability-identifier-naming.ConstantCase
-    value:           lower_case
+    value:           UPPER_CASE
   - key:             readability-identifier-naming.ClassConstantCase
     value:           UPPER_CASE
   - key:             readability-identifier-naming.GlobalConstantCase
