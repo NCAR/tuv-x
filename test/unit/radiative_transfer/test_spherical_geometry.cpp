@@ -30,8 +30,7 @@ TEST(SphericalGeometry, OverheadSunDsdh)
   {
     for (std::size_t j = 0; j < i; ++j)
     {
-      EXPECT_NEAR(geom.dsdh_[i][j], 1.0, 1.0e-10)
-          << "level " << i << " layer " << j;
+      EXPECT_NEAR(geom.dsdh_[i][j], 1.0, 1.0e-10) << "level " << i << " layer " << j;
     }
   }
 }
@@ -47,23 +46,19 @@ TEST(SphericalGeometry, SlantOpticalDepthOverheadSun)
   std::vector<double> taun = { 0.1, 0.2, 0.3 };  // top-to-bottom layers
 
   // At level 0 (TOA), path = 0
-  EXPECT_NEAR(
-      tuvx::SlantOpticalDepth(0, geom.nid_[0], geom.dsdh_[0], taun), 0.0, 1.0e-12);
+  EXPECT_NEAR(tuvx::SlantOpticalDepth(0, geom.nid_[0], geom.dsdh_[0], taun), 0.0, 1.0e-12);
   // Level 1: sum of layer 0 = 0.1
-  EXPECT_NEAR(
-      tuvx::SlantOpticalDepth(1, geom.nid_[1], geom.dsdh_[1], taun), 0.1, 1.0e-10);
+  EXPECT_NEAR(tuvx::SlantOpticalDepth(1, geom.nid_[1], geom.dsdh_[1], taun), 0.1, 1.0e-10);
   // Level 2: layers 0+1 = 0.3
-  EXPECT_NEAR(
-      tuvx::SlantOpticalDepth(2, geom.nid_[2], geom.dsdh_[2], taun), 0.3, 1.0e-10);
+  EXPECT_NEAR(tuvx::SlantOpticalDepth(2, geom.nid_[2], geom.dsdh_[2], taun), 0.3, 1.0e-10);
   // Level 3 (ground): layers 0+1+2 = 0.6
-  EXPECT_NEAR(
-      tuvx::SlantOpticalDepth(3, geom.nid_[3], geom.dsdh_[3], taun), 0.6, 1.0e-10);
+  EXPECT_NEAR(tuvx::SlantOpticalDepth(3, geom.nid_[3], geom.dsdh_[3], taun), 0.6, 1.0e-10);
 }
 
 // nullopt nid (below tangent height) returns infinity.
 TEST(SphericalGeometry, SlantOpticalDepthBelowTangentHeight)
 {
-  std::vector<double> taun   = { 0.1 };
+  std::vector<double> taun = { 0.1 };
   std::vector<double> slpath = { 1.0 };
   double result = tuvx::SlantOpticalDepth(0, std::nullopt, slpath, taun);
   EXPECT_TRUE(std::isinf(result));
@@ -72,7 +67,7 @@ TEST(SphericalGeometry, SlantOpticalDepthBelowTangentHeight)
 // For overhead sun, slant_optical_depth at level 0 with nid=0 should be 0.
 TEST(SphericalGeometry, SlantOpticalDepthAtToa)
 {
-  std::vector<double> taun   = { 0.5, 0.3 };
+  std::vector<double> taun = { 0.5, 0.3 };
   std::vector<double> slpath = { 1.0, 1.0 };
   // nid[0] = 0 for overhead sun → no layers crossed → path = 0
   EXPECT_DOUBLE_EQ(tuvx::SlantOpticalDepth(0, std::size_t{ 0 }, slpath, taun), 0.0);
