@@ -1,8 +1,7 @@
 // Copyright (C) 2023-2026 University Corporation for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
-#include <tuvx/util/array3d.hpp>
-
 #include <tuvx/util/array2d.hpp>
+#include <tuvx/util/array3d.hpp>
 
 #include <gtest/gtest.h>
 
@@ -114,10 +113,7 @@ TEST(Array3D, ForEachRowScale)
     }
   }
 
-  a.ForEachRow(
-      [](const double &src, double &dst) { dst = src * 2.0; },
-      a.GetConstColumnView(0),
-      a.GetColumnView(1));
+  a.ForEachRow([](const double &src, double &dst) { dst = src * 2.0; }, a.GetConstColumnView(0), a.GetColumnView(1));
 
   for (std::size_t i = 0; i < 2; ++i)
   {
@@ -136,22 +132,16 @@ TEST(Array3D, ForEachRowWithRowVariable)
   {
     for (std::size_t j = 0; j < 2; ++j)
     {
-      a(i, j, 0) = static_cast<double>((i * 2) + j + 1);    // 1,2,3,4
+      a(i, j, 0) = static_cast<double>((i * 2) + j + 1);     // 1,2,3,4
       a(i, j, 1) = static_cast<double>(((i * 2) + j) * 10);  // 0,10,20,30
     }
   }
 
   auto tmp = a.GetRowVariable();
   a.ForEachRow(
-      [](const double &x, const double &y, double &t) { t = x + y; },
-      a.GetConstColumnView(0),
-      a.GetConstColumnView(1),
-      tmp);
+      [](const double &x, const double &y, double &t) { t = x + y; }, a.GetConstColumnView(0), a.GetConstColumnView(1), tmp);
 
-  a.ForEachRow(
-      [](const double &t, double &out) { out = t * 2.0; },
-      tmp,
-      a.GetColumnView(2));
+  a.ForEachRow([](const double &t, double &out) { out = t * 2.0; }, tmp, a.GetColumnView(2));
 
   EXPECT_DOUBLE_EQ(a(0, 0, 2), 2.0);   // (1 + 0) * 2
   EXPECT_DOUBLE_EQ(a(0, 1, 2), 24.0);  // (2 + 10) * 2
@@ -165,11 +155,10 @@ TEST(Array3D, Function)
   tuvx::Array3D<double> proto(2, 2, 3);
 
   auto func = tuvx::Array3D<double>::Function(
-      [](auto &arr) {
+      [](auto &arr)
+      {
         arr.ForEachRow(
-            [](const double &src, double &dst) { dst = src * 5.0; },
-            arr.GetConstColumnView(0),
-            arr.GetColumnView(1));
+            [](const double &src, double &dst) { dst = src * 5.0; }, arr.GetConstColumnView(0), arr.GetColumnView(1));
       },
       proto);
 

@@ -39,8 +39,14 @@ namespace tuvx
             col_(col)
       {
       }
-      T &operator()(std::size_t i, std::size_t j) { return (*arr_)(i, j, col_); }
-      const T &operator()(std::size_t i, std::size_t j) const { return (*arr_)(i, j, col_); }
+      T &operator()(std::size_t i, std::size_t j)
+      {
+        return (*arr_)(i, j, col_);
+      }
+      const T &operator()(std::size_t i, std::size_t j) const
+      {
+        return (*arr_)(i, j, col_);
+      }
 
      private:
       Array3D<T> *arr_ = nullptr;
@@ -56,7 +62,10 @@ namespace tuvx
             col_(col)
       {
       }
-      const T &operator()(std::size_t i, std::size_t j) const { return (*arr_)(i, j, col_); }
+      const T &operator()(std::size_t i, std::size_t j) const
+      {
+        return (*arr_)(i, j, col_);
+      }
 
      private:
       const Array3D<T> *arr_ = nullptr;
@@ -72,8 +81,14 @@ namespace tuvx
             dim2_(dim2)
       {
       }
-      T &operator()(std::size_t i, std::size_t j) { return data_[(i * dim2_) + j]; }
-      const T &operator()(std::size_t i, std::size_t j) const { return data_[(i * dim2_) + j]; }
+      T &operator()(std::size_t i, std::size_t j)
+      {
+        return data_[(i * dim2_) + j];
+      }
+      const T &operator()(std::size_t i, std::size_t j) const
+      {
+        return data_[(i * dim2_) + j];
+      }
 
      private:
       std::vector<T> data_{};
