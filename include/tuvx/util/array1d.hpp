@@ -13,6 +13,8 @@ namespace tuvx
   class Array1D
   {
    public:
+    using value_type = T;
+
     Array1D() = default;
 
     /// @brief Construct an array of the given size.
