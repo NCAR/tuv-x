@@ -1,8 +1,7 @@
 // Copyright (C) 2023-2026 University Corporation for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
-#include <tuvx/util/array2d.hpp>
-
 #include <tuvx/util/array1d.hpp>
+#include <tuvx/util/array2d.hpp>
 
 #include <gtest/gtest.h>
 
@@ -98,10 +97,7 @@ TEST(Array2D, ForEachRowScale)
   a(2, 0) = 3.0;
   a(3, 0) = 4.0;
 
-  a.ForEachRow(
-      [](const double &src, double &dst) { dst = src * 2.0; },
-      a.GetConstColumnView(0),
-      a.GetColumnView(1));
+  a.ForEachRow([](const double &src, double &dst) { dst = src * 2.0; }, a.GetConstColumnView(0), a.GetColumnView(1));
 
   EXPECT_DOUBLE_EQ(a(0, 1), 2.0);
   EXPECT_DOUBLE_EQ(a(1, 1), 4.0);
@@ -132,10 +128,7 @@ TEST(Array2D, ForEachRowWithRowVariable)
       tmp);
 
   // col2 = tmp * 2
-  a.ForEachRow(
-      [](const double &t, double &out) { out = t * 2.0; },
-      tmp,
-      a.GetColumnView(2));
+  a.ForEachRow([](const double &t, double &out) { out = t * 2.0; }, tmp, a.GetColumnView(2));
 
   EXPECT_DOUBLE_EQ(a(0, 2), 22.0);
   EXPECT_DOUBLE_EQ(a(1, 2), 44.0);
@@ -149,11 +142,10 @@ TEST(Array2D, Function)
 
   // op: col1 = col0 * 3
   auto func = tuvx::Array2D<double>::Function(
-      [](auto &arr) {
+      [](auto &arr)
+      {
         arr.ForEachRow(
-            [](const double &src, double &dst) { dst = src * 3.0; },
-            arr.GetConstColumnView(0),
-            arr.GetColumnView(1));
+            [](const double &src, double &dst) { dst = src * 3.0; }, arr.GetConstColumnView(0), arr.GetColumnView(1));
       },
       proto);
 

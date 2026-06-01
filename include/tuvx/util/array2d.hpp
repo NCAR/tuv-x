@@ -37,8 +37,14 @@ namespace tuvx
             col_(col)
       {
       }
-      T &operator[](std::size_t row) { return (*arr_)(row, col_); }
-      const T &operator[](std::size_t row) const { return (*arr_)(row, col_); }
+      T &operator[](std::size_t row)
+      {
+        return (*arr_)(row, col_);
+      }
+      const T &operator[](std::size_t row) const
+      {
+        return (*arr_)(row, col_);
+      }
 
      private:
       Array2D<T> *arr_ = nullptr;
@@ -54,7 +60,10 @@ namespace tuvx
             col_(col)
       {
       }
-      const T &operator[](std::size_t row) const { return (*arr_)(row, col_); }
+      const T &operator[](std::size_t row) const
+      {
+        return (*arr_)(row, col_);
+      }
 
      private:
       const Array2D<T> *arr_ = nullptr;
@@ -69,8 +78,14 @@ namespace tuvx
           : data_(n_rows)
       {
       }
-      T &operator[](std::size_t row) { return data_[row]; }
-      const T &operator[](std::size_t row) const { return data_[row]; }
+      T &operator[](std::size_t row)
+      {
+        return data_[row];
+      }
+      const T &operator[](std::size_t row) const
+      {
+        return data_[row];
+      }
 
      private:
       std::vector<T> data_{};
