@@ -25,8 +25,7 @@ Checks: >
   -cppcoreguidelines-non-private-member-variables-in-classes,
   -misc-non-private-member-variables-in-classes,
   -misc-include-cleaner,
-  -readability-identifier-length,
-  -modernize-use-constraints
+  -readability-identifier-length
 
 WarningsAsErrors: '*'
 

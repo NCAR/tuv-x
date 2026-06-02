@@ -15,9 +15,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <concepts>
 #include <cstddef>
-#include <type_traits>
-#include <vector>
 
 namespace tuvx
 {
@@ -47,13 +46,21 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // wrap_analytic
   //
-  // Two overloads:
+  // Two overloads selected by concept:
   //   wrap_analytic(f)  where f(λ) → T       — wavelength-only formula
   //   wrap_analytic(f)  where f(λ, T) → T    — wavelength + temperature formula
-  //
-  // SFINAE selects the correct overload based on f's arity:
-  //   - λ-only:   invocable with (T)     but NOT with (T, T)
-  //   - λ+T:      invocable with (T, T)
+
+  /// @brief Concept for a wavelength-only analytic formula.
+  template<typename F, typename T>
+  concept WavelengthFormula = requires(F f, T wl) {
+    { f(wl) } -> std::convertible_to<T>;
+  };
+
+  /// @brief Concept for a wavelength-and-temperature analytic formula.
+  template<typename F, typename T>
+  concept WavelengthTemperatureFormula = requires(F f, T wl, T temp) {
+    { f(wl, temp) } -> std::convertible_to<T>;
+  };
 
   /// @brief Wraps a simple analytic formula f(λ) → T into a full TransformFunc.
   ///
@@ -68,13 +75,9 @@ namespace tuvx
   ///
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  f  Callable returning a weight given wavelength (meters).
-  template<
-      typename ArrayPolicy = Array3D<double>,
-      typename F,
-      typename T = typename ArrayPolicy::value_type,
-      std::enable_if_t<
-          std::is_invocable_r_v<T, F, T> && !std::is_invocable_r_v<T, F, T, T>,
-          int> = 0>
+  template<typename ArrayPolicy = Array3D<double>, typename F>
+    requires WavelengthFormula<F, typename ArrayPolicy::value_type> &&
+             (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
     return [f = std::move(f)](
@@ -104,11 +107,8 @@ namespace tuvx
   ///
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  f  Callable returning a weight given wavelength (m) and temperature (K).
-  template<
-      typename ArrayPolicy = Array3D<double>,
-      typename F,
-      typename T = typename ArrayPolicy::value_type,
-      std::enable_if_t<std::is_invocable_r_v<T, F, T, T>, int> = 0>
+  template<typename ArrayPolicy = Array3D<double>, typename F>
+    requires WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
     return [f = std::move(f)](
