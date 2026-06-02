@@ -11,7 +11,7 @@ namespace
   // Test atmosphere: 3 wavelength bins, 2 height layers, 2 columns.
   //   wl mid-points: 225nm, 275nm, 350nm  (edges: 200, 250, 300, 400 nm)
   //   temperature:   col0: [250, 270],  col1: [260, 280]  (K)
-  //   air density:   col0: [1.0e-3, 8.0e-4],  col1: [9.0e-4, 7.0e-4]  (mol/m³)
+  //   air density:   col0: [1.0e-3, 8.0e-4],  col1: [9.0e-4, 7.0e-4]  (mol/m3)
   tuvx::AtmosphericState<> make_state()
   {
     tuvx::AtmosphericState<> state;
@@ -76,7 +76,7 @@ TEST(Factories, WrapAnalyticWavelengthOnly)
   auto state = make_state();
   auto weights = make_weights();
 
-  // f(λ) = λ in nm → 225, 275, 350
+  // f(lambda) = lambda in nm -> 225, 275, 350
   auto tf = tuvx::wrap_analytic([](double lambda) { return lambda * 1e9; });
   tf(state, weights);
 
@@ -96,7 +96,7 @@ TEST(Factories, WrapAnalyticWavelengthAndTemperature)
   auto state = make_state();
   auto weights = make_weights();
 
-  // f(λ, T) = T — verify T is indexed by (z, col)
+  // f(lambda, T) = T  -  verify T is indexed by (z, col)
   auto tf = tuvx::wrap_analytic([](double /*lambda*/, double temp) { return temp; });
   tf(state, weights);
 
@@ -154,11 +154,11 @@ TEST(Factories, TemperatureInterpolation)
   }
 }
 
-// polynomial_scaling: coeffs[wl × order], computes sum_n coeffs(wl,n) * ΔT^n
+// polynomial_scaling: coeffs[wl x order], computes sum_n coeffs(wl,n) * dT^n
 // T_ref = 250 K
-//   wl=0: coeffs = [1.0, 0.01, 0.0]  → P(ΔT) = 1.0 + 0.01·ΔT
-//   wl=1: coeffs = [2.0, 0.0, 0.001] → P(ΔT) = 2.0 + 0.001·ΔT²
-//   wl=2: coeffs = [0.5, 0.02, 0.0]  → P(ΔT) = 0.5 + 0.02·ΔT
+//   wl=0: coeffs = [1.0, 0.01, 0.0]  -> P(dT) = 1.0 + 0.01*dT
+//   wl=1: coeffs = [2.0, 0.0, 0.001] -> P(dT) = 2.0 + 0.001*dT^2
+//   wl=2: coeffs = [0.5, 0.02, 0.0]  -> P(dT) = 0.5 + 0.02*dT
 TEST(Factories, PolynomialScaling)
 {
   auto state = make_state();
@@ -178,17 +178,17 @@ TEST(Factories, PolynomialScaling)
   const auto tf = tuvx::polynomial_scaling(coeffs, 250.0);
   tf(state, weights);
 
-  // col0, z0: T=250 → ΔT=0
+  // col0, z0: T=250 -> dT=0
   EXPECT_DOUBLE_EQ(weights(0, 0, 0), 1.0);
   EXPECT_DOUBLE_EQ(weights(1, 0, 0), 2.0);
   EXPECT_DOUBLE_EQ(weights(2, 0, 0), 0.5);
 
-  // col0, z1: T=270 → ΔT=20
+  // col0, z1: T=270 -> dT=20
   EXPECT_DOUBLE_EQ(weights(0, 1, 0), 1.0 + (0.01 * 20.0));
   EXPECT_DOUBLE_EQ(weights(1, 1, 0), 2.0 + (0.001 * 20.0 * 20.0));
   EXPECT_DOUBLE_EQ(weights(2, 1, 0), 0.5 + (0.02 * 20.0));
 
-  // col1, z0: T=260 → ΔT=10
+  // col1, z0: T=260 -> dT=10
   EXPECT_DOUBLE_EQ(weights(0, 0, 1), 1.0 + (0.01 * 10.0));
   EXPECT_DOUBLE_EQ(weights(1, 0, 1), 2.0 + (0.001 * 10.0 * 10.0));
   EXPECT_DOUBLE_EQ(weights(2, 0, 1), 0.5 + (0.02 * 10.0));
@@ -199,7 +199,7 @@ TEST(Factories, ExponentialScaling)
   auto state = make_state();
   auto weights = make_weights();
 
-  // coeffs: order-1 polynomial in exponent: exp(0.0 + 0.001·ΔT)
+  // coeffs: order-1 polynomial in exponent: exp(0.0 + 0.001*dT)
   tuvx::Array2D<double> coeffs(3, 2);
   for (std::size_t wl = 0; wl < 3; ++wl)
   {
@@ -235,15 +235,15 @@ TEST(Factories, LinearCorrection)
   const auto tf = tuvx::linear_correction(base, slope, 250.0);
   tf(state, weights);
 
-  // col0, z1: T=270 → ΔT=20
+  // col0, z1: T=270 -> dT=20
   EXPECT_DOUBLE_EQ(weights(0, 1, 0), 1.0e-22 + (1.0e-24 * 20.0));
   EXPECT_DOUBLE_EQ(weights(1, 1, 0), 2.0e-22 + (2.0e-24 * 20.0));
-  // col0, z0: T=250 → ΔT=0
+  // col0, z0: T=250 -> dT=0
   EXPECT_DOUBLE_EQ(weights(2, 0, 0), 3.0e-22);
 }
 
-// stern_volmer: φ = φ₀ / (1 + k·M·φ₀)
-// phi0=0.4, k=1.0e3 m³/mol, M varies per (z, col)
+// stern_volmer: phi = phi0 / (1 + k*M*phi0)
+// phi0=0.4, k=1.0e3 m3/mol, M varies per (z, col)
 TEST(Factories, SternVolmer)
 {
   auto state = make_state();

@@ -5,7 +5,7 @@
 //
 // Each combinator takes one or more TransformFunc values and returns a new
 // TransformFunc that calculates composite weights.  They work with any
-// TransformFunc — library factories, combinators, or user-written lambdas.
+// TransformFunc - library factories, combinators, or user-written lambdas.
 #pragma once
 
 #include <tuvx/transforms/transform_func.hpp>
@@ -67,7 +67,7 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // multiply
 
-  /// @brief Returns a TransformFunc whose weights are @p a weights × @p b weights.
+  /// @brief Returns a TransformFunc whose weights are @p a weights multiplied by @p b weights.
   ///
   /// Both transforms are evaluated into separate buffers; the results are
   /// combined element-wise.
@@ -98,7 +98,7 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // add
 
-  /// @brief Returns a TransformFunc whose weights are @p a weights + @p b weights.
+  /// @brief Returns a TransformFunc whose weights are @p a weights plus @p b weights.
   template<typename ArrayPolicy = Array3D<double>>
   auto add(TransformFunc<ArrayPolicy> a, TransformFunc<ArrayPolicy> b) -> TransformFunc<ArrayPolicy>
   {
@@ -153,7 +153,7 @@ namespace tuvx
       const auto n_z = weights.Size2();
       const auto n_col = weights.Size3();
 
-      // Zero all weights — regions cover only their range.
+      // Zero all weights - regions cover only their range.
       for (auto &w : weights)
       {
         w = T{ 0 };
@@ -162,7 +162,6 @@ namespace tuvx
       Array3D<T> tmp(n_wl, n_z, n_col);
       for (const auto &region : regions)
       {
-        // Evaluate the region's transform into tmp.
         region.transform_(state, tmp);
 
         for (std::size_t wl = 0; wl < n_wl; ++wl)
@@ -211,7 +210,9 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // override_band
   //
-  // Named spectral bands used by override_band(name, ...).
+  // Named spectral bands. Wavelength limits from Fortran la_sr_bands.F90:
+  //   Lyman-alpha:    wlla  = [121.4, 121.9] nm
+  //   Schumann-Runge: wlsrb = [175.4, 206.2] nm
 
   /// @brief A named wavelength band with known spectral limits (meters).
   struct SpectralBand
@@ -278,7 +279,7 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // scale
 
-  /// @brief Returns a TransformFunc whose weights are @p factor × those of @p t.
+  /// @brief Returns a TransformFunc whose weights are @p factor times those of @p t.
   ///
   /// @param factor  Scalar multiplier.
   /// @param t       Source transform.

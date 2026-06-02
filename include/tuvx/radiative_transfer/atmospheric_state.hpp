@@ -14,7 +14,7 @@ namespace tuvx
   /// @brief Atmospheric state used to calculate transform weights.
   ///
   /// Holds the grids and per-column profiles that transforms need to
-  /// calculate their weight arrays [wavelength × height × column].
+  /// calculate their weight arrays [wavelength x height x column].
   /// The template parameter controls the 3D storage policy; 2D profiles
   /// are always backed by Array2D<value_type>.
   ///
@@ -24,19 +24,19 @@ namespace tuvx
   {
     using value_type = typename ArrayPolicy::value_type;
 
-    /// Wavelength grid (constant across columns), [n_wavelengths × 1].
+    /// Wavelength grid (constant across columns), [n_wavelengths x 1].
     Grid<Array2D<value_type>> wavelength_grid_{};
 
-    /// Height grid (may vary by column), [n_layers × n_columns].
+    /// Height grid (may vary by column), [n_layers x n_columns].
     Grid<Array2D<value_type>> height_grid_{};
 
-    /// Temperature profile [n_layers × n_columns] (K).
+    /// Temperature profile [n_layers x n_columns] (K).
     Array2D<value_type> temperature_{};
 
-    /// Pressure profile [n_layers × n_columns] (Pa).
+    /// Pressure profile [n_layers x n_columns] (Pa).
     Array2D<value_type> pressure_{};
 
-    /// Air number density [n_layers × n_columns] (mol m⁻³).
+    /// Air number density [n_layers x n_columns] (mol m-3).
     Array2D<value_type> air_density_{};
   };
 

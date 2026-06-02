@@ -89,7 +89,7 @@ TEST(Combinators, Scale)
 }
 
 // in_region: wl mid-points 225nm, 275nm, 350nm
-// region [250nm, 300nm] → only bin 1 (275nm) is inside
+// region [250nm, 300nm] -> only bin 1 (275nm) is inside
 TEST(Combinators, InRegion)
 {
   auto state = make_state();
@@ -167,7 +167,7 @@ TEST(Combinators, PiecewiseGapIsZero)
   auto state = make_state();
   auto weights = make_weights();
 
-  // Only covers bins 0 and 2 — bin 1 (275nm) gets zero
+  // Only covers bins 0 and 2  -  bin 1 (275nm) gets zero
   std::vector<tuvx::PiecewiseRegion<>> regions;
   regions.push_back({ .wl_min_ = 200e-9, .wl_max_ = 249e-9, .transform_ = tuvx::constant(1.0) });
   regions.push_back({ .wl_min_ = 310e-9, .wl_max_ = 400e-9, .transform_ = tuvx::constant(2.0) });
@@ -234,7 +234,7 @@ TEST(Combinators, Composition)
 {
   auto state = make_state();
 
-  // add: base(1e-22) + in_region(250-300, 1e-22) → 1e-22 except bin1 gets 2e-22
+  // add: base(1e-22) + in_region(250-300, 1e-22) -> 1e-22 except bin1 gets 2e-22
   auto weights_add = make_weights();
   auto tf_add = tuvx::add(tuvx::constant(1.0e-22), tuvx::in_region(250e-9, 300e-9, tuvx::constant(1.0e-22)));
   tf_add(state, weights_add);
@@ -249,7 +249,7 @@ TEST(Combinators, Composition)
     }
   }
 
-  // multiply: 3 × in_region(250-300, 2) → 0 outside, 6 inside
+  // multiply: 3 x in_region(250-300, 2) -> 0 outside, 6 inside
   auto weights_mul = make_weights();
   auto tf_mul = tuvx::multiply(tuvx::constant(3.0), tuvx::in_region(250e-9, 300e-9, tuvx::constant(2.0)));
   tf_mul(state, weights_mul);
