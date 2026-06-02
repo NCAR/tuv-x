@@ -227,9 +227,13 @@ namespace tuvx
   inline SpectralBand named_band(std::string_view name)
   {
     if (name == "lyman-alpha")
+    {
       return { 1.2150e-7, 1.2165e-7 };
+    }
     if (name == "schumann-runge")
+    {
       return { 1.75e-7, 2.05e-7 };
+    }
     throw std::invalid_argument("Unknown spectral band: " + std::string(name));
   }
 
