@@ -228,11 +228,11 @@ namespace tuvx
   {
     if (name == "lyman-alpha")
     {
-      return { 1.2150e-7, 1.2165e-7 };
+      return { .wl_min_ = 1.2150e-7, .wl_max_ = 1.2165e-7 };
     }
     if (name == "schumann-runge")
     {
-      return { 1.75e-7, 2.05e-7 };
+      return { .wl_min_ = 1.75e-7, .wl_max_ = 2.05e-7 };
     }
     throw std::invalid_argument("Unknown spectral band: " + std::string(name));
   }

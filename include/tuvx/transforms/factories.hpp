@@ -15,8 +15,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <concepts>
 #include <cstddef>
+#include <type_traits>
 #include <vector>
 
 namespace tuvx
@@ -45,13 +45,15 @@ namespace tuvx
   }
 
   // ---------------------------------------------------------------------------
-  // wrap_analytic — f(λ) overload
-
-  /// @brief Concept for a wavelength-only analytic formula.
-  template<typename F, typename T>
-  concept WavelengthFormula = requires(F f, T wl) {
-    { f(wl) } -> std::convertible_to<T>;
-  };
+  // wrap_analytic
+  //
+  // Two overloads:
+  //   wrap_analytic(f)  where f(λ) → T       — wavelength-only formula
+  //   wrap_analytic(f)  where f(λ, T) → T    — wavelength + temperature formula
+  //
+  // SFINAE selects the correct overload based on f's arity:
+  //   - λ-only:   invocable with (T)     but NOT with (T, T)
+  //   - λ+T:      invocable with (T, T)
 
   /// @brief Wraps a simple analytic formula f(λ) → T into a full TransformFunc.
   ///
@@ -59,15 +61,20 @@ namespace tuvx
   ///
   /// Example:
   /// @code
-  ///   auto xs = tuvx::wrap_analytic<>([](double wl) {
+  ///   auto xs = tuvx::wrap_analytic([](double wl) {
   ///       return 1.0e-22 * std::exp(-(wl - 300e-9) * (wl - 300e-9) / (10e-9 * 10e-9));
   ///   });
   /// @endcode
   ///
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  f  Callable returning a weight given wavelength (meters).
-  template<typename ArrayPolicy = Array3D<double>, typename F>
-    requires WavelengthFormula<F, typename ArrayPolicy::value_type>
+  template<
+      typename ArrayPolicy = Array3D<double>,
+      typename F,
+      typename T = typename ArrayPolicy::value_type,
+      std::enable_if_t<
+          std::is_invocable_r_v<T, F, T> && !std::is_invocable_r_v<T, F, T, T>,
+          int> = 0>
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
     return [f = std::move(f)](
@@ -91,25 +98,17 @@ namespace tuvx
     };
   }
 
-  // ---------------------------------------------------------------------------
-  // wrap_analytic — f(λ, T) overload
-
-  /// @brief Concept for a wavelength-and-temperature analytic formula.
-  template<typename F, typename T>
-  concept WavelengthTemperatureFormula = requires(F f, T wl, T temp) {
-    { f(wl, temp) } -> std::convertible_to<T>;
-  };
-
   /// @brief Wraps an analytic formula f(λ, T) → T into a full TransformFunc.
   ///
-  /// Temperature is taken from AtmosphericState::temperature_ at each (height, column)
-  /// and broadcast with the per-wavelength result.
+  /// Temperature is taken from AtmosphericState::temperature_ at each (height, column).
   ///
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  f  Callable returning a weight given wavelength (m) and temperature (K).
-  template<typename ArrayPolicy = Array3D<double>, typename F>
-    requires WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type> &&
-             (!WavelengthFormula<F, typename ArrayPolicy::value_type>)
+  template<
+      typename ArrayPolicy = Array3D<double>,
+      typename F,
+      typename T = typename ArrayPolicy::value_type,
+      std::enable_if_t<std::is_invocable_r_v<T, F, T, T>, int> = 0>
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
     return [f = std::move(f)](
@@ -141,8 +140,7 @@ namespace tuvx
   /// (length == number of wavelength bins the transform will be called with).
   /// Values are broadcast uniformly over all height levels and columns.
   ///
-  /// @param model_values  Pre-interpolated cross-section or quantum yield values
-  ///                      indexed by wavelength bin [n_wavelengths].
+  /// @param model_values  Pre-interpolated values indexed by wavelength bin [n_wavelengths].
   template<typename ArrayPolicy = Array3D<double>>
   auto from_data(Array1D<typename ArrayPolicy::value_type> model_values) -> TransformFunc<ArrayPolicy>
   {
@@ -168,15 +166,6 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // temperature_interpolation
 
-  /// @brief Concept for a bilinear temperature interpolation callable.
-  ///
-  /// The interpolator takes the wavelength index and temperature and returns the
-  /// interpolated value from the reference table it captured at construction.
-  template<typename F, typename T>
-  concept TemperatureInterpolator = requires(F f, std::size_t wl_idx, T temp) {
-    { f(wl_idx, temp) } -> std::convertible_to<T>;
-  };
-
   /// @brief Returns a TransformFunc using T-dependent tabulated data.
   ///
   /// The @p interp callable encapsulates a reference cross-section table and its
@@ -185,10 +174,8 @@ namespace tuvx
   ///
   /// Example — linear interpolation in T:
   /// @code
-  ///   // ref_temps and xs_table captured inside interp_fn
-  ///   auto xs = tuvx::temperature_interpolation<>(
+  ///   auto xs = tuvx::temperature_interpolation(
   ///       [ref_temps, xs_at_wl](std::size_t wl_idx, double T) {
-  ///           // xs_at_wl[wl_idx] is an Array1D<double> over temperature
   ///           return interpolate_linear(ref_temps, xs_at_wl[wl_idx], T);
   ///       });
   /// @endcode
@@ -196,7 +183,6 @@ namespace tuvx
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  interp  Callable: (wl_idx, temperature_K) → value.
   template<typename ArrayPolicy = Array3D<double>, typename Interp>
-    requires TemperatureInterpolator<Interp, typename ArrayPolicy::value_type>
   auto temperature_interpolation(Interp interp) -> TransformFunc<ArrayPolicy>
   {
     return [interp = std::move(interp)](
@@ -221,20 +207,16 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // polynomial_scaling
   //
-  // Computes σ₀(λ) · P(T - T_ref, λ) where P is a polynomial:
-  //   P(ΔT, λ) = Σₙ coeffs(wl, n) · ΔT^n
-  //
-  // coeffs[n_wavelengths × poly_order+1], coeffs(wl, 0) = σ₀(λ).
+  // Computes Σₙ coeffs(wl, n) · (T − T_ref)^n
 
   /// @brief Returns a TransformFunc for polynomial temperature scaling.
   ///
   /// At each (wavelength, height, column), computes:
-  ///   w = Σₙ coeffs(wl, n) · (T - T_ref)^n
+  ///   w = Σₙ coeffs(wl, n) · (T − T_ref)^n
   ///
-  /// The zero-th order coefficient coeffs(wl, 0) is the base cross-section σ₀(λ).
+  /// The zero-th order coefficient coeffs(wl, 0) is the base value σ₀(λ).
   ///
   /// @param coeffs  Polynomial coefficients [n_wavelengths × (max_order+1)].
-  ///                coeffs(wl, n) is the n-th order coefficient for wavelength wl.
   /// @param t_ref   Reference temperature (K).
   template<typename ArrayPolicy = Array3D<double>>
   auto polynomial_scaling(Array2D<typename ArrayPolicy::value_type> coeffs, typename ArrayPolicy::value_type t_ref)
@@ -272,12 +254,12 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // exponential_scaling
   //
-  // Computes exp(Σₙ coeffs(wl, n) · (T - T_ref)^n).
+  // Computes exp(Σₙ coeffs(wl, n) · (T − T_ref)^n)
 
   /// @brief Returns a TransformFunc for exponential temperature scaling.
   ///
   /// At each (wavelength, height, column), computes:
-  ///   w = exp(Σₙ coeffs(wl, n) · (T - T_ref)^n)
+  ///   w = exp(Σₙ coeffs(wl, n) · (T − T_ref)^n)
   ///
   /// @param coeffs  Polynomial exponent coefficients [n_wavelengths × (max_order+1)].
   /// @param t_ref   Reference temperature (K).
@@ -318,12 +300,12 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // linear_correction
   //
-  // Computes base(wl) + slope(wl) · (T - T_ref).
+  // Computes base(wl) + slope(wl) · (T − T_ref)
 
   /// @brief Returns a TransformFunc for a linear temperature correction.
   ///
   /// At each (wavelength, height, column), computes:
-  ///   w = base[wl] + slope[wl] · (T - T_ref)
+  ///   w = base[wl] + slope[wl] · (T − T_ref)
   ///
   /// @param base   Base values at reference temperature [n_wavelengths].
   /// @param slope  Temperature slope per wavelength bin [n_wavelengths] (value K⁻¹).
@@ -348,7 +330,7 @@ namespace tuvx
         {
           for (std::size_t col = 0; col < n_col; ++col)
           {
-            weights(wl, z, col) = base[wl] + slope[wl] * (state.temperature_(z, col) - t_ref);
+            weights(wl, z, col) = base[wl] + (slope[wl] * (state.temperature_(z, col) - t_ref));
           }
         }
       }
@@ -358,9 +340,8 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // stern_volmer
   //
-  // Computes the collisionally quenched quantum yield:
-  //   φ = 1 / (1/φ₀ + k · M)
-  // where M is air number density (mol m⁻³) from AtmosphericState::air_density_.
+  // Computes φ = φ₀ / (1 + k · M · φ₀)
+  // where M is air number density from AtmosphericState::air_density_.
 
   /// @brief Returns a TransformFunc for Stern-Volmer quenching quantum yield.
   ///
@@ -385,7 +366,7 @@ namespace tuvx
           for (std::size_t col = 0; col < n_col; ++col)
           {
             const auto air = state.air_density_(z, col);
-            weights(wl, z, col) = phi0 / (typename ArrayPolicy::value_type{ 1 } + k * air * phi0);
+            weights(wl, z, col) = phi0 / (typename ArrayPolicy::value_type{ 1 } + (k * air * phi0));
           }
         }
       }
@@ -395,16 +376,9 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // parameterized
   //
-  // Generic escape hatch for algorithms that don't fit the above patterns.
-  // The user supplies a callable that, given (wl_idx, z, col, state), returns
-  // the weight value.  This is equivalent to writing a raw TransformFunc lambda
-  // but with the nested loops factored out.
-
-  /// @brief Concept for a parameterized weight calculator.
-  template<typename F, typename T>
-  concept WeightCalculator = requires(F f, std::size_t wl, std::size_t z, std::size_t col, T temp, T air) {
-    { f(wl, z, col, temp, air) } -> std::convertible_to<T>;
-  };
+  // Generic escape hatch: the user supplies a callable that, given
+  // (wl_idx, z_idx, col_idx, temperature_K, air_density_mol_per_m3),
+  // returns the weight value.
 
   /// @brief Returns a TransformFunc from a generic per-element calculator.
   ///
@@ -414,7 +388,6 @@ namespace tuvx
   /// @tparam ArrayPolicy  Storage policy.
   /// @param  calc  Per-element weight calculator.
   template<typename ArrayPolicy = Array3D<double>, typename Calc>
-    requires WeightCalculator<Calc, typename ArrayPolicy::value_type>
   auto parameterized(Calc calc) -> TransformFunc<ArrayPolicy>
   {
     return [calc = std::move(calc)](
