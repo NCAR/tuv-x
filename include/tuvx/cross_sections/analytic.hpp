@@ -36,11 +36,15 @@ namespace tuvx::cross_sections
 
   /// @brief Returns a TransformFunc for Rayleigh scattering cross-section.
   ///
-  /// The Nicolet (1984) parameterisation:
+  /// The cross-section parameterisation:
   /// \f[ \sigma(\lambda) = \frac{4.02 \times 10^{-28}}{\mu^{p(\mu)}} \f]
   /// where \f$\mu = \lambda\,[\text{nm}]/1000\f$ (micrometers) and
   /// \f$p(\mu) = 3.6772 + 0.389\mu + 0.09426/\mu\f$ for
   /// \f$\mu \le 0.55\f$, else \f$p = 4.04\f$.
+  ///
+  /// \rst
+  /// From WMO (1985), originally :cite:`Nicolet1984`.
+  /// \endrst
   ///
   /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
   template<typename ArrayPolicy = Array3D<double>>
@@ -51,7 +55,7 @@ namespace tuvx::cross_sections
         {
           const auto mu = lambda_m * 1.0e6;  // m -> micrometers (Fortran: lambda_nm/1000)
           const auto pwr = (mu <= 0.55)
-                               ? 3.6772 + 0.389 * mu + 0.09426 / mu
+                               ? 3.6772 + (0.389 * mu) + (0.09426 / mu)
                                : 4.04;
           const auto sigma_cm2 = 4.02e-28 / std::pow(mu, pwr);
           return sigma_cm2 * 1.0e-4;  // cm² -> m²
@@ -72,7 +76,7 @@ namespace tuvx::cross_sections
 
   /// @brief Returns a TransformFunc for HOBr cross-section.
   ///
-  /// Sum of three log-normal functions (Burkholder et al.):
+  /// Sum of three log-normal functions:
   /// \f[ \sigma(\lambda) = \left[
   ///     24.77 e^{-109.80 (\ln(284.01/\lambda_\text{nm}))^2}
   ///   + 12.22 e^{-93.63  (\ln(350.57/\lambda_\text{nm}))^2}
@@ -92,9 +96,9 @@ namespace tuvx::cross_sections
             {
               const auto wl = lambda_m * 1.0e9;  // m -> nm
               const auto sigma_cm2 =
-                  (24.77 * std::exp(-109.80 * std::pow(std::log(284.01 / wl), 2)) +
-                   12.22 * std::exp(-93.63 * std::pow(std::log(350.57 / wl), 2)) +
-                   2.283 * std::exp(-242.40 * std::pow(std::log(457.38 / wl), 2))) *
+                  ((24.77 * std::exp(-109.80 * std::pow(std::log(284.01 / wl), 2))) +
+                   (12.22 * std::exp(-93.63 * std::pow(std::log(350.57 / wl), 2))) +
+                   (2.283 * std::exp(-242.40 * std::pow(std::log(457.38 / wl), 2)))) *
                   1.0e-20;
               return sigma_cm2 * 1.0e-4;  // cm² -> m²
             }));
@@ -126,7 +130,7 @@ namespace tuvx::cross_sections
               [a, b, c](typename ArrayPolicy::value_type lambda_m) -> typename ArrayPolicy::value_type
               {
                 const auto wl = lambda_m * 1.0e9;  // m -> nm
-                const auto sigma_cm2 = std::exp(c + wl * (b + a * wl));
+                const auto sigma_cm2 = std::exp(c + (wl * (b + (a * wl))));
                 return sigma_cm2 * 1.0e-4;  // cm² -> m²
               }));
     }
