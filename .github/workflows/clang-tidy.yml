@@ -25,6 +25,7 @@ jobs:
         find include -type f -name '*.hpp' -exec \
           clang-tidy --config-file=.clang-tidy -p build \
           --extra-arg=-I${{ github.workspace }}/include \
+          --extra-arg=-std=c++20 \
           --warnings-as-errors='*' {} +
 
     - name: Run clang-tidy on sources
@@ -32,4 +33,5 @@ jobs:
         find src -type f -name '*.cpp' -exec \
           clang-tidy --config-file=.clang-tidy -p build \
           --extra-arg=-I${{ github.workspace }}/include \
+          --extra-arg=-std=c++20 \
           --warnings-as-errors='*' {} +

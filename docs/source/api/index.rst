@@ -8,4 +8,6 @@ API Reference
    grid
    profile
    linear_algebra
+   atmospheric_state
    radiative_transfer
+   transforms
