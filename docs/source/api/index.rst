@@ -11,3 +11,4 @@ API Reference
    atmospheric_state
    radiative_transfer
    transforms
+   cross_sections
