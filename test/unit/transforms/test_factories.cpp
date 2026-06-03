@@ -139,9 +139,8 @@ TEST(Factories, TemperatureInterpolation)
   auto weights = make_weights();
 
   // interp(wl_idx, T) = wl_idx * 10.0 + T / 100.0
-  auto tf = tuvx::temperature_interpolation(
-      [](std::size_t wl_idx, double temp)
-      { return (static_cast<double>(wl_idx) * 10.0) + (temp / 100.0); });
+  auto tf = tuvx::temperature_interpolation([](std::size_t wl_idx, double temp)
+                                            { return (static_cast<double>(wl_idx) * 10.0) + (temp / 100.0); });
   tf(state, weights);
 
   for (std::size_t wl = 0; wl < 3; ++wl)
@@ -275,9 +274,8 @@ TEST(Factories, Parameterized)
   auto weights = make_weights();
 
   // weight = wl_idx * 100 + z_idx * 10 + col_idx
-  auto tf = tuvx::parameterized(
-      [](std::size_t wl, std::size_t z, std::size_t col, double /*temp*/, double /*air*/)
-      { return static_cast<double>((wl * 100) + (z * 10) + col); });
+  auto tf = tuvx::parameterized([](std::size_t wl, std::size_t z, std::size_t col, double /*temp*/, double /*air*/)
+                                { return static_cast<double>((wl * 100) + (z * 10) + col); });
   tf(state, weights);
 
   for (std::size_t wl = 0; wl < 3; ++wl)

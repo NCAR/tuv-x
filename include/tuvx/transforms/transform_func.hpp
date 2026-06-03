@@ -39,8 +39,7 @@ namespace tuvx
   ///
   /// @tparam ArrayPolicy  3D array policy (default: Array3D<double>).
   template<typename ArrayPolicy = Array3D<double>>
-  using TransformFunc = std::function<void(
-      const AtmosphericState<ArrayPolicy> &state,
-      Array3D<typename ArrayPolicy::value_type> &weights)>;
+  using TransformFunc =
+      std::function<void(const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)>;
 
 }  // namespace tuvx

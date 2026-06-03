@@ -33,8 +33,7 @@ namespace tuvx
   template<typename ArrayPolicy = Array3D<double>>
   auto constant(typename ArrayPolicy::value_type value) -> TransformFunc<ArrayPolicy>
   {
-    return [value](const AtmosphericState<ArrayPolicy> & /*state*/,
-                   Array3D<typename ArrayPolicy::value_type> &weights)
+    return [value](const AtmosphericState<ArrayPolicy> & /*state*/, Array3D<typename ArrayPolicy::value_type> &weights)
     {
       for (auto &w : weights)
       {
@@ -77,11 +76,10 @@ namespace tuvx
   /// @param  f  Callable returning a weight given wavelength (m).
   template<typename ArrayPolicy = Array3D<double>, typename F>
     requires WavelengthFormula<F, typename ArrayPolicy::value_type> &&
-             (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
+                 (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
-    return [f = std::move(f)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [f = std::move(f)](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -111,8 +109,7 @@ namespace tuvx
     requires WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
-    return [f = std::move(f)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [f = std::move(f)](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -266,9 +263,8 @@ namespace tuvx
   /// @param coeffs  Polynomial exponent coefficients [n_wavelengths x (max_order+1)].
   /// @param t_ref   Reference temperature (K).
   template<typename ArrayPolicy = Array3D<double>>
-  auto exponential_scaling(
-      Array2D<typename ArrayPolicy::value_type> coeffs,
-      typename ArrayPolicy::value_type t_ref) -> TransformFunc<ArrayPolicy>
+  auto exponential_scaling(Array2D<typename ArrayPolicy::value_type> coeffs, typename ArrayPolicy::value_type t_ref)
+      -> TransformFunc<ArrayPolicy>
   {
     return [coeffs = std::move(coeffs), t_ref](
                const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
@@ -353,8 +349,7 @@ namespace tuvx
   /// @param phi0  Base (pressure-independent) quantum yield.
   /// @param k     Quenching rate coefficient (m3 mol-1).
   template<typename ArrayPolicy = Array3D<double>>
-  auto stern_volmer(typename ArrayPolicy::value_type phi0, typename ArrayPolicy::value_type k)
-      -> TransformFunc<ArrayPolicy>
+  auto stern_volmer(typename ArrayPolicy::value_type phi0, typename ArrayPolicy::value_type k) -> TransformFunc<ArrayPolicy>
   {
     return [phi0, k](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
     {
