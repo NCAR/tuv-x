@@ -8,8 +8,10 @@ produced by a standalone program that evaluates the formulas below — the same
 formulas implemented by the Fortran source files, with no TUV-x or NetCDF
 dependency.
 
-These values are the ground truth the C++ `tuvx::cross_sections` factories are
-regression-tested against (relative tolerance 1e-10).
+These values are the ground truth the C++ implementation is regression-tested
+against (relative tolerance 1e-10). The C++ side assembles each species from
+the general analytic transform forms (`tuvx/transforms/analytic_forms.hpp`) in
+the example header `tuvx/fixed_configuration.hpp`.
 
 ### Reference source
 

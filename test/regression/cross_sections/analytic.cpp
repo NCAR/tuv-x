@@ -1,12 +1,13 @@
 // Copyright (C) 2026 University Corporation for Atmospheric Research
 // SPDX-License-Identifier: Apache-2.0
 //
-// Regression tests for analytic cross-section factories.
-// Each test loads the reference CSV (see reference/README provenance) and
-// compares against the C++ TransformFunc output.
+// Regression tests for the analytic cross-sections in the example fixed
+// configuration.  Each test loads the reference CSV (see reference/README for
+// provenance) and compares against the C++ output assembled from the general
+// analytic transform forms.
 //
 // Tolerance: relative 1e-10 -- both sides evaluate the same IEEE 754 formulas.
-#include <tuvx/cross_sections/analytic.hpp>
+#include <tuvx/fixed_configuration.hpp>
 
 #include <gtest/gtest.h>
 
@@ -110,28 +111,28 @@ namespace
 
 TEST(AnalyticCrossSections, Rayleigh)
 {
-  CheckAgainstRef(RefDir() + "rayleigh.csv", tuvx::cross_sections::rayleigh());
+  CheckAgainstRef(RefDir() + "rayleigh.csv", tuvx::fixed_configuration::rayleigh());
 }
 
 TEST(AnalyticCrossSections, HOBr)
 {
-  CheckAgainstRef(RefDir() + "hobr.csv", tuvx::cross_sections::hobr());
+  CheckAgainstRef(RefDir() + "hobr.csv", tuvx::fixed_configuration::hobr());
 }
 
 TEST(AnalyticCrossSections, TButylNitrate)
 {
   CheckAgainstRef(
-      RefDir() + "t_butyl_nitrate.csv", tuvx::cross_sections::t_butyl_nitrate());
+      RefDir() + "t_butyl_nitrate.csv", tuvx::fixed_configuration::t_butyl_nitrate());
 }
 
 TEST(AnalyticCrossSections, NitroxyAcetone)
 {
   CheckAgainstRef(
-      RefDir() + "nitroxy_acetone.csv", tuvx::cross_sections::nitroxy_acetone());
+      RefDir() + "nitroxy_acetone.csv", tuvx::fixed_configuration::nitroxy_acetone());
 }
 
 TEST(AnalyticCrossSections, NitroxyEthanol)
 {
   CheckAgainstRef(
-      RefDir() + "nitroxy_ethanol.csv", tuvx::cross_sections::nitroxy_ethanol());
+      RefDir() + "nitroxy_ethanol.csv", tuvx::fixed_configuration::nitroxy_ethanol());
 }

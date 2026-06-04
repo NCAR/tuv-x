@@ -26,7 +26,7 @@ namespace tuvx
   ///
   /// Example - user-written lambda:
   /// @code
-  ///   tuvx::TransformFunc<> rayleigh = [](const auto& state, auto& weights) {
+  ///   tuvx::TransformFunc<> my_cross_section = [](const auto& state, auto& weights) {
   ///       weights.ForEachRow(
   ///           [](double& w, const double& wl) {
   ///               constexpr double A = 1.0455996e-30;  // m2 nm4
