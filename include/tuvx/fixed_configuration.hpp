@@ -63,11 +63,11 @@ namespace tuvx::fixed_configuration
     using T = typename ArrayPolicy::value_type;
     // amplitude = (coefficient * 1e-20 cm^2) * 1e-4 (cm^2 -> m^2) = coefficient * 1e-24
     return tuvx::log_normal_bands<ArrayPolicy>(
-        { LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 24.77e-24 }, .width_ = T{ 109.80 }, .center_ = T{ 284.01e-9 } },
-          LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 12.22e-24 }, .width_ = T{ 93.63 }, .center_ = T{ 350.57e-9 } },
-          LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 2.283e-24 }, .width_ = T{ 242.40 }, .center_ = T{ 457.38e-9 } } },
-        T{ 250.0e-9 },
-        T{ 550.0e-9 });
+        { .bands_ = { LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 24.77e-24 }, .width_ = T{ 109.80 }, .center_ = T{ 284.01e-9 } },
+                      LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 12.22e-24 }, .width_ = T{ 93.63 }, .center_ = T{ 350.57e-9 } },
+                      LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 2.283e-24 }, .width_ = T{ 242.40 }, .center_ = T{ 457.38e-9 } } },
+          .wl_min_ = T{ 250.0e-9 },
+          .wl_max_ = T{ 550.0e-9 } });
   }
 
   // The three organic nitrates share the form
@@ -84,8 +84,11 @@ namespace tuvx::fixed_configuration
   auto t_butyl_nitrate() -> TransformFunc<ArrayPolicy>
   {
     using T = typename ArrayPolicy::value_type;
-    return tuvx::exp_polynomial<ArrayPolicy>(
-        { T{ -115.5 }, T{ 0.5307 }, T{ -0.993e-3 } }, T{ 1.0e9 }, T{ 1.0e-4 }, T{ 270.0e-9 }, T{ 330.0e-9 });
+    return tuvx::exp_polynomial<ArrayPolicy>({ .coefficients_ = { T{ -115.5 }, T{ 0.5307 }, T{ -0.993e-3 } },
+                                               .wavelength_scale_ = T{ 1.0e9 },
+                                               .output_scale_ = T{ 1.0e-4 },
+                                               .wl_min_ = T{ 270.0e-9 },
+                                               .wl_max_ = T{ 330.0e-9 } });
   }
 
   /// @brief Nitroxy acetone cross-section (m^2), active 284-335 nm.
@@ -93,8 +96,11 @@ namespace tuvx::fixed_configuration
   auto nitroxy_acetone() -> TransformFunc<ArrayPolicy>
   {
     using T = typename ArrayPolicy::value_type;
-    return tuvx::exp_polynomial<ArrayPolicy>(
-        { T{ -156.8 }, T{ 0.7834 }, T{ -1.365e-3 } }, T{ 1.0e9 }, T{ 1.0e-4 }, T{ 284.0e-9 }, T{ 335.0e-9 });
+    return tuvx::exp_polynomial<ArrayPolicy>({ .coefficients_ = { T{ -156.8 }, T{ 0.7834 }, T{ -1.365e-3 } },
+                                               .wavelength_scale_ = T{ 1.0e9 },
+                                               .output_scale_ = T{ 1.0e-4 },
+                                               .wl_min_ = T{ 284.0e-9 },
+                                               .wl_max_ = T{ 335.0e-9 } });
   }
 
   /// @brief Nitroxy ethanol cross-section (m^2), active 270-306 nm.
@@ -102,8 +108,11 @@ namespace tuvx::fixed_configuration
   auto nitroxy_ethanol() -> TransformFunc<ArrayPolicy>
   {
     using T = typename ArrayPolicy::value_type;
-    return tuvx::exp_polynomial<ArrayPolicy>(
-        { T{ -210.4 }, T{ 1.2478 }, T{ -2.359e-3 } }, T{ 1.0e9 }, T{ 1.0e-4 }, T{ 270.0e-9 }, T{ 306.0e-9 });
+    return tuvx::exp_polynomial<ArrayPolicy>({ .coefficients_ = { T{ -210.4 }, T{ 1.2478 }, T{ -2.359e-3 } },
+                                               .wavelength_scale_ = T{ 1.0e9 },
+                                               .output_scale_ = T{ 1.0e-4 },
+                                               .wl_min_ = T{ 270.0e-9 },
+                                               .wl_max_ = T{ 306.0e-9 } });
   }
 
 }  // namespace tuvx::fixed_configuration

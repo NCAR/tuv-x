@@ -61,8 +61,16 @@ caller-supplied; no species or constant is hard-coded.
    :project: tuvx
    :members:
 
+.. doxygenstruct:: tuvx::LogNormalBandsParameters
+   :project: tuvx
+   :members:
+
 .. doxygenfunction:: tuvx::log_normal_bands
    :project: tuvx
+
+.. doxygenstruct:: tuvx::ExpPolynomialParameters
+   :project: tuvx
+   :members:
 
 .. doxygenfunction:: tuvx::exp_polynomial
    :project: tuvx

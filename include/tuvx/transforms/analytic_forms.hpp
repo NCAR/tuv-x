@@ -5,9 +5,10 @@
 //
 // These are species-agnostic mathematical shapes that recur across many
 // cross-sections, quantum yields, and spectral weights.  All parameters are
-// supplied by the caller; no constant is hard-coded and no species is named
-// here.  Example configurations that bind specific parameter values live in
-// tuvx/fixed_configuration.hpp.
+// supplied by the caller through a named-field parameters struct (so every
+// value carries a name at the call site); no constant is hard-coded and no
+// species is named here.  Example configurations that bind specific parameter
+// values live in tuvx/fixed_configuration.hpp.
 //
 // Each form evaluates its formula only within an optional [wl_min, wl_max]
 // wavelength window and writes zero outside it.  Evaluating only inside the
@@ -81,26 +82,32 @@ namespace tuvx
     typename ArrayPolicy::value_type center_{};
   };
 
+  /// @brief Parameters for log_normal_bands().
+  template<typename ArrayPolicy = Array3D<double>>
+  struct LogNormalBandsParameters
+  {
+    /// Bands to sum.
+    std::vector<LogNormalBand<ArrayPolicy>> bands_{};
+    /// Lower wavelength bound, inclusive (m). Default: no lower bound.
+    typename ArrayPolicy::value_type wl_min_ = std::numeric_limits<typename ArrayPolicy::value_type>::lowest();
+    /// Upper wavelength bound, inclusive (m). Default: no upper bound.
+    typename ArrayPolicy::value_type wl_max_ = std::numeric_limits<typename ArrayPolicy::value_type>::max();
+  };
+
   /// @brief Returns a TransformFunc equal to a sum of log-normal bands.
   ///
   /// \f[ w(\lambda) = \sum_i A_i \exp\!\left(-w_i\,\ln^2(c_i/\lambda)\right) \f]
   /// evaluated for \f$ \lambda_\text{min} \le \lambda \le \lambda_\text{max} \f$
-  /// and zero outside.  Each band's amplitude \f$A_i\f$, width \f$w_i\f$, and
-  /// centre \f$c_i\f$ are caller-supplied.
+  /// and zero outside.
   ///
   /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
-  /// @param bands   The bands to sum.
-  /// @param wl_min  Lower wavelength bound, inclusive (m). Default: no lower bound.
-  /// @param wl_max  Upper wavelength bound, inclusive (m). Default: no upper bound.
+  /// @param params  Bands and optional wavelength window.
   template<typename ArrayPolicy = Array3D<double>>
-  auto log_normal_bands(
-      std::vector<LogNormalBand<ArrayPolicy>> bands,
-      typename ArrayPolicy::value_type wl_min = std::numeric_limits<typename ArrayPolicy::value_type>::lowest(),
-      typename ArrayPolicy::value_type wl_max = std::numeric_limits<typename ArrayPolicy::value_type>::max())
-      -> TransformFunc<ArrayPolicy>
+  auto log_normal_bands(LogNormalBandsParameters<ArrayPolicy> params) -> TransformFunc<ArrayPolicy>
   {
     return detail::wavelength_form<ArrayPolicy>(
-        [bands = std::move(bands)](typename ArrayPolicy::value_type lambda) -> typename ArrayPolicy::value_type
+        [bands = std::move(params.bands_)](typename ArrayPolicy::value_type lambda) ->
+        typename ArrayPolicy::value_type
         {
           using T = typename ArrayPolicy::value_type;
           T sum = 0;
@@ -111,12 +118,31 @@ namespace tuvx
           }
           return sum;
         },
-        wl_min,
-        wl_max);
+        params.wl_min_,
+        params.wl_max_);
   }
 
   // ---------------------------------------------------------------------------
   // exp_polynomial
+
+  /// @brief Parameters for exp_polynomial().
+  ///
+  /// Computes \f$ s_\text{out}\,\exp\!\left(\sum_n c_n (s_\lambda \lambda)^n\right) \f$.
+  template<typename ArrayPolicy = Array3D<double>>
+  struct ExpPolynomialParameters
+  {
+    /// Polynomial coefficients, lowest order first (c0, c1, c2, ...).
+    std::vector<typename ArrayPolicy::value_type> coefficients_{};
+    /// Factor applied to lambda (m) before evaluating the polynomial
+    /// (e.g. 1e9 to evaluate in nm while the grid is in m).
+    typename ArrayPolicy::value_type wavelength_scale_ = 1;
+    /// Factor applied to the exponential result (e.g. 1e-4 for cm^2 -> m^2).
+    typename ArrayPolicy::value_type output_scale_ = 1;
+    /// Lower wavelength bound, inclusive (m). Default: no lower bound.
+    typename ArrayPolicy::value_type wl_min_ = std::numeric_limits<typename ArrayPolicy::value_type>::lowest();
+    /// Upper wavelength bound, inclusive (m). Default: no upper bound.
+    typename ArrayPolicy::value_type wl_max_ = std::numeric_limits<typename ArrayPolicy::value_type>::max();
+  };
 
   /// @brief Returns a TransformFunc equal to the exponential of a wavelength polynomial.
   ///
@@ -125,29 +151,16 @@ namespace tuvx
   /// evaluated for \f$ \lambda_\text{min} \le \lambda \le \lambda_\text{max} \f$
   /// and zero outside.  The polynomial is evaluated by Horner's method.
   ///
-  /// @p wavelength_scale lets the caller keep coefficients in their natural
-  /// basis (e.g. pass 1e9 to evaluate the polynomial in nm while the grid is in
-  /// m).  @p output_scale multiplies the exponential (e.g. 1e-4 to convert a
-  /// cm^2 formula to m^2).
-  ///
   /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
-  /// @param coeffs            Polynomial coefficients, lowest order first (c0, c1, ...).
-  /// @param wavelength_scale  Factor applied to lambda (m) before evaluating the polynomial.
-  /// @param output_scale      Factor applied to the exponential result.
-  /// @param wl_min            Lower wavelength bound, inclusive (m). Default: no lower bound.
-  /// @param wl_max            Upper wavelength bound, inclusive (m). Default: no upper bound.
+  /// @param params  Coefficients, scales, and optional wavelength window.
   template<typename ArrayPolicy = Array3D<double>>
-  auto exp_polynomial(
-      std::vector<typename ArrayPolicy::value_type> coeffs,
-      typename ArrayPolicy::value_type wavelength_scale = 1,
-      typename ArrayPolicy::value_type output_scale = 1,
-      typename ArrayPolicy::value_type wl_min = std::numeric_limits<typename ArrayPolicy::value_type>::lowest(),
-      typename ArrayPolicy::value_type wl_max = std::numeric_limits<typename ArrayPolicy::value_type>::max())
-      -> TransformFunc<ArrayPolicy>
+  auto exp_polynomial(ExpPolynomialParameters<ArrayPolicy> params) -> TransformFunc<ArrayPolicy>
   {
     return detail::wavelength_form<ArrayPolicy>(
-        [coeffs = std::move(coeffs), wavelength_scale, output_scale](
-            typename ArrayPolicy::value_type lambda) -> typename ArrayPolicy::value_type
+        [coeffs = std::move(params.coefficients_),
+         wavelength_scale = params.wavelength_scale_,
+         output_scale = params.output_scale_](typename ArrayPolicy::value_type lambda) ->
+        typename ArrayPolicy::value_type
         {
           using T = typename ArrayPolicy::value_type;
           const T x = lambda * wavelength_scale;
@@ -159,8 +172,8 @@ namespace tuvx
           }
           return output_scale * std::exp(poly);
         },
-        wl_min,
-        wl_max);
+        params.wl_min_,
+        params.wl_max_);
   }
 
 }  // namespace tuvx
