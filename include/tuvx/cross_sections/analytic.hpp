@@ -5,12 +5,18 @@
 // factories.  Each returns a TransformFunc that broadcasts a wavelength-only
 // formula over all height levels and columns.
 //
-// All output weights are in m² (SI).  Formulas are ported from:
-//   main:src/cross_sections/rayliegh.F90
-//   main:src/cross_sections/hobr-oh_br.F90
-//   main:src/cross_sections/t_butyl_nitrate.F90
-//   main:src/cross_sections/nitroxy_acetone.F90
-//   main:src/cross_sections/nitroxy_ethanol.F90
+// All output weights are in m² (SI).  Scientific sources:
+//   rayleigh         -- Nicolet (1984), via WMO (1985)
+//   hobr             -- Ingham et al. (1998)
+//   t_butyl_nitrate  -- see note below
+//   nitroxy_acetone  -- see note below
+//   nitroxy_ethanol  -- see note below
+//
+// The three organic-nitrate formulas share the log-quadratic-in-wavelength
+// form characteristic of Roberts & Fajer (1989), the standard literature
+// source for UV cross-sections of atmospherically important organic nitrates;
+// however the exact coefficients used here have not been verified against that
+// paper, so no citation is asserted for them.
 #pragma once
 
 #include <tuvx/transforms/combinators.hpp>
@@ -24,9 +30,9 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // rayleigh
   //
-  // Nicolet (1984) Rayleigh scattering cross-section.
+  // Rayleigh scattering cross-section, Nicolet (1984) via WMO (1985).
   //
-  // Formula (from rayliegh.F90):
+  // Formula:
   //   mu  = lambda_nm / 1000   (micrometers)
   //   pwr = 3.6772 + 0.389*mu + 0.09426/mu   (mu <= 0.55)
   //       = 4.04                               (mu > 0.55)
@@ -53,7 +59,7 @@ namespace tuvx::cross_sections
     return tuvx::wrap_analytic<ArrayPolicy>(
         [](typename ArrayPolicy::value_type lambda_m) -> typename ArrayPolicy::value_type
         {
-          const auto mu = lambda_m * 1.0e6;  // m -> micrometers (Fortran: lambda_nm/1000)
+          const auto mu = lambda_m * 1.0e6;  // m -> micrometers (= lambda_nm/1000)
           const auto pwr = (mu <= 0.55)
                                ? 3.6772 + (0.389 * mu) + (0.09426 / mu)
                                : 4.04;
@@ -65,24 +71,31 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // hobr
   //
-  // Hypobromous acid (HOBr) cross-section.
+  // Hypobromous acid (HOBr) cross-section, Ingham et al. (1998).
   //
-  // Formula (from hobr-oh_br.F90):
+  // Formula:
   //   sigma = [24.77 * exp(-109.80 * (ln(284.01/wl))^2)
   //          + 12.22 * exp( -93.63 * (ln(350.57/wl))^2)
   //          + 2.283 * exp(-242.40 * (ln(457.38/wl))^2)] * 1e-20  [cm²]
   //   where wl is wavelength in nm.
+  //   The three terms correspond to the measured bands peaking near 284, 351,
+  //   and 457 nm (Ingham et al. 1998, Table 2).
   //   Active for 250 <= wl_nm <= 550; zero elsewhere.
 
   /// @brief Returns a TransformFunc for HOBr cross-section.
   ///
-  /// Sum of three log-normal functions:
+  /// Sum of three log-normal functions fit to the three measured absorption
+  /// bands:
   /// \f[ \sigma(\lambda) = \left[
   ///     24.77 e^{-109.80 (\ln(284.01/\lambda_\text{nm}))^2}
   ///   + 12.22 e^{-93.63  (\ln(350.57/\lambda_\text{nm}))^2}
   ///   + 2.283 e^{-242.40 (\ln(457.38/\lambda_\text{nm}))^2}
   ///   \right] \times 10^{-20}\,\text{cm}^2 \f]
   /// Active in [250, 550] nm; zero outside.
+  ///
+  /// \rst
+  /// Cross-section data from :cite:`Ingham1998`.
+  /// \endrst
   ///
   /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
   template<typename ArrayPolicy = Array3D<double>>
@@ -107,11 +120,15 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // nitrate_formula (internal helper)
   //
-  // Shared exponential-quadratic formula used by t-butyl nitrate,
-  // nitroxy acetone, and nitroxy ethanol (all from the Fortran):
+  // Shared log-quadratic-in-wavelength formula used by t-butyl nitrate,
+  // nitroxy acetone, and nitroxy ethanol:
   //
   //   sigma_cm2 = exp(c + wl_nm * (b + a * wl_nm))
   //   Active for wl_min_nm <= wl_nm <= wl_max_nm; zero elsewhere.
+  //
+  // This is the functional form used by Roberts & Fajer (1989) for organic
+  // nitrate UV cross-sections, but the specific coefficients below have not
+  // been verified against a primary source, so no citation is asserted.
 
   namespace detail
   {
@@ -139,9 +156,8 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // t_butyl_nitrate
   //
-  // Constants from t_butyl_nitrate.F90:
-  //   a = -0.993e-3, b = 0.5307, c = -115.5
-  //   Active: 270 <= wl_nm <= 330
+  // Constants: a = -0.993e-3, b = 0.5307, c = -115.5
+  // Active: 270 <= wl_nm <= 330
 
   /// @brief Returns a TransformFunc for tert-butyl nitrate cross-section.
   ///
@@ -158,9 +174,8 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // nitroxy_acetone
   //
-  // Constants from nitroxy_acetone.F90:
-  //   a = -1.365e-3, b = 0.7834, c = -156.8
-  //   Active: 284 <= wl_nm <= 335
+  // Constants: a = -1.365e-3, b = 0.7834, c = -156.8
+  // Active: 284 <= wl_nm <= 335
 
   /// @brief Returns a TransformFunc for nitroxy acetone cross-section.
   ///
@@ -176,9 +191,8 @@ namespace tuvx::cross_sections
   // ---------------------------------------------------------------------------
   // nitroxy_ethanol
   //
-  // Constants from nitroxy_ethanol.F90:
-  //   a = -2.359e-3, b = 1.2478, c = -210.4
-  //   Active: 270 <= wl_nm <= 306
+  // Constants: a = -2.359e-3, b = 1.2478, c = -210.4
+  // Active: 270 <= wl_nm <= 306
 
   /// @brief Returns a TransformFunc for nitroxy ethanol cross-section.
   ///
