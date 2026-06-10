@@ -49,9 +49,10 @@ endif()
 # MUSICA such as CATChem) NetCDF has usually already been located and exposed as
 # an imported target. Different finders use different target names, so probe the
 # common variants and reuse a host-provided target before searching ourselves.
-# Only when nothing is found do we fall back to pkg-config. TUV-x's own sources
-# link the canonical tuvx::netcdf_c / tuvx::netcdf_fortran targets defined below,
-# decoupling them from however NetCDF was located.
+# Only when nothing is found do we fall back to pkg-config. The resolved target
+# names are stored in TUVX_NETCDF_C_TARGET / TUVX_NETCDF_FORTRAN_TARGET and linked
+# directly (we avoid wrapping them in an imported target, which would leak an
+# unresolvable target into the exported link interface).
 
 if(NOT TUVX_DOCS_ONLY)
   # Return the first of ARGN that already exists as a target (target names are
@@ -87,12 +88,6 @@ if(NOT TUVX_DOCS_ONLY)
     set(TUVX_NETCDF_C_TARGET PkgConfig::netcdfc)
     set(TUVX_NETCDF_FORTRAN_TARGET PkgConfig::netcdff)
   endif()
-
-  # Canonical targets TUV-x's sources link against, regardless of origin.
-  add_library(tuvx::netcdf_c INTERFACE IMPORTED GLOBAL)
-  target_link_libraries(tuvx::netcdf_c INTERFACE ${TUVX_NETCDF_C_TARGET})
-  add_library(tuvx::netcdf_fortran INTERFACE IMPORTED GLOBAL)
-  target_link_libraries(tuvx::netcdf_fortran INTERFACE ${TUVX_NETCDF_FORTRAN_TARGET})
 endif()
 
 # ##############################################################################

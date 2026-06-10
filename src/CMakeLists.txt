@@ -22,8 +22,8 @@ target_include_directories(
          $<INSTALL_INTERFACE:${TUVX_INSTALL_MOD_DIR}>
          $<INSTALL_INTERFACE:${TUVX_INSTALL_INCLUDE_DIR}>)
 
-target_link_libraries(tuvx_object PRIVATE tuvx::netcdf_fortran
-                                          tuvx::netcdf_c
+target_link_libraries(tuvx_object PRIVATE ${TUVX_NETCDF_FORTRAN_TARGET}
+                                          ${TUVX_NETCDF_C_TARGET}
                                           yaml-cpp::yaml-cpp)
 
 if(TUVX_ENABLE_LAPACK)
