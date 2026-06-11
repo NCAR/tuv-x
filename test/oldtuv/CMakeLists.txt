@@ -98,7 +98,7 @@ add_subdirectory(util)
 add_subdirectory(Profile)
 
 add_library(oldphotolib ${PHOTO_SRC} ${GRID_SRC} ${PROFILE_SRC} ${CROSS_SRC} ${QY_SRC} ${RADIATOR_SRC} ${RAD_SRC} ${SW_SRC} ${UTIL_SRC})
-target_link_libraries(oldphotolib musica::tuvx ${NETCDF_LIBS})
+target_link_libraries(oldphotolib musica::tuvx ${TUVX_NETCDF_FORTRAN_TARGET} ${TUVX_NETCDF_C_TARGET})
 set_target_properties(oldphotolib PROPERTIES OUTPUT_NAME oldphoto)
 
 add_executable(oldtuv tuv.f)
