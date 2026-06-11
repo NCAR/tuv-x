@@ -35,14 +35,11 @@ namespace tuvx
     // broadcast across all height levels and columns.  Outside the window the
     // weight is zero and f is never called.
     template<typename ArrayPolicy, typename F>
-    auto wavelength_form(
-        F f,
-        typename ArrayPolicy::value_type wl_min,
-        typename ArrayPolicy::value_type wl_max) -> TransformFunc<ArrayPolicy>
+    auto wavelength_form(F f, typename ArrayPolicy::value_type wl_min, typename ArrayPolicy::value_type wl_max)
+        -> TransformFunc<ArrayPolicy>
     {
       return [f = std::move(f), wl_min, wl_max](
-                 const AtmosphericState<ArrayPolicy> &state,
-                 Array3D<typename ArrayPolicy::value_type> &weights)
+                 const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
       {
         using T = typename ArrayPolicy::value_type;
         const auto n_wl = weights.Size1();
@@ -106,8 +103,7 @@ namespace tuvx
   auto log_normal_bands(LogNormalBandsParameters<ArrayPolicy> params) -> TransformFunc<ArrayPolicy>
   {
     return detail::wavelength_form<ArrayPolicy>(
-        [bands = std::move(params.bands_)](typename ArrayPolicy::value_type lambda) ->
-        typename ArrayPolicy::value_type
+        [bands = std::move(params.bands_)](typename ArrayPolicy::value_type lambda) -> typename ArrayPolicy::value_type
         {
           using T = typename ArrayPolicy::value_type;
           T sum = 0;
@@ -159,8 +155,7 @@ namespace tuvx
     return detail::wavelength_form<ArrayPolicy>(
         [coeffs = std::move(params.coefficients_),
          wavelength_scale = params.wavelength_scale_,
-         output_scale = params.output_scale_](typename ArrayPolicy::value_type lambda) ->
-        typename ArrayPolicy::value_type
+         output_scale = params.output_scale_](typename ArrayPolicy::value_type lambda) -> typename ArrayPolicy::value_type
         {
           using T = typename ArrayPolicy::value_type;
           const T x = lambda * wavelength_scale;
