@@ -63,9 +63,12 @@ namespace tuvx::fixed_configuration
     using T = typename ArrayPolicy::value_type;
     // amplitude = (coefficient * 1e-20 cm^2) * 1e-4 (cm^2 -> m^2) = coefficient * 1e-24
     return tuvx::log_normal_bands<ArrayPolicy>(
-        { .bands_ = { LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 24.77e-24 }, .width_ = T{ 109.80 }, .center_ = T{ 284.01e-9 } },
-                      LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 12.22e-24 }, .width_ = T{ 93.63 }, .center_ = T{ 350.57e-9 } },
-                      LogNormalBand<ArrayPolicy>{ .amplitude_ = T{ 2.283e-24 }, .width_ = T{ 242.40 }, .center_ = T{ 457.38e-9 } } },
+        { .bands_ = { LogNormalBand<ArrayPolicy>{
+                          .amplitude_ = T{ 24.77e-24 }, .width_ = T{ 109.80 }, .center_ = T{ 284.01e-9 } },
+                      LogNormalBand<ArrayPolicy>{
+                          .amplitude_ = T{ 12.22e-24 }, .width_ = T{ 93.63 }, .center_ = T{ 350.57e-9 } },
+                      LogNormalBand<ArrayPolicy>{
+                          .amplitude_ = T{ 2.283e-24 }, .width_ = T{ 242.40 }, .center_ = T{ 457.38e-9 } } },
           .wl_min_ = T{ 250.0e-9 },
           .wl_max_ = T{ 550.0e-9 } });
   }

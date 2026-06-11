@@ -50,8 +50,8 @@ TEST(LogNormalBands, PeaksAtCenter)
   // ln(center/lambda) = 0 at lambda == center, so the weight equals amplitude.
   auto state = StateWithWavelengths({ 300e-9 });
   tuvx::Array3D<double> w(1, 1, 1);
-  tuvx::log_normal_bands<>(
-      { .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 5.0, .width_ = 100.0, .center_ = 300e-9 } } })(state, w);
+  tuvx::log_normal_bands<>({ .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 5.0, .width_ = 100.0, .center_ = 300e-9 } } })(
+      state, w);
   EXPECT_DOUBLE_EQ(w(0, 0, 0), 5.0);
 }
 
@@ -60,9 +60,9 @@ TEST(LogNormalBands, SumsMultipleBands)
   // Two bands both centred at lambda -> weight is the sum of amplitudes.
   auto state = StateWithWavelengths({ 300e-9 });
   tuvx::Array3D<double> w(1, 1, 1);
-  tuvx::log_normal_bands<>(
-      { .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 2.0, .width_ = 50.0, .center_ = 300e-9 },
-                    tuvx::LogNormalBand<>{ .amplitude_ = 3.0, .width_ = 50.0, .center_ = 300e-9 } } })(state, w);
+  tuvx::log_normal_bands<>({ .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 2.0, .width_ = 50.0, .center_ = 300e-9 },
+                                         tuvx::LogNormalBand<>{ .amplitude_ = 3.0, .width_ = 50.0, .center_ = 300e-9 } } })(
+      state, w);
   EXPECT_DOUBLE_EQ(w(0, 0, 0), 5.0);
 }
 
@@ -70,10 +70,9 @@ TEST(LogNormalBands, ZeroOutsideRegion)
 {
   auto state = StateWithWavelengths({ 200e-9, 300e-9, 600e-9 });
   tuvx::Array3D<double> w(3, 1, 1);
-  tuvx::log_normal_bands<>(
-      { .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 1.0, .width_ = 1.0, .center_ = 300e-9 } },
-        .wl_min_ = 250e-9,
-        .wl_max_ = 550e-9 })(state, w);
+  tuvx::log_normal_bands<>({ .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 1.0, .width_ = 1.0, .center_ = 300e-9 } },
+                             .wl_min_ = 250e-9,
+                             .wl_max_ = 550e-9 })(state, w);
   EXPECT_DOUBLE_EQ(w(0, 0, 0), 0.0);  // 200 nm: below band
   EXPECT_GT(w(1, 0, 0), 0.0);         // 300 nm: inside
   EXPECT_DOUBLE_EQ(w(2, 0, 0), 0.0);  // 600 nm: above band
@@ -83,10 +82,9 @@ TEST(LogNormalBands, RegionBoundariesInclusive)
 {
   auto state = StateWithWavelengths({ 250e-9, 550e-9 });
   tuvx::Array3D<double> w(2, 1, 1);
-  tuvx::log_normal_bands<>(
-      { .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 1.0, .width_ = 1.0, .center_ = 400e-9 } },
-        .wl_min_ = 250e-9,
-        .wl_max_ = 550e-9 })(state, w);
+  tuvx::log_normal_bands<>({ .bands_ = { tuvx::LogNormalBand<>{ .amplitude_ = 1.0, .width_ = 1.0, .center_ = 400e-9 } },
+                             .wl_min_ = 250e-9,
+                             .wl_max_ = 550e-9 })(state, w);
   EXPECT_GT(w(0, 0, 0), 0.0);  // exactly at wl_min
   EXPECT_GT(w(1, 0, 0), 0.0);  // exactly at wl_max
 }
@@ -153,10 +151,10 @@ TEST(ExpPolynomial, HornerMatchesQuadratic)
   auto state = StateWithWavelengths({ 300e-9 });
   tuvx::Array3D<double> w(1, 1, 1);
   tuvx::exp_polynomial<>({ .coefficients_ = { c0, c1, c2 },
-                          .wavelength_scale_ = 1.0e9,
-                          .output_scale_ = 1.0e-4,
-                          .wl_min_ = 270e-9,
-                          .wl_max_ = 330e-9 })(state, w);
+                           .wavelength_scale_ = 1.0e9,
+                           .output_scale_ = 1.0e-4,
+                           .wl_min_ = 270e-9,
+                           .wl_max_ = 330e-9 })(state, w);
   const double x = 300.0;  // 300 nm
   const double expected = 1.0e-4 * std::exp(c0 + (c1 * x) + (c2 * x * x));
   // Relative tolerance: the form evaluates x = lambda_m * 1e9 by Horner, which
@@ -177,7 +175,7 @@ TEST(ExpPolynomial, NoOverflowOutsideRegion)
   EXPECT_DOUBLE_EQ(w(0, 0, 0), 0.0);  // 100 nm: outside, exactly zero (not evaluated)
   EXPECT_TRUE(std::isfinite(w(1, 0, 0)));
   EXPECT_DOUBLE_EQ(w(1, 0, 0), std::exp(300.0));  // 300 nm: inside
-  EXPECT_DOUBLE_EQ(w(2, 0, 0), 0.0);  // 900 nm: outside; would have overflowed if evaluated
+  EXPECT_DOUBLE_EQ(w(2, 0, 0), 0.0);              // 900 nm: outside; would have overflowed if evaluated
 }
 
 TEST(ExpPolynomial, BroadcastsOverHeightAndColumn)

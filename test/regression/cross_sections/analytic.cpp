@@ -95,15 +95,13 @@ namespace
       const double expected = ref[i].cross_section_m2_;
       if (expected == 0.0)
       {
-        EXPECT_DOUBLE_EQ(got, 0.0)
-            << "at wavelength " << ref[i].wavelength_m_ << " m";
+        EXPECT_DOUBLE_EQ(got, 0.0) << "at wavelength " << ref[i].wavelength_m_ << " m";
       }
       else
       {
         const double rel_err = std::abs((got - expected) / expected);
-        EXPECT_LT(rel_err, 1.0e-10)
-            << "at wavelength " << ref[i].wavelength_m_
-            << " m  got=" << got << "  expected=" << expected;
+        EXPECT_LT(rel_err, 1.0e-10) << "at wavelength " << ref[i].wavelength_m_ << " m  got=" << got
+                                    << "  expected=" << expected;
       }
     }
   }
@@ -121,18 +119,15 @@ TEST(AnalyticCrossSections, HOBr)
 
 TEST(AnalyticCrossSections, TButylNitrate)
 {
-  CheckAgainstRef(
-      RefDir() + "t_butyl_nitrate.csv", tuvx::fixed_configuration::t_butyl_nitrate());
+  CheckAgainstRef(RefDir() + "t_butyl_nitrate.csv", tuvx::fixed_configuration::t_butyl_nitrate());
 }
 
 TEST(AnalyticCrossSections, NitroxyAcetone)
 {
-  CheckAgainstRef(
-      RefDir() + "nitroxy_acetone.csv", tuvx::fixed_configuration::nitroxy_acetone());
+  CheckAgainstRef(RefDir() + "nitroxy_acetone.csv", tuvx::fixed_configuration::nitroxy_acetone());
 }
 
 TEST(AnalyticCrossSections, NitroxyEthanol)
 {
-  CheckAgainstRef(
-      RefDir() + "nitroxy_ethanol.csv", tuvx::fixed_configuration::nitroxy_ethanol());
+  CheckAgainstRef(RefDir() + "nitroxy_ethanol.csv", tuvx::fixed_configuration::nitroxy_ethanol());
 }
