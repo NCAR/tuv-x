@@ -50,6 +50,31 @@ Factory Functions
 .. doxygenfunction:: tuvx::parameterized
    :project: tuvx
 
+Analytic Forms
+--------------
+
+General, configurable wavelength-only shapes that recur across many
+cross-sections, quantum yields, and spectral weights. All parameters are
+caller-supplied; no species or constant is hard-coded.
+
+.. doxygenstruct:: tuvx::LogNormalBand
+   :project: tuvx
+   :members:
+
+.. doxygenstruct:: tuvx::LogNormalBandsParameters
+   :project: tuvx
+   :members:
+
+.. doxygenfunction:: tuvx::log_normal_bands
+   :project: tuvx
+
+.. doxygenstruct:: tuvx::ExpPolynomialParameters
+   :project: tuvx
+   :members:
+
+.. doxygenfunction:: tuvx::exp_polynomial
+   :project: tuvx
+
 Combinators
 -----------
 
