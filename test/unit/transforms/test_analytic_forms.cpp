@@ -201,3 +201,64 @@ TEST(ExpPolynomial, BroadcastsOverHeightAndColumn)
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// bounded_analytic
+
+TEST(BoundedAnalytic, EvaluatesPerTemperature)
+{
+  // f(lambda, T) = T; verify the local temperature reaches the formula.
+  tuvx::AtmosphericState<> state;
+  state.wavelength_grid_ = tuvx::Grid<tuvx::Array2D<double>>("m", 1, 1);
+  state.wavelength_grid_.mid_points_(0, 0) = 300e-9;
+  state.height_grid_ = tuvx::Grid<tuvx::Array2D<double>>("m", 1, 2);
+  state.temperature_ = tuvx::Array2D<double>(1, 2);
+  state.temperature_(0, 0) = 250.0;
+  state.temperature_(0, 1) = 280.0;
+  state.pressure_ = tuvx::Array2D<double>(1, 2);
+  state.air_density_ = tuvx::Array2D<double>(1, 2);
+
+  tuvx::Array3D<double> w(1, 1, 2);
+  tuvx::bounded_analytic<>([](double /*lambda*/, double temp) { return temp; })(state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 250.0);
+  EXPECT_DOUBLE_EQ(w(0, 0, 1), 280.0);
+}
+
+TEST(BoundedAnalytic, ZeroOutsideBand)
+{
+  auto state = StateWithWavelengths({ 200e-9, 300e-9, 600e-9 });
+  state.temperature_(0, 0) = 250.0;
+  tuvx::Array3D<double> w(3, 1, 1);
+  tuvx::bounded_analytic<>([](double, double) { return 5.0; }, 250e-9, 550e-9)(state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 0.0);  // 200 nm below band
+  EXPECT_DOUBLE_EQ(w(1, 0, 0), 5.0);  // 300 nm inside
+  EXPECT_DOUBLE_EQ(w(2, 0, 0), 0.0);  // 600 nm above band
+}
+
+// The formula is never evaluated outside the band, so an expression that would
+// overflow there must still yield exactly zero (never inf or NaN).
+TEST(BoundedAnalytic, NoOverflowOutsideBand)
+{
+  auto state = StateWithWavelengths({ 100e-9, 300e-9, 900e-9 });
+  state.temperature_(0, 0) = 250.0;
+  tuvx::Array3D<double> w(3, 1, 1);
+  // exp(lambda_nm) overflows for large lambda; must not be evaluated outside [250,350] nm.
+  tuvx::bounded_analytic<>([](double lambda_m, double) { return std::exp(lambda_m * 1e9); }, 250e-9, 350e-9)(
+      state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 0.0);
+  EXPECT_TRUE(std::isfinite(w(1, 0, 0)));
+  EXPECT_DOUBLE_EQ(w(1, 0, 0), std::exp(300.0));
+  EXPECT_DOUBLE_EQ(w(2, 0, 0), 0.0);  // would have overflowed if evaluated
+}
+
+TEST(BoundedAnalytic, NoBandEvaluatesEverywhere)
+{
+  auto state = StateWithWavelengths({ 100e-9, 500e-9, 900e-9 });
+  state.temperature_(0, 0) = 250.0;
+  tuvx::Array3D<double> w(3, 1, 1);
+  tuvx::bounded_analytic<>([](double, double) { return 2.0; })(state, w);  // default: no bounds
+  for (std::size_t i = 0; i < 3; ++i)
+  {
+    EXPECT_DOUBLE_EQ(w(i, 0, 0), 2.0);
+  }
+}

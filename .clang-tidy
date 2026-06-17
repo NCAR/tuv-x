@@ -35,7 +35,7 @@ CheckOptions:
   - key:             readability-identifier-naming.FunctionCase
     value:           CamelCase
   - key:             readability-identifier-naming.FunctionIgnoredRegexp
-    value:           '^(begin|end|operator.*|constant|from_data|temperature_interpolation|polynomial_scaling|exponential_scaling|linear_correction|stern_volmer|parameterized|wrap_analytic|in_region|multiply|add|piecewise|clamp|override_band|scale|named_band|log_normal_bands|exp_polynomial|wavelength_form|rayleigh|hobr|t_butyl_nitrate|nitroxy_acetone|nitroxy_ethanol)$'
+    value:           '^(begin|end|operator.*|constant|from_data|temperature_interpolation|polynomial_scaling|exponential_scaling|linear_correction|stern_volmer|parameterized|wrap_analytic|in_region|multiply|add|piecewise|clamp|override_band|scale|named_band|log_normal_bands|exp_polynomial|wavelength_form|wavelength_temperature_form|bounded_analytic|horner|tabulated_lookup|rayleigh|hobr|t_butyl_nitrate|nitroxy_acetone|nitroxy_ethanol|n2o|cl2|h2o2|chbr3)$'
   - key:             readability-identifier-naming.LocalConstantCase
     value:           aNy_CasE
   - key:             readability-identifier-naming.VariableCase
