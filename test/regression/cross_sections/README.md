@@ -170,6 +170,12 @@ Tabulated (below-band) values are from `cross_section.h2o2-oh_oh.nc` (cm^2):
 - analytic wavelengths (nm): 270, 290, 310, 330, 345
 - temperatures (K): 180, 250, 298, 350, 420  (180/420 exercise the clamp)
 
+The degree-7 polynomial has large alternating coefficients whose terms nearly
+cancel, so the in-band result is ill-conditioned: different platforms' libm and
+floating-point contraction evaluate it slightly differently (worst observed
+~1.4e-10 relative). The H2O2 regression therefore uses a relative tolerance of
+1e-8 (still ~8 significant figures) rather than the 1e-10 used for the others.
+
 ### chbr3 (hybrid)
 
 Analytic only where `290 < wl < 340` **and** `210 < T < 300`; otherwise tabulated.
