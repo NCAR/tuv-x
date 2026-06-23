@@ -67,14 +67,11 @@ namespace tuvx
     // is zero and f is never called (so a formula that would overflow outside its
     // band never gets the chance to).
     template<typename ArrayPolicy, typename F>
-    auto wavelength_temperature_form(
-        F f,
-        typename ArrayPolicy::value_type wl_min,
-        typename ArrayPolicy::value_type wl_max) -> TransformFunc<ArrayPolicy>
+    auto wavelength_temperature_form(F f, typename ArrayPolicy::value_type wl_min, typename ArrayPolicy::value_type wl_max)
+        -> TransformFunc<ArrayPolicy>
     {
       return [f = std::move(f), wl_min, wl_max](
-                 const AtmosphericState<ArrayPolicy> &state,
-                 Array3D<typename ArrayPolicy::value_type> &weights)
+                 const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
       {
         using T = typename ArrayPolicy::value_type;
         const auto n_wl = weights.Size1();
@@ -88,8 +85,7 @@ namespace tuvx
           {
             for (std::size_t col = 0; col < n_col; ++col)
             {
-              weights(wl, z, col) =
-                  in_band ? static_cast<T>(f(lambda, state.temperature_(z, col))) : T{ 0 };
+              weights(wl, z, col) = in_band ? static_cast<T>(f(lambda, state.temperature_(z, col))) : T{ 0 };
             }
           }
         }

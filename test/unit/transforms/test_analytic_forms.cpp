@@ -241,8 +241,7 @@ TEST(BoundedAnalytic, NoOverflowOutsideBand)
   state.temperature_(0, 0) = 250.0;
   tuvx::Array3D<double> w(3, 1, 1);
   // exp(lambda_nm) overflows for large lambda; must not be evaluated outside [250,350] nm.
-  tuvx::bounded_analytic<>([](double lambda_m, double) { return std::exp(lambda_m * 1e9); }, 250e-9, 350e-9)(
-      state, w);
+  tuvx::bounded_analytic<>([](double lambda_m, double) { return std::exp(lambda_m * 1e9); }, 250e-9, 350e-9)(state, w);
   EXPECT_DOUBLE_EQ(w(0, 0, 0), 0.0);
   EXPECT_TRUE(std::isfinite(w(1, 0, 0)));
   EXPECT_DOUBLE_EQ(w(1, 0, 0), std::exp(300.0));
