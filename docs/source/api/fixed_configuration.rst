@@ -25,3 +25,15 @@ Cross Sections
 
 .. doxygenfunction:: tuvx::fixed_configuration::nitroxy_ethanol
    :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::n2o
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::cl2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::h2o2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::chbr3
+   :project: tuvx

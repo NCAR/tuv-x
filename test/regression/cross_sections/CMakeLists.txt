@@ -8,4 +8,9 @@ create_regression_cxx_test(
     SOURCES analytic.cpp
 )
 
+create_regression_cxx_test(
+    NAME    regression_cross_sections_tdependent
+    SOURCES tdependent.cpp
+)
+
 ################################################################################

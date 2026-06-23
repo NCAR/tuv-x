@@ -75,6 +75,9 @@ caller-supplied; no species or constant is hard-coded.
 .. doxygenfunction:: tuvx::exp_polynomial
    :project: tuvx
 
+.. doxygenfunction:: tuvx::bounded_analytic
+   :project: tuvx
+
 Combinators
 -----------
 
