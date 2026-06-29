@@ -101,9 +101,9 @@ void CheckInputs(
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(0, 0), 120.0 * 1.0e-9, 1.0e-16);
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(77, 0), 311.5 * 1.0e-9, 1.0e-16);
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(156, 0), 735.0 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(0, 0), 120.69 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(77, 0), 311.9 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155, 0), 729.9 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(0, 0), 120.7 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(77, 0), 312.0 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155, 0), 730.0 * 1.0e-9, 1.0e-16);
 
   // optical depths are unitless
   ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size1(), 156);
