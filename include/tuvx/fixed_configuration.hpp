@@ -67,7 +67,6 @@ namespace tuvx::fixed_configuration
     }
   }  // namespace detail
 
-
   /// @brief Rayleigh scattering cross-section (m^2).
   ///
   /// \f[ \sigma(\lambda) = \frac{4.02\times10^{-28}}{\mu^{p(\mu)}}\,\text{cm}^2,
@@ -178,8 +177,7 @@ namespace tuvx::fixed_configuration
           const T t_adj = std::max(T{ 194.0 }, std::min(temperature, T{ 320.0 }));
           const T a = detail::horner<T>(
               { T{ 2.520672e-7 }, T{ -1.777846e-4 }, T{ 4.301146e-2 }, T{ -4.071805 }, T{ 68.21023 } }, wl);
-          const T b_poly =
-              detail::horner<T>({ T{ -1.881058e-5 }, T{ 1.111572e-2 }, T{ -2.116255 }, T{ 123.4014 } }, wl);
+          const T b_poly = detail::horner<T>({ T{ -1.881058e-5 }, T{ 1.111572e-2 }, T{ -2.116255 }, T{ 123.4014 } }, wl);
           const T b = (t_adj - T{ 300.0 }) * std::exp(b_poly);
           return std::exp(a + b) * T{ 1.0e-4 };  // cm^2 -> m^2
         },
@@ -228,13 +226,12 @@ namespace tuvx::fixed_configuration
   {
     using T = typename ArrayPolicy::value_type;
     // Tabulated base below the analytic band, from cross_section.h2o2-oh_oh.nc (cm^2 -> m^2).
-    const std::vector<std::pair<T, T>> tabulated = {
-      { T{ 190.0e-9 }, T{ 6.72e-19 } * T{ 1.0e-4 } }, { T{ 195.0e-9 }, T{ 5.64e-19 } * T{ 1.0e-4 } },
-      { T{ 200.0e-9 }, T{ 4.75e-19 } * T{ 1.0e-4 } }, { T{ 205.0e-9 }, T{ 4.08e-19 } * T{ 1.0e-4 } },
-      { T{ 210.0e-9 }, T{ 3.57e-19 } * T{ 1.0e-4 } }
-    };
-    return [tabulated](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
+    const std::vector<std::pair<T, T>> tabulated = { { T{ 190.0e-9 }, T{ 6.72e-19 } * T{ 1.0e-4 } },
+                                                     { T{ 195.0e-9 }, T{ 5.64e-19 } * T{ 1.0e-4 } },
+                                                     { T{ 200.0e-9 }, T{ 4.75e-19 } * T{ 1.0e-4 } },
+                                                     { T{ 205.0e-9 }, T{ 4.08e-19 } * T{ 1.0e-4 } },
+                                                     { T{ 210.0e-9 }, T{ 3.57e-19 } * T{ 1.0e-4 } } };
+    return [tabulated](const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -252,15 +249,16 @@ namespace tuvx::fixed_configuration
             {
               const T t_adj = std::max(T{ 200.0 }, std::min(state.temperature_(z, col), T{ 400.0 }));
               const T chi = T{ 1.0 } / (T{ 1.0 } + std::exp(T{ -1265.0 } / t_adj));
-              const T sum_a = detail::horner<T>({ T{ 1.5534675e-13 },
-                                                  T{ -2.652014e-10 },
-                                                  T{ 1.6878206e-7 },
-                                                  T{ -4.035101e-5 },
-                                                  T{ -4.4589016e-3 },
-                                                  T{ 4.535649 },
-                                                  T{ -9.2170972e2 },
-                                                  T{ 6.4761e4 } },
-                                                wl_nm);
+              const T sum_a = detail::horner<T>(
+                  { T{ 1.5534675e-13 },
+                    T{ -2.652014e-10 },
+                    T{ 1.6878206e-7 },
+                    T{ -4.035101e-5 },
+                    T{ -4.4589016e-3 },
+                    T{ 4.535649 },
+                    T{ -9.2170972e2 },
+                    T{ 6.4761e4 } },
+                  wl_nm);
               const T sum_b = detail::horner<T>(
                   { T{ -1.0924e-7 }, T{ -3.0493e-5 }, T{ 1.1522e-1 }, T{ -5.1351e1 }, T{ 6.8123e3 } }, wl_nm);
               weights(wl, z, col) = ((chi * sum_a) + ((T{ 1.0 } - chi) * sum_b)) * T{ 1.0e-21 } * T{ 1.0e-4 };
@@ -294,8 +292,7 @@ namespace tuvx::fixed_configuration
       { T{ 206.0e-9 }, T{ 4.45e-18 } * T{ 1.0e-4 } }, { T{ 208.0e-9 }, T{ 4.51e-18 } * T{ 1.0e-4 } },
       { T{ 210.0e-9 }, T{ 4.68e-18 } * T{ 1.0e-4 } }
     };
-    return [tabulated](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
+    return [tabulated](const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();

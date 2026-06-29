@@ -119,8 +119,7 @@ namespace
       const double expected = row.cross_section_m2_;
       if (expected == 0.0)
       {
-        EXPECT_DOUBLE_EQ(got, 0.0)
-            << "at wavelength " << row.wavelength_m_ << " m, T " << row.temperature_k_ << " K";
+        EXPECT_DOUBLE_EQ(got, 0.0) << "at wavelength " << row.wavelength_m_ << " m, T " << row.temperature_k_ << " K";
       }
       else
       {
