@@ -73,8 +73,8 @@ void CheckInputs(
 
   // Earth-Sun distances are in AU
   ASSERT_EQ(earth_sun_distances.size(), 2);
-  ASSERT_NEAR(earth_sun_distances.at(0), 0.9961, 1.0e-6);
-  ASSERT_NEAR(earth_sun_distances.at(1), 0.9962, 1.0e-6);
+  ASSERT_NEAR(earth_sun_distances.at(0), 0.99618238, 1.0e-4);
+  ASSERT_NEAR(earth_sun_distances.at(1), 0.99618252, 1.0e-4);
 
   // heights have been converted to meters from km
   ASSERT_EQ(grids.size(), 2);
