@@ -120,6 +120,9 @@ contains
     call compare_radiation_fields( f90_radiation_fields, cpp_radiation_fields )
 
     ! Clean up
+    deallocate( radiator_states )
+    deallocate( f90_radiation_fields )
+    deallocate( cpp_radiation_fields )
     deallocate( earth_sun_distance )
     deallocate( solar_zenith_angle )
     deallocate( columns )
