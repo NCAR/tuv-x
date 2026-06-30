@@ -247,6 +247,16 @@ contains
     end do
 
     call free_output_c( output )
+
+    deallocate( solar_zenith_angles_c )
+    deallocate( earth_sun_distances_c )
+    deallocate( altitude_mid_points_c )
+    deallocate( altitude_edges_c )
+    deallocate( wavelength_mid_points_c )
+    deallocate( wavelength_edges_c )
+    deallocate( layer_OD_c )
+    deallocate( layer_SSA_c )
+    deallocate( layer_G_c )
     deallocate( heights )
     deallocate( wavelengths )
 
