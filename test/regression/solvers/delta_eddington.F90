@@ -112,11 +112,11 @@ contains
       call core%radiative_transfer_%radiator_warehouse_%accumulate_states(    &
                                                   radiator_states( i_col ) )
     end do
-    cpp_radiation_fields =                                                    &
-        calculate_cpp_radiation_fields( core,                                 &
-                                        solar_zenith_angle%edge_val_,         &
-                                        earth_sun_distance%edge_val_,         &
-                                        radiator_states )
+    call calculate_cpp_radiation_fields( core,                               &
+                                         solar_zenith_angle%edge_val_,       &
+                                         earth_sun_distance%edge_val_,       &
+                                         radiator_states,                    &
+                                         cpp_radiation_fields )
     call compare_radiation_fields( f90_radiation_fields, cpp_radiation_fields )
 
     ! Clean up
@@ -135,8 +135,8 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   ! Calculates the radiation field using the C++ Delta-Eddington solver
-  function calculate_cpp_radiation_fields( tuvx_core, solar_zenith_angles,      &
-      earth_sun_distances, radiator_states ) result( radiation_fields )
+  subroutine calculate_cpp_radiation_fields( tuvx_core, solar_zenith_angles,   &
+      earth_sun_distances, radiator_states, radiation_fields )
 
     use tuvx_constants,                only: pi
     use tuvx_core,                     only: core_t
@@ -145,11 +145,11 @@ contains
     use tuvx_radiator,                 only: radiator_state_t
     use tuvx_solver,                   only: radiation_field_t
 
-    type(core_t),             intent(in) :: tuvx_core
-    real(dk),                 intent(in) :: solar_zenith_angles(:)
-    real(dk),                 intent(in) :: earth_sun_distances(:)
-    type(radiator_state_t),   intent(in) :: radiator_states(:)
-    type(radiation_field_t), allocatable :: radiation_fields(:)
+    type(core_t),             intent(in)  :: tuvx_core
+    real(dk),                 intent(in)  :: solar_zenith_angles(:)
+    real(dk),                 intent(in)  :: earth_sun_distances(:)
+    type(radiator_state_t),   intent(in)  :: radiator_states(:)
+    type(radiation_field_t), allocatable, intent(out) :: radiation_fields(:)
 
     class(grid_t), pointer :: heights
     class(grid_t), pointer :: wavelengths
@@ -260,7 +260,7 @@ contains
     deallocate( heights )
     deallocate( wavelengths )
 
-  end function calculate_cpp_radiation_fields
+  end subroutine calculate_cpp_radiation_fields
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
