@@ -89,7 +89,10 @@ function(add_tuvx_test test_name test_binary test_args working_dir)
   separate_arguments(memcheck)
   if(TUVX_ENABLE_MPI AND MEMORYCHECK_COMMAND AND TUVX_ENABLE_MEMCHECK)
     add_test(NAME memcheck_${test_name}
-      COMMAND mpirun -v -np 2 ${memcheck} ${CMAKE_BINARY_DIR}/${test_binary} ${test_args}
+      COMMAND mpirun -v -np 2
+                --mca btl_vader_single_copy_mechanism none
+                --mca opal_warn_on_missing_libcuda 0
+                ${memcheck} ${CMAKE_BINARY_DIR}/${test_binary} ${test_args}
              WORKING_DIRECTORY ${working_dir})
   elseif(MEMORYCHECK_COMMAND AND TUVX_ENABLE_MEMCHECK)
     add_test(NAME memcheck_${test_name}
