@@ -25,7 +25,7 @@ jobs:
           - Dockerfile.coverage
           - Dockerfile.memcheck
           - Dockerfile.mpi
-          - Dockerfile.mpi.memcheck
+          # - Dockerfile.mpi.memcheck  # TODO: fails due to OpenMPI/Valgrind/shm issues in Docker, to be addressed
           - Dockerfile.intel
           - Dockerfile.nvhpc
     steps:
@@ -46,11 +46,11 @@ jobs:
 
       - name: Run tests in container
         if: matrix.dockerfile != 'Dockerfile.coverage'
-        run: docker run --name test-container -t tuvx bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
+        run: docker run --shm-size=1g --name test-container -t tuvx bash -c 'make test ARGS="--rerun-failed --output-on-failure"'
 
       - name: Run coverage tests in container
         if: matrix.dockerfile == 'Dockerfile.coverage'
-        run: docker run --name test-container -t tuvx bash -c 'make coverage ARGS="--rerun-failed --output-on-failure"'
+        run: docker run --shm-size=1g --name test-container -t tuvx bash -c 'make coverage ARGS="--rerun-failed --output-on-failure"'
 
       - name: Copy coverage from container
         if: matrix.dockerfile == 'Dockerfile.coverage'

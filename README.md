@@ -10,7 +10,7 @@ Tropospheric ultraviolet-extended (TUV-x): A photolysis rate calculator
 [![Windows](https://github.com/NCAR/tuv-x/actions/workflows/windows.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/windows.yml)
 [![Docker](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml/badge.svg)](https://github.com/NCAR/tuv-x/actions/workflows/docker.yml)
 [![codecov](https://codecov.io/gh/NCAR/tuv-x/branch/main/graph/badge.svg?token=H46AAEAQF9)](https://codecov.io/gh/NCAR/tuv-x)
-[![DOI](https://zenodo.org/badge/396946468.svg)](https://zenodo.org/badge/latestdoi/396946468)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7126039.svg)](https://doi.org/10.5281/zenodo.7126039)
 
 Copyright (C) 2020-2026 University Corporation for Atmospheric Research
 

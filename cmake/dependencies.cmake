@@ -1,4 +1,3 @@
-find_package(PkgConfig REQUIRED)
 include(FetchContent)
 
 # ##############################################################################
@@ -45,10 +44,50 @@ endif()
 
 # ##############################################################################
 # NetCDF library
+#
+# When TUV-x is built inside a host project (e.g. MUSICA, or a model embedding
+# MUSICA such as CATChem) NetCDF has usually already been located and exposed as
+# an imported target. Different finders use different target names, so probe the
+# common variants and reuse a host-provided target before searching ourselves.
+# Only when nothing is found do we fall back to pkg-config. The resolved target
+# names are stored in TUVX_NETCDF_C_TARGET / TUVX_NETCDF_FORTRAN_TARGET and linked
+# directly (we avoid wrapping them in an imported target, which would leak an
+# unresolvable target into the exported link interface).
 
 if(NOT TUVX_DOCS_ONLY)
-  pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
-  pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
+  # Return the first of ARGN that already exists as a target (target names are
+  # case-sensitive, so we list each convention explicitly).
+  function(tuvx_first_existing_target out_var)
+    foreach(candidate ${ARGN})
+      if(TARGET ${candidate})
+        set(${out_var} ${candidate} PARENT_SCOPE)
+        return()
+      endif()
+    endforeach()
+    set(${out_var} "" PARENT_SCOPE)
+  endfunction()
+
+  tuvx_first_existing_target(TUVX_NETCDF_C_TARGET
+    netCDF::netcdf
+    NetCDF::NetCDF_C
+    netcdf
+    NETCDF::NETCDF)
+  tuvx_first_existing_target(TUVX_NETCDF_FORTRAN_TARGET
+    netCDF::netcdff
+    NetCDF::NetCDF_Fortran
+    netcdff)
+
+  if(TUVX_NETCDF_C_TARGET AND TUVX_NETCDF_FORTRAN_TARGET)
+    message(STATUS "TUV-x: reusing NetCDF targets from parent project: "
+                   "${TUVX_NETCDF_C_TARGET}, ${TUVX_NETCDF_FORTRAN_TARGET}")
+  else()
+    message(STATUS "TUV-x: no parent NetCDF target found; locating via pkg-config")
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(netcdff IMPORTED_TARGET REQUIRED netcdf-fortran)
+    pkg_check_modules(netcdfc IMPORTED_TARGET REQUIRED netcdf)
+    set(TUVX_NETCDF_C_TARGET PkgConfig::netcdfc)
+    set(TUVX_NETCDF_FORTRAN_TARGET PkgConfig::netcdff)
+  endif()
 endif()
 
 # ##############################################################################
