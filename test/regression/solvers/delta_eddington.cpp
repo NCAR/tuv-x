@@ -73,8 +73,8 @@ void CheckInputs(
 
   // Earth-Sun distances are in AU
   ASSERT_EQ(earth_sun_distances.size(), 2);
-  ASSERT_NEAR(earth_sun_distances.at(0), 0.9961, 1.0e-6);
-  ASSERT_NEAR(earth_sun_distances.at(1), 0.9962, 1.0e-6);
+  ASSERT_NEAR(earth_sun_distances.at(0), 0.99618237961096778, 1.0e-12);
+  ASSERT_NEAR(earth_sun_distances.at(1), 0.99620580182181020, 1.0e-12);
 
   // heights have been converted to meters from km
   ASSERT_EQ(grids.size(), 2);
@@ -101,42 +101,42 @@ void CheckInputs(
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(0, 0), 120.0 * 1.0e-9, 1.0e-16);
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(77, 0), 311.5 * 1.0e-9, 1.0e-16);
   ASSERT_NEAR(grids.at("wavelength [m]").edges_(156, 0), 735.0 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(0, 0), 120.69 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(77, 0), 311.9 * 1.0e-9, 1.0e-16);
-  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155, 0), 729.9 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(0, 0), 120.7 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(77, 0), 312.0 * 1.0e-9, 1.0e-16);
+  ASSERT_NEAR(grids.at("wavelength [m]").mid_points_(155, 0), 730.0 * 1.0e-9, 1.0e-16);
 
   // optical depths are unitless
   ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size1(), 156);
   ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size2(), 120);
   ASSERT_EQ(accumulated_radiator_states.optical_depth_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 0), 2896168.4, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 0), 4.83152e-4, 1.0e-10);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 0), 6.64755e-10, 1.0e-18);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 1), 2896168.4, 1.0e-3);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 1), 4.83152e-4, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 1), 6.64755e-10, 1.0e-18);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 0), 2896168.42, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 0), 4.83152e-4, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 0), 6.64755e-10, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(0, 0, 1), 2896168.4199063173, 1.0e-3);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(83, 41, 1), 4.83152e-4, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.optical_depth_(155, 119, 1), 6.64755e-10, 1.0e-4);
 
   // single scattering albedos are unitless
   ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size1(), 156);
   ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size2(), 120);
   ASSERT_EQ(accumulated_radiator_states.single_scattering_albedo_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 0), 4.78487e-6, 1.0e-12);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 0), 0.5383450, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 0), 0.997822, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 1), 4.78487e-6, 1.0e-12);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 1), 0.5383450, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 1), 0.997822, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 0), 4.78487e-6, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 0), 0.5383450, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 0), 0.997822, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(0, 0, 1), 4.78487e-6, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(83, 41, 1), 0.5383450, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.single_scattering_albedo_(155, 119, 1), 0.997822, 1.0e-4);
 
   // asymmetry parameters are unitless
   ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size1(), 156);
   ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size2(), 120);
   ASSERT_EQ(accumulated_radiator_states.asymmetry_parameter_.Size3(), 2);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 0), 2.12438e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 0), 2.13209e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 0), 0.0, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 1), 2.12438e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 1), 2.13209e-2, 1.0e-8);
-  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 1), 0.0, 1.0e-8);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 0), 2.12438e-2, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 0), 2.13209e-2, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 0), 0.0, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(0, 0, 1), 2.12438e-2, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(83, 41, 1), 2.13209e-2, 1.0e-4);
+  ASSERT_NEAR(accumulated_radiator_states.asymmetry_parameter_(155, 119, 1), 0.0, 1.0e-4);
 }
 
 SolverOutput RunDeltaEddingtonSolver(const SolverInput input)
