@@ -155,3 +155,30 @@ TEST(TemperatureDependentCrossSections, CHBr3)
 {
   CheckAgainstRef(RefDir() + "chbr3.csv", tuvx::fixed_configuration::chbr3());
 }
+
+// Tabulated base cross-section x temperature correction (PR C).
+
+TEST(TemperatureDependentCrossSections, HNO3)
+{
+  CheckAgainstRef(RefDir() + "hno3.csv", tuvx::fixed_configuration::hno3());
+}
+
+TEST(TemperatureDependentCrossSections, RONO2)
+{
+  CheckAgainstRef(RefDir() + "rono2.csv", tuvx::fixed_configuration::rono2());
+}
+
+TEST(TemperatureDependentCrossSections, CH3ONO2)
+{
+  CheckAgainstRef(RefDir() + "ch3ono2.csv", tuvx::fixed_configuration::ch3ono2());
+}
+
+TEST(TemperatureDependentCrossSections, CH2O)
+{
+  CheckAgainstRef(RefDir() + "ch2o.csv", tuvx::fixed_configuration::ch2o());
+}
+
+TEST(TemperatureDependentCrossSections, CFC11)
+{
+  CheckAgainstRef(RefDir() + "cfc11.csv", tuvx::fixed_configuration::cfc11());
+}

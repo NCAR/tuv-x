@@ -37,3 +37,18 @@ Cross Sections
 
 .. doxygenfunction:: tuvx::fixed_configuration::chbr3
    :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::hno3
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::rono2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::ch3ono2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::ch2o
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::cfc11
+   :project: tuvx
