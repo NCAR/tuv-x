@@ -212,3 +212,32 @@ require interpolation or extrapolation:
 The arbitrary-grid resampling path and CHBr3's temperature-gated fallback are
 therefore **not** exercised here; they will be covered once the conserving
 interpolator and NetCDF reader land (Phases 4–5).
+
+## Tabulated base x temperature correction (PR C)
+
+`hno3.csv`, `rono2.csv`, `ch3ono2.csv`, `ch2o.csv`, and `cfc11.csv` cover
+cross-sections that are a **tabulated base** cross-section combined with a
+temperature correction. Same `main` commit (`c2a8f33`), SI conventions, and
+temperature-axis CSV format (`wavelength_m,temperature_K,cross_section_m2`) as
+the PR B files.
+
+Because the base data comes from NetCDF and the conserving interpolator is not
+yet ported, each grid is **pinned to the file's native wavelengths** (identity
+resampling); the hardcoded base arrays in `fixed_configuration.hpp` are the same
+values, so the comparison is exact. Temperatures sampled: 250, 280, 298, 330 K
+(298 K = reference, zeroing every correction).
+
+| File | Fortran source | Base data (`.nc`) | Formula (`l` = wl nm, `dT = T - 298`) |
+|------|----------------|-------------------|----------------------------------------|
+| `hno3.csv` | `hno3-oh_no2.F90` | `cross_section.hno3.nc` | `sigma0(l) * exp(sigma1(l)*dT)` |
+| `rono2.csv` | `rono2.F90` | `cross_section.rono2.nc` | `sigma0(l) * exp(sigma1(l)*dT)` |
+| `ch3ono2.csv` | `ch3ono2-ch3o_no2.F90` | `cross_section.ch3ono2_ch3o_no2.nc` | `sigma0(l) * exp(sigma1(l)*dT)` |
+| `ch2o.csv` | `ch2o.F90` | `cross_section.ch2o.nc` | `sigma0(l) + sigma1(l)*dT` |
+| `cfc11.csv` | `cfc-11.F90` | `cross_section.cfc-11.nc` | `sigma0(l) * exp((l - 184.9)*1e-4*dT)` |
+
+`sigma0` (and, for CH2O, `sigma1`) are cross-sections in cm^2, converted to m^2
+by 1e-4. For HNO3/RONO2/CH3ONO2 the exponent coefficient `sigma1` (1/K) is
+tabulated; for CFC-11 only the base is tabulated and the temperature dependence
+is a closed-form function of wavelength. The C++ side composes these from the
+existing factory library: `multiply(from_data(sigma0), exponential_scaling(...))`,
+`linear_correction(...)`, and `multiply(from_data(sigma0), bounded_analytic(...))`.

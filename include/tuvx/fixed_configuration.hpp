@@ -17,7 +17,10 @@
 #pragma once
 
 #include <tuvx/transforms/analytic_forms.hpp>
+#include <tuvx/transforms/combinators.hpp>
 #include <tuvx/transforms/factories.hpp>
+#include <tuvx/util/array1d.hpp>
+#include <tuvx/util/array2d.hpp>
 
 #include <algorithm>
 #include <cmath>
@@ -56,14 +59,38 @@ namespace tuvx::fixed_configuration
     template<typename T>
     T tabulated_lookup(const TabulatedTable<T> &table, T lambda_m)
     {
-      for (const auto &[wavelength, value] : table)
+      const auto match = std::ranges::find_if(
+          table,
+          [lambda_m](const std::pair<T, T> &entry)
+          { return std::abs(entry.first - lambda_m) <= T{ 1.0e-12 } * entry.first; });
+      return match != table.end() ? match->second : T{ 0 };
+    }
+
+    /// Build an Array1D from literal values, each multiplied by @p scale
+    /// (e.g. 1e-4 to convert a cm^2 table to m^2).
+    template<typename T>
+    tuvx::Array1D<T> scaled_array(std::initializer_list<double> values, double scale)
+    {
+      tuvx::Array1D<T> out(values.size());
+      std::ranges::transform(values, out.begin(), [scale](double v) { return static_cast<T>(v * scale); });
+      return out;
+    }
+
+    /// Build an [n x 2] coefficient array for exponential_scaling with a zero
+    /// zeroth-order term and the given per-wavelength first-order coefficients,
+    /// so exponential_scaling yields exp(coefficient * (T - T_ref)).
+    template<typename T>
+    tuvx::Array2D<T> first_order_exponent(std::initializer_list<double> coefficients)
+    {
+      tuvx::Array2D<T> out(coefficients.size(), 2);
+      std::size_t i = 0;
+      for (double c : coefficients)
       {
-        if (std::abs(wavelength - lambda_m) <= T{ 1.0e-12 } * wavelength)
-        {
-          return value;
-        }
+        out(i, 0) = T{ 0 };
+        out(i, 1) = static_cast<T>(c);
+        ++i;
       }
-      return T{ 0 };
+      return out;
     }
   }  // namespace detail
 
@@ -321,6 +348,88 @@ namespace tuvx::fixed_configuration
         }
       }
     };
+  }
+
+  /// @brief HNO3 -> OH + NO2 cross-section (m^2): sigma0(l) * exp(sigma1(l)*(T-298)).
+  ///
+  /// Base sigma0 and exponent coefficient sigma1 are tabulated per wavelength
+  /// (from cross_section.hno3.nc). Composed as a base cross-section multiplied
+  /// by an exponential temperature scaling.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto hno3() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>(
+        { 1.36e-17, 1.225e-17, 1.095e-17, 9.4e-18, 7.7e-18, 5.88e-18, 4.47e-18, 3.28e-18, 2.31e-18, 1.56e-18,
+          1.04e-18 },
+        1.0e-4);
+    auto sigma1 = detail::first_order_exponent<T>(
+        { 0.0017, 0.0017, 0.0017, 0.0017, 0.00165, 0.00166, 0.00169, 0.00174, 0.00177, 0.00185, 0.00197 });
+    return tuvx::multiply<ArrayPolicy>(
+        tuvx::from_data<ArrayPolicy>(sigma0), tuvx::exponential_scaling<ArrayPolicy>(sigma1, T{ 298.0 }));
+  }
+
+  /// @brief RONO2 (alkyl nitrate) cross-section (m^2): sigma0(l) * exp(sigma1(l)*(T-298)).
+  template<typename ArrayPolicy = Array3D<double>>
+  auto rono2() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>({ 4.65e-21, 3.82e-21, 3.01e-21, 2.42e-21 }, 1.0e-4);
+    auto sigma1 = detail::first_order_exponent<T>({ 0.00536, 0.00561, 0.00589, 0.00623 });
+    return tuvx::multiply<ArrayPolicy>(
+        tuvx::from_data<ArrayPolicy>(sigma0), tuvx::exponential_scaling<ArrayPolicy>(sigma1, T{ 298.0 }));
+  }
+
+  /// @brief CH3ONO2 -> CH3O + NO2 cross-section (m^2): sigma0(l) * exp(sigma1(l)*(T-298)).
+  template<typename ArrayPolicy = Array3D<double>>
+  auto ch3ono2() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>({ 2.98e-21, 2.41e-21, 1.94e-21, 1.54e-21 }, 1.0e-4);
+    auto sigma1 = detail::first_order_exponent<T>({ 0.00514, 0.00543, 0.00567, 0.006 });
+    return tuvx::multiply<ArrayPolicy>(
+        tuvx::from_data<ArrayPolicy>(sigma0), tuvx::exponential_scaling<ArrayPolicy>(sigma1, T{ 298.0 }));
+  }
+
+  /// @brief CH2O -> products cross-section (m^2): sigma0(l) + sigma1(l)*(T-298).
+  ///
+  /// Base value and linear temperature slope are tabulated per wavelength
+  /// (from cross_section.ch2o.nc); a straight linear temperature correction.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto ch2o() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto base = detail::scaled_array<T>(
+        { 4.74e-20, 1.74e-20, 5.56e-20, 1.19e-20, 1.54e-20, 3.86e-20, 9.66e-22, 3.15e-20, 4.36e-21, 3.6e-22,
+          6.96e-21, 8.7e-23, 8.8e-23, 6.36e-22 },
+        1.0e-4);
+    auto slope = detail::scaled_array<T>(
+        { 4.173e-24, 2.36e-24, 2.587e-24, 2.4e-25, 2.213e-24, -2.173e-24, -5.0e-27, 5.52e-24, 2.765e-24, -7.28e-25,
+          2.456e-24, 0.0, 0.0, 0.0 },
+        1.0e-4);
+    return tuvx::linear_correction<ArrayPolicy>(base, slope, T{ 298.0 });
+  }
+
+  /// @brief CFC-11 -> products cross-section (m^2): sigma0(l) * exp((l_nm - 184.9) * 1e-4 * (T-298)).
+  ///
+  /// Only the base cross-section is tabulated (from cross_section.cfc-11.nc);
+  /// the temperature dependence is a closed-form function of wavelength.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto cfc11() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>(
+        { 1.78e-18, 1.49e-18, 1.23e-18, 9.9e-19, 8.01e-19, 6.47e-19, 5.08e-19, 3.88e-19, 2.93e-19, 2.12e-19,
+          1.54e-19 },
+        1.0e-4);
+    return tuvx::multiply<ArrayPolicy>(
+        tuvx::from_data<ArrayPolicy>(sigma0),
+        tuvx::bounded_analytic<ArrayPolicy>(
+            [](T lambda_m, T temperature) -> T
+            {
+              const T wl = lambda_m * T{ 1.0e9 };  // nm
+              return std::exp(((wl - T{ 184.9 }) * T{ 1.0e-4 }) * (temperature - T{ 298.0 }));
+            }));
   }
 
 }  // namespace tuvx::fixed_configuration
