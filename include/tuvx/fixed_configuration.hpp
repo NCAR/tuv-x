@@ -360,8 +360,7 @@ namespace tuvx::fixed_configuration
   {
     using T = typename ArrayPolicy::value_type;
     auto sigma0 = detail::scaled_array<T>(
-        { 1.36e-17, 1.225e-17, 1.095e-17, 9.4e-18, 7.7e-18, 5.88e-18, 4.47e-18, 3.28e-18, 2.31e-18, 1.56e-18,
-          1.04e-18 },
+        { 1.36e-17, 1.225e-17, 1.095e-17, 9.4e-18, 7.7e-18, 5.88e-18, 4.47e-18, 3.28e-18, 2.31e-18, 1.56e-18, 1.04e-18 },
         1.0e-4);
     auto sigma1 = detail::first_order_exponent<T>(
         { 0.0017, 0.0017, 0.0017, 0.0017, 0.00165, 0.00166, 0.00169, 0.00174, 0.00177, 0.00185, 0.00197 });
@@ -400,12 +399,36 @@ namespace tuvx::fixed_configuration
   {
     using T = typename ArrayPolicy::value_type;
     auto base = detail::scaled_array<T>(
-        { 4.74e-20, 1.74e-20, 5.56e-20, 1.19e-20, 1.54e-20, 3.86e-20, 9.66e-22, 3.15e-20, 4.36e-21, 3.6e-22,
-          6.96e-21, 8.7e-23, 8.8e-23, 6.36e-22 },
+        { 4.74e-20,
+          1.74e-20,
+          5.56e-20,
+          1.19e-20,
+          1.54e-20,
+          3.86e-20,
+          9.66e-22,
+          3.15e-20,
+          4.36e-21,
+          3.6e-22,
+          6.96e-21,
+          8.7e-23,
+          8.8e-23,
+          6.36e-22 },
         1.0e-4);
     auto slope = detail::scaled_array<T>(
-        { 4.173e-24, 2.36e-24, 2.587e-24, 2.4e-25, 2.213e-24, -2.173e-24, -5.0e-27, 5.52e-24, 2.765e-24, -7.28e-25,
-          2.456e-24, 0.0, 0.0, 0.0 },
+        { 4.173e-24,
+          2.36e-24,
+          2.587e-24,
+          2.4e-25,
+          2.213e-24,
+          -2.173e-24,
+          -5.0e-27,
+          5.52e-24,
+          2.765e-24,
+          -7.28e-25,
+          2.456e-24,
+          0.0,
+          0.0,
+          0.0 },
         1.0e-4);
     return tuvx::linear_correction<ArrayPolicy>(base, slope, T{ 298.0 });
   }
@@ -419,8 +442,7 @@ namespace tuvx::fixed_configuration
   {
     using T = typename ArrayPolicy::value_type;
     auto sigma0 = detail::scaled_array<T>(
-        { 1.78e-18, 1.49e-18, 1.23e-18, 9.9e-19, 8.01e-19, 6.47e-19, 5.08e-19, 3.88e-19, 2.93e-19, 2.12e-19,
-          1.54e-19 },
+        { 1.78e-18, 1.49e-18, 1.23e-18, 9.9e-19, 8.01e-19, 6.47e-19, 5.08e-19, 3.88e-19, 2.93e-19, 2.12e-19, 1.54e-19 },
         1.0e-4);
     return tuvx::multiply<ArrayPolicy>(
         tuvx::from_data<ArrayPolicy>(sigma0),
