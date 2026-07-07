@@ -289,3 +289,87 @@ TEST(Factories, Parameterized)
     }
   }
 }
+
+// ---------------------------------------------------------------------------
+// temperature_table: clamped linear interpolation over a temperature table.
+
+namespace
+{
+  // State with `n_wl` wavelengths (arbitrary mid-points) and one column per
+  // supplied temperature (single height layer).
+  tuvx::AtmosphericState<> TemperatureState(std::size_t n_wl, std::initializer_list<double> temps)
+  {
+    tuvx::AtmosphericState<> state;
+    const auto n_col = temps.size();
+    state.wavelength_grid_ = tuvx::Grid<tuvx::Array2D<double>>("m", 1, n_wl);
+    for (std::size_t i = 0; i < n_wl; ++i)
+    {
+      state.wavelength_grid_.mid_points_(i, 0) = (200.0 + static_cast<double>(i)) * 1.0e-9;
+    }
+    state.height_grid_ = tuvx::Grid<tuvx::Array2D<double>>("m", 1, n_col);
+    state.temperature_ = tuvx::Array2D<double>(1, n_col);
+    state.pressure_ = tuvx::Array2D<double>(1, n_col);
+    state.air_density_ = tuvx::Array2D<double>(1, n_col);
+    std::size_t c = 0;
+    for (double t : temps)
+    {
+      state.temperature_(0, c++) = t;
+    }
+    return state;
+  }
+}  // namespace
+
+TEST(Factories, TemperatureTableInterpolatesPerWavelength)
+{
+  // reference temps 200, 300 K; two wavelengths with different T-behavior.
+  tuvx::Array1D<double> temps(2);
+  temps[0] = 200.0;
+  temps[1] = 300.0;
+  tuvx::Array2D<double> xs(2, 2);
+  xs(0, 0) = 10.0;
+  xs(0, 1) = 20.0;  // wl0 rises 10 -> 20
+  xs(1, 0) = 100.0;
+  xs(1, 1) = 0.0;  // wl1 falls 100 -> 0
+
+  auto state = TemperatureState(2, { 250.0 });  // midpoint -> t_star = 0.5
+  tuvx::Array3D<double> w(2, 1, 1);
+  tuvx::temperature_table<>(temps, xs)(state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 15.0);
+  EXPECT_DOUBLE_EQ(w(1, 0, 0), 50.0);
+}
+
+TEST(Factories, TemperatureTableClampsOutsideRange)
+{
+  tuvx::Array1D<double> temps(2);
+  temps[0] = 200.0;
+  temps[1] = 300.0;
+  tuvx::Array2D<double> xs(1, 2);
+  xs(0, 0) = 3.0;
+  xs(0, 1) = 9.0;
+
+  auto state = TemperatureState(1, { 150.0, 200.0, 300.0, 400.0 });
+  tuvx::Array3D<double> w(1, 1, 4);
+  tuvx::temperature_table<>(temps, xs)(state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 3.0);  // below range -> first column
+  EXPECT_DOUBLE_EQ(w(0, 0, 1), 3.0);  // exactly first node
+  EXPECT_DOUBLE_EQ(w(0, 0, 2), 9.0);  // exactly last node
+  EXPECT_DOUBLE_EQ(w(0, 0, 3), 9.0);  // above range -> last column
+}
+
+TEST(Factories, TemperatureTableSelectsCorrectBracket)
+{
+  // three intervals; verify the middle bracket is used and interpolated.
+  tuvx::Array1D<double> temps(3);
+  temps[0] = 200.0;
+  temps[1] = 250.0;
+  temps[2] = 400.0;
+  tuvx::Array2D<double> xs(1, 3);
+  xs(0, 0) = 0.0;
+  xs(0, 1) = 10.0;
+  xs(0, 2) = 40.0;
+
+  auto state = TemperatureState(1, { 300.0 });  // in [250,400]: t_star = 50/150
+  tuvx::Array3D<double> w(1, 1, 1);
+  tuvx::temperature_table<>(temps, xs)(state, w);
+  EXPECT_DOUBLE_EQ(w(0, 0, 0), 10.0 + ((50.0 / 150.0) * (40.0 - 10.0)));
+}

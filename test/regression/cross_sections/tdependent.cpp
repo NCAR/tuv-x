@@ -182,3 +182,10 @@ TEST(TemperatureDependentCrossSections, CFC11)
 {
   CheckAgainstRef(RefDir() + "cfc11.csv", tuvx::fixed_configuration::cfc11());
 }
+
+// Temperature-table interpolation (PR D).
+
+TEST(TemperatureDependentCrossSections, NO2)
+{
+  CheckAgainstRef(RefDir() + "no2.csv", tuvx::fixed_configuration::no2());
+}

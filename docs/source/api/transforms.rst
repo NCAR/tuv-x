@@ -35,6 +35,9 @@ Factory Functions
 .. doxygenfunction:: tuvx::temperature_interpolation
    :project: tuvx
 
+.. doxygenfunction:: tuvx::temperature_table
+   :project: tuvx
+
 .. doxygenfunction:: tuvx::polynomial_scaling
    :project: tuvx
 

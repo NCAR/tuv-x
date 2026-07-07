@@ -202,6 +202,52 @@ namespace tuvx
   }
 
   // ---------------------------------------------------------------------------
+  // temperature_table
+
+  /// @brief Returns a TransformFunc that linearly interpolates a cross-section
+  ///        tabulated at several temperatures.
+  ///
+  /// Given reference temperatures \f$T_0 < T_1 < \dots < T_{n-1}\f$ and a value
+  /// table \f$\sigma(\lambda, T_i)\f$, the weight at temperature \f$T\f$ is the
+  /// linear interpolation between the two bracketing reference temperatures,
+  /// with \f$T\f$ clamped to \f$[T_0, T_{n-1}]\f$ (constant extrapolation):
+  /// \f[ w(\lambda, T) = \sigma(\lambda, T_i)
+  ///     + \frac{T_\text{clamped} - T_i}{T_{i+1} - T_i}
+  ///       \left( \sigma(\lambda, T_{i+1}) - \sigma(\lambda, T_i) \right) \f]
+  ///
+  /// This is the shared operation behind the Fortran "tint"-style
+  /// temperature-interpolated cross-sections.
+  ///
+  /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
+  /// @param reference_temperatures  Ascending reference temperatures (K), length n.
+  /// @param cross_sections          Values [n_wavelengths x n], column i at reference_temperatures[i].
+  template<typename ArrayPolicy = Array3D<double>>
+  auto temperature_table(
+      Array1D<typename ArrayPolicy::value_type> reference_temperatures,
+      Array2D<typename ArrayPolicy::value_type> cross_sections) -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    return temperature_interpolation<ArrayPolicy>(
+        [temps = std::move(reference_temperatures), xs = std::move(cross_sections)](
+            std::size_t wl_idx, T temperature) -> T
+        {
+          const auto n = temps.Size();
+          const T t_clamped = std::clamp(temperature, temps[0], temps[n - 1]);
+          std::size_t hi = 1;
+          for (; hi < n; ++hi)
+          {
+            if (t_clamped <= temps[hi])
+            {
+              break;
+            }
+          }
+          const std::size_t lo = hi - 1;
+          const T t_star = (t_clamped - temps[lo]) / (temps[lo + 1] - temps[lo]);
+          return xs(wl_idx, lo) + (t_star * (xs(wl_idx, lo + 1) - xs(wl_idx, lo)));
+        });
+  }
+
+  // ---------------------------------------------------------------------------
   // polynomial_scaling
   //
   // Computes sum_n coeffs(wl, n) * (T - T_ref)^n
