@@ -59,14 +59,11 @@ namespace tuvx::fixed_configuration
     template<typename T>
     T tabulated_lookup(const TabulatedTable<T> &table, T lambda_m)
     {
-      for (const auto &[wavelength, value] : table)
-      {
-        if (std::abs(wavelength - lambda_m) <= T{ 1.0e-12 } * wavelength)
-        {
-          return value;
-        }
-      }
-      return T{ 0 };
+      const auto match = std::ranges::find_if(
+          table,
+          [lambda_m](const std::pair<T, T> &entry)
+          { return std::abs(entry.first - lambda_m) <= T{ 1.0e-12 } * entry.first; });
+      return match != table.end() ? match->second : T{ 0 };
     }
 
     /// Build an Array1D from literal values, each multiplied by @p scale
@@ -75,11 +72,7 @@ namespace tuvx::fixed_configuration
     tuvx::Array1D<T> scaled_array(std::initializer_list<double> values, double scale)
     {
       tuvx::Array1D<T> out(values.size());
-      std::size_t i = 0;
-      for (double v : values)
-      {
-        out[i++] = static_cast<T>(v * scale);
-      }
+      std::ranges::transform(values, out.begin(), [scale](double v) { return static_cast<T>(v * scale); });
       return out;
     }
 
