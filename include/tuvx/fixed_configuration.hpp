@@ -97,11 +97,8 @@ namespace tuvx::fixed_configuration
     /// by @p scale. Used for temperature tables: one row per wavelength, one
     /// column per reference temperature.
     template<typename T>
-    tuvx::Array2D<T> scaled_table(
-        std::size_t n_rows,
-        std::size_t n_cols,
-        std::initializer_list<double> row_major,
-        double scale)
+    tuvx::Array2D<T>
+    scaled_table(std::size_t n_rows, std::size_t n_cols, std::initializer_list<double> row_major, double scale)
     {
       tuvx::Array2D<T> out(n_rows, n_cols);
       // Array2D is row-major, so filling its storage in order matches (row, col).
@@ -484,8 +481,10 @@ namespace tuvx::fixed_configuration
     auto cross_sections = detail::scaled_table<T>(
         2,
         2,
-        { 1.32e-19, 1.32e-19,    // 300.7685 nm at 220 K, 294 K
-          1.6e-19,  1.61e-19 },  // 305.361 nm at 220 K, 294 K
+        { 1.32e-19,
+          1.32e-19,  // 300.7685 nm at 220 K, 294 K
+          1.6e-19,
+          1.61e-19 },  // 305.361 nm at 220 K, 294 K
         1.0e-4);
     return tuvx::temperature_table<ArrayPolicy>(reference_temperatures, cross_sections);
   }
