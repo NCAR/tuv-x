@@ -228,8 +228,7 @@ namespace tuvx
   {
     using T = typename ArrayPolicy::value_type;
     return temperature_interpolation<ArrayPolicy>(
-        [temps = std::move(reference_temperatures), xs = std::move(cross_sections)](
-            std::size_t wl_idx, T temperature) -> T
+        [temps = std::move(reference_temperatures), xs = std::move(cross_sections)](std::size_t wl_idx, T temperature) -> T
         {
           const auto n = temps.Size();
           const T t_clamped = std::clamp(temperature, temps[0], temps[n - 1]);
