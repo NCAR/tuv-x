@@ -67,3 +67,24 @@ Cross Sections
 
 .. doxygenfunction:: tuvx::fixed_configuration::acetone
    :project: tuvx
+
+Spectral Weights
+----------------
+
+Dose-rate action spectra: unitless, wavelength-only weights applied to spectral
+irradiance during dose-rate calculation.
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::standard_human_erythema
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::uv_index
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::scup_mice
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::exp_decay
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::par
+   :project: tuvx
