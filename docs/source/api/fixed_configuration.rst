@@ -52,3 +52,6 @@ Cross Sections
 
 .. doxygenfunction:: tuvx::fixed_configuration::cfc11
    :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::no2
+   :project: tuvx

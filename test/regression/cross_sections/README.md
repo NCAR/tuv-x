@@ -241,3 +241,30 @@ tabulated; for CFC-11 only the base is tabulated and the temperature dependence
 is a closed-form function of wavelength. The C++ side composes these from the
 existing factory library: `multiply(from_data(sigma0), exponential_scaling(...))`,
 `linear_correction(...)`, and `multiply(from_data(sigma0), bounded_analytic(...))`.
+
+## Temperature-table interpolation (PR D)
+
+`no2.csv` covers a cross-section tabulated at several temperatures and linearly
+interpolated to the model temperature (the Fortran "tint" family). Same commit,
+SI conventions, and temperature-axis format as PR B/C.
+
+| File | Fortran source | Base data (`.nc`) | Operation |
+|------|----------------|-------------------|-----------|
+| `no2.csv` | `no2_tint.F90` | `cross_section.no2_tint.nc` | clamped linear interpolation in temperature |
+
+NO2 is tabulated at 220 K and 294 K (wavelengths 300.7685 nm, 305.361 nm). The
+weight at temperature `T` is the linear interpolation between the two bracketing
+reference temperatures, with `T` clamped to `[220, 294]` (constant extrapolation
+outside). Sampled temperatures 210/257/294/300 K exercise clamp-low, midpoint
+interpolation, an exact node, and clamp-high.
+
+The C++ side uses the `temperature_table(reference_temperatures, cross_sections)`
+form. Because the `no2_tint` stub only varies mildly across temperature, the
+interpolation math itself is validated separately by unit tests in
+`test/unit/transforms/test_factories.cpp` (per-wavelength interpolation, bracket
+selection, and end-clamping with non-degenerate synthetic data).
+
+The other "tint"-type species (`tint`, `o3_tint`) and `oclo` are deferred:
+`oclo`'s test exercises **wavelength** extrapolation modes (constant/boundary),
+which belong with the conserving-interpolator work (Phases 4-5) rather than
+temperature interpolation.

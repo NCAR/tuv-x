@@ -92,6 +92,22 @@ namespace tuvx::fixed_configuration
       }
       return out;
     }
+
+    /// Build an [n_rows x n_cols] array from row-major literals, each multiplied
+    /// by @p scale. Used for temperature tables: one row per wavelength, one
+    /// column per reference temperature.
+    template<typename T>
+    tuvx::Array2D<T> scaled_table(
+        std::size_t n_rows,
+        std::size_t n_cols,
+        std::initializer_list<double> row_major,
+        double scale)
+    {
+      tuvx::Array2D<T> out(n_rows, n_cols);
+      // Array2D is row-major, so filling its storage in order matches (row, col).
+      std::ranges::transform(row_major, out.AsVector().begin(), [scale](double v) { return static_cast<T>(v * scale); });
+      return out;
+    }
   }  // namespace detail
 
   /// @brief Rayleigh scattering cross-section (m^2).
@@ -452,6 +468,26 @@ namespace tuvx::fixed_configuration
               const T wl = lambda_m * T{ 1.0e9 };  // nm
               return std::exp(((wl - T{ 184.9 }) * T{ 1.0e-4 }) * (temperature - T{ 298.0 }));
             }));
+  }
+
+  /// @brief NO2 -> NO + O cross-section (m^2), temperature-interpolated ("tint" type).
+  ///
+  /// Linear interpolation of a cross-section tabulated at two temperatures
+  /// (220 K, 294 K), clamped outside that range; from cross_section.no2_tint.nc.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto no2() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    // Reference temperatures (K) and cross-section table (cm^2 -> m^2):
+    // one row per wavelength (300.7685 nm, 305.361 nm), one column per temperature.
+    auto reference_temperatures = detail::scaled_array<T>({ 220.0, 294.0 }, 1.0);
+    auto cross_sections = detail::scaled_table<T>(
+        2,
+        2,
+        { 1.32e-19, 1.32e-19,    // 300.7685 nm at 220 K, 294 K
+          1.6e-19,  1.61e-19 },  // 305.361 nm at 220 K, 294 K
+        1.0e-4);
+    return tuvx::temperature_table<ArrayPolicy>(reference_temperatures, cross_sections);
   }
 
 }  // namespace tuvx::fixed_configuration
