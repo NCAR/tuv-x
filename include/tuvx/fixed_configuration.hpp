@@ -490,4 +490,126 @@ namespace tuvx::fixed_configuration
     return tuvx::temperature_table<ArrayPolicy>(reference_temperatures, cross_sections);
   }
 
+  namespace detail
+  {
+    // Shared builder for the CCl4/CHCl3 pattern: base cross-section times a
+    // temperature-scaling factor 10^(poly(lambda) * (clamp(T,210,300) - 295))
+    // inside [wl_lo, wl_hi] nm, and 1 (base unchanged) outside.
+    template<typename ArrayPolicy, typename T = typename ArrayPolicy::value_type>
+    auto pow10_temperature_scaled(
+        Array1D<T> sigma0,
+        std::initializer_list<T> poly_high_to_low,
+        T wl_lo,
+        T wl_hi) -> TransformFunc<ArrayPolicy>
+    {
+      const std::vector<T> poly(poly_high_to_low);
+      return tuvx::multiply<ArrayPolicy>(
+          tuvx::from_data<ArrayPolicy>(std::move(sigma0)),
+          tuvx::wrap_analytic<ArrayPolicy>(
+              [poly, wl_lo, wl_hi](T lambda_m, T temperature) -> T
+              {
+                const T wl = lambda_m * T{ 1.0e9 };  // nm
+                if (wl <= wl_lo || wl >= wl_hi)
+                {
+                  return T{ 1 };
+                }
+                const T t_adj = std::clamp(temperature, T{ 210.0 }, T{ 300.0 }) - T{ 295.0 };
+                T w_poly = 0;
+                for (const T c : poly)
+                {
+                  w_poly = (w_poly * wl) + c;
+                }
+                return std::pow(T{ 10.0 }, w_poly * t_adj);
+              }));
+    }
+  }  // namespace detail
+
+  /// @brief CCl4 -> products cross-section (m^2).
+  ///
+  /// Base cross-section scaled by \f$10^{P(\lambda)\,(\mathrm{clamp}(T,210,300)-295)}\f$
+  /// for 194 < lambda < 250 nm (base unchanged outside), with P a degree-4
+  /// polynomial in wavelength (nm).
+  template<typename ArrayPolicy = Array3D<double>>
+  auto ccl4() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>({ 6.6e-19, 6.38e-19, 6.1e-19, 5.7e-19, 5.25e-19, 4.69e-19 }, 1.0e-4);
+    // P coefficients highest order first: b4, b3, b2, b1, b0.
+    return detail::pow10_temperature_scaled<ArrayPolicy>(
+        std::move(sigma0),
+        { T{ 1.5022e-10 }, T{ -1.9811e-7 }, T{ 8.8141e-5 }, T{ -1.6275e-2 }, T{ 1.0739 } },
+        T{ 194.0 },
+        T{ 250.0 });
+  }
+
+  /// @brief CHCl3 -> products cross-section (m^2).
+  ///
+  /// Same form as ccl4() with its own degree-4 wavelength polynomial, active for
+  /// 190 < lambda < 240 nm.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto chcl3() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto sigma0 = detail::scaled_array<T>(
+        { 1.13e-18, 8.99e-19, 7.61e-19, 6.42e-19, 5.3e-19, 4.26e-19, 3.44e-19, 2.72e-19, 2.07e-19, 1.51e-19,
+          1.07e-19 },
+        1.0e-4);
+    return detail::pow10_temperature_scaled<ArrayPolicy>(
+        std::move(sigma0),
+        { T{ 1.7555e-9 }, T{ -1.5226e-6 }, T{ 4.9397e-4 }, T{ -7.0913e-2 }, T{ 3.7973 } },
+        T{ 190.0 },
+        T{ 240.0 });
+  }
+
+  /// @brief ClONO2 -> products cross-section (m^2).
+  ///
+  /// \f[ \sigma = \sigma_0(\lambda)\,\left(1 + \Delta T\,(c_1(\lambda) + \Delta T\,c_2(\lambda))\right),
+  ///     \quad \Delta T = T - 296 \f]
+  /// with per-wavelength coefficients \f$\sigma_0, c_1, c_2\f$.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto clono2() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    // sigma0 in m^2 (cm^2 x 1e-4); c1, c2 are temperature coefficients (unscaled).
+    auto sigma0 = detail::scaled_array<T>(
+        { 3.1e-18, 2.94e-18, 2.82e-18, 2.77e-18, 2.8e-18, 2.88e-18, 3.0e-18, 3.14e-18, 3.29e-18, 3.39e-18 },
+        1.0e-4);
+    auto c1 = detail::scaled_array<T>(
+        { 9.9e-05, 6.72e-05, -5.34e-06, -0.000119, -0.00026, -0.000412, -0.000562, -0.000696, -0.000804, -0.000874 },
+        1.0);
+    auto c2 = detail::scaled_array<T>(
+        { -8.38e-06, -8.03e-06, -7.64e-06, -7.64e-06, -7.5e-06, -7.74e-06, -8.05e-06, -8.41e-06, -8.75e-06, -9.04e-06 },
+        1.0);
+    return tuvx::parameterized<ArrayPolicy>(
+        [sigma0 = std::move(sigma0), c1 = std::move(c1), c2 = std::move(c2)](
+            std::size_t wl, std::size_t /*z*/, std::size_t /*col*/, T temperature, T /*air*/) -> T
+        {
+          const T dt = temperature - T{ 296.0 };
+          return sigma0[wl] * (T{ 1.0 } + (dt * (c1[wl] + (dt * c2[wl]))));
+        });
+  }
+
+  /// @brief Acetone (CH3COCH3) -> products cross-section (m^2), Blitz parameterization.
+  ///
+  /// \f[ \sigma = \sigma_0(\lambda)\,\left(1 + T_c(c_1 + T_c(c_2 + T_c c_3))\right),
+  ///     \quad T_c = \mathrm{clamp}(T, 235, 298) \f]
+  /// The polynomial is in the clamped absolute temperature (not an offset), so it
+  /// uses the generic per-element calculator rather than polynomial_scaling.
+  template<typename ArrayPolicy = Array3D<double>>
+  auto acetone() -> TransformFunc<ArrayPolicy>
+  {
+    using T = typename ArrayPolicy::value_type;
+    auto c0 = detail::scaled_array<T>({ 1.0, 2.0, 3.0, 4.0, 5.0 }, 1.0e-4);
+    auto c1 = detail::scaled_array<T>({ 6.0, 7.0, 8.0, 9.0, 10.0 }, 1.0);
+    auto c2 = detail::scaled_array<T>({ 11.0, 12.0, 13.0, 14.0, 15.0 }, 1.0);
+    auto c3 = detail::scaled_array<T>({ 16.0, 17.0, 18.0, 19.0, 20.0 }, 1.0);
+    return tuvx::parameterized<ArrayPolicy>(
+        [c0 = std::move(c0), c1 = std::move(c1), c2 = std::move(c2), c3 = std::move(c3)](
+            std::size_t wl, std::size_t /*z*/, std::size_t /*col*/, T temperature, T /*air*/) -> T
+        {
+          const T tc = std::clamp(temperature, T{ 235.0 }, T{ 298.0 });
+          return c0[wl] * (T{ 1.0 } + (tc * (c1[wl] + (tc * (c2[wl] + (tc * c3[wl]))))));
+        });
+  }
+
 }  // namespace tuvx::fixed_configuration
