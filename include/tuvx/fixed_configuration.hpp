@@ -104,12 +104,8 @@ namespace tuvx::fixed_configuration
         double scale)
     {
       tuvx::Array2D<T> out(n_rows, n_cols);
-      std::size_t idx = 0;
-      for (double v : row_major)
-      {
-        out(idx / n_cols, idx % n_cols) = static_cast<T>(v * scale);
-        ++idx;
-      }
+      // Array2D is row-major, so filling its storage in order matches (row, col).
+      std::ranges::transform(row_major, out.AsVector().begin(), [scale](double v) { return static_cast<T>(v * scale); });
       return out;
     }
   }  // namespace detail

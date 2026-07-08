@@ -233,15 +233,11 @@ namespace tuvx
         {
           const auto n = temps.Size();
           const T t_clamped = std::clamp(temperature, temps[0], temps[n - 1]);
-          std::size_t hi = 1;
-          for (; hi < n; ++hi)
-          {
-            if (t_clamped <= temps[hi])
-            {
-              break;
-            }
-          }
-          const std::size_t lo = hi - 1;
+          // Upper bracket: first reference temperature >= t. Search from the
+          // second node so the lower index is always valid (constant extrapolation
+          // at the ends is handled by the clamp above).
+          const auto upper = std::ranges::lower_bound(temps.begin() + 1, temps.end(), t_clamped);
+          const std::size_t lo = static_cast<std::size_t>(upper - temps.begin()) - 1;
           const T t_star = (t_clamped - temps[lo]) / (temps[lo + 1] - temps[lo]);
           return xs(wl_idx, lo) + (t_star * (xs(wl_idx, lo + 1) - xs(wl_idx, lo)));
         });
