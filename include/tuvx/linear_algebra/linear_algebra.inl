@@ -58,10 +58,7 @@ namespace tuvx
   {
     std::mt19937 random_device(seed);
     std::normal_distribution<double> distribution(5.0, 1.0);
-    for (std::size_t i = 0; i < x.Size(); i++)
-    {
-      x[i] = static_cast<T>(distribution(random_device));
-    }
+    std::ranges::generate(x, [&]() { return static_cast<T>(distribution(random_device)); });
   }
 
   template<typename T>
@@ -86,12 +83,12 @@ namespace tuvx
   template<typename T>
   inline void Print(const Array1D<T> &x)
   {
-    std::cout << std::endl;
-    for (std::size_t i = 0; i < x.Size(); i++)
+    std::cout << '\n';
+    for (const auto &value : x)
     {
-      std::cout << x[i] << std::endl;
+      std::cout << value << '\n';
     }
-    std::cout << std::endl;
+    std::cout << '\n';
   }
 
   template<typename T>
@@ -114,11 +111,11 @@ namespace tuvx
   template<typename T>
   inline void Print(const TridiagonalMatrix<T> &x)
   {
-    std::cout << "----" << std::endl;
+    std::cout << "----\n";
     Print(x.upper_diagonal_);
     Print(x.main_diagonal_);
     Print(x.lower_diagonal_);
-    std::cout << "----" << std::endl;
+    std::cout << "----\n";
   }
 
 }  // namespace tuvx
