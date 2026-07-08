@@ -55,3 +55,15 @@ Cross Sections
 
 .. doxygenfunction:: tuvx::fixed_configuration::no2
    :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::ccl4
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::chcl3
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::clono2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::acetone
+   :project: tuvx

@@ -268,3 +268,31 @@ The other "tint"-type species (`tint`, `o3_tint`) and `oclo` are deferred:
 `oclo`'s test exercises **wavelength** extrapolation modes (constant/boundary),
 which belong with the conserving-interpolator work (Phases 4-5) rather than
 temperature interpolation.
+
+## Polynomial-T scaling (PR E)
+
+`ccl4.csv`, `chcl3.csv`, `clono2.csv`, and `acetone.csv` cover cross-sections
+with polynomial temperature dependence. Same commit, SI conventions, and
+temperature-axis format as PR B/C/D.
+
+| File | Fortran source | Base data (`.nc`) | Formula (`l` = wl nm) |
+|------|----------------|-------------------|------------------------|
+| `ccl4.csv` | `ccl4.F90` | `cross_section.ccl4.nc` | `s0 * 10^(P(l)*(clamp(T,210,300)-295))` in 194-250 nm, else `s0` |
+| `chcl3.csv` | `chcl3.F90` | `cross_section.chcl3.nc` | `s0 * 10^(P(l)*(clamp(T,210,300)-295))` in 190-240 nm, else `s0` |
+| `clono2.csv` | `clono2.F90` | `cross_section.clono2.nc` | `c0 * (1 + dT*(c1 + dT*c2))`, `dT = T - 296` |
+| `acetone.csv` | `acetone-ch3co_ch3.F90` | `cross_section.acetone.nc` | `c0 * (1 + Tc*(c1 + Tc*(c2 + Tc*c3)))`, `Tc = clamp(T,235,298)` |
+
+`P(l)` is a degree-4 polynomial in wavelength (Horner). Base/leading
+cross-sections are cm^2 -> m^2 (x1e-4); the temperature coefficients (`c1`,
+`c2`, `c3`, and the polynomial `P`) are unscaled. Sampled temperatures exercise
+the clamp bounds and the reference point where the correction vanishes.
+
+C++ composition: `ccl4`/`chcl3` via `multiply(from_data(s0), wrap_analytic(...))`
+(the factor is 1 outside the active band, leaving the base unchanged); `clono2`
+and `acetone` via `parameterized` (acetone's absolute-temperature clamp rules out
+`polynomial_scaling`). The `chcl3` 190 nm bin and `ccl4`/`chcl3` out-of-clamp
+temperatures exercise the band/clamp edges.
+
+Acetone's `.nc` test stub uses synthetic sequential coefficients (1-20), so its
+reference values are not physical; they verify parity with the Fortran
+evaluation, not a real acetone spectrum.

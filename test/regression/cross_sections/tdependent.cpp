@@ -189,3 +189,25 @@ TEST(TemperatureDependentCrossSections, NO2)
 {
   CheckAgainstRef(RefDir() + "no2.csv", tuvx::fixed_configuration::no2());
 }
+
+// Polynomial-T scaling (PR E).
+
+TEST(TemperatureDependentCrossSections, CCl4)
+{
+  CheckAgainstRef(RefDir() + "ccl4.csv", tuvx::fixed_configuration::ccl4());
+}
+
+TEST(TemperatureDependentCrossSections, CHCl3)
+{
+  CheckAgainstRef(RefDir() + "chcl3.csv", tuvx::fixed_configuration::chcl3());
+}
+
+TEST(TemperatureDependentCrossSections, ClONO2)
+{
+  CheckAgainstRef(RefDir() + "clono2.csv", tuvx::fixed_configuration::clono2());
+}
+
+TEST(TemperatureDependentCrossSections, Acetone)
+{
+  CheckAgainstRef(RefDir() + "acetone.csv", tuvx::fixed_configuration::acetone());
+}
