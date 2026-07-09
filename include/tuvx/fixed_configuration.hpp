@@ -496,11 +496,8 @@ namespace tuvx::fixed_configuration
     // temperature-scaling factor 10^(poly(lambda) * (clamp(T,210,300) - 295))
     // inside [wl_lo, wl_hi] nm, and 1 (base unchanged) outside.
     template<typename ArrayPolicy, typename T = typename ArrayPolicy::value_type>
-    auto pow10_temperature_scaled(
-        Array1D<T> sigma0,
-        std::initializer_list<T> poly_high_to_low,
-        T wl_lo,
-        T wl_hi) -> TransformFunc<ArrayPolicy>
+    auto pow10_temperature_scaled(Array1D<T> sigma0, std::initializer_list<T> poly_high_to_low, T wl_lo, T wl_hi)
+        -> TransformFunc<ArrayPolicy>
     {
       const std::vector<T> poly(poly_high_to_low);
       return tuvx::multiply<ArrayPolicy>(
@@ -551,8 +548,7 @@ namespace tuvx::fixed_configuration
   {
     using T = typename ArrayPolicy::value_type;
     auto sigma0 = detail::scaled_array<T>(
-        { 1.13e-18, 8.99e-19, 7.61e-19, 6.42e-19, 5.3e-19, 4.26e-19, 3.44e-19, 2.72e-19, 2.07e-19, 1.51e-19,
-          1.07e-19 },
+        { 1.13e-18, 8.99e-19, 7.61e-19, 6.42e-19, 5.3e-19, 4.26e-19, 3.44e-19, 2.72e-19, 2.07e-19, 1.51e-19, 1.07e-19 },
         1.0e-4);
     return detail::pow10_temperature_scaled<ArrayPolicy>(
         std::move(sigma0),
@@ -572,11 +568,9 @@ namespace tuvx::fixed_configuration
     using T = typename ArrayPolicy::value_type;
     // sigma0 in m^2 (cm^2 x 1e-4); c1, c2 are temperature coefficients (unscaled).
     auto sigma0 = detail::scaled_array<T>(
-        { 3.1e-18, 2.94e-18, 2.82e-18, 2.77e-18, 2.8e-18, 2.88e-18, 3.0e-18, 3.14e-18, 3.29e-18, 3.39e-18 },
-        1.0e-4);
+        { 3.1e-18, 2.94e-18, 2.82e-18, 2.77e-18, 2.8e-18, 2.88e-18, 3.0e-18, 3.14e-18, 3.29e-18, 3.39e-18 }, 1.0e-4);
     auto c1 = detail::scaled_array<T>(
-        { 9.9e-05, 6.72e-05, -5.34e-06, -0.000119, -0.00026, -0.000412, -0.000562, -0.000696, -0.000804, -0.000874 },
-        1.0);
+        { 9.9e-05, 6.72e-05, -5.34e-06, -0.000119, -0.00026, -0.000412, -0.000562, -0.000696, -0.000804, -0.000874 }, 1.0);
     auto c2 = detail::scaled_array<T>(
         { -8.38e-06, -8.03e-06, -7.64e-06, -7.64e-06, -7.5e-06, -7.74e-06, -8.05e-06, -8.41e-06, -8.75e-06, -9.04e-06 },
         1.0);
