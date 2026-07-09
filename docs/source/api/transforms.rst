@@ -105,5 +105,8 @@ Combinators
 .. doxygenfunction:: tuvx::scale
    :project: tuvx
 
+.. doxygenfunction:: tuvx::normalize
+   :project: tuvx
+
 .. doxygenfunction:: tuvx::named_band
    :project: tuvx

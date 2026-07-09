@@ -88,3 +88,18 @@ irradiance during dose-rate calculation.
 
 .. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::par
    :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::gaussian
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::plant_damage
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::plant_damage_flint_caldwell
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::plant_damage_flint_caldwell_ext
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::phytoplankton_boucher
+   :project: tuvx

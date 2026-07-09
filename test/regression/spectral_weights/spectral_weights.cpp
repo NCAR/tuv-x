@@ -121,3 +121,33 @@ TEST(SpectralWeights, PAR)
 {
   CheckAgainstRef(RefDir() + "par.csv", tuvx::fixed_configuration::spectral_weights::par());
 }
+
+TEST(SpectralWeights, Gaussian)
+{
+  CheckAgainstRef(RefDir() + "gaussian.csv", tuvx::fixed_configuration::spectral_weights::gaussian(305.0));
+}
+
+TEST(SpectralWeights, PlantDamage)
+{
+  CheckAgainstRef(RefDir() + "plant_damage.csv", tuvx::fixed_configuration::spectral_weights::plant_damage());
+}
+
+TEST(SpectralWeights, PlantDamageFlintCaldwell)
+{
+  CheckAgainstRef(
+      RefDir() + "plant_damage_flint_caldwell.csv",
+      tuvx::fixed_configuration::spectral_weights::plant_damage_flint_caldwell());
+}
+
+TEST(SpectralWeights, PlantDamageFlintCaldwellExt)
+{
+  CheckAgainstRef(
+      RefDir() + "plant_damage_flint_caldwell_ext.csv",
+      tuvx::fixed_configuration::spectral_weights::plant_damage_flint_caldwell_ext());
+}
+
+TEST(SpectralWeights, PhytoplanktonBoucher)
+{
+  CheckAgainstRef(
+      RefDir() + "phytoplankton_boucher.csv", tuvx::fixed_configuration::spectral_weights::phytoplankton_boucher());
+}

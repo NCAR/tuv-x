@@ -715,6 +715,91 @@ namespace tuvx::fixed_configuration
             return (wl > T{ 400.0 } && wl < T{ 700.0 }) ? T{ 8.36e-3 } * wl : T{ 0.0 };
           });
     }
+
+    /// @brief Gaussian spectral weight (unitless), normalized to unit sum over
+    ///        the model wavelength grid: exp(-ln2 * 0.04 * (lambda_nm - centroid)^2).
+    /// @param centroid  Centre wavelength of the Gaussian (nm).
+    template<typename ArrayPolicy = Array3D<double>>
+    auto gaussian(typename ArrayPolicy::value_type centroid) -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::normalize<ArrayPolicy>(tuvx::wrap_analytic<ArrayPolicy>(
+          [centroid](T lambda_m) -> T
+          {
+            const T d = (lambda_m * T{ 1.0e9 }) - centroid;  // nm from centroid
+            return std::exp(-(std::log(T{ 2.0 }) * T{ 0.04 } * d * d));
+          }));
+    }
+
+    /// @brief Plant-damage action spectrum (unitless).
+    ///
+    /// Cubic polynomial in wavelength, zeroed where negative or above 313 nm.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto plant_damage() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T
+          {
+            const T wl = lambda_m * T{ 1.0e9 };  // nm
+            const T value =
+                fixed_configuration::detail::horner<T>({ T{ -1.13118e-5 }, T{ 0.01274 }, T{ -4.70144 }, T{ 570.25 } }, wl);
+            return (value < T{ 0.0 } || wl > T{ 313.0 }) ? T{ 0.0 } : value;
+          });
+    }
+
+    namespace detail
+    {
+      /// Flint & Caldwell plant-damage action spectrum, shared by the two
+      /// variants that differ only in the upper wavelength cutoff.
+      template<typename ArrayPolicy, typename T = typename ArrayPolicy::value_type>
+      auto flint_caldwell(T wl_cutoff) -> TransformFunc<ArrayPolicy>
+      {
+        return tuvx::wrap_analytic<ArrayPolicy>(
+            [wl_cutoff](T lambda_m) -> T
+            {
+              const T wl = lambda_m * T{ 1.0e9 };  // nm
+              const T exponent = (T{ 4.688272 } * std::exp(-std::exp(T{ 0.1703411 } * (wl - T{ 307.867 }) / T{ 1.15 }))) +
+                                 (((T{ 390.0 } - wl) / T{ 121.7557 }) - T{ 4.183832 });
+              const T value = std::exp(exponent) * wl / T{ 300.0 };
+              return (value < T{ 0.0 } || wl > wl_cutoff) ? T{ 0.0 } : value;
+            });
+      }
+    }  // namespace detail
+
+    /// @brief Flint & Caldwell plant-damage action spectrum (unitless), cutoff 366 nm.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto plant_damage_flint_caldwell() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return detail::flint_caldwell<ArrayPolicy>(T{ 366.0 });
+    }
+
+    /// @brief Flint & Caldwell (extended) plant-damage action spectrum (unitless), cutoff 390 nm.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto plant_damage_flint_caldwell_ext() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return detail::flint_caldwell<ArrayPolicy>(T{ 390.0 });
+    }
+
+    /// @brief Phytoplankton (Boucher) action spectrum (unitless), active 290-400 nm.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto phytoplankton_boucher() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T
+          {
+            const T wl = lambda_m * T{ 1.0e9 };  // nm
+            if (wl <= T{ 290.0 } || wl >= T{ 400.0 })
+            {
+              return T{ 0.0 };
+            }
+            const T value = T{ -3.17e-6 } + std::exp(T{ 112.5 } + (wl * (T{ -0.6223 } + (wl * T{ 7.67e-4 }))));
+            return std::max(T{ 0.0 }, value);
+          });
+    }
   }  // namespace spectral_weights
 
 }  // namespace tuvx::fixed_configuration

@@ -264,3 +264,38 @@ TEST(Combinators, Composition)
     }
   }
 }
+
+TEST(Combinators, Normalize)
+{
+  auto state = make_state();
+  auto weights = make_weights();
+
+  // constant(2) over 3 wavelengths -> each normalized to 1/3.
+  auto tf = tuvx::normalize(tuvx::constant(2.0));
+  tf(state, weights);
+  for (std::size_t z = 0; z < 2; ++z)
+  {
+    for (std::size_t col = 0; col < 2; ++col)
+    {
+      EXPECT_DOUBLE_EQ(weights(0, z, col), 1.0 / 3.0);
+      EXPECT_DOUBLE_EQ(weights(1, z, col), 1.0 / 3.0);
+      EXPECT_DOUBLE_EQ(weights(2, z, col), 1.0 / 3.0);
+      // sums to 1 over the wavelength axis
+      EXPECT_DOUBLE_EQ(weights(0, z, col) + weights(1, z, col) + weights(2, z, col), 1.0);
+    }
+  }
+}
+
+TEST(Combinators, NormalizeZeroSumUnchanged)
+{
+  auto state = make_state();
+  auto weights = make_weights();
+
+  // all-zero weights sum to 0 -> left unchanged (no divide by zero).
+  auto tf = tuvx::normalize(tuvx::constant(0.0));
+  tf(state, weights);
+  for (const auto &w : weights)
+  {
+    EXPECT_DOUBLE_EQ(w, 0.0);
+  }
+}
