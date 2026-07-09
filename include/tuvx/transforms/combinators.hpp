@@ -297,4 +297,48 @@ namespace tuvx
     };
   }
 
+  // ---------------------------------------------------------------------------
+  // normalize
+
+  /// @brief Returns a TransformFunc whose weights are @p t's weights divided by
+  ///        their sum over the wavelength axis (per height/column).
+  ///
+  /// This is a reduction: it evaluates @p t, sums the weights over wavelength for
+  /// each (height, column), and divides each weight by that sum. A column whose
+  /// weights sum to zero is left unchanged (avoiding a divide by zero).
+  ///
+  /// Used for normalized action spectra / cross-sections (e.g. a Gaussian
+  /// spectral weight normalized to unit sum over the model grid).
+  template<typename ArrayPolicy = Array3D<double>>
+  auto normalize(TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
+  {
+    return [t = std::move(t)](
+               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    {
+      using T = typename ArrayPolicy::value_type;
+      t(state, weights);
+      const auto n_wl = weights.Size1();
+      const auto n_z = weights.Size2();
+      const auto n_col = weights.Size3();
+      for (std::size_t z = 0; z < n_z; ++z)
+      {
+        for (std::size_t col = 0; col < n_col; ++col)
+        {
+          T sum = 0;
+          for (std::size_t wl = 0; wl < n_wl; ++wl)
+          {
+            sum += weights(wl, z, col);
+          }
+          if (sum != T{ 0 })
+          {
+            for (std::size_t wl = 0; wl < n_wl; ++wl)
+            {
+              weights(wl, z, col) /= sum;
+            }
+          }
+        }
+      }
+    };
+  }
+
 }  // namespace tuvx
