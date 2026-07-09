@@ -683,8 +683,7 @@ namespace tuvx::fixed_configuration
     {
       using T = typename ArrayPolicy::value_type;
       return tuvx::wrap_analytic<ArrayPolicy>(
-          [](T lambda_m) -> T
-          { return detail::sw_futr<T>(lambda_m * T{ 1.0e9 }) / detail::sw_futr<T>(T{ 300.0 }); });
+          [](T lambda_m) -> T { return detail::sw_futr<T>(lambda_m * T{ 1.0e9 }) / detail::sw_futr<T>(T{ 300.0 }); });
     }
 
     /// @brief Exponential-decay spectral weight (unitless): 10^((300 - lambda_nm)/14).

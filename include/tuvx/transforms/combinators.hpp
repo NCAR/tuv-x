@@ -312,8 +312,7 @@ namespace tuvx
   template<typename ArrayPolicy = Array3D<double>>
   auto normalize(TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
   {
-    return [t = std::move(t)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [t = std::move(t)](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
     {
       using T = typename ArrayPolicy::value_type;
       t(state, weights);
