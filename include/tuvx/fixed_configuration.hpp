@@ -802,4 +802,83 @@ namespace tuvx::fixed_configuration
     }
   }  // namespace spectral_weights
 
+  // ---------------------------------------------------------------------------
+  // Quantum yields (unitless photodissociation branching fractions, typically 0-1).
+  // ---------------------------------------------------------------------------
+  namespace quantum_yields
+  {
+    namespace detail
+    {
+      /// Shared ClONO2 branching fraction (the "Cl + NO3" channel): 0.6 below
+      /// 308 nm, a linear ramp to 1.0 across 308-364 nm, and 1.0 above.
+      template<typename T>
+      T clono2_cl_no3_branch(T w)
+      {
+        if (w < T{ 308.0 })
+        {
+          return T{ 0.6 };
+        }
+        if (w <= T{ 364.0 })
+        {
+          return (T{ 7.143e-3 } * w) - T{ 1.6 };
+        }
+        return T{ 1.0 };
+      }
+    }  // namespace detail
+
+    /// @brief ClO + hv -> Cl + O(1D) quantum yield: 1 below 263.4 nm, else 0.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto clo_cl_o1d() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return (lambda_m * T{ 1.0e9 } < T{ 263.4 }) ? T{ 1.0 } : T{ 0.0 }; });
+    }
+
+    /// @brief ClO + hv -> Cl + O(3P) quantum yield: 0 below 263.4 nm, else 1 (complement of clo_cl_o1d).
+    template<typename ArrayPolicy = Array3D<double>>
+    auto clo_cl_o3p() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return (lambda_m * T{ 1.0e9 } < T{ 263.4 }) ? T{ 0.0 } : T{ 1.0 }; });
+    }
+
+    /// @brief ClONO2 + hv -> Cl + NO3 quantum yield (piecewise, see detail::clono2_cl_no3_branch).
+    template<typename ArrayPolicy = Array3D<double>>
+    auto clono2_cl_no3() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return detail::clono2_cl_no3_branch<T>(lambda_m * T{ 1.0e9 }); });
+    }
+
+    /// @brief ClONO2 + hv -> ClO + NO2 quantum yield: 1 - the Cl+NO3 branch.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto clono2_clo_no2() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return T{ 1.0 } - detail::clono2_cl_no3_branch<T>(lambda_m * T{ 1.0e9 }); });
+    }
+
+    /// @brief HO2 + hv -> OH + O quantum yield: 1 at/above 248 nm; a linear ramp
+    ///        below, clamped to >= 0.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto ho2_oh_o() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T
+          {
+            const T w = lambda_m * T{ 1.0e9 };  // nm
+            if (w >= T{ 248.0 })
+            {
+              return T{ 1.0 };
+            }
+            return std::max(T{ 0.0 }, (T{ 1.0 } + ((T{ 14.0 } * (w - T{ 193.0 })) / T{ 55.0 })) / T{ 15.0 });
+          });
+    }
+  }  // namespace quantum_yields
+
 }  // namespace tuvx::fixed_configuration
