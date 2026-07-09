@@ -103,3 +103,24 @@ irradiance during dose-rate calculation.
 
 .. doxygenfunction:: tuvx::fixed_configuration::spectral_weights::phytoplankton_boucher
    :project: tuvx
+
+Quantum Yields
+--------------
+
+Unitless photodissociation branching fractions (typically 0-1), applied
+alongside the cross-section in photolysis-rate calculation.
+
+.. doxygenfunction:: tuvx::fixed_configuration::quantum_yields::clo_cl_o1d
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::quantum_yields::clo_cl_o3p
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::quantum_yields::clono2_cl_no3
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::quantum_yields::clono2_clo_no2
+   :project: tuvx
+
+.. doxygenfunction:: tuvx::fixed_configuration::quantum_yields::ho2_oh_o
+   :project: tuvx
