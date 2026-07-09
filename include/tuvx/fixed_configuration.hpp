@@ -23,6 +23,7 @@
 #include <tuvx/util/array2d.hpp>
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstddef>
 #include <initializer_list>
@@ -610,5 +611,110 @@ namespace tuvx::fixed_configuration
           return c0[wl] * (T{ 1.0 } + (tc * (c1[wl] + (tc * (c2[wl] + (tc * c3[wl]))))));
         });
   }
+
+  // ---------------------------------------------------------------------------
+  // Spectral weights (dose-rate action spectra).
+  //
+  // Unlike cross-sections these are unitless and wavelength-only; the value is
+  // applied to spectral irradiance in the dose-rate calculation (Phase 3).
+  // ---------------------------------------------------------------------------
+  namespace spectral_weights
+  {
+    namespace detail
+    {
+      /// CIE erythema action spectrum sw_fery(w), w in nm (piecewise).
+      template<typename T>
+      T sw_fery(T w)
+      {
+        if (w <= T{ 298.0 })
+        {
+          return T{ 1.0 };
+        }
+        if (w <= T{ 328.0 })
+        {
+          return std::pow(T{ 10.0 }, T{ 0.094 } * (T{ 298.0 } - w));
+        }
+        if (w <= T{ 400.0 })
+        {
+          return std::pow(T{ 10.0 }, T{ 0.015 } * (T{ 140.0 } - w));
+        }
+        return T{ 1.0e-36 };
+      }
+
+      /// SCUP-mice action spectrum sw_futr(w) = exp(P(w)), where P is the
+      /// 4th-order Lagrange interpolating polynomial through 5 nodes (deGruijl
+      /// et al. 1993). w in nm.
+      template<typename T>
+      T sw_futr(T w)
+      {
+        constexpr std::array<T, 5> x = { T{ 270.0 }, T{ 302.0 }, T{ 334.0 }, T{ 367.0 }, T{ 400.0 } };
+        constexpr std::array<T, 5> a = { T{ -10.91 }, T{ -0.86 }, T{ -8.60 }, T{ -9.36 }, T{ -13.15 } };
+        T p = 0;
+        for (std::size_t i = 0; i < x.size(); ++i)
+        {
+          T term = a[i];
+          for (std::size_t j = 0; j < x.size(); ++j)
+          {
+            if (j != i)
+            {
+              term *= (w - x[j]) / (x[i] - x[j]);
+            }
+          }
+          p += term;
+        }
+        return std::exp(p);
+      }
+    }  // namespace detail
+
+    /// @brief Standard human erythema action spectrum (unitless), Webb et al. (2011).
+    template<typename ArrayPolicy = Array3D<double>>
+    auto standard_human_erythema() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>([](T lambda_m) -> T { return detail::sw_fery<T>(lambda_m * T{ 1.0e9 }); });
+    }
+
+    /// @brief UV Index action spectrum (unitless): 40 x the erythema spectrum.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto uv_index() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return T{ 40.0 } * detail::sw_fery<T>(lambda_m * T{ 1.0e9 }); });
+    }
+
+    /// @brief SCUP-mice (skin cancer) action spectrum (unitless), normalized to 1 at 300 nm.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto scup_mice() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T
+          { return detail::sw_futr<T>(lambda_m * T{ 1.0e9 }) / detail::sw_futr<T>(T{ 300.0 }); });
+    }
+
+    /// @brief Exponential-decay spectral weight (unitless): 10^((300 - lambda_nm)/14).
+    template<typename ArrayPolicy = Array3D<double>>
+    auto exp_decay() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T { return std::pow(T{ 10.0 }, (T{ 300.0 } - (lambda_m * T{ 1.0e9 })) / T{ 14.0 }); });
+    }
+
+    /// @brief Photosynthetically active radiation (PAR) weight (unitless):
+    ///        8.36e-3 * lambda_nm for 400 < lambda < 700 nm, else 0.
+    template<typename ArrayPolicy = Array3D<double>>
+    auto par() -> TransformFunc<ArrayPolicy>
+    {
+      using T = typename ArrayPolicy::value_type;
+      return tuvx::wrap_analytic<ArrayPolicy>(
+          [](T lambda_m) -> T
+          {
+            const T wl = lambda_m * T{ 1.0e9 };  // nm
+            return (wl > T{ 400.0 } && wl < T{ 700.0 }) ? T{ 8.36e-3 } * wl : T{ 0.0 };
+          });
+    }
+  }  // namespace spectral_weights
 
 }  // namespace tuvx::fixed_configuration
