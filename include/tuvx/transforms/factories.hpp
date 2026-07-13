@@ -33,9 +33,9 @@ namespace tuvx
   template<typename ArrayPolicy = Array3D<double>>
   auto constant(typename ArrayPolicy::value_type value) -> TransformFunc<ArrayPolicy>
   {
-    return [value](const AtmosphericState<ArrayPolicy> & /*state*/, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [value](const AtmosphericState<ArrayPolicy>& /*state*/, Array3D<typename ArrayPolicy::value_type>& weights)
     {
-      for (auto &w : weights)
+      for (auto& w : weights)
       {
         w = value;
       }
@@ -76,10 +76,10 @@ namespace tuvx
   /// @param  f  Callable returning a weight given wavelength (m).
   template<typename ArrayPolicy = Array3D<double>, typename F>
     requires WavelengthFormula<F, typename ArrayPolicy::value_type> &&
-                 (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
+             (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
-    return [f = std::move(f)](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [f = std::move(f)](const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -109,7 +109,7 @@ namespace tuvx
     requires WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
-    return [f = std::move(f)](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [f = std::move(f)](const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -142,7 +142,7 @@ namespace tuvx
   auto from_data(Array1D<typename ArrayPolicy::value_type> model_values) -> TransformFunc<ArrayPolicy>
   {
     return [vals = std::move(model_values)](
-               const AtmosphericState<ArrayPolicy> & /*state*/, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& /*state*/, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       assert(vals.Size() == weights.Size1());
       const auto n_z = weights.Size2();
@@ -183,7 +183,7 @@ namespace tuvx
   auto temperature_interpolation(Interp interp) -> TransformFunc<ArrayPolicy>
   {
     return [interp = std::move(interp)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -215,8 +215,8 @@ namespace tuvx
   ///     + \frac{T_\text{clamped} - T_i}{T_{i+1} - T_i}
   ///       \left( \sigma(\lambda, T_{i+1}) - \sigma(\lambda, T_i) \right) \f]
   ///
-  /// This is the shared operation behind the Fortran "tint"-style
-  /// temperature-interpolated cross-sections.
+  /// This is the shared operation behind temperature-interpolated
+  /// cross-sections.
   ///
   /// @tparam ArrayPolicy  Storage policy (default: Array3D<double>).
   /// @param reference_temperatures  Ascending reference temperatures (K), length n.
@@ -263,7 +263,7 @@ namespace tuvx
       -> TransformFunc<ArrayPolicy>
   {
     return [coeffs = std::move(coeffs), t_ref](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       assert(coeffs.Size1() == weights.Size1());
       const auto n_wl = weights.Size1();
@@ -308,7 +308,7 @@ namespace tuvx
       -> TransformFunc<ArrayPolicy>
   {
     return [coeffs = std::move(coeffs), t_ref](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       assert(coeffs.Size1() == weights.Size1());
       const auto n_wl = weights.Size1();
@@ -356,7 +356,7 @@ namespace tuvx
       typename ArrayPolicy::value_type t_ref) -> TransformFunc<ArrayPolicy>
   {
     return [base = std::move(base), slope = std::move(slope), t_ref](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       assert(base.Size() == weights.Size1());
       assert(slope.Size() == weights.Size1());
@@ -392,7 +392,7 @@ namespace tuvx
   template<typename ArrayPolicy = Array3D<double>>
   auto stern_volmer(typename ArrayPolicy::value_type phi0, typename ArrayPolicy::value_type k) -> TransformFunc<ArrayPolicy>
   {
-    return [phi0, k](const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [phi0, k](const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -429,7 +429,7 @@ namespace tuvx
   auto parameterized(Calc calc) -> TransformFunc<ArrayPolicy>
   {
     return [calc = std::move(calc)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();

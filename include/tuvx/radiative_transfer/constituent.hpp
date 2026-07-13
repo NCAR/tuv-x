@@ -47,7 +47,6 @@ namespace tuvx
     template<typename ConstituentStatePolicy>
     static ConstituentStatePolicy Accumulate(const std::vector<ConstituentStatePolicy>& states)
     {
-      // [DEV NOTES] Placeholder for the ConstituentState::Accumulate method
       assert(!states.empty());
       return states[0];
     }

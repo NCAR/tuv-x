@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Spherical geometry for slant-path optical depth calculations.
-// Ported from src/spherical_geometry.F90 and src/radiative_transfer/solver.F90.
 #pragma once
 
 #include <algorithm>
@@ -51,8 +50,6 @@ namespace tuvx
   };
 
   /// @brief Total slant-path optical depth from TOA to a given level.
-  ///
-  /// Ported from @c slant_optical_depth() in @c src/radiative_transfer/solver.F90.
   ///
   /// @param level Level index (0 = TOA). Layers 0..level-1 lie above this level.
   /// @param n_layers_crossed Layers crossed by the beam (SphericalGeometry::nid_

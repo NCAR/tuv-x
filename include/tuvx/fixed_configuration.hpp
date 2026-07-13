@@ -11,7 +11,7 @@
 //
 // The core transform library contains no species names or magic numbers; this
 // file is a copyable example, and the regression tests use it to reproduce the
-// reference values from the original implementation.
+// reference values.
 //
 // All cross-sections return weights in m^2 (SI).
 #pragma once
@@ -53,16 +53,15 @@ namespace tuvx::fixed_configuration
     using TabulatedTable = std::vector<std::pair<T, T>>;
 
     /// Look up a wavelength (m) in a (wavelength_m, value) table, returning the
-    /// matching value or zero if the wavelength is absent. This exact-match
-    /// lookup is a deliberate placeholder for the conserving interpolator
-    /// (Phases 4-5): it is faithful only when the model grid coincides with the
-    /// tabulated grid, which is how the hybrid regression grids are pinned.
+    /// matching value or zero if the wavelength is absent. This is an exact-match
+    /// lookup: it returns a value only when the requested wavelength coincides
+    /// with a tabulated grid point.
     template<typename T>
-    T tabulated_lookup(const TabulatedTable<T> &table, T lambda_m)
+    T tabulated_lookup(const TabulatedTable<T>& table, T lambda_m)
     {
       const auto match = std::ranges::find_if(
           table,
-          [lambda_m](const std::pair<T, T> &entry)
+          [lambda_m](const std::pair<T, T>& entry)
           { return std::abs(entry.first - lambda_m) <= T{ 1.0e-12 } * entry.first; });
       return match != table.end() ? match->second : T{ 0 };
     }
@@ -259,9 +258,7 @@ namespace tuvx::fixed_configuration
   /// In band: \f$ \sigma = (\chi\,A(\lambda) + (1-\chi)\,B(\lambda))\,10^{-21}\,\text{cm}^2 \f$
   /// with \f$\chi = 1/(1 + e^{-1265/T})\f$, \f$T\f$ clamped to [200, 400], \f$A\f$
   /// degree-7 and \f$B\f$ degree-4 polynomials in nm. Below the band the
-  /// tabulated base cross-section is used. The Fortran source constant
-  /// \f$A_0 = 6.4761\times10^{4}\f$ is authoritative (the bundled .nc header text
-  /// shows a typo'd exponent).
+  /// tabulated base cross-section is used.
   template<typename ArrayPolicy = Array3D<double>>
   auto h2o2() -> TransformFunc<ArrayPolicy>
   {
@@ -272,7 +269,7 @@ namespace tuvx::fixed_configuration
                                                      { T{ 200.0e-9 }, T{ 4.75e-19 } * T{ 1.0e-4 } },
                                                      { T{ 205.0e-9 }, T{ 4.08e-19 } * T{ 1.0e-4 } },
                                                      { T{ 210.0e-9 }, T{ 3.57e-19 } * T{ 1.0e-4 } } };
-    return [tabulated](const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
+    return [tabulated](const AtmosphericState<ArrayPolicy>& state, Array3D<T>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -333,7 +330,7 @@ namespace tuvx::fixed_configuration
       { T{ 206.0e-9 }, T{ 4.45e-18 } * T{ 1.0e-4 } }, { T{ 208.0e-9 }, T{ 4.51e-18 } * T{ 1.0e-4 } },
       { T{ 210.0e-9 }, T{ 4.68e-18 } * T{ 1.0e-4 } }
     };
-    return [tabulated](const AtmosphericState<ArrayPolicy> &state, Array3D<T> &weights)
+    return [tabulated](const AtmosphericState<ArrayPolicy>& state, Array3D<T>& weights)
     {
       const auto n_wl = weights.Size1();
       const auto n_z = weights.Size2();
@@ -610,7 +607,7 @@ namespace tuvx::fixed_configuration
   // Spectral weights (dose-rate action spectra).
   //
   // Unlike cross-sections these are unitless and wavelength-only; the value is
-  // applied to spectral irradiance in the dose-rate calculation (Phase 3).
+  // applied to spectral irradiance in the dose-rate calculation.
   // ---------------------------------------------------------------------------
   namespace spectral_weights
   {
@@ -683,8 +680,7 @@ namespace tuvx::fixed_configuration
     {
       using T = typename ArrayPolicy::value_type;
       return tuvx::wrap_analytic<ArrayPolicy>(
-          [](T lambda_m) -> T
-          { return detail::sw_futr<T>(lambda_m * T{ 1.0e9 }) / detail::sw_futr<T>(T{ 300.0 }); });
+          [](T lambda_m) -> T { return detail::sw_futr<T>(lambda_m * T{ 1.0e9 }) / detail::sw_futr<T>(T{ 300.0 }); });
     }
 
     /// @brief Exponential-decay spectral weight (unitless): 10^((300 - lambda_nm)/14).
