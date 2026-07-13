@@ -76,7 +76,7 @@ namespace tuvx
   /// @param  f  Callable returning a weight given wavelength (m).
   template<typename ArrayPolicy = Array3D<double>, typename F>
     requires WavelengthFormula<F, typename ArrayPolicy::value_type> &&
-             (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
+                 (!WavelengthTemperatureFormula<F, typename ArrayPolicy::value_type>)
   auto wrap_analytic(F f) -> TransformFunc<ArrayPolicy>
   {
     return [f = std::move(f)](const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)

@@ -89,8 +89,8 @@ namespace
       else
       {
         const double rel_err = std::abs((got - expected) / expected);
-        EXPECT_LT(rel_err, 1.0e-10)
-            << "at wavelength " << ref[i].wavelength_m_ << " m  got=" << got << "  expected=" << expected;
+        EXPECT_LT(rel_err, 1.0e-10) << "at wavelength " << ref[i].wavelength_m_ << " m  got=" << got
+                                    << "  expected=" << expected;
       }
     }
   }
