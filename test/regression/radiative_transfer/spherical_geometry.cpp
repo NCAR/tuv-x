@@ -4,10 +4,6 @@
 // Regression tests for SphericalGeometry::SetParameters() and
 // SlantOpticalDepth() against reference CSV data.
 //
-// Reference CSVs were generated from the C++ implementation at the commit
-// recorded in README.md. See README.md for the test atmosphere and
-// regeneration steps.
-//
 // Test atmosphere: 3-layer, altitude edges 0/1/2/3 km, optical depths
 //                 0.1/0.2/0.3 (top-to-bottom) for slant_od columns.
 #include <tuvx/radiative_transfer/spherical_geometry.hpp>

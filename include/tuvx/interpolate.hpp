@@ -3,15 +3,10 @@
 //
 // Grid interpolation primitives.
 //
-// These are faithful C++ ports of the four interpolators in the Fortran
-// tuvx_interpolate module (src/interpolate.F90) plus the add_point data-prep
-// helper (src/util.F90).  They resample tabulated data given on a source axis
-// onto a target axis; a typical use is matching a molecular cross-section,
-// quantum yield, or action spectrum onto the model wavelength grid.
-//
-// They are pure numerics - arrays in, arrays out, no I/O.  The names are fully
-// descriptive of the interpolation method, mirroring the Fortran type names
-// (interpolator_linear_t, interpolator_conserving_t, ...).
+// These resample tabulated data given on a source axis onto a target axis; a
+// typical use is matching a molecular cross-section, quantum yield, or action
+// spectrum onto the model wavelength grid.  They are pure numerics - arrays in,
+// arrays out, no I/O.
 //
 // Two axis conventions are in play:
 //   * interpolate_linear treats both axes as discrete POINTS and returns one
@@ -51,7 +46,7 @@ namespace tuvx
   template<typename T = double>
   auto interpolate_linear(const Array1D<T>& x_target, const Array1D<T>& x_source, const Array1D<T>& y_source) -> Array1D<T>
   {
-    // 1-based read helpers so the body mirrors the Fortran line for line.
+    // 1-based indexed read helpers, so the index arithmetic below stays readable.
     auto xs = [&](int i) -> T { return x_source[static_cast<std::size_t>(i - 1)]; };
     auto ys = [&](int i) -> T { return y_source[static_cast<std::size_t>(i - 1)]; };
 

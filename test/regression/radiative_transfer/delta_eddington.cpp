@@ -3,9 +3,6 @@
 //
 // Regression tests for DeltaEddington::Solve() against reference CSV data.
 //
-// Reference CSVs were generated from the Fortran source on the main branch.
-// See README.md for the source commit, test atmosphere, and regeneration steps.
-//
 // Test atmosphere: 3-layer, tau=0.5/layer, ssa=0.9/layer, g=0.85/layer,
 //                 surface albedo=0.1, altitudes 0/1/2/3 km.
 #include <tuvx/grid.hpp>

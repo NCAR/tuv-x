@@ -3,11 +3,9 @@
 //
 // Unit tests for the grid interpolation primitives in tuvx/interpolate.hpp.
 //
-// Expected values are gold outputs from the original Fortran routines
-// (NCAR/tuv-x src/interpolate.F90 and src/util.F90, tuvx-src @ bbf7dd9), run
-// verbatim on these exact inputs by a standalone driver. Constant- and
-// linear-source cases are additionally exact by hand (trapezoid areas are
-// analytic). Tolerance: relative 1e-12 (pure arithmetic, no ill-conditioning).
+// Each case uses inputs whose interpolated result is analytic (constant and
+// linear sources average exactly; trapezoid areas are exact), so the expected
+// values are computed by hand. Tolerance: relative 1e-12.
 #include <tuvx/interpolate.hpp>
 #include <tuvx/util/array1d.hpp>
 

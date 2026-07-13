@@ -33,13 +33,12 @@ namespace tuvx
   /// @param wl_max  Upper bound (inclusive), meters.
   /// @param t       Transform to apply within the region.
   template<typename ArrayPolicy = Array3D<double>>
-  auto in_region(
-      typename ArrayPolicy::value_type wl_min,
-      typename ArrayPolicy::value_type wl_max,
-      TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
+  auto
+  in_region(typename ArrayPolicy::value_type wl_min, typename ArrayPolicy::value_type wl_max, TransformFunc<ArrayPolicy> t)
+      -> TransformFunc<ArrayPolicy>
   {
     return [wl_min, wl_max, t = std::move(t)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       using T = typename ArrayPolicy::value_type;
       const auto n_wl = weights.Size1();
@@ -75,7 +74,7 @@ namespace tuvx
   auto multiply(TransformFunc<ArrayPolicy> a, TransformFunc<ArrayPolicy> b) -> TransformFunc<ArrayPolicy>
   {
     return [a = std::move(a), b = std::move(b)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       using T = typename ArrayPolicy::value_type;
       const auto n_wl = weights.Size1();
@@ -87,7 +86,7 @@ namespace tuvx
       b(state, tmp);
 
       auto it_w = weights.begin();
-      for (const auto &v : tmp)
+      for (const auto& v : tmp)
       {
         *it_w *= v;
         ++it_w;
@@ -103,7 +102,7 @@ namespace tuvx
   auto add(TransformFunc<ArrayPolicy> a, TransformFunc<ArrayPolicy> b) -> TransformFunc<ArrayPolicy>
   {
     return [a = std::move(a), b = std::move(b)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       using T = typename ArrayPolicy::value_type;
       const auto n_wl = weights.Size1();
@@ -115,7 +114,7 @@ namespace tuvx
       b(state, tmp);
 
       auto it_w = weights.begin();
-      for (const auto &v : tmp)
+      for (const auto& v : tmp)
       {
         *it_w += v;
         ++it_w;
@@ -146,7 +145,7 @@ namespace tuvx
   auto piecewise(std::vector<PiecewiseRegion<ArrayPolicy>> regions) -> TransformFunc<ArrayPolicy>
   {
     return [regions = std::move(regions)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       using T = typename ArrayPolicy::value_type;
       const auto n_wl = weights.Size1();
@@ -154,13 +153,13 @@ namespace tuvx
       const auto n_col = weights.Size3();
 
       // Zero all weights - regions cover only their range.
-      for (auto &w : weights)
+      for (auto& w : weights)
       {
         w = T{ 0 };
       }
 
       Array3D<T> tmp(n_wl, n_z, n_col);
-      for (const auto &region : regions)
+      for (const auto& region : regions)
       {
         region.transform_(state, tmp);
 
@@ -191,16 +190,15 @@ namespace tuvx
   /// @param min_val  Minimum weight value.
   /// @param max_val  Maximum weight value.
   template<typename ArrayPolicy = Array3D<double>>
-  auto clamp(
-      TransformFunc<ArrayPolicy> t,
-      typename ArrayPolicy::value_type min_val,
-      typename ArrayPolicy::value_type max_val) -> TransformFunc<ArrayPolicy>
+  auto
+  clamp(TransformFunc<ArrayPolicy> t, typename ArrayPolicy::value_type min_val, typename ArrayPolicy::value_type max_val)
+      -> TransformFunc<ArrayPolicy>
   {
     return [t = std::move(t), min_val, max_val](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       t(state, weights);
-      for (auto &w : weights)
+      for (auto& w : weights)
       {
         w = std::clamp(w, min_val, max_val);
       }
@@ -210,9 +208,9 @@ namespace tuvx
   // ---------------------------------------------------------------------------
   // override_band
   //
-  // Named spectral bands. Wavelength limits from Fortran la_sr_bands.F90:
-  //   Lyman-alpha:    wlla  = [121.4, 121.9] nm
-  //   Schumann-Runge: wlsrb = [175.4, 206.2] nm
+  // Named spectral bands and their wavelength limits:
+  //   Lyman-alpha:    [121.4, 121.9] nm
+  //   Schumann-Runge: [175.4, 206.2] nm
 
   /// @brief A named wavelength band with known spectral limits (meters).
   struct SpectralBand
@@ -253,7 +251,7 @@ namespace tuvx
   {
     const SpectralBand band = named_band(name);  // validate at factory time
     return [band, value, t = std::move(t)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       t(state, weights);
       const auto n_wl = weights.Size1();
@@ -287,10 +285,10 @@ namespace tuvx
   auto scale(typename ArrayPolicy::value_type factor, TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
   {
     return [factor, t = std::move(t)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+               const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       t(state, weights);
-      for (auto &w : weights)
+      for (auto& w : weights)
       {
         w *= factor;
       }
@@ -312,8 +310,7 @@ namespace tuvx
   template<typename ArrayPolicy = Array3D<double>>
   auto normalize(TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
   {
-    return [t = std::move(t)](
-               const AtmosphericState<ArrayPolicy> &state, Array3D<typename ArrayPolicy::value_type> &weights)
+    return [t = std::move(t)](const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
     {
       using T = typename ArrayPolicy::value_type;
       t(state, weights);
