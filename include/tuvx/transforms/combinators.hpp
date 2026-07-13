@@ -33,9 +33,10 @@ namespace tuvx
   /// @param wl_max  Upper bound (inclusive), meters.
   /// @param t       Transform to apply within the region.
   template<typename ArrayPolicy = Array3D<double>>
-  auto
-  in_region(typename ArrayPolicy::value_type wl_min, typename ArrayPolicy::value_type wl_max, TransformFunc<ArrayPolicy> t)
-      -> TransformFunc<ArrayPolicy>
+  auto in_region(
+      typename ArrayPolicy::value_type wl_min,
+      typename ArrayPolicy::value_type wl_max,
+      TransformFunc<ArrayPolicy> t) -> TransformFunc<ArrayPolicy>
   {
     return [wl_min, wl_max, t = std::move(t)](
                const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
@@ -190,9 +191,10 @@ namespace tuvx
   /// @param min_val  Minimum weight value.
   /// @param max_val  Maximum weight value.
   template<typename ArrayPolicy = Array3D<double>>
-  auto
-  clamp(TransformFunc<ArrayPolicy> t, typename ArrayPolicy::value_type min_val, typename ArrayPolicy::value_type max_val)
-      -> TransformFunc<ArrayPolicy>
+  auto clamp(
+      TransformFunc<ArrayPolicy> t,
+      typename ArrayPolicy::value_type min_val,
+      typename ArrayPolicy::value_type max_val) -> TransformFunc<ArrayPolicy>
   {
     return [t = std::move(t), min_val, max_val](
                const AtmosphericState<ArrayPolicy>& state, Array3D<typename ArrayPolicy::value_type>& weights)
