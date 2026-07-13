@@ -24,8 +24,8 @@
 
 #include <algorithm>
 #include <cstddef>
+#include <functional>
 #include <stdexcept>
-#include <string>
 
 namespace tuvx
 {
@@ -46,38 +46,24 @@ namespace tuvx
   template<typename T = double>
   auto interpolate_linear(const Array1D<T>& x_target, const Array1D<T>& x_source, const Array1D<T>& y_source) -> Array1D<T>
   {
-    // 1-based indexed read helpers, so the index arithmetic below stays readable.
-    auto xs = [&](int i) -> T { return x_source[static_cast<std::size_t>(i - 1)]; };
-    auto ys = [&](int i) -> T { return y_source[static_cast<std::size_t>(i - 1)]; };
+    const std::size_t n = x_source.Size();
+    Array1D<T> y_target(x_target.Size());  // value-initialized to zero
 
-    const int n = static_cast<int>(x_source.Size());
-    const int nt = static_cast<int>(x_target.Size());
-    Array1D<T> y_target(static_cast<std::size_t>(nt));  // value-initialized to zero
-
-    int jsave = 1;
-    for (int i = 1; i <= nt; ++i)
-    {
-      const T xt = x_target[static_cast<std::size_t>(i - 1)];
-      int j = jsave;
-      while (true)
-      {
-        if (xt < xs(j) || xt >= xs(j + 1))
+    std::ranges::transform(
+        x_target,
+        y_target.begin(),
+        [&](T x) -> T
         {
-          j = j + 1;
-          if (j >= n)
+          if (n < 2 || x < x_source[0] || x >= x_source[n - 1])
           {
-            break;
+            return T{ 0 };
           }
-        }
-        else
-        {
-          const T slope = (ys(j + 1) - ys(j)) / (xs(j + 1) - xs(j));
-          y_target[static_cast<std::size_t>(i - 1)] = ys(j) + (slope * (xt - xs(j)));
-          jsave = j;
-          break;
-        }
-      }
-    }
+          // upper_bound gives the first source point strictly greater than x, so
+          // the bracketing segment is [j, j + 1] with x in [x_source[j], x_source[j + 1]).
+          const std::size_t j = static_cast<std::size_t>(std::ranges::upper_bound(x_source, x) - x_source.begin()) - 1;
+          const T slope = (y_source[j + 1] - y_source[j]) / (x_source[j + 1] - x_source[j]);
+          return y_source[j] + (slope * (x - x_source[j]));
+        });
     return y_target;
   }
 
@@ -104,68 +90,52 @@ namespace tuvx
   auto interpolate_conserving(const Array1D<T>& x_target, const Array1D<T>& x_source, const Array1D<T>& y_source)
       -> Array1D<T>
   {
-    auto xs = [&](int i) -> T { return x_source[static_cast<std::size_t>(i - 1)]; };
-    auto ys = [&](int i) -> T { return y_source[static_cast<std::size_t>(i - 1)]; };
+    const std::size_t n = x_source.Size();
+    const std::size_t ng = x_target.Size();
 
-    const int n = static_cast<int>(x_source.Size());
-    const int ng = static_cast<int>(x_target.Size());
-
-    // Grids must be monotonically increasing.
-    for (int i = 1; i < n; ++i)
+    if (std::ranges::adjacent_find(x_source, std::greater_equal<T>{}) != x_source.end())
     {
-      if (xs(i) >= xs(i + 1))
-      {
-        throw std::invalid_argument("interpolate_conserving: source grid must be monotonically increasing");
-      }
+      throw std::invalid_argument("interpolate_conserving: source grid must be monotonically increasing");
     }
-    for (int i = 1; i < ng; ++i)
+    if (std::ranges::adjacent_find(x_target, std::greater_equal<T>{}) != x_target.end())
     {
-      if (x_target[static_cast<std::size_t>(i - 1)] >= x_target[static_cast<std::size_t>(i)])
-      {
-        throw std::invalid_argument("interpolate_conserving: target grid must be monotonically increasing");
-      }
+      throw std::invalid_argument("interpolate_conserving: target grid must be monotonically increasing");
     }
-    // Source must overlap the full target range.
-    if (xs(1) > x_target[0] || xs(n) < x_target[static_cast<std::size_t>(ng - 1)])
+    if (x_source[0] > x_target[0] || x_source[n - 1] < x_target[ng - 1])
     {
       throw std::invalid_argument("interpolate_conserving: source and target grids do not overlap");
     }
 
-    Array1D<T> y_target(static_cast<std::size_t>(ng - 1));  // value-initialized to zero
-    int jstart = 1;
-    for (int i = 1; i <= ng - 1; ++i)
+    Array1D<T> y_target(ng - 1);  // value-initialized to zero
+    std::size_t start = 0;        // scan hint: first source segment that may reach this bin
+    for (std::size_t i = 0; i + 1 < ng; ++i)
     {
       T area = 0;
-      const T xgl = x_target[static_cast<std::size_t>(i - 1)];
-      const T xgu = x_target[static_cast<std::size_t>(i)];
-      // jstart is only a scan hint; keep it in range (a slightly-too-early start
-      // rescans harmlessly and yields the same result). Both loops guard k < n,
-      // so an out-of-range start simply produces a zero-area bin.
-      int k = jstart < 1 ? 1 : jstart;
-      // discard source points that lie entirely before this bin
-      while (k < n && xs(k + 1) <= xgl)
+      const T lo = x_target[i];
+      const T hi = x_target[i + 1];
+      std::size_t k = start;
+      // skip source segments that lie entirely below this bin
+      while (k + 1 < n && x_source[k + 1] <= lo)
       {
-        jstart = k - 1;
-        k = k + 1;
+        start = (k == 0) ? 0 : k - 1;
+        ++k;
       }
-      // accumulate trapezoidal area over each source segment's overlap with [xgl, xgu]
-      while (k < n && xs(k) < xgu)
+      // accumulate the trapezoidal area of each source segment's overlap with [lo, hi]
+      while (k + 1 < n && x_source[k] < hi)
       {
-        jstart = k - 1;
-        const T a1 = std::max(xs(k), xgl);
-        const T a2 = std::min(xs(k + 1), xgu);
-        T darea = 0;
-        if (xs(k + 1) != xs(k))
+        start = (k == 0) ? 0 : k - 1;
+        const T a1 = std::max(x_source[k], lo);
+        const T a2 = std::min(x_source[k + 1], hi);
+        if (x_source[k + 1] != x_source[k])
         {
-          const T slope = (ys(k + 1) - ys(k)) / (xs(k + 1) - xs(k));
-          const T b1 = ys(k) + (slope * (a1 - xs(k)));
-          const T b2 = ys(k) + (slope * (a2 - xs(k)));
-          darea = T{ 0.5 } * (a2 - a1) * (b2 + b1);
+          const T slope = (y_source[k + 1] - y_source[k]) / (x_source[k + 1] - x_source[k]);
+          const T b1 = y_source[k] + (slope * (a1 - x_source[k]));
+          const T b2 = y_source[k] + (slope * (a2 - x_source[k]));
+          area += T{ 0.5 } * (a2 - a1) * (b2 + b1);
         }
-        area = area + darea;
-        k = k + 1;
+        ++k;
       }
-      y_target[static_cast<std::size_t>(i - 1)] = area / (xgu - xgl);
+      y_target[i] = area / (hi - lo);
     }
     return y_target;
   }
@@ -198,51 +168,47 @@ namespace tuvx
       const Array1D<T>& y_source,
       bool fold_in = false) -> Array1D<T>
   {
-    auto xt = [&](int i) -> T { return x_target[static_cast<std::size_t>(i - 1)]; };
-    auto xf = [&](int i) -> T { return x_source[static_cast<std::size_t>(i - 1)]; };
-    auto yf = [&](int i) -> T { return y_source[static_cast<std::size_t>(i - 1)]; };
+    const std::size_t nto = x_target.Size();
+    const std::size_t nfrom = x_source.Size();
+    const std::size_t n_bins = nto - 1;
+    Array1D<T> y_target(n_bins);  // value-initialized to zero
 
-    const int nto = static_cast<int>(x_target.Size());
-    const int nfrom = static_cast<int>(x_source.Size());
-    const int ntobins = nto - 1;
-    Array1D<T> y_target(static_cast<std::size_t>(ntobins));  // value-initialized to zero
-
-    int jstart = 1;
-    int j = jstart;
-    for (int i = 1; i <= ntobins; ++i)
+    std::size_t start = 0;  // scan hint: first source bin that may reach this target bin
+    std::size_t j = 0;
+    for (std::size_t i = 0; i + 1 < nto; ++i)
     {
       T sum = 0;
-      j = jstart;
+      j = start;
       // skip source bins entirely below this target bin
-      while (j < nfrom && xf(j + 1) < xt(i))
+      while (j + 1 < nfrom && x_source[j + 1] < x_target[i])
       {
-        jstart = j;
-        j = j + 1;
+        start = j;
+        ++j;
       }
       // add the fractional overlap of each source bin, normalized to source width
-      while (j < nfrom && xf(j) <= xt(i + 1))
+      while (j + 1 < nfrom && x_source[j] <= x_target[i + 1])
       {
-        const T a1 = std::max(xf(j), xt(i));
-        const T a2 = std::min(xf(j + 1), xt(i + 1));
-        sum = sum + ((yf(j) * (a2 - a1)) / (xf(j + 1) - xf(j)));
-        j = j + 1;
+        const T a1 = std::max(x_source[j], x_target[i]);
+        const T a2 = std::min(x_source[j + 1], x_target[i + 1]);
+        sum += (y_source[j] * (a2 - a1)) / (x_source[j + 1] - x_source[j]);
+        ++j;
       }
-      y_target[static_cast<std::size_t>(i - 1)] = sum;
+      y_target[i] = sum;
     }
 
-    if (fold_in && j >= 2)
+    // integrate the "overhang" past the last target edge and fold it into the last bin
+    if (fold_in && j >= 1)
     {
-      j = j - 1;
-      const T a1 = xt(nto);
-      const T a2 = xf(j + 1);
+      const T a1 = x_target[nto - 1];
+      const T a2 = x_source[j];
       if (a2 > a1 || j + 1 < nfrom)
       {
-        T tail = (yf(j) * (a2 - a1)) / (xf(j + 1) - xf(j));
-        for (int k = j + 1; k <= nfrom - 1; ++k)
+        T tail = (y_source[j - 1] * (a2 - a1)) / (x_source[j] - x_source[j - 1]);
+        for (std::size_t k = j; k + 1 < nfrom; ++k)
         {
-          tail = tail + (yf(k) * (xf(k + 1) - xf(k)));
+          tail += y_source[k] * (x_source[k + 1] - x_source[k]);
         }
-        y_target[static_cast<std::size_t>(ntobins - 1)] += tail;
+        y_target[n_bins - 1] += tail;
       }
     }
     return y_target;
@@ -270,50 +236,46 @@ namespace tuvx
       const Array1D<T>& y_source,
       bool fold_in = false) -> Array1D<T>
   {
-    auto xt = [&](int i) -> T { return x_target[static_cast<std::size_t>(i - 1)]; };
-    auto xs = [&](int i) -> T { return x_source[static_cast<std::size_t>(i - 1)]; };
-    auto ys = [&](int i) -> T { return y_source[static_cast<std::size_t>(i - 1)]; };
+    const std::size_t n = x_source.Size();
+    const std::size_t ng = x_target.Size();
+    Array1D<T> y_target(ng - 1);  // value-initialized to zero
 
-    const int n = static_cast<int>(x_source.Size());
-    const int ng = static_cast<int>(x_target.Size());
-    Array1D<T> y_target(static_cast<std::size_t>(ng - 1));  // value-initialized to zero
-
-    int jstart = 1;
-    int j = jstart;
-    for (int i = 1; i <= ng - 1; ++i)
+    std::size_t start = 0;  // scan hint: first source bin that may reach this target bin
+    std::size_t j = 0;
+    for (std::size_t i = 0; i + 1 < ng; ++i)
     {
       T sum = 0;
-      j = jstart;
+      j = start;
       // skip source bins entirely below this target bin
-      while (j < n && xs(j + 1) < xt(i))
+      while (j + 1 < n && x_source[j + 1] < x_target[i])
       {
-        jstart = j;
-        j = j + 1;
+        start = j;
+        ++j;
       }
-      // add the fractional overlap of each source bin, normalized below to target width
-      while (j < n && xs(j) <= xt(i + 1))
+      // add the fractional overlap of each source bin; normalized below to target width
+      while (j + 1 < n && x_source[j] <= x_target[i + 1])
       {
-        const T a1 = std::max(xs(j), xt(i));
-        const T a2 = std::min(xs(j + 1), xt(i + 1));
-        sum = sum + (ys(j) * (a2 - a1));
-        j = j + 1;
+        const T a1 = std::max(x_source[j], x_target[i]);
+        const T a2 = std::min(x_source[j + 1], x_target[i + 1]);
+        sum += y_source[j] * (a2 - a1);
+        ++j;
       }
-      y_target[static_cast<std::size_t>(i - 1)] = sum / (xt(i + 1) - xt(i));
+      y_target[i] = sum / (x_target[i + 1] - x_target[i]);
     }
 
-    if (fold_in && j >= 2)
+    // integrate the "overhang" past the last target edge and fold it into the last bin
+    if (fold_in && j >= 1)
     {
-      j = j - 1;
-      const T a1 = xt(ng);
-      const T a2 = xs(j + 1);
+      const T a1 = x_target[ng - 1];
+      const T a2 = x_source[j];
       if (a2 > a1 || j + 1 < n)
       {
-        T tail = (ys(j) * (a2 - a1)) / (xs(j + 1) - xs(j));
-        for (int k = j + 1; k <= n - 1; ++k)
+        T tail = (y_source[j - 1] * (a2 - a1)) / (x_source[j] - x_source[j - 1]);
+        for (std::size_t k = j; k + 1 < n; ++k)
         {
-          tail = tail + (ys(k) * (xs(k + 1) - xs(k)));
+          tail += y_source[k] * (x_source[k + 1] - x_source[k]);
         }
-        y_target[static_cast<std::size_t>(ng - 2)] += tail;
+        y_target[ng - 2] += tail;
       }
     }
     return y_target;
@@ -343,42 +305,20 @@ namespace tuvx
   {
     auto& xv = x.AsVector();
     auto& yv = y.AsVector();
-    const std::size_t n = xv.size();
 
-    for (std::size_t i = 1; i < n; ++i)
+    if (std::ranges::adjacent_find(xv, std::greater_equal<T>{}) != xv.end())
     {
-      if (xv[i] <= xv[i - 1])
-      {
-        throw std::invalid_argument("add_point: grid not monotonically increasing");
-      }
+      throw std::invalid_argument("add_point: grid not monotonically increasing");
     }
-    for (std::size_t i = 0; i < n; ++i)
+    if (std::ranges::find(xv, xnew) != xv.end())
     {
-      if (xv[i] == xnew)
-      {
-        throw std::invalid_argument("add_point: xnew exactly matches an existing grid value");
-      }
+      throw std::invalid_argument("add_point: xnew exactly matches an existing grid value");
     }
 
-    std::size_t insert = n;  // default: append at end (xnew > x.back())
-    if (n == 0 || xnew < xv[0])
-    {
-      insert = 0;
-    }
-    else if (xnew < xv[n - 1])
-    {
-      for (std::size_t i = 1; i < n; ++i)
-      {
-        if (xv[i] > xnew)
-        {
-          insert = i;
-          break;
-        }
-      }
-    }
-
-    xv.insert(xv.begin() + static_cast<std::ptrdiff_t>(insert), xnew);
-    yv.insert(yv.begin() + static_cast<std::ptrdiff_t>(insert), ynew);
+    const auto position = std::ranges::upper_bound(xv, xnew);
+    const auto index = position - xv.begin();
+    xv.insert(position, xnew);
+    yv.insert(yv.begin() + index, ynew);
   }
 
 }  // namespace tuvx
