@@ -2,6 +2,8 @@
 
 See [master plan](plan-tuvXCppSolverRewrite.prompt.md) for overall architecture and key decisions.
 
+**Status (2026-07-14):** Steps 7–9 (transform system) complete. Step 10 cross-sections 19/27; Step 11 quantum yields 5/20; Step 12 spectral weights 11/12. The interpolators (master-plan item 18) are done (PR #213); a `from_tabulated_data` factory to resample tabulated data onto the model grid is the next step and unblocks the remaining data-driven transforms. Implemented transforms live in the copyable example `include/tuvx/fixed_configuration.hpp`, each validated by per-transform reference CSVs under `test/reference/`.
+
 ## Context
 
 The current Fortran codebase has 27 cross-section types, 20 quantum yield types, and 12 spectral weight types, each implemented as a separate class with a factory pattern. Analysis shows these decompose into ~8 recurring mathematical patterns.
@@ -48,7 +50,7 @@ Provide a library of pre-built factory functions that return `TransformFunc` cal
 | Factory function | Math | Useful for |
 |-----------|------|---------------------------|
 | `constant(value)` | Sets all weights to a single value | Flat quantum yields, unit weights |
-| `from_data(reader, interpolator)` | Tabulated data → model grid interpolation | Base cross-sections, quantum yields |
+| `from_data(model_values)` | Broadcasts an already-on-grid value table across heights/columns | Base cross-sections, quantum yields (after resampling) |
 | `temperature_interpolation(reader)` | $\sigma(\lambda,T) = \sigma_i + \frac{T-T_i}{T_{i+1}-T_i}(\sigma_{i+1}-\sigma_i)$ | T-dependent tint types |
 | `polynomial_scaling(coeffs, T_ref)` | $\sigma_0 \cdot P(T-T_{ref}, \lambda)$ | CCl4, acetone, ClONO2, HCFC |
 | `exponential_scaling(coeffs, T_ref)` | $\sigma_0 \cdot \exp(f(T,\lambda))$ | CFC-11, RONO2, N2O5, CHBr3, CH3ONO2 |
@@ -82,10 +84,12 @@ Combinators are higher-order functions: they take one or more `TransformFunc` va
 
 ## Step 10: Port cross-section algorithms
 
+_Status: 19/27 done (PRs #192/#196/#202/#204/#206). The remaining 8 are tabulated-data types awaiting the `from_tabulated_data` factory._
+
 Express each of the 27 Fortran cross-section types as a weight calculation: either a library factory, a composition of factories via combinators, or a user-written `TransformFunc` lambda. Reference files in `src/cross_sections/`:
 
 ### Simple cases (direct factory mapping)
-- `base` → `from_data(reader, conserving_interpolator())`
+- `base` → `from_tabulated_data(lambda, values, interpolate_conserving)` (factory pending; interpolators done, PR #213)
 - `tint` → `temperature_interpolation(reader)`
 - `CCl4` → `multiply(from_data(...), in_region(194e-9, 250e-9, polynomial_scaling(...)))`
 - `CFC-11` → `multiply(from_data(...), exponential_scaling(...))`
@@ -104,6 +108,8 @@ Temperature parameterization utilities in `src/cross_sections/util/`: `temperatu
 
 ## Step 11: Port quantum yield algorithms
 
+_Status: 5/20 done (PR #211: pure-wavelength yields). Remaining: temperature/air-density yields (via `parameterized`) and the data-driven yields (via `from_tabulated_data`)._
+
 ~20 types in `src/quantum_yields/`. Most map to library factories, combinators, or direct `TransformFunc` lambdas:
 
 | Fortran type | Transform |
@@ -118,11 +124,13 @@ Temperature parameterization utilities in `src/cross_sections/util/`: `temperatu
 
 ## Step 12: Port spectral weight algorithms
 
+_Status: 11/12 done (PRs #209/#210). Only `eppley` remains — it needs tabulated data._
+
 ~12 types in `src/spectral_weights/`. Simpler — wavelength-only (no T/P dependence):
 
 | Fortran type | Transform |
 |-------------|-----------|
-| `base` | `from_data(reader, conserving_interpolator())` |
+| `base` | `from_tabulated_data(lambda, values, interpolate_conserving)` (factory pending) |
 | `gaussian` | `wrap_analytic([](λ, μ) { return exp(-ln2 * 0.04 * (λ-μ)²); })` |
 | `notch_filter` | `in_region(λ_min, λ_max, constant(1.0))` |
 | `exp_decay` | `wrap_analytic([](λ) { return pow(10, (300e-9-λ)/14e-9); })` |
