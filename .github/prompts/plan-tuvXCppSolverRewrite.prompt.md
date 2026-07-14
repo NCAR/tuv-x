@@ -2,6 +2,8 @@
 
 **TL;DR**: Replace the Fortran-based TUV-x with a high-performance C++ photolysis rate constant calculator, developed on a clean branch (`cpp-rewrite`) in the existing `tuv-x` repo. The library provides a pure programmatic C++ API — no configuration files — with composable lambda-based transforms for cross-sections, quantum yields, and dose rates. Data structures use template policies to support both CPU SIMD (multi-column vectorization) and GPU (CUDA/HIP) execution. Delta Eddington solver ships first; Discrete Ordinate follows. MUSICA wraps this library and handles YAML/JSON configuration and Python/JS/Fortran bindings.
 
+**Status (2026-07-14):** Phase 0 and Phase 1 complete. Phase 2 in progress — the transform system (steps 7–9) and interpolation utilities (step 18, pulled forward) are done; cross-sections 19/27, quantum yields 5/20, spectral weights 11/12; the bulk-ops migration (12a) has not started. Phases 3, 5–8 not started. Item checkboxes below reflect this.
+
 ### Target README Example
 
 This draft example is the API we are building toward. It should compile and run as-is when the library is complete. Keep it up to date as the API evolves — if the example gets ugly, the API needs work.
@@ -127,9 +129,9 @@ Document as you go — every public header, class, function, and non-obvious imp
 - **README**: Keep the top-level README current with build instructions, a usage example, and a link to the Doxygen-generated API docs.
 - **No verbose boilerplate**: Omit `@author`, `@date`, `@file`, and other noise. Don't restate what the code already says.
 
-- [ ] 1. **Create `cpp-rewrite` branch** in the existing `tuv-x` repo. Reset the branch to a clean state: remove Fortran source, legacy config, and unused build scaffolding. Set up CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
+- [x] 1. **Create `cpp-rewrite` branch** in the existing `tuv-x` repo. Reset the branch to a clean state: remove Fortran source, legacy config, and unused build scaffolding. Set up CMake build system (CMake 3.21+ to match MUSICA). Configure languages `CXX` with optional `CUDA`/`HIP`. Set up GitHub Actions CI with strict quality gates: >95% unit test coverage enforced on PRs, valgrind memcheck on all tests, multi-compiler matrix (GCC, Clang, MSVC, Intel, NVHPC) across Linux/macOS/Windows, clang-tidy static analysis as a PR gate, and auto-generated formatting PRs via clang-format. Enforce legible naming conventions (no cryptic abbreviations).
 
-- [ ] 2. **Restructure existing C++ code.** Reorganize the already-complete implementations from `include/tuvx/` into a clean directory structure on the `cpp-rewrite` branch:
+- [x] 2. **Restructure existing C++ code.** Reorganize the already-complete implementations from `include/tuvx/` into a clean directory structure on the `cpp-rewrite` branch:
    - `Array1D<T>` — new implementation (see below), modeled after `Array2D`/`Array3D`
    - `Array2D<T>`, `Array3D<T>` — `include/tuvx/util/array2d.hpp`, `include/tuvx/util/array3d.hpp`
    - `Grid<ArrayPolicy>` — `include/tuvx/grid.hpp`
@@ -140,7 +142,7 @@ Document as you go — every public header, class, function, and non-obvious imp
    - Existing GTest tests for all of the above
    - Existing Google Benchmark for tridiagonal solver — `benchmark/benchmark_tridiagonal_solver.cpp`
 
-- [ ] 3. **Define template policy system for CPU/GPU portability.** Extend the existing `ArrayPolicy` pattern into a coherent execution/memory policy. The solver algorithms are written once, templated on a single `ArrayPolicy` — from the algorithm's perspective, array access is identical regardless of backing storage:
+- [x] 3. **Define template policy system for CPU/GPU portability.** Extend the existing `ArrayPolicy` pattern into a coherent execution/memory policy. The solver algorithms are written once, templated on a single `ArrayPolicy` — from the algorithm's perspective, array access is identical regardless of backing storage:
 
    - `ArrayPolicy` controls: memory allocation (where), data layout (how), and element access (syntax)
    - `HostArrayPolicy` — `std::vector`-backed; data layout chosen for compiler auto-vectorization (SIMD)
@@ -236,9 +238,9 @@ This means solver functions never loop over columns explicitly — they express 
 
 ## Phase 1: Delta Eddington Solver
 
-- [ ] 4. **Implement spherical geometry utilities.** Port the pseudo-spherical correction from `src/spherical_geometry.F90` and the slant optical depth calculation from `src/radiative_transfer/solver.F90`. These compute the effective solar path through curved atmospheric layers. Pure functions, no state.
+- [x] 4. **Implement spherical geometry utilities.** Port the pseudo-spherical correction from `src/spherical_geometry.F90` and the slant optical depth calculation from `src/radiative_transfer/solver.F90`. These compute the effective solar path through curved atmospheric layers. Pure functions, no state.
 
-- [ ] 5. **Implement Delta Eddington solver.** Replace the placeholder in `include/tuvx/radiative_transfer/solvers/delta_eddington.inl` with the actual algorithm from `src/radiative_transfer/solvers/delta_eddington.F90`. The implementation follows 6 steps documented in [issue #64](https://github.com/NCAR/tuv-x/issues/64):
+- [x] 5. **Implement Delta Eddington solver.** Replace the placeholder in `include/tuvx/radiative_transfer/solvers/delta_eddington.inl` with the actual algorithm from `src/radiative_transfer/solvers/delta_eddington.F90`. The implementation follows 6 steps documented in [issue #64](https://github.com/NCAR/tuv-x/issues/64):
    - **Step 1**: Delta-scale optical properties; compute gamma coefficients ($\gamma_1$ through $\gamma_4$, $\lambda$, $\Gamma$) — per layer, per wavelength, per column
    - **Step 2**: Compute solar source functions $C^+(\tau)$ and $C^-(\tau)$
    - **Step 3**: Assemble tridiagonal system coefficients ($e_1$ through $e_4$; $A_n$, $B_n$, $D_n$ matrix diagonals)
@@ -248,13 +250,13 @@ This means solver functions never loop over columns explicitly — they express 
    - All operations process batches of columns; the `ArrayPolicy` determines the optimal data layout for parallelization
    - All units in SI (meters, radians, seconds) — no unit conversions in solver code; all input data must be provided in SI units
 
-- [ ] 6. **Regression test against Fortran solver.** Adapt the existing test harness in `test/regression/solvers/` to validate the new C++ solver against pre-computed Fortran reference outputs stored as binary/NetCDF files. This decouples testing from the Fortran build.
+- [x] 6. **Regression test against Fortran solver.** Adapt the existing test harness in `test/regression/solvers/` to validate the new C++ solver against pre-computed Fortran reference outputs stored as binary/NetCDF files. This decouples testing from the Fortran build.
 
 ## Phase 2: Composable Transform System
 
    **What is a transform?** A transform is a set of per-wavelength, per-height weights `[wavelength × height × column]` — conceptually a weight matrix that can be *applied* to the radiation field (element-wise multiplication). Cross-sections, quantum yields, and spectral weights are all transforms. Calculating a transform may depend on atmospheric state (T, P, density, constituent concentrations, etc.), but those are inputs to the *weight calculation*, not to the application. You first **calculate** a transform (produce the weight matrix), then **apply** it to the radiation field (multiply), then **reduce** (sum over wavelengths) to get rates.
 
-- [ ] 7. **Design the transform type system.** Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[wavelength × height × column]` given the current atmospheric state:
+- [x] 7. **Design the transform type system.** Define `TransformFunc` as a callable that **calculates** a transform — i.e., fills a weight array `[wavelength × height × column]` given the current atmospheric state:
    ```cpp
    template<typename ArrayPolicy>
    using TransformFunc = std::function<void(
@@ -274,12 +276,12 @@ This means solver functions never loop over columns explicitly — they express 
    ```
    The weights include the column dimension because atmospheric state varies per column, so the calculated weights differ per column. The weights are later applied to the radiation field in Phase 3 (rate calculation).
 
-- [ ] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables — each one calculates a particular kind of weight matrix. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda that calculates weights matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
+- [x] 8. **Implement convenience transform library.** Provide a library of pre-built factory functions that return `TransformFunc` callables — each one calculates a particular kind of weight matrix. These are **convenience utilities built on the same public API a user would use** — they are not special internal constructs. Each factory captures its parameters and returns a lambda that calculates weights matching the `TransformFunc` signature. Users can use these off-the-shelf, compose them with combinators, or ignore them entirely and write raw lambdas:
 
    | Factory function | Math | Useful for |
    |-----------|------|------------------------|
    | `constant(value)` | Sets all weights to a single value | Flat quantum yields, unit weights |
-   | `from_data(reader, interpolator)` | Tabulated data → model grid interpolation | Base cross-sections, quantum yields |
+   | `from_data(model_values)` | Broadcasts an already-on-grid value table across heights/columns | Base cross-sections, quantum yields (after resampling) |
    | `temperature_interpolation(reader)` | $\sigma(\lambda,T) = \sigma_i + \frac{T-T_i}{T_{i+1}-T_i}(\sigma_{i+1}-\sigma_i)$ | T-dependent tint types |
    | `polynomial_scaling(coeffs, T_ref)` | $\sigma_0 \cdot P(T - T_{ref}, \lambda)$ | CCl4, acetone, ClONO2, HCFC |
    | `exponential_scaling(coeffs, T_ref)` | $\sigma_0 \cdot \exp(f(T, \lambda))$ | CFC-11, RONO2, N2O5, CHBr3 |
@@ -288,9 +290,11 @@ This means solver functions never loop over columns explicitly — they express 
    | `parameterized(type, params)` | Taylor series, Burkholder, Harwood strategies | T-parameterized cross-sections |
    | `wrap_analytic(f)` | Adapts a simple `f(λ)→double` or `f(λ,T)→double` into the full `TransformFunc` signature | Quick one-liner formulas (Rayleigh, etc.) |
 
+   As implemented, `from_data` takes an `Array1D` of values already on the model grid. Resampling tabulated source data onto the grid is done by the standalone interpolators in `tuvx/interpolate.hpp` (item 18, done in PR #213); a `from_tabulated_data` factory combining `add_point` padding with conserving interpolation is the next step.
+
    `wrap_analytic` is a **signature adapter** — it takes a simple function of wavelength (and optionally temperature) and wraps it to handle grid iteration and column broadcasting internally. It is a convenience for simple formulas, not the primary way to create custom transforms.
 
-- [ ] 9. **Implement transform combinators.** These are higher-order functions that take one or more `TransformFunc` values and return a new `TransformFunc`. They work with **any** transform — library-provided or user-written:
+- [x] 9. **Implement transform combinators.** These are higher-order functions that take one or more `TransformFunc` values and return a new `TransformFunc`. They work with **any** transform — library-provided or user-written:
 
    | Combinator | Description |
    |------------|-------------|
@@ -304,21 +308,21 @@ This means solver functions never loop over columns explicitly — they express 
 
    **Why combinators instead of sequential calculation?** A `TransformFunc` *writes* to the weight array — it doesn't modify an existing value. Calculating two transforms in sequence would just overwrite the first weight set with the second. Combinators like `multiply(a, b)` internally calculate both weight sets (one into the output, one into a temporary), then combine them element-wise to produce a single composite weight matrix.
 
-- [ ] 10. **Port existing cross-section algorithms as composed transforms.** For each of the 27 cross-section types in `src/cross_sections/`, express the weight calculation as a library factory, a composition of factories via combinators, or a direct user-written `TransformFunc` lambda. Example for CCl4:
+- [ ] 10. **Port existing cross-section algorithms as composed transforms.** _(In progress — 19/27 done via PRs #192/#196/#202/#204/#206. The remaining 8 are tabulated-data types; they await a `from_tabulated_data` factory built on the now-complete interpolators, item 18.)_ For each of the 27 cross-section types in `src/cross_sections/`, express the weight calculation as a library factory, a composition of factories via combinators, or a direct user-written `TransformFunc` lambda. Example for CCl4:
     ```cpp
     auto ccl4_xs = multiply(
-        from_data(netcdf_reader("CCl4.nc"), conserving_interpolator()),
+        from_tabulated_data(ccl4_lambda, ccl4_sigma, interpolate_conserving),  // factory pending; interpolator done (#213)
         in_region(194e-9, 250e-9,
             polynomial_scaling({b0, b1, b2, b3, b4}, 295.0))
     );
     ```
     For complex cases like O3 (4 regions, refraction correction) or H2O2 (blended polynomials via Boltzmann $\chi$), use `piecewise()` with a mix of library factories and user-written lambdas.
 
-- [ ] 11. **Port quantum yield algorithms** (~20 types in `src/quantum_yields/`) using the same library factories, combinators, and/or user-written lambdas. Most reuse existing factories; `stern_volmer`, `wrap_analytic`, and `temperature_interpolation` cover the majority.
+- [ ] 11. **Port quantum yield algorithms** (~20 types in `src/quantum_yields/`) using the same library factories, combinators, and/or user-written lambdas. Most reuse existing factories; `stern_volmer`, `wrap_analytic`, and `temperature_interpolation` cover the majority. _(In progress — 5/20 done via PR #211: the pure-wavelength yields.)_
 
-- [ ] 12. **Port spectral weight algorithms** (~12 types in `src/spectral_weights/`) — these are simpler wavelength-only transforms (`gaussian`, `notch_filter`, `exponential_decay`, etc.).
+- [ ] 12. **Port spectral weight algorithms** (~12 types in `src/spectral_weights/`) — these are simpler wavelength-only transforms (`gaussian`, `notch_filter`, `exponential_decay`, etc.). _(In progress — 11/12 done via PRs #209/#210; only `eppley` (needs tabulated data) remains.)_
 
-- [ ] 12a. **Migrate transform weight-array loops to the bulk operations API.** The factory, combinator, and analytic-form implementations (`include/tuvx/transforms/*.hpp`) currently compute per-element weights with raw `(wavelength, height, column)` index loops and raw iterator loops over the `Array3D` weight data (e.g. `constant`, `multiply`, `add`, `scale`, `clamp`, `from_data`, `exponential_scaling`, `log_normal_bands`). These are hot paths on policy-backed arrays, so per the bulk-operations design they should express element-wise work through `ForEachRow` / `ColumnView` / `Function` rather than raw loops or host-only `std::` algorithms — this is the layout-agnostic seam a `DeviceArrayPolicy` (CUDA/HIP) will dispatch through, and `std::ranges::transform` over `begin()/end()` would tie them to host contiguous memory. (Note: small host-only, run-once setup helpers — e.g. `fixed_configuration`'s `tabulated_lookup`/`scaled_array`, tabulated-array construction — are *not* hot paths and appropriately use `std::ranges`/`std::` algorithms.) This is a mechanical, behavior-preserving refactor; keep the existing reference-data regression tests green throughout.
+- [ ] 12a. **Migrate transform weight-array loops to the bulk operations API.** _(Not started.)_ The factory, combinator, and analytic-form implementations (`include/tuvx/transforms/*.hpp`) currently compute per-element weights with raw `(wavelength, height, column)` index loops and raw iterator loops over the `Array3D` weight data (e.g. `constant`, `multiply`, `add`, `scale`, `clamp`, `from_data`, `exponential_scaling`, `log_normal_bands`). These are hot paths on policy-backed arrays, so per the bulk-operations design they should express element-wise work through `ForEachRow` / `ColumnView` / `Function` rather than raw loops or host-only `std::` algorithms — this is the layout-agnostic seam a `DeviceArrayPolicy` (CUDA/HIP) will dispatch through, and `std::ranges::transform` over `begin()/end()` would tie them to host contiguous memory. (Note: small host-only, run-once setup helpers — e.g. `fixed_configuration`'s `tabulated_lookup`/`scaled_array`, tabulated-array construction — are *not* hot paths and appropriately use `std::ranges`/`std::` algorithms.) This is a mechanical, behavior-preserving refactor; keep the existing reference-data regression tests green throughout.
 
 ## Phase 3: Rate Calculation Engine
 
@@ -336,7 +340,7 @@ This means solver functions never loop over columns explicitly — they express 
 
 - [ ] 17. **Implement Lyman-Alpha and Schumann-Runge band parameterization.** Port `src/la_sr_bands.F90` — this handles special UV absorption bands of O₂ that require separate treatment from the main solver.
 
-- [ ] 18. **Implement interpolation utilities.** Port the 4 interpolator types from `src/interpolate.F90` (linear, conserving, fractional_source, fractional_target) as standalone functions/objects used by the data reader system.
+- [x] 18. **Implement interpolation utilities.** _(Done — pulled forward into Phase 2 (PR #213), since the interpolator, not NetCDF, is what unblocks the remaining data-driven transforms.)_ The 4 interpolator types from `src/interpolate.F90` (linear, conserving, fractional_source, fractional_target), plus the `add_point` padding helper, are implemented as standalone functions in `include/tuvx/interpolate.hpp` and will back the `from_tabulated_data` factory and the data reader system.
 
 ## Phase 5: Data Reader Abstraction
 
