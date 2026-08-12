@@ -57,6 +57,8 @@ module tuvx_core
                           get_radiator_updater
     generic :: get_updater => get_grid_updater, get_profile_updater,          &
                               get_radiator_updater
+    ! Returns an updater for a host-supplied radiation field
+    procedure :: get_radiation_field_updater
     ! Returns the number of photolysis reactions
     procedure :: number_of_photolysis_reactions
     ! Returns the number of dose rates
@@ -496,6 +498,33 @@ contains
     updater = this%radiative_transfer_%get_radiator_updater( radiator, found )
 
   end function get_radiator_updater
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_radiation_field_updater( this, found ) result( updater )
+    ! Returns an updater that a host application can use to set the radiation
+    ! field at runtime
+    !
+    ! The TUV-x configuration must set the radiative transfer solver type to
+    ! ``from host``. If the optional `found` flag is omitted, an error is
+    ! returned when the configured solver is of another type.
+    !
+    ! The host application must call the update function of the returned
+    ! updater before each call to :f:func:`~tuvx_core/core_t%run`.
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_solver_from_host,         only : radiation_field_updater_t
+
+    class(core_t),     intent(in)  :: this  ! TUV-x core
+    logical, optional, intent(out) :: found ! Flag indicating whether a
+                                            ! host-updatable solver was found
+    type(radiation_field_updater_t) :: updater
+
+    call assert_msg( 285116374, associated( this%radiative_transfer_ ),        &
+                     "Radiative transfer not available" )
+    updater = this%radiative_transfer_%get_radiation_field_updater( found )
+
+  end function get_radiation_field_updater
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

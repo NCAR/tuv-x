@@ -66,6 +66,7 @@ interest through simple configuration options.
 
    getting_started
    user_guide
+   host_radiation_field
    api/index
    contributing/index
    citation

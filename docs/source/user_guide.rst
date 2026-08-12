@@ -627,7 +627,7 @@ Radiator configuration formats are described
 
 The ``solver`` key is required and specifies the solver to
 use for radiative transfer.
-There are currently two options, described below.
+There are currently three options, described below.
 
 Delta Eddington
 ~~~~~~~~~~~~~~~
@@ -661,6 +661,26 @@ The configuration format for the discrete ordinate solver is:
 The ``number of streams`` is required and specifies the number
 of streams to solve for.
 The value must be an even number between 2 and 32.
+
+From Host
+~~~~~~~~~
+
+This solver performs no radiative transfer calculation. It returns
+the radiation field that the host application supplies at runtime.
+The configuration format for the from host solver is:
+
+
+.. code-block:: JSON
+
+   "type": "from host"
+
+
+There are no configuration options for this solver.
+The host application must set the radiation field before each
+TUV-x calculation.
+See :ref:`host-radiation-field` for the units, the array shapes,
+the call sequence, and the spectral resolution that this solver
+requires.
 
 .. _configuration-radiators:
 
