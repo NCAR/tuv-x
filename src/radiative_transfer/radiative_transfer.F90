@@ -258,6 +258,10 @@ contains
                                                       ! host-updatable solver was found
     type(radiation_field_updater_t)          :: updater
 
+    ! ifx rejects a string_t function result inside a concatenation, so the
+    ! name goes into a local first
+    type(string_t) :: solver_name
+
     call assert_msg( 208734615, associated( this%solver_ ),                    &
                      "Radiative transfer solver not available" )
     if( present( found ) ) found = .false.
@@ -266,11 +270,12 @@ contains
       updater = radiation_field_updater_t( solver )
       if( present( found ) ) found = .true.
     class default
+      solver_name = solver_type_name( this%solver_ )
       call assert_msg( 921177509, present( found ),                            &
                        "Cannot update the radiation field. The configured "//  &
-                       "radiative transfer solver is '"//                      &
-                       solver_type_name( this%solver_ )//"'. Set the solver "//&
-                       "type to 'from host' in the TUV-x configuration." )
+                       "radiative transfer solver is '"//solver_name//         &
+                       "'. Set the solver type to 'from host' in the TUV-x "// &
+                       "configuration." )
     end select
 
   end function get_radiation_field_updater

@@ -4,6 +4,11 @@
 !> Builds solver_t objects for use in radiative transfer calculations
 module tuvx_solver_factory
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with the Intel compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
+  use musica_config,                   only : config_t
+#endif
   use tuvx_solver,                     only : solver_t
   use tuvx_solver_delta_eddington,     only : solver_delta_eddington_t
   use tuvx_solver_discrete_ordinate,   only : solver_discrete_ordinate_t
@@ -22,8 +27,11 @@ contains
   function solver_builder( config, grid_warehouse, profile_warehouse )        &
       result( solver )
 
-    use musica_assert,                 only : die_msg
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
     use musica_config,                 only : config_t
+#endif
+    use musica_assert,                 only : die_msg
     use musica_string,                 only : string_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t

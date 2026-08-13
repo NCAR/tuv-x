@@ -29,6 +29,11 @@ module tuvx_solver_from_host
   ! rates of zero. See :ref:`configuration-solvers-from-host` for more
   ! information.
 
+  ! Including musica_config at the module level to avoid an ICE
+  ! with the Intel compiler
+#ifdef MUSICA_IS_INTEL_COMPILER
+  use musica_config,                   only : config_t
+#endif
   use musica_constants,                only : dk => musica_dk
   use tuvx_solver,                     only : solver_t, radiation_field_t
 
@@ -92,8 +97,11 @@ contains
       result( solver )
     ! Constructs a solver that the host application updates
 
-    use musica_assert,                 only : assert_msg
+    ! avoid a GCC13 ICE when including musica_config at the module level
+#ifndef MUSICA_IS_INTEL_COMPILER
     use musica_config,                 only : config_t
+#endif
+    use musica_assert,                 only : assert_msg
     use musica_string,                 only : string_t
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
