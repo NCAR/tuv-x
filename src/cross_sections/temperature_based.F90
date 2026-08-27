@@ -189,7 +189,6 @@ contains
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
     use tuvx_profile,                  only : profile_t
-    use tuvx_util,                     only : add_point
 
     real(kind=dk), allocatable                           :: cross_section(:,:)
     class(cross_section_temperature_based_t), intent(in) :: this
@@ -205,9 +204,10 @@ contains
     class(grid_t),     pointer :: wavelengths
     class(profile_t),  pointer :: temperatures
     real(kind=dk)              :: temperature
-    real(kind=dk), allocatable :: raw_data(:), raw_wl(:)
+    real(kind=dk), allocatable :: raw_data(:)
+    real(kind=dk), allocatable :: padded_wavelengths(:), padded_data(:)
     logical                    :: l_at_mid_point
-    integer                    :: i_wl, i_height
+    integer                    :: i_height, n_raw, n_padded
 
     ! Add temperature-based cross section values
     temperatures => profile_warehouse%get_profile( this%temperature_profile_ )
@@ -223,6 +223,33 @@ contains
       allocate( cross_section( temperatures%size( ) + 1,                      &
                                wavelengths%size( ) ) )
     end if
+
+    ! Pad the parameterization wavelength grid with the same four boundary
+    ! points that tuvx_util::add_point used to add, one at a time, on every
+    ! height. The padded grid does not depend on height or temperature, so
+    ! it only needs to be built once here, rather than on every iteration of
+    ! the loop below. Wavelengths are always positive and far smaller than
+    ! 1.0e38, so, as with the repeated add_point calls this replaces, the
+    ! two new low points are always inserted below raw_wavelengths_ and the
+    ! two new high points are always inserted above it.
+    n_raw = size( this%raw_wavelengths_ )
+    n_padded = n_raw + 4
+    allocate( padded_wavelengths( n_padded ) )
+    padded_wavelengths(1) = 0.0_dk
+    padded_wavelengths(2) = ( 1.0_dk - deltax ) * this%raw_wavelengths_(1)
+    padded_wavelengths( 3 : n_padded - 2 ) = this%raw_wavelengths_
+    padded_wavelengths( n_padded - 1 ) =                                      &
+        ( 1.0_dk + deltax ) * this%raw_wavelengths_( n_raw )
+    padded_wavelengths( n_padded ) = 1.0e38_dk
+
+    ! The four padding values are always zero, and stay zero on every
+    ! height, so they only need to be set once too.
+    allocate( padded_data( n_padded ) )
+    padded_data(1) = 0.0_dk
+    padded_data(2) = 0.0_dk
+    padded_data( n_padded - 1 ) = 0.0_dk
+    padded_data( n_padded )     = 0.0_dk
+
     do i_height = 1, size( cross_section, 1 )
       if( l_at_mid_point ) then
         temperature = temperatures%mid_val_( i_height )
@@ -230,21 +257,13 @@ contains
         temperature = temperatures%edge_val_( i_height )
       end if
       raw_data = this%raw_data_
-      raw_wl   = this%raw_wavelengths_
-      call this%parameterization_%calculate( temperature, raw_wl, raw_data )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = ( 1.0_dk - deltax ) * raw_wl(1), ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = 0.0_dk, ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = ( 1.0_dk + deltax ) * raw_wl( size( raw_wl ) ),  &
-                      ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = 1.0e38_dk, ynew = 0.0_dk )
+      call this%parameterization_%calculate( temperature,                     &
+                                             this%raw_wavelengths_, raw_data )
+      padded_data( 3 : n_padded - 2 ) = raw_data
       cross_section( i_height, : ) =                                          &
           this%interpolator_%interpolate( x_target = wavelengths%edge_,       &
-                                          x_source = raw_wl,                  &
-                                          y_source = raw_data,                &
+                                          x_source = padded_wavelengths,      &
+                                          y_source = padded_data,             &
                                           requested_by =                      &
                            "temperature based cross section wavelength grid" )
     end do
