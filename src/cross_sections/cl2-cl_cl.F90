@@ -82,6 +82,7 @@ contains
     real(dk)    :: aa, bb, bbsq, alpha, ex1, ex2
     real(dk),         allocatable :: modelTemp(:)
     real(dk),         allocatable :: wrkCrossSection(:,:)
+    real(dk),         allocatable :: logTerm1(:), logTerm2(:)
     class(grid_t),    pointer     :: lambdaGrid
     class(grid_t),    pointer     :: zGrid
     class(profile_t), pointer     :: temperature
@@ -105,22 +106,27 @@ contains
 
     allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
+    ! The squared log terms below depend only on wavelength, not on height,
+    ! so compute them once here rather than on every one of the nzdim
+    ! heights.
+    allocate( logTerm1( lambdaGrid%ncells_ ), logTerm2( lambdaGrid%ncells_ ) )
     associate( wc => lambdaGrid%mid_ )
+    logTerm1(:) = ( log( 329.5_dk / wc(:) ) )**2
+    logTerm2(:) = ( log( 406.5_dk / wc(:) ) )**2
+    end associate
+
     do vertNdx = 1, nzdim
       aa    = 402.7_dk / modelTemp( vertNdx )
       bb    = exp( aa )
       bbsq  = bb * bb
       alpha = ( bbsq - rONE ) / ( bbsq + rONE )
       do lambdaNdx = 1, lambdaGrid%ncells_
-        ex1 = 27.3_dk * exp( -99.0_dk * alpha                                 &
-                      * ( log( 329.5_dk / wc( lambdaNdx ) ) )**2 )
-        ex2 =  .932_dk * exp( -91.5_dk * alpha                                &
-                       * ( log( 406.5_dk / wc( lambdaNdx ) ) )**2 )
+        ex1 = 27.3_dk * exp( -99.0_dk * alpha * logTerm1( lambdaNdx ) )
+        ex2 =  .932_dk * exp( -91.5_dk * alpha * logTerm2( lambdaNdx ) )
         wrkCrossSection( lambdaNdx, vertNdx ) =                               &
             1.e-20_dk * sqrt( alpha ) * ( ex1 + ex2 )
       enddo
     enddo
-    end associate
 
     cross_section = transpose( wrkCrossSection )
 

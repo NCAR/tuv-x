@@ -166,6 +166,21 @@ vert_loop: &
                   min( this%maximum_temperature_, modelTemp( vertNdx ) ) )    &
                 / 295._dk
       M    = modelDens( vertNdx )
+
+      ! The a*, b*, and c3 coefficients below depend only on Tadj, which is
+      ! fixed for this height, not on wavelength. Compute them once here
+      ! instead of on every one of the wavelength grid's cells.
+      a0 = 0.350_dk * Tadj**( -1.28_dk )
+      b0 = 0.068_dk * Tadj**( -2.65_dk )
+      a1 = 1.600E-19_dk * Tadj**( -2.38_dk )
+      b1 = 0.55E-3_dk   * Tadj**( -3.19_dk )
+      a2 = 1.62E-17_dk * Tadj**( -10.03_dk )
+      b2 = 1.79E-3_dk  * Tadj**( -1.364_dk )
+      a3 = 26.29_dk   * Tadj**( -6.59_dk )
+      b3 = 5.72E-7_dk * Tadj**( -2.93_dk )
+      c3 = 30006._dk  * Tadj**( -0.064_dk )
+      a4 = 1.67E-15_dk * Tadj**( -7.25_dk )
+      b4 = 2.08E-3_dk  * Tadj**( -1.16_dk )
 lambda_loop: &
       do lambdaNdx = 1, lambdaGrid%ncells_
         w = lambdaGrid%mid_( lambdaNdx )
@@ -175,8 +190,6 @@ lambda_loop: &
            qy = this%high_wavelength_value_
         else
           ! CO (carbon monoxide) quantum yields:
-          a0 = 0.350_dk * Tadj**( -1.28_dk )
-          b0 = 0.068_dk * Tadj**( -2.65_dk )
           ! SM: prevent exponent overflow in rare cases:
           dumexp = b0 * ( w - 248._dk )
           if( dumexp > 80._dk ) then
@@ -189,22 +202,13 @@ lambda_loop: &
           ! CH3CO (acetyl radical) quantum yields:
           wadj = 1.e7_dk / w
           if( w >= 279._dk .and. w < 302._dk ) then
-            a1 = 1.600E-19_dk * Tadj**( -2.38_dk )
-            b1 = 0.55E-3_dk   * Tadj**( -3.19_dk )
             cA1 = a1 * EXP( -b1 * ( wadj - 33113._dk ) )
             fac = ( rONE - fco ) / ( rONE + cA1 * M )
           else if( w >= 302._dk .and. w <= 327._dk ) then
-            a2 = 1.62E-17_dk * Tadj**( -10.03_dk )
-            b2 = 1.79E-3_dk  * Tadj**( -1.364_dk )
             cA2 = a2 * EXP( -b2 * ( wadj - 30488._dk ) )
 
-            a3 = 26.29_dk   * Tadj**( -6.59_dk )
-            b3 = 5.72E-7_dk * Tadj**( -2.93_dk )
-            c3 = 30006._dk  * Tadj**( -0.064_dk )
             ca3 = a3 * EXP( -b3 * ( wadj - c3 )**2 )
 
-            a4 = 1.67E-15_dk * Tadj**( -7.25_dk )
-            b4 = 2.08E-3_dk  * Tadj**( -1.16_dk )
             cA4 = a4 * EXP( -b4 * ( wadj - 30488._dk ) )
 
             fac = ( rONE - fco ) * ( rONE + cA3 + cA4 * M ) &
