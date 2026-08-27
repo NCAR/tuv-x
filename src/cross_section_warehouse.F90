@@ -22,6 +22,8 @@ module tuvx_cross_section_warehouse
     procedure, private :: get_copy_char, get_copy_string
     procedure, private :: get_copy_ptr
     generic :: get => get_copy_char, get_copy_string, get_copy_ptr
+    !> Get a non-owning view of a specific cross section, without copying it
+    procedure :: get_view
     !> Returns a pointer to a cross section in the warehouse
     procedure, private :: get_ptr_char, get_ptr_string
     generic :: get_ptr => get_ptr_char, get_ptr_string
@@ -168,6 +170,32 @@ contains
     allocate( cross_section, source = this%cross_sections_( ptr%index_ )%val_ )
 
   end function get_copy_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_view( this, ptr ) result( cross_section )
+    ! Returns a non-owning view of a cross section from the warehouse,
+    ! without copying it
+    !
+    ! Unlike get, the result aliases this warehouse's own copy of the
+    ! cross section. The caller must not deallocate or modify it, and must
+    ! not use it once this warehouse has been deallocated. Cross sections
+    ! are only ever added to a cross section warehouse before it is first
+    ! used to calculate anything, so a view stays valid for as long as the
+    ! warehouse itself does.
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_cross_section,            only : cross_section_t
+
+    class(cross_section_warehouse_t),  intent(in) :: this ! cross section warehouse
+    type(cross_section_warehouse_ptr), intent(in) :: ptr ! cross section pointer
+    class(cross_section_t), pointer               :: cross_section ! view of the cross section
+
+    call assert_msg( 829999478, ptr%index_ > 0,                               &
+                     "Invalid cross section pointer" )
+    cross_section => this%cross_sections_( ptr%index_ )%val_
+
+  end function get_view
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

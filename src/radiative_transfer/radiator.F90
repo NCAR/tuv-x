@@ -193,7 +193,7 @@ contains
       profile_warehouse%get_profile_view( this%radiator_profile_ )
 
     radiator_cross_section =>                                                 &
-      cross_section_warehouse%get( this%cross_section_ )
+      cross_section_warehouse%get_view( this%cross_section_ )
 
     ! check radiator state type allocation
     call assert_msg( 345645215, allocated( this%state_%layer_OD_ ),           &
@@ -221,8 +221,6 @@ contains
       this%state_%layer_SSA_ = 0._dk
       this%state_%layer_G_   = 0._dk
     endif
-
-    deallocate( radiator_cross_section )
 
   end subroutine update_state
 
