@@ -174,4 +174,22 @@ if(TUVX_ENABLE_BENCHMARK AND TUVX_ENABLE_LAPACK AND NOT TUVX_DOCS_ONLY)
   add_subdirectory(benchmark)
 endif()
 
+if(TUVX_ENABLE_BENCHMARK AND NOT TUVX_DOCS_ONLY)
+  # Times the photolysis rate constant calculation with and without an
+  # internal radiative transfer solve, by reusing a host-supplied radiation
+  # field. See examples/benchmark_from_host_radiation_field.F90.
+  add_executable(benchmark_from_host_radiation_field
+                 examples/benchmark_from_host_radiation_field.F90)
+
+  set_target_properties(benchmark_from_host_radiation_field
+    PROPERTIES
+    LINKER_LANGUAGE Fortran
+  )
+
+  target_link_libraries(benchmark_from_host_radiation_field
+    PUBLIC
+      musica::tuvx
+  )
+endif()
+
 ################################################################################
