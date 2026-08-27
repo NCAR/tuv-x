@@ -77,11 +77,9 @@ contains
     ! Local variables
     class(grid_t), pointer      :: lambdaGrid
 
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     spectral_weight = 40._dk * sw_fery( lambdaGrid%mid_ )
-
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
 
   end function run
 

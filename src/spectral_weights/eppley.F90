@@ -69,13 +69,11 @@ contains
 
     class(grid_t), pointer      :: lambdaGrid
 
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     spectral_weight = this%spectral_weight_parms(1)%array( :, 1 )
     accum = dot_product( spectral_weight, lambdaGrid%delta_ )
     spectral_weight = NINETY * spectral_weight / accum
-
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
 
   end function run
 

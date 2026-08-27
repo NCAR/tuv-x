@@ -25,6 +25,8 @@ module tuvx_profile_warehouse
     procedure, private :: get_profile_char, get_profile_string, get_profile_ptr
     generic :: get_profile => get_profile_char, get_profile_string,           &
                               get_profile_ptr
+    ! returns a non-owning view of a profile object, without copying it
+    procedure :: get_profile_view
     ! returns a pointer to a profile object
     procedure, private :: get_ptr_char, get_ptr_string
     generic :: get_ptr => get_ptr_char, get_ptr_string
@@ -189,6 +191,31 @@ contains
     allocate( profile, source = this%profiles_( ptr%index_ )%val_ )
 
   end function get_profile_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_profile_view( this, ptr ) result( profile )
+    ! Returns a non-owning view of a profile from the warehouse, without
+    ! copying it
+    !
+    ! Unlike get_profile, the result aliases this warehouse's own copy of
+    ! the profile. The caller must not deallocate or modify it, and must
+    ! not use it once this profile warehouse has been deallocated.
+    ! Profiles are only ever added to a profile warehouse before it is
+    ! first used to calculate anything, so a view stays valid for as long
+    ! as the warehouse itself does.
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_profile,                  only : profile_t
+
+    class(profile_warehouse_t),  intent(in) :: this    ! The profile warehouse
+    type(profile_warehouse_ptr), intent(in) :: ptr     ! Pointer to a profile in the warehouse
+    class(profile_t),            pointer    :: profile ! View of the profile
+
+    call assert_msg( 108824616, ptr%index_ > 0, "Invalid profile pointer" )
+    profile => this%profiles_( ptr%index_ )%val_
+
+  end function get_profile_view
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

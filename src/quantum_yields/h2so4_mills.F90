@@ -149,8 +149,8 @@ contains
 
     quantum_yield =                                                           &
         this%quantum_yield_t%calculate( grid_warehouse, profile_warehouse )
-    temperature => profile_warehouse%get_profile( this%temperature_profile_ )
-    air => profile_warehouse%get_profile( this%air_profile_ )
+    temperature => profile_warehouse%get_profile_view( this%temperature_profile_ )
+    air => profile_warehouse%get_profile_view( this%air_profile_ )
 
     ! Overwrite the quantum yields for the parameterized wavelengths
     do i_wl = 1, size( this%wavelength_indices_ )
@@ -165,9 +165,6 @@ contains
     ! The top layer has quantum yields set to 1.0
     quantum_yield( size( quantum_yield, dim=1 ),                              &
                    this%wavelength_indices_(:) ) = 1.0_dk
-
-    deallocate( temperature )
-    deallocate( air         )
 
   end function calculate
 

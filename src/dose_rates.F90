@@ -203,9 +203,9 @@ contains
     class(grid_t),    pointer :: lambdaGrid
     class(profile_t), pointer :: etfl
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-    etfl => profile_warehouse%get_profile( this%etfl_profile_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+    etfl => profile_warehouse%get_profile_view( this%etfl_profile_ )
 
     if( this%enable_diagnostics_ ) then
       allocate( tmp_spectral_weight(0) )
@@ -251,10 +251,6 @@ rate_loop:                                                                    &
       call diagout( 'sw.'//file_tag//'.new', tmp_spectral_weight,               &
         this%enable_diagnostics_ )
     end if
-
-    if( associated( zGrid ) ) deallocate( zGrid )
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
-    if( associated( etfl ) ) deallocate( etfl )
 
   end subroutine get
 

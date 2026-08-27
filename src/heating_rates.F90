@@ -258,10 +258,10 @@ contains
     real(kind=dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     integer :: i_rate, n_rates, i_height
 
-    heights => grids%get_grid( this%height_grid_ )
-    wavelengths => grids%get_grid( this%wavelength_grid_ )
-    etfl => profiles%get_profile( this%etfl_profile_ )
-    air => profiles%get_profile( this%air_profile_ )
+    heights => grids%get_grid_view( this%height_grid_ )
+    wavelengths => grids%get_grid_view( this%wavelength_grid_ )
+    etfl => profiles%get_profile_view( this%etfl_profile_ )
+    air => profiles%get_profile_view( this%air_profile_ )
 
     n_rates = size( this%heating_parameters_ )
     call assert( 966855732,                                                   &
@@ -304,11 +304,6 @@ contains
       end do
     end associate
     end do
-
-    deallocate( heights )
-    deallocate( wavelengths )
-    deallocate( etfl )
-    deallocate( air )
 
   end subroutine get
 

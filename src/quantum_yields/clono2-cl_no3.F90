@@ -75,8 +75,8 @@ contains
     class(grid_t), pointer     :: lambdaGrid
     class(grid_t), pointer     :: zGrid
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     allocate( wrkQuantumYield( lambdaGrid%ncells_) )
     allocate( wrkQuantumYield2D( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
@@ -97,9 +97,6 @@ contains
     enddo
 
     quantum_yield = transpose( wrkQuantumYield2D )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
 
   end function run
 

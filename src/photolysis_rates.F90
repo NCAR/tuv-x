@@ -308,9 +308,9 @@ contains
     class(profile_t), pointer :: airProfile
     class(profile_t), pointer :: etfl
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-    etfl  => profile_warehouse%get_profile( this%etfl_profile_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+    etfl  => profile_warehouse%get_profile_view( this%etfl_profile_ )
 
     nRates = size( this%cross_sections_ )
     call assert_msg( 470014831,                                               &
@@ -343,7 +343,7 @@ rate_loop:                                                                    &
 
       ! O2 photolysis can have special la & srb band handling
       if( any( this%o2_rate_indices_ == rateNdx ) ) then
-        airProfile => profile_warehouse%get_profile( this%air_profile_ )
+        airProfile => profile_warehouse%get_profile_view( this%air_profile_ )
         allocate( air_vertical_column( airProfile%ncells_ ),                  &
                   air_slant_column( airProfile%ncells_ + 1 ) )
         call spherical_geometry%air_mass( airProfile%exo_layer_dens_,         &
@@ -353,7 +353,6 @@ rate_loop:                                                                    &
                                    air_vertical_column, air_slant_column,     &
                                    cross_section, spherical_geometry )
         deallocate( air_vertical_column, air_slant_column )
-        deallocate( airProfile )
       endif
 
       if( this%enable_diagnostics_ ) then
@@ -390,10 +389,6 @@ rate_loop:                                                                    &
     end associate
     end if
     
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( etfl )
-
   end subroutine get
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

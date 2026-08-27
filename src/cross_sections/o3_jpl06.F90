@@ -110,10 +110,10 @@ contains
     class(profile_t), pointer  :: temperatures
     real(kind=dk)              :: temperature
 
-    heights => grid_warehouse%get_grid( this%height_grid_ )
-    wavelengths => grid_warehouse%get_grid( this%wavelength_grid_ )
+    heights => grid_warehouse%get_grid_view( this%height_grid_ )
+    wavelengths => grid_warehouse%get_grid_view( this%wavelength_grid_ )
     temperatures =>                                                           &
-        profile_warehouse%get_profile( this%temperature_profile_ )
+        profile_warehouse%get_profile_view( this%temperature_profile_ )
 
     n_heights = heights%ncells_ + 1
     if( present( at_mid_point ) ) then
@@ -153,10 +153,6 @@ contains
       end if
     end associate
     end do
-
-    deallocate( heights )
-    deallocate( wavelengths )
-    deallocate( temperatures )
 
   end function calculate
 

@@ -222,9 +222,9 @@ file_loop: &
     real(dk), parameter :: rZERO   = 0.0_dk
     real(dk), parameter :: rONE    = 1.0_dk
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-    temperature => profile_warehouse%get_profile( this%temperature_profile_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+    temperature => profile_warehouse%get_profile_view( this%temperature_profile_ )
 
     allocate( wrkQuantumYield(lambdaGrid%ncells_,zGrid%ncells_+1) )
 
@@ -253,10 +253,6 @@ file_loop: &
     enddo file_loop
 
     quantum_yield = transpose( wrkQuantumYield )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( temperature )
 
   end function run
 

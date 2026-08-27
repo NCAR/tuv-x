@@ -210,8 +210,8 @@ contains
     integer                    :: i_height, n_raw, n_padded
 
     ! Add temperature-based cross section values
-    temperatures => profile_warehouse%get_profile( this%temperature_profile_ )
-    wavelengths  => grid_warehouse%get_grid( this%wavelength_grid_ )
+    temperatures => profile_warehouse%get_profile_view( this%temperature_profile_ )
+    wavelengths  => grid_warehouse%get_grid_view( this%wavelength_grid_ )
     if( present( at_mid_point ) ) then
       l_at_mid_point = at_mid_point
     else
@@ -267,8 +267,6 @@ contains
                                           requested_by =                      &
                            "temperature based cross section wavelength grid" )
     end do
-    deallocate( temperatures )
-    deallocate( wavelengths  )
 
   end function calculate
 

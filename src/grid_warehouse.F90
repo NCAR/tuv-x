@@ -23,6 +23,8 @@ module tuvx_grid_warehouse
     !> get a copy of a grid object
     procedure, private :: get_grid_char, get_grid_string, get_grid_ptr
     generic :: get_grid => get_grid_char, get_grid_string, get_grid_ptr
+    !> get a non-owning view of a grid object, without copying it
+    procedure :: get_grid_view
     !> returns a pointer to a grid object
     procedure, private :: get_ptr_char, get_ptr_string
     generic :: get_ptr => get_ptr_char, get_ptr_string
@@ -184,6 +186,31 @@ contains
     allocate( grid, source = this%grids_( ptr%index_ )%val_ )
 
   end function get_grid_ptr
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function get_grid_view( this, ptr ) result( grid )
+    ! Returns a non-owning view of a grid from a grid pointer, without
+    ! copying it
+    !
+    ! Unlike get_grid, the result aliases this warehouse's own copy of the
+    ! grid. The caller must not deallocate or modify it, and must not use
+    ! it once this grid warehouse has been deallocated. Grids are only
+    ! ever added to a grid warehouse before it is first used to calculate
+    ! anything, so a view stays valid for as long as the warehouse itself
+    ! does.
+
+    use musica_assert,                 only : assert_msg
+    use tuvx_grid,                     only : grid_t
+
+    class(grid_warehouse_t),  intent(in) :: this ! This grid warehouse
+    type(grid_warehouse_ptr), intent(in) :: ptr  ! Pointer to a grid in the warehouse
+    class(grid_t),            pointer    :: grid
+
+    call assert_msg( 108824615, ptr%index_ > 0, "Invalid grid pointer" )
+    grid => this%grids_( ptr%index_ )%val_
+
+  end function get_grid_view
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

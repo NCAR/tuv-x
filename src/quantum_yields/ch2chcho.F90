@@ -80,9 +80,9 @@ contains
     class(grid_t),    pointer     :: lambdaGrid
     class(profile_t), pointer     :: mdlDensity
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-    mdlDensity => profile_warehouse%get_profile( this%air_profile_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+    mdlDensity => profile_warehouse%get_profile_view( this%air_profile_ )
 
     nzdim = zGrid%ncells_ + iONE
     modelDens = mdlDensity%edge_val_
@@ -107,10 +107,6 @@ contains
     enddo
 
     quantum_yield = transpose( wrkQuantumYield )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( mdlDensity )
 
   end function run
 

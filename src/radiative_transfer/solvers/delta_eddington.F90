@@ -147,10 +147,10 @@ contains
     class(grid_t),    pointer            :: lambdaGrid
     class(profile_t), pointer            :: surfaceAlbedo
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
     surfaceAlbedo =>                                                          &
-        profile_warehouse%get_profile( this%surface_albedo_profile_ )
+        profile_warehouse%get_profile_view( this%surface_albedo_profile_ )
 
     nlambda = lambdaGrid%ncells_
     radiation_field => radiation_field_t( n_layers + 1, nlambda )
@@ -385,10 +385,6 @@ contains
     enddo wavelength_loop
 
     end associate
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( surfaceAlbedo )
 
   end function update_radiation_field
 

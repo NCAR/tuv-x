@@ -81,15 +81,13 @@ contains
 
     class(grid_t), pointer      :: lambdaGrid
 
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     spectral_weight = a0 + lambdaGrid%mid_                                    &
                      * ( a1 + lambdaGrid%mid_ * ( a2 + lambdaGrid%mid_ * a3 ) )
     where( spectral_weight < 0.0_dk .or. lambdaGrid%mid_ > 313._dk )
       spectral_weight = 0.0_dk
     endwhere
-
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
 
   end function run
 

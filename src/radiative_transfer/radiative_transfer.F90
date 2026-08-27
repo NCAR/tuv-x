@@ -192,7 +192,7 @@ contains
     ! look for O2 radiator; Lyman Alpha and SR bands
     if( this%O2_exists_ ) then
       aRadiator => this%radiator_warehouse_%get_radiator( this%O2_radiator_ )
-      airprofile => profile_warehouse%get_profile( this%air_profile_ )
+      airprofile => profile_warehouse%get_profile_view( this%air_profile_ )
       allocate( airVcol( airprofile%ncells_ ),                                &
                 airScol( airprofile%ncells_ + 1 ) )
       call spherical_geometry%air_mass( airprofile%exo_layer_dens_, airVcol,  &
@@ -201,7 +201,6 @@ contains
                                  airScol, aRadiator%state_%layer_OD_,         &
                                  spherical_geometry )
       deallocate( airVcol, airScol )
-      deallocate( airprofile )
     endif
 
     ! The layer count comes from the height grid rather than from a radiator,

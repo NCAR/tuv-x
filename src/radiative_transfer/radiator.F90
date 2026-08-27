@@ -186,11 +186,11 @@ contains
     class(cross_section_t), pointer :: radiator_cross_section
 
     ! get specific grids and profiles
-    z_grid => grid_warehouse%get_grid( this%height_grid_ )
-    lambda_grid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    z_grid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambda_grid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     radiator_profile =>                                                       &
-      profile_warehouse%get_profile( this%radiator_profile_ )
+      profile_warehouse%get_profile_view( this%radiator_profile_ )
 
     radiator_cross_section =>                                                 &
       cross_section_warehouse%get( this%cross_section_ )
@@ -222,9 +222,6 @@ contains
       this%state_%layer_G_   = 0._dk
     endif
 
-    deallocate( z_grid )
-    deallocate( lambda_grid )
-    deallocate( radiator_profile )
     deallocate( radiator_cross_section )
 
   end subroutine update_state

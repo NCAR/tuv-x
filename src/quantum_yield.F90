@@ -274,7 +274,7 @@ file_loop: &
     class(grid_t),  pointer     :: zGrid
     real(dk),       allocatable :: wrkQuantumYield(:,:)
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
 
     allocate( wrkQuantumYield(                                                &
       size( this%quantum_yield_parms(1)%array, dim = 1 ), zGrid%ncells_ + 1 ) )
@@ -292,8 +292,6 @@ file_loop: &
     enddo
 
     quantum_yield = transpose( wrkQuantumYield )
-
-    deallocate( zGrid )
 
   end function run
 

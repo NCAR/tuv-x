@@ -82,7 +82,7 @@ contains
     real(dk), parameter  :: w2 = 390._dk
     class(grid_t), pointer      :: lambdaGrid
 
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     spectral_weight = exp( a0 * exp( -exp( a1                                 &
                                      * ( lambdaGrid%mid_ - w1 ) / 1.15_dk ) ) &
@@ -91,8 +91,6 @@ contains
     where( spectral_weight < 0.0_dk .or. lambdaGrid%mid_ > 366._dk )
       spectral_weight = 0.0_dk
     endwhere
-
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
 
   end function run
 

@@ -102,7 +102,7 @@ contains
 
     zenrad = zen * d2r
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
 
     nlayer = zGrid%ncells_
     nz     = nlayer + 1
@@ -160,8 +160,6 @@ contains
     enddo layer_loop
 
     this%solar_zenith_angle_ = zen
-
-    deallocate( zGrid )
 
   end subroutine set_parameters
 

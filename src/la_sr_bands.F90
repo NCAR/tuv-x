@@ -237,9 +237,9 @@ contains
     has_la_srb: if( this%has_la_srb ) then
 
       ! get specific grids and vertical profiles
-      zGrid => grid_warehouse%get_grid( this%height_grid_ )
-      lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-      temperature => profile_warehouse%get_profile( this%temperature_profile_ )
+      zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+      lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+      temperature => profile_warehouse%get_profile_view( this%temperature_profile_ )
 
       nzm1 = zGrid%ncells_
       nz   = nzm1 +  iONE
@@ -253,10 +253,9 @@ contains
       if( this%do_scaled_O2_ ) then
         o2scol(:) = this%O2_scale_factor_ * air_slant_column(:)
       else
-        O2_profile => profile_warehouse%get_profile( this%O2_profile_ )
+        O2_profile => profile_warehouse%get_profile_view( this%O2_profile_ )
         call spherical_geometry%air_mass( O2_profile%exo_layer_dens_, o2vcol, &
                                           o2scol )
-        deallocate( O2_profile )
       end if
 
       ! Effective secant of solar zenith angle.
@@ -290,10 +289,6 @@ contains
               o2_optical_depth_k( :, iw - this%isrb + iONE )
         enddo
       endif
-
-      deallocate( zGrid )
-      deallocate( lambdaGrid )
-      deallocate( temperature )
 
     endif has_la_srb
 
@@ -345,9 +340,9 @@ contains
     has_la_srb: if( this%has_la_srb ) then
 
       ! get specific grids and vertical profiles
-      zGrid => grid_warehouse%get_grid( this%height_grid_ )
-      lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
-      temperature => profile_warehouse%get_profile( this%temperature_profile_ )
+      zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+      lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
+      temperature => profile_warehouse%get_profile_view( this%temperature_profile_ )
 
       nzm1 = zGrid%ncells_
       nz   = nzm1 +  iONE
@@ -356,10 +351,9 @@ contains
       if( this%do_scaled_O2_ ) then
         o2scol(:) = this%O2_scale_factor_ * air_slant_column(:)
       else
-        O2_profile => profile_warehouse%get_profile( this%O2_profile_ )
+        O2_profile => profile_warehouse%get_profile_view( this%O2_profile_ )
         call spherical_geometry%air_mass( O2_profile%exo_layer_dens_, o2vcol, &
                                           o2scol )
-        deallocate( O2_profile )
       end if
 
       ! Effective secant of solar zenith angle.
@@ -393,10 +387,6 @@ contains
               o2_cross_section_k( :, iw - this%isrb + iONE )
         enddo
       endif
-
-      deallocate( zGrid )
-      deallocate( lambdaGrid )
-      deallocate( temperature )
 
     endif has_la_srb
 

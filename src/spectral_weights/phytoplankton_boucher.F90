@@ -80,7 +80,7 @@ contains
     real(dk), parameter  :: c  = 7.67e-4_dk
     class(grid_t), pointer      :: lambdaGrid
 
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     allocate( spectral_weight( lambdaGrid%ncells_ ) )
 
@@ -91,8 +91,6 @@ contains
       spectral_weight = 0.0_dk
     endwhere
     spectral_weight = max( 0.0_dk,spectral_weight )
-
-    if( associated( lambdaGrid ) ) deallocate( lambdaGrid )
 
   end function run
 

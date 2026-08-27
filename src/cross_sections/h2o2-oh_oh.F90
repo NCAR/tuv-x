@@ -103,10 +103,10 @@ contains
     class(grid_t),    pointer :: lambdaGrid
     class(profile_t), pointer :: temperature
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
     temperature =>                                                            &
-        profile_warehouse%get_profile( this%temperature_profile_ )
+        profile_warehouse%get_profile_view( this%temperature_profile_ )
 
     allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
 
@@ -135,10 +135,6 @@ contains
     end associate
 
     cross_section = transpose( wrkCrossSection )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( temperature )
 
   end function calculate
 

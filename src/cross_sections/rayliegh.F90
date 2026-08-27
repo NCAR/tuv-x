@@ -86,8 +86,8 @@ contains
     real(musica_dk), allocatable  :: pwr(:), wrk(:)
     real(musica_dk), allocatable  :: wrkCrossSection(:,:)
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
 
     nzdim = zGrid%ncells_ + 1
     if( present( at_mid_point ) ) then
@@ -113,9 +113,6 @@ contains
     enddo
 
     cross_section = transpose( wrkCrossSection )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
 
   end function calculate
 

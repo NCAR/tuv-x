@@ -147,11 +147,11 @@ contains
     real(dk)    :: dumexp
     real(dk)    :: fco, fac, qy
 
-    zGrid => grid_warehouse%get_grid( this%height_grid_ )
-    lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
+    zGrid => grid_warehouse%get_grid_view( this%height_grid_ )
+    lambdaGrid => grid_warehouse%get_grid_view( this%wavelength_grid_ )
     mdlTemperature =>                                                         &
-        profile_warehouse%get_profile( this%temperature_profile_ )
-    mdlDensity => profile_warehouse%get_profile( this%air_profile_ )
+        profile_warehouse%get_profile_view( this%temperature_profile_ )
+    mdlDensity => profile_warehouse%get_profile_view( this%air_profile_ )
 
     nzdim = zGrid%ncells_ + 1
     modelTemp = mdlTemperature%edge_val_
@@ -223,11 +223,6 @@ lambda_loop: &
     enddo vert_loop
 
     quantum_yield = transpose( wrkQuantumYield )
-
-    deallocate( zGrid )
-    deallocate( lambdaGrid )
-    deallocate( mdlTemperature )
-    deallocate( mdlDensity )
 
   end function run
 
