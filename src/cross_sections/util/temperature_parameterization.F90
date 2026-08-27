@@ -54,6 +54,12 @@ module tuvx_temperature_parameterization
     integer :: max_wavelength_index_ = 0
     !> Temperature ranges used in parameterization
     type(temperature_range_t), allocatable :: ranges_(:)
+    !> Cache of ( wavelength - base_wavelength_ )**lp_(i_lp), built on the
+    !! first call to calculate(). This does not depend on temperature, and
+    !! calculate() is always called with the same wavelength array for the
+    !! lifetime of a temperature_parameterization_t, so it only needs to be
+    !! built once rather than on every call.
+    real(kind=dk), allocatable :: wavelength_power_cache_(:,:)
   contains
     !> Merges NetCDF wavelength grid with parameterization grid
     procedure :: merge_wavelength_grids
@@ -260,7 +266,7 @@ contains
 
     use tuvx_profile,                  only : profile_t
 
-    class(temperature_parameterization_t), intent(in)    :: this
+    class(temperature_parameterization_t), intent(inout) :: this
     real(kind=dk),                         intent(in)    :: temperature
     real(kind=dk),                         intent(in)    :: wavelengths(:)
     real(kind=dk),                         intent(inout) :: cross_section(:)
@@ -271,6 +277,17 @@ contains
 
     w_min = this%min_wavelength_index_
     w_max = this%max_wavelength_index_
+
+    if( .not. allocated( this%wavelength_power_cache_ ) ) then
+      allocate( this%wavelength_power_cache_( w_max - w_min + 1,              &
+                                              size( this%lp_ ) ) )
+      do i_lp = 1, size( this%lp_ )
+        this%wavelength_power_cache_( :, i_lp ) =                             &
+            ( wavelengths( w_min:w_max ) - this%base_wavelength_ )            &
+            **this%lp_( i_lp )
+      end do
+    end if
+
     do i_range = 1, size( this%ranges_ )
     associate( temp_range => this%ranges_( i_range ) )
       if( temperature < temp_range%min_temperature_ .or.       &
@@ -289,8 +306,7 @@ contains
       do i_lp = 1, size( this%lp_ )
         temp_xs( w_min:w_max ) = temp_xs( w_min:w_max ) +                     &
             ( this%AA_( i_lp ) + temp * this%BB_( i_lp ) ) *                  &
-              ( wavelengths( w_min:w_max )                                    &
-                - this%base_wavelength_ )**this%lp_( i_lp )
+            this%wavelength_power_cache_( :, i_lp )
       end do
       if (this%is_base_10_) then
         cross_section( w_min:w_max ) = cross_section( w_min:w_max )           &

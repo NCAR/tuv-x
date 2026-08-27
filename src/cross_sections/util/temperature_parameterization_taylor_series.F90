@@ -157,7 +157,7 @@ contains
 
     use tuvx_profile,                  only : profile_t
 
-    class(temperature_parameterization_taylor_series_t), intent(in) :: this
+    class(temperature_parameterization_taylor_series_t), intent(inout) :: this
     real(kind=dk), intent(in)    :: temperature
     real(kind=dk), intent(in)    :: wavelengths(:)
     real(kind=dk), intent(inout) :: cross_section(:)
