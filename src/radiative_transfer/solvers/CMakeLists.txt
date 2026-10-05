@@ -6,6 +6,7 @@ target_sources(tuvx_object
     delta_eddington.F90
     discrete_ordinant.F90
     discrete_ordinant_util.F90
+    from_host.F90
 )
 
 ################################################################################

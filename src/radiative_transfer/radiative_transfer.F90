@@ -40,12 +40,15 @@ module tuvx_radiative_transfer
     logical                                     :: O2_exists_   ! indicates whether O2 exists as a profile
     type(radiator_warehouse_ptr)                :: O2_radiator_ ! pointer to the O2 radiator in the radiator warehouse
     type(profile_warehouse_ptr)                 :: air_profile_ ! pointer to the air profile in the profile warehouse
+    integer                                     :: n_layers_    ! number of vertical layers in the height grid
   contains
     procedure :: name => component_name
     procedure :: description
     procedure :: calculate
     ! Returns an updater for a radiator in the warehouse
     procedure :: get_radiator_updater
+    ! Returns an updater for a host-supplied radiation field
+    procedure :: get_radiation_field_updater
     ! Returns the number of bytes needed to pack the object onto a buffer
     procedure :: pack_size
     ! Packs the object onto a character buffer
@@ -68,6 +71,8 @@ contains
       result( this )
     ! Initializes the components necessary to solve radiative transfer
 
+    use tuvx_grid,                     only : grid_t
+
     type(radiative_transfer_t), pointer :: this ! New :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
     type(config_t),                        intent(inout) :: config            ! radXfer configuration data
     type(grid_warehouse_t),                intent(inout) :: grid_warehouse    ! A :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
@@ -78,6 +83,7 @@ contains
     type(config_t) :: solver_config
     type(config_t) :: child_config
     type(string_t) :: required_keys(2), optional_keys(1)
+    class(grid_t), pointer :: height_grid
 
     required_keys(1) = "cross sections"
     required_keys(2) = "radiators"
@@ -102,6 +108,13 @@ contains
         radiator_warehouse_t( child_config, grid_warehouse, profile_warehouse,&
                               this%cross_section_warehouse_ )
     if( present( radiators ) ) call this%radiator_warehouse_%add( radiators )
+
+    ! The radiators are built on the height grid, so the number of vertical
+    ! layers is the number of height grid cells. The grid cell count is fixed
+    ! at construction, so the count is cached here.
+    height_grid => grid_warehouse%get_grid( "height", "km" )
+    this%n_layers_ = height_grid%ncells_
+    deallocate( height_grid )
 
     ! set up pointers to radiators and profiles
     this%O2_exists_ = this%radiator_warehouse_%exists( "O2" )
@@ -191,7 +204,10 @@ contains
       deallocate( airprofile )
     endif
 
-    nlyr = size( aRadiator%state_%layer_OD_, dim = 1 )
+    ! The layer count comes from the height grid rather than from a radiator,
+    ! so that a configuration with no radiators works. The ``from host``
+    ! solver permits such a configuration.
+    nlyr = this%n_layers_
 
     zenithAngle = spherical_geometry%solar_zenith_angle_
     associate( theSolver => this%solver_ )
@@ -226,6 +242,46 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
+  function get_radiation_field_updater( this, found ) result( updater )
+    ! Returns an updater that a host application can use to set the radiation
+    ! field at runtime
+    !
+    ! The configured solver must be of type ``from host``. If the optional
+    ! `found` flag is omitted, an error is returned when the configured solver
+    ! is of another type.
+
+    use tuvx_solver_from_host,         only : radiation_field_updater_t,       &
+                                              solver_from_host_t
+
+    class(radiative_transfer_t), intent(in)  :: this  ! Radiative transfer calculator
+    logical, optional,           intent(out) :: found ! Flag indicating whether a
+                                                      ! host-updatable solver was found
+    type(radiation_field_updater_t)          :: updater
+
+    ! ifx rejects a string_t function result inside a concatenation, so the
+    ! name goes into a local first
+    type(string_t) :: solver_name
+
+    call assert_msg( 208734615, associated( this%solver_ ),                    &
+                     "Radiative transfer solver not available" )
+    if( present( found ) ) found = .false.
+    select type( solver => this%solver_ )
+    class is( solver_from_host_t )
+      updater = radiation_field_updater_t( solver )
+      if( present( found ) ) found = .true.
+    class default
+      solver_name = solver_type_name( this%solver_ )
+      call assert_msg( 921177509, present( found ),                            &
+                       "Cannot update the radiation field. The configured "//  &
+                       "radiative transfer solver is '"//solver_name//         &
+                       "'. Set the solver type to 'from host' in the TUV-x "// &
+                       "configuration." )
+    end select
+
+  end function get_radiation_field_updater
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   integer function pack_size( this, comm )
     ! Returns the size of a character buffer required to pack the radiative
     ! transfer calculator
@@ -244,7 +300,8 @@ contains
                 this%radiator_warehouse_%pack_size( comm ) +                  &
                 musica_mpi_pack_size( this%O2_exists_, comm ) +               &
                 this%O2_radiator_%pack_size( comm ) +                         &
-                this%air_profile_%pack_size( comm )
+                this%air_profile_%pack_size( comm ) +                         &
+                musica_mpi_pack_size( this%n_layers_, comm )
 #else
     pack_size = 0
 #endif
@@ -274,6 +331,7 @@ contains
     call musica_mpi_pack( buffer, position, this%O2_exists_, comm )
     call this%O2_radiator_%mpi_pack( buffer, position, comm )
     call this%air_profile_%mpi_pack( buffer, position, comm )
+    call musica_mpi_pack( buffer, position, this%n_layers_, comm )
 
     call assert( 742641642, position - prev_pos <= this%pack_size( comm ) )
 #endif
@@ -308,6 +366,7 @@ contains
     call musica_mpi_unpack( buffer, position, this%O2_exists_, comm )
     call this%O2_radiator_%mpi_unpack( buffer, position, comm )
     call this%air_profile_%mpi_unpack( buffer, position, comm )
+    call musica_mpi_unpack( buffer, position, this%n_layers_, comm )
 
     call assert( 559826176, position - prev_pos <= this%pack_size( comm ) )
 #endif
