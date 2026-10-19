@@ -88,7 +88,7 @@ contains
     Jday = julian_day_of_year(Year, Month, Day )
 
     do tNdx = 1_ik,this%ncells_+1_ik
-      ut = timeGrid%edge_(tNdx) + tmzone
+      ut = timeGrid%edge_(tNdx) - tmzone
       solarElevation = solar_zenith_angle(Year, Jday, ut, Lat, Lon )
       this%edge_val_ = [this%edge_val_,NINETY - solarElevation]
     enddo
