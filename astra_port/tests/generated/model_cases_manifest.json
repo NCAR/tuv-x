@@ -1,0 +1,74 @@
+[
+  {
+    "path": "examples/tuv_5_4.json",
+    "sha256": "4d4ce86bf02b633efe863a7c1573f9e41fac76e2170f9e50c6231414b79c1ff3"
+  },
+  {
+    "path": "examples/ts1_tsmlt.json",
+    "sha256": "d62065148834640554b989bb3983d8f7646facbddc72a5418d617c3cd803f28d"
+  },
+  {
+    "path": "test/data/photorates.test.config.json",
+    "sha256": "6a09ecbb4a708ea2c367ff45afecde5f27f0cb14277ef4eff71fba9c2fa1821f"
+  },
+  {
+    "path": "test/data/doserates.test.config.json",
+    "sha256": "6b91057d1883293e26f5eb750f2513fad39483c90258263e7a32c844ea8733e8"
+  },
+  {
+    "path": "test/data/solver_from_host.json",
+    "sha256": "c42f768babde5c65234582ee4dfb83e2d07a342b222b7719c06b961933a80da4"
+  },
+  {
+    "path": "test/data/solver_from_host.other_solver.json",
+    "sha256": "bd866082dc9d09d64a1f60ee2902f6210ee1f37a5bc261fe47542d7aead9a2b8"
+  },
+  {
+    "path": "test/data/radiators.aerosols.4strm.config.json",
+    "sha256": "a4e61e40a5412577dc36498e652bae1f086f4a9ef9784eb39555103850ff3854"
+  },
+  {
+    "path": "test/data/radiators.aerosols.config.json",
+    "sha256": "045b6fd1b582a158c96764618c12400f7c09cd7da5751b6f5b7366d0c8322bc0"
+  },
+  {
+    "path": "test/data/radiators.all.4strm.config.json",
+    "sha256": "8eb41dc28460cf1bd9766dc3f341531586b1d0fff1845f58b1a17b23d3a8d024"
+  },
+  {
+    "path": "test/data/radiators.all.config.json",
+    "sha256": "873031d580c869931eebbf9b3d3e38dd08ce3d2aadfb6159897e01c83b385c53"
+  },
+  {
+    "path": "test/data/radiators.o2.4strm.config.json",
+    "sha256": "23490d31a65a07f4fbe194863dfbc83f85e44e1f623a926d7bf6f0bc95361838"
+  },
+  {
+    "path": "test/data/radiators.o2.config.json",
+    "sha256": "a37732bb90d18cd3cd2fd640eadff6f688bc40f5457c9954f195ac52880879cd"
+  },
+  {
+    "path": "test/data/radiators.o3.4strm.config.json",
+    "sha256": "3502f5affded2a1bc4abc2eeb6e15acd651325b34836691e02dea477e1318749"
+  },
+  {
+    "path": "test/data/radiators.o3.config.json",
+    "sha256": "ac655ae7b290bd42c8b20160956b0bf7ef475f329e4d42f1754a2d834f16e6d0"
+  },
+  {
+    "path": "test/data/radiators.rayleigh.4strm.config.json",
+    "sha256": "87d460373e21e0bbdb71681ffb29c4158ae4c03baac4c00e9b1484d1f6833005"
+  },
+  {
+    "path": "test/data/radiators.rayleigh.config.json",
+    "sha256": "758f21bd9a777c274408e0e441f5711678325d847ade19bac943a2a7c9c42c9c"
+  },
+  {
+    "path": "test/data/heating_rates.json",
+    "sha256": "a29c9ad779d19ad0884a753e4edcfd548ad0b23cb81ceb1148f8dde4668e7e67"
+  },
+  {
+    "path": "test/data/radiators.from_netcdf_file.config.json",
+    "sha256": "324a0a9f5d59fd036239eec98605986dea349d002f9070f9b07c12c991ec976d"
+  }
+]

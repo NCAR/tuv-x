@@ -1,0 +1,2569 @@
+{
+  "upstream_revision": "ebe5006cbdb74b9040173c97b93323e48a83b464",
+  "files": [
+    {
+      "path": "data/cross_sections/1-C4H9ONO2_1.nc",
+      "sha256": "063b52b16ceb52c9f92ac8f54c61d284ed2a083b17cc3ecafabe6a7233ea9e2d",
+      "bytes": 8418,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/2-C4H9ONO2_1.nc",
+      "sha256": "71714af41c4911bda3dd80963a2bc8c2487a3fa1a42111e2d0e6510baae0df57",
+      "bytes": 8146,
+      "variables": {
+        "wavelength": [
+          15
+        ],
+        "cross_section_parameters": [
+          1,
+          15
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ACETONE_JPL06.nc",
+      "sha256": "496a1976850f6282a87ce216777f435c29da3d12917c44a2eee9c70e0dbaaad5",
+      "bytes": 7424,
+      "variables": {
+        "wavelength": [
+          135
+        ],
+        "temperature_parameters": [
+          4,
+          135
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BRONO2_JPL06.nc",
+      "sha256": "ee213adc8ad3b811d3e08e23f1db3eab472346482af59f179849b2206234a75f",
+      "bytes": 6156,
+      "variables": {
+        "wavelength": [
+          151
+        ],
+        "temperature_parameters": [
+          3,
+          151
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BRO_JPL06.nc",
+      "sha256": "94384e4fb049c3eb629ed0cbcb1b3c7f5e377a1430ac867e0d1d62d58691263f",
+      "bytes": 11768,
+      "variables": {
+        "wavelength": [
+          198
+        ],
+        "cross_section_parameters": [
+          1,
+          198
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/Br2_1.nc",
+      "sha256": "83fb29950bfc6c376781cff0b0060530273a9a522980a969e6c45360108df45a",
+      "bytes": 8370,
+      "variables": {
+        "wavelength": [
+          29
+        ],
+        "cross_section_parameters": [
+          1,
+          29
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrCl_1.nc",
+      "sha256": "81af78ec1cf4e6dc9fea6cf2208ee308ca897a07b03bd0388a68e17597d97f37",
+      "bytes": 9768,
+      "variables": {
+        "wavelength": [
+          81
+        ],
+        "cross_section_parameters": [
+          1,
+          81
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrNO2_1.nc",
+      "sha256": "49073c08b2fc60f9ae584ec6f501672991e0aaa65ca6c45e6586aff5b616e385",
+      "bytes": 8865,
+      "variables": {
+        "wavelength": [
+          54
+        ],
+        "cross_section_parameters": [
+          1,
+          54
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrNO_1.nc",
+      "sha256": "a1f9b4676d704067b8e2928a9867febb2a6aca64e92be923307a84da18670767",
+      "bytes": 8338,
+      "variables": {
+        "wavelength": [
+          27
+        ],
+        "cross_section_parameters": [
+          1,
+          27
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrONO2_1.nc",
+      "sha256": "1686ec0c4bfc07f70a505b14d89a65f7f162aa40a695e1f4481ad81f5c52fd7c",
+      "bytes": 9739,
+      "variables": {
+        "wavelength": [
+          61
+        ],
+        "cross_section_parameters": [
+          1,
+          61
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrONO_1.nc",
+      "sha256": "dae018fffa85025b674ffd37567915e2f643795f606232b292a042b46c829f43",
+      "bytes": 8513,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/BrO_1.nc",
+      "sha256": "b695e8f636ad183d0934c1b1b435d36d3247519af89ab87b459fdf7e375eab30",
+      "bytes": 9228,
+      "variables": {
+        "wavelength": [
+          16
+        ],
+        "cross_section_parameters": [
+          1,
+          16
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/C2H5CHO_1.nc",
+      "sha256": "d99b517f4704bc2666f3acf91f1f0eb071314477cec410ee89e11c81a9039654",
+      "bytes": 9602,
+      "variables": {
+        "wavelength": [
+          106
+        ],
+        "cross_section_parameters": [
+          1,
+          106
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/C2H5ONO2_1.nc",
+      "sha256": "617318327fc60441306269308b052a29ec1556d01633a80583ab029f2248c44e",
+      "bytes": 8674,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          2,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CCl2O_1.nc",
+      "sha256": "58beb5a6be48e9f3fef6590a406027151eaeb8a89eb97edfbd45e9c6f9330f58",
+      "bytes": 10489,
+      "variables": {
+        "wavelength": [
+          22
+        ],
+        "cross_section_parameters": [
+          1,
+          22
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CCl4_1.nc",
+      "sha256": "b8cd71ae50342aa58f87f5ae1b2ccb7ee22144f748c0cfb539a44600d0b20437",
+      "bytes": 8610,
+      "variables": {
+        "wavelength": [
+          44
+        ],
+        "cross_section_parameters": [
+          1,
+          44
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CClFO_1.nc",
+      "sha256": "5799f43f31f6fabc1772fbbca9c7d653f390523ce7641c48f3343f4081cfaeb7",
+      "bytes": 10472,
+      "variables": {
+        "wavelength": [
+          21
+        ],
+        "cross_section_parameters": [
+          1,
+          21
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CClFO_JPL19.nc",
+      "sha256": "30dccc8e079d969f85862c41f2cc39cdd312af728b41f2c8959ee5fdf1b1875c",
+      "bytes": 7857,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2Br2_1.nc",
+      "sha256": "6cb16c2fe235b76f57fbf952d994003b12e9f69c1d44e509287cd11d3c4a59bc",
+      "bytes": 10707,
+      "variables": {
+        "wavelength": [
+          56
+        ],
+        "cross_section_parameters": [
+          1,
+          56
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2BrCF2Br_1.nc",
+      "sha256": "58195c9e32a91732c64f8fc9c6911f401eeb62179b92c65f03d26b66dce17565",
+      "bytes": 10389,
+      "variables": {
+        "wavelength": [
+          46
+        ],
+        "cross_section_parameters": [
+          1,
+          46
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2BrCl_1.nc",
+      "sha256": "52c2304cf463d0a3bb7742e80f866718329c37bf31c2b2cc8cd7c7e74b52def6",
+      "bytes": 9964,
+      "variables": {
+        "wavelength": [
+          50
+        ],
+        "cross_section_parameters": [
+          1,
+          50
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2BrCl_JPL19.nc",
+      "sha256": "ae44f02c0e806a1ba47326ba65408133ca2980c119e4461081c19b13f1c19781",
+      "bytes": 8802,
+      "variables": {
+        "wavelength": [
+          91
+        ],
+        "cross_section_parameters": [
+          1,
+          91
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2CL2_JPL06.nc",
+      "sha256": "c12188341d06eeeedc5a40e9ca7def9b077b78acbec1630c7fd661cc2f0f6747",
+      "bytes": 11013,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "cross_section_parameters": [
+          1,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2ClCF2CHFCl_1.nc",
+      "sha256": "d8f1d879b914bb0d11bec337dad3ec877b9fb8440f7bc1d5795d42cfc9f1294c",
+      "bytes": 8991,
+      "variables": {
+        "wavelength": [
+          11
+        ],
+        "cross_section_parameters": [
+          1,
+          11
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF2O_1.nc",
+      "sha256": "bbd444ce11a452263483eb1ad039e8f8a21c3b840b590e54fd0082eff0cbba15",
+      "bytes": 8242,
+      "variables": {
+        "wavelength": [
+          21
+        ],
+        "cross_section_parameters": [
+          1,
+          21
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF3Br_1.nc",
+      "sha256": "b7b9d0ffa90b6788e92d97867971f57c4a21d3840e0d80955ad208041c92ba90",
+      "bytes": 10530,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "cross_section_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF3CF2CHCl2_1.nc",
+      "sha256": "685264532e14c60cb8c94c6ee6b3cf5eef28cd96f8fc70f9dddd416e003c1912",
+      "bytes": 9083,
+      "variables": {
+        "wavelength": [
+          17
+        ],
+        "cross_section_parameters": [
+          1,
+          17
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF3CHCl2_1.nc",
+      "sha256": "7f14496fdce9cdf7541970bacb8c23a99c871633dbfa4144e801ca1ee9648778",
+      "bytes": 8950,
+      "variables": {
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF3CHCl_1.nc",
+      "sha256": "0538a2dfcc3ef407b1d62fa7755482f69d9d855bde6daac56b47a49d266bdde8",
+      "bytes": 8950,
+      "variables": {
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CF3CHFCl_1.nc",
+      "sha256": "b0f77f41d34dad0a8050490d460ee5a8f0bdff08c7b2150b0066d8ff94b1e192",
+      "bytes": 8950,
+      "variables": {
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC-113_1.nc",
+      "sha256": "f4ad2bb98bcb1b4e3507fdd493acbfa7aeb799360bc7aa502342773ec2585682",
+      "bytes": 11486,
+      "variables": {
+        "wavelength": [
+          24
+        ],
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          2,
+          24
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC-114_1.nc",
+      "sha256": "d4eb3b6dcca64ecfa01866b59ae4e462c3426ed81aafe31a7c20fe014ef8db78",
+      "bytes": 11493,
+      "variables": {
+        "wavelength": [
+          25
+        ],
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          2,
+          25
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC-115_1.nc",
+      "sha256": "e0389011404e3e659aa7891d15ffa75daf8825296b42af9e1f345784043e37b8",
+      "bytes": 9284,
+      "variables": {
+        "wavelength": [
+          17
+        ],
+        "cross_section_parameters": [
+          1,
+          17
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC-11_1.nc",
+      "sha256": "18eadcdee3d14310198b2cd128d51bbbcb8eadfaa2fb389b57702ca20dc66575",
+      "bytes": 10027,
+      "variables": {
+        "wavelength": [
+          37
+        ],
+        "cross_section_parameters": [
+          1,
+          37
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC-12_1.nc",
+      "sha256": "1088ee076b5c0acd923d489b2d63978c4f14ca21b045255b437602bc46123503",
+      "bytes": 9915,
+      "variables": {
+        "wavelength": [
+          30
+        ],
+        "cross_section_parameters": [
+          1,
+          30
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC113_JPL06.nc",
+      "sha256": "51dd7335845952dd6913fdac0ec28129b0b598126c1f3dcd11ef0e72d5773eb7",
+      "bytes": 10364,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "cross_section_parameters": [
+          1,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC114_JPL10.nc",
+      "sha256": "4a00e744544def37f64eac0297b967b25e9fbd785f06813b9e8c8ab4a2dcef8b",
+      "bytes": 9687,
+      "variables": {
+        "wavelength": [
+          33
+        ],
+        "cross_section_parameters": [
+          1,
+          33
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFC115_JPL10.nc",
+      "sha256": "7f14f827f584fd12efcedd8322e32b06c1742216dadf7e3b3b3aa61a9f9982ee",
+      "bytes": 10302,
+      "variables": {
+        "wavelength": [
+          23
+        ],
+        "cross_section_parameters": [
+          1,
+          23
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CFCL3_JPL06.nc",
+      "sha256": "67aa53680b981e0111d99f1e9edffc5939e27c077b3f70241052b810c59f9f0b",
+      "bytes": 9457,
+      "variables": {
+        "wavelength": [
+          35
+        ],
+        "cross_section_parameters": [
+          1,
+          35
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH2BR2_1.nc",
+      "sha256": "9bd07e5fbc89dabc53ee86494abc8909c3c1f000ee644a98e233195241615e71",
+      "bytes": 11365,
+      "variables": {
+        "wavelength": [
+          34
+        ],
+        "cross_section_parameters": [
+          1,
+          34
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH2CHCHO_1.nc",
+      "sha256": "7bd187ab58b93e539237f05e0830c854e2e114ca2710ae55a2f3e46daee03b41",
+      "bytes": 8786,
+      "variables": {
+        "wavelength": [
+          55
+        ],
+        "cross_section_parameters": [
+          1,
+          55
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH2O_1.nc",
+      "sha256": "8688c9e230514213c63529ff09dc4b2a71929a5fbc056b0df7287f93e708acdf",
+      "bytes": 11506,
+      "variables": {
+        "wavelength": [
+          150
+        ],
+        "cross_section_parameters": [
+          2,
+          150
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH2O_JPL19.nc",
+      "sha256": "709142300899c26d055c09c42574be865581e173dd72499c475ed25fe538b2e2",
+      "bytes": 9920,
+      "variables": {
+        "wavelength": [
+          126
+        ],
+        "cross_section_parameters": [
+          2,
+          126
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3BR_JPL06.nc",
+      "sha256": "f9e755a9df57f0cb4a799fbd8127079d7a75f8591ca7fd9926050d8f89120e71",
+      "bytes": 14428,
+      "variables": {
+        "wavelength": [
+          56
+        ],
+        "cross_section_parameters": [
+          1,
+          56
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3Br_1.nc",
+      "sha256": "9d7246ee03bb87d7bda764458fdf57b7cc499ce3cadafcbfb7cafeab37633d80",
+      "bytes": 9401,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "cross_section_parameters": [
+          1,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CCl3_1.nc",
+      "sha256": "f5ee662868a63df2fb25575b4c32d58aa8c6e3857d84f3502478c77b152715d4",
+      "bytes": 11709,
+      "variables": {
+        "wavelength": [
+          11
+        ],
+        "temperature": [
+          3
+        ],
+        "cross_section_parameters": [
+          3,
+          11
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CCl3_JPL19.nc",
+      "sha256": "1c78c313f92585a8c57a7e56166dfdd6ed69206cbc231bb28d03b6967ebbb6ba",
+      "bytes": 7634,
+      "variables": {
+        "wavelength": [
+          18
+        ],
+        "cross_section_parameters": [
+          1,
+          18
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CF2Cl_1.nc",
+      "sha256": "1ce5a191b3c2efc12190d038c7d2cc2a8fecd3db080e17ee5618055f22abc57e",
+      "bytes": 8950,
+      "variables": {
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CFCl2_1.nc",
+      "sha256": "b89c47a447c9df51d45cb83f061acdc4edf50899db9b0b67c0717637f90aa7fd",
+      "bytes": 9681,
+      "variables": {
+        "wavelength": [
+          16
+        ],
+        "cross_section_parameters": [
+          1,
+          16
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CH2ONO2_1.nc",
+      "sha256": "3a66445c7ff16dc2842d437c413d97b356433b827618b234f68d8afa587f49d3",
+      "bytes": 9401,
+      "variables": {
+        "wavelength": [
+          58
+        ],
+        "cross_section_parameters": [
+          2,
+          58
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CH3NNO_1.nc",
+      "sha256": "6102b3b29d95e722884bdc6d13b313ecf7639c71d1b9a7971e4e4dad063a342b",
+      "bytes": 10018,
+      "variables": {
+        "wavelength": [
+          132
+        ],
+        "cross_section_parameters": [
+          1,
+          132
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CHONO2CH3_1.nc",
+      "sha256": "88ed13da7ad56bb77dacfb7448aa3175ecbde96a27e66195d0f317beab5e237f",
+      "bytes": 9531,
+      "variables": {
+        "wavelength": [
+          63
+        ],
+        "cross_section_parameters": [
+          2,
+          63
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CHO_1.nc",
+      "sha256": "295094c37406615543f444c37fe407e7781eed46f366b9ba8e4fa95129a4861a",
+      "bytes": 9522,
+      "variables": {
+        "wavelength": [
+          101
+        ],
+        "cross_section_parameters": [
+          1,
+          101
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3CL_JPL06.nc",
+      "sha256": "e8ceae1a65a401efe48797c342d09080e5d61afe9f9f82dfc371a4eaf4184297",
+      "bytes": 11488,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COCH2CH3_1.nc",
+      "sha256": "5269b152385f4f0bdf0a8dafd703f2df424ae2881464043fb4751aab573b5184",
+      "bytes": 9543,
+      "variables": {
+        "wavelength": [
+          96
+        ],
+        "cross_section_parameters": [
+          1,
+          96
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COCH3_1.nc",
+      "sha256": "5b10402bdb472f8f1929d22d7848c38df1f291759b26a35ae0e92e33464b34f7",
+      "bytes": 13306,
+      "variables": {
+        "wavelength": [
+          135
+        ],
+        "cross_section_parameters": [
+          4,
+          135
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COCHO_1.nc",
+      "sha256": "860fab7a9bae49d9f35173436b3cdf7c585c75679b24144a120b42beb3b00f1a",
+      "bytes": 12610,
+      "variables": {
+        "wavelength": [
+          294
+        ],
+        "cross_section_parameters": [
+          1,
+          294
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COCOCH3_1.nc",
+      "sha256": "f76a8adece9d04fc2948d2e15ac4698493e2bd7f08ced985d234d8b08da819bf",
+      "bytes": 12615,
+      "variables": {
+        "wavelength": [
+          287
+        ],
+        "cross_section_parameters": [
+          1,
+          287
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COCOOH_1.nc",
+      "sha256": "a7e0fe467ea36c4befe6d99c64d1630aac20ab318df2597dd57273f69c615f2f",
+      "bytes": 10130,
+      "variables": {
+        "wavelength": [
+          139
+        ],
+        "cross_section_parameters": [
+          1,
+          139
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COOH_1.nc",
+      "sha256": "c71f381817012eed1d369d8ad65937004aba9472e125dffa0d51ac0eb073d69d",
+      "bytes": 8194,
+      "variables": {
+        "wavelength": [
+          18
+        ],
+        "cross_section_parameters": [
+          1,
+          18
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3COOOH_1.nc",
+      "sha256": "622c86ebcb27d97247cd51d791d268a76bf174b5243ef2fe0fd9dba3bce26880",
+      "bytes": 8962,
+      "variables": {
+        "wavelength": [
+          66
+        ],
+        "cross_section_parameters": [
+          1,
+          66
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3Cl_1.nc",
+      "sha256": "d073ab664d98c59e3e524dfe79a0f4a23ed8597fc2d304a9f763ea04f92c2fb7",
+      "bytes": 11225,
+      "variables": {
+        "wavelength": [
+          16
+        ],
+        "temperature": [
+          3
+        ],
+        "cross_section_parameters": [
+          3,
+          16
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3OCl_1.nc",
+      "sha256": "3ccace8fd2aa096445441b43c6135cd3f82a5939d0736d1df42fedba8c9c594f",
+      "bytes": 9234,
+      "variables": {
+        "wavelength": [
+          83
+        ],
+        "cross_section_parameters": [
+          1,
+          83
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3ONO2_1.nc",
+      "sha256": "51a16c4bd14921ecc76410766bf40138440cc724cebad7c61784d667f4a955ff",
+      "bytes": 9466,
+      "variables": {
+        "wavelength": [
+          65
+        ],
+        "cross_section_parameters": [
+          2,
+          65
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3OOH_1.nc",
+      "sha256": "53a040ad1db799f080126385be11f293bc2997369ce1167041e30744e682f612",
+      "bytes": 10739,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH3OONO2_1.nc",
+      "sha256": "7155df2a1f70fa606b2a08c4694a1869da97d21b98f7bf5323912f970682337c",
+      "bytes": 8936,
+      "variables": {
+        "wavelength": [
+          26
+        ],
+        "cross_section_parameters": [
+          1,
+          26
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CH4_1.nc",
+      "sha256": "ac58580b379d39834aab1128420102eb031f64c00532f9dbbcfc11b45a3e841f",
+      "bytes": 9725,
+      "variables": {
+        "wavelength": [
+          39
+        ],
+        "cross_section_parameters": [
+          1,
+          39
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CHBR3_JPL10.nc",
+      "sha256": "422bfbd4c1e257628fe312ee74ee35ce2fc034734a37526ea85995f7779b92f2",
+      "bytes": 11474,
+      "variables": {
+        "wavelength": [
+          97
+        ],
+        "cross_section_parameters": [
+          1,
+          97
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CHBr3_1.nc",
+      "sha256": "0d4c546fca2330032ed44d7c6a3a5404af8d5bf09d92c5740ad8451c20ce226a",
+      "bytes": 9298,
+      "variables": {
+        "wavelength": [
+          87
+        ],
+        "cross_section_parameters": [
+          1,
+          87
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CHCl3_1.nc",
+      "sha256": "6ccab51d573d7cb70a7196cc33a845a86d481849dadde9803723587167f182b1",
+      "bytes": 8530,
+      "variables": {
+        "wavelength": [
+          39
+        ],
+        "cross_section_parameters": [
+          1,
+          39
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CHClF2_1.nc",
+      "sha256": "371e0ee6c79887fe5b09c38cc3166aa45b4471fb2662c3d180e669938c7b2001",
+      "bytes": 11490,
+      "variables": {
+        "wavelength": [
+          16
+        ],
+        "temperature": [
+          5
+        ],
+        "cross_section_parameters": [
+          5,
+          16
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CHOCHO_1.nc",
+      "sha256": "4ce3fca68a3e887d545bbda3d9d9bf4dbf1d15594f372f63c586b38488a637fb",
+      "bytes": 12338,
+      "variables": {
+        "wavelength": [
+          277
+        ],
+        "cross_section_parameters": [
+          1,
+          277
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CL2O2_JPL10.nc",
+      "sha256": "40b4b7f4a29d736586309548f2e0d9f06a8f09664249bfc4e768460061c584bf",
+      "bytes": 17686,
+      "variables": {
+        "wavelength": [
+          521
+        ],
+        "cross_section_parameters": [
+          1,
+          521
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CLO_JPL06.nc",
+      "sha256": "295ff053d9873f1656ed06e225c58c920132dade51eaf6d36c677ebc74856fe8",
+      "bytes": 9189,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "cross_section_parameters": [
+          1,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/CO2_1.nc",
+      "sha256": "1849b01d8a9d35b7f2daf0dd3ab9fcdff32eb98a00765294544fb6d96c42da55",
+      "bytes": 9857,
+      "variables": {
+        "wavelength": [
+          55
+        ],
+        "cross_section_parameters": [
+          1,
+          55
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/COF2_1.nc",
+      "sha256": "a65715225462f856a662d7cd7c57a0006e57b0f4a865babb2edc3ad0268645b5",
+      "bytes": 9913,
+      "variables": {
+        "wavelength": [
+          21
+        ],
+        "cross_section_parameters": [
+          1,
+          21
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/COFCl_1.nc",
+      "sha256": "42d60e5410625514859f8c174acf9cb242a91358699c1b2fc5cd96a13e73526b",
+      "bytes": 10396,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/Cl2O2_1.nc",
+      "sha256": "ebdf7e01f1d19ccb749ef49fe7f01b89671a4e3041d2592db2f2d445dffaf508",
+      "bytes": 18486,
+      "variables": {
+        "wavelength": [
+          571
+        ],
+        "cross_section_parameters": [
+          1,
+          571
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClNO2_1.nc",
+      "sha256": "457ace46ec05f00bed8e12342a29823e32d4489fbaa75a1e75fe7349ce0fa633",
+      "bytes": 8322,
+      "variables": {
+        "wavelength": [
+          26
+        ],
+        "cross_section_parameters": [
+          1,
+          26
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClONO2_1.nc",
+      "sha256": "6069614eecc31d21d9fd7f6f1679896a8c790cd06cbfd6c60b6f171c0c331721",
+      "bytes": 11714,
+      "variables": {
+        "wavelength": [
+          119
+        ],
+        "cross_section_parameters": [
+          3,
+          119
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClONO_1.nc",
+      "sha256": "1643da906dc2b64b0ec9840e37173d03113ba1fa6932bdc481b2ffc64f24a321",
+      "bytes": 8450,
+      "variables": {
+        "wavelength": [
+          34
+        ],
+        "cross_section_parameters": [
+          1,
+          34
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClOOCl_1.nc",
+      "sha256": "2d82b412d1dfaa3bd4f5bbf9e76acde4b651b261d85bcacfca87cef7d332f988",
+      "bytes": 9682,
+      "variables": {
+        "wavelength": [
+          111
+        ],
+        "cross_section_parameters": [
+          1,
+          111
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClOO_1.nc",
+      "sha256": "8a468a2fde0305d6d12dd3402d5327604076fdf9350743e8b545ff3e16893300",
+      "bytes": 9492,
+      "variables": {
+        "wavelength": [
+          31
+        ],
+        "cross_section_parameters": [
+          1,
+          31
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/ClO_1.nc",
+      "sha256": "6326563afe1b33d786b3ee3dcbe6365310fd2b95edb5c9fa1b701991386de8bc",
+      "bytes": 57578,
+      "variables": {
+        "wavelength": [
+          453
+        ],
+        "temperature": [
+          12
+        ],
+        "cross_section_parameters": [
+          12,
+          453
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H1301_JPL06.nc",
+      "sha256": "63639b1d472b22fb591e60cceb1c0ab88a7013b65f6b938d8bda1a82993a26d1",
+      "bytes": 11503,
+      "variables": {
+        "wavelength": [
+          61
+        ],
+        "cross_section_parameters": [
+          1,
+          61
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2402_JPL06.nc",
+      "sha256": "32f737faa936edb7a03f6fcb31cf0462ee9e02aea118ffae9476e165e5f5760e",
+      "bytes": 11754,
+      "variables": {
+        "wavelength": [
+          76
+        ],
+        "cross_section_parameters": [
+          1,
+          76
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2O2_1.nc",
+      "sha256": "9383a52b761fb963a9e24d18d3c701f4475e098ca8d8a2f92a21b4538afac9d8",
+      "bytes": 18819,
+      "variables": {
+        "wavelength": [
+          527
+        ],
+        "cross_section_parameters": [
+          1,
+          527
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2O2_JPL19.nc",
+      "sha256": "25e8071d15f2fe7709efa7f2e29cfae5274246ec0461c7b83a097c000d95aada",
+      "bytes": 7907,
+      "variables": {
+        "wavelength": [
+          33
+        ],
+        "cross_section_parameters": [
+          1,
+          33
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2O_1.nc",
+      "sha256": "191ea3e7b33289c41202da9d6467e170555a40affe44df7fc20b61bc83e3abb4",
+      "bytes": 117280,
+      "variables": {
+        "wavelength": [
+          6784
+        ],
+        "cross_section_parameters": [
+          1,
+          6784
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2O_2.nc",
+      "sha256": "3f0051d345f1b6fe967f7941b29ec6f4dca4b97526b64a77522dcfb275133288",
+      "bytes": 8006,
+      "variables": {
+        "wavelength": [
+          11
+        ],
+        "cross_section_parameters": [
+          1,
+          11
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2O_3.nc",
+      "sha256": "9776a1681ce8f723f971ebc28e736df6c1dbcf6198c01b305fdae7a2e6903a37",
+      "bytes": 15136,
+      "variables": {
+        "wavelength": [
+          466
+        ],
+        "cross_section_parameters": [
+          1,
+          466
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/H2SO4_1.nc",
+      "sha256": "7f5a57189fab00bd377f1a8cc4c8bea553bc001ce503114eeb4f8cf212cc1753",
+      "bytes": 9995,
+      "variables": {
+        "wavelength": [
+          125
+        ],
+        "cross_section_parameters": [
+          1,
+          125
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HBr_1.nc",
+      "sha256": "e63aa30ab64c4bedfa1174fbe73492d0c1bbee0e510f56f869ba6284b726f68e",
+      "bytes": 10650,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "cross_section_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HCFC141b_JPL10.nc",
+      "sha256": "03a082b90c3dbacd9ad6cab44d3460c2c2b53c6b4be0eb67ac32adc4fcac31b0",
+      "bytes": 10754,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "cross_section_parameters": [
+          1,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HCFC142b_JPL10.nc",
+      "sha256": "5058214d99d4669e79518427f848c039e58e6cc14d8b630efd4186f2d8272b27",
+      "bytes": 11580,
+      "variables": {
+        "wavelength": [
+          25
+        ],
+        "cross_section_parameters": [
+          1,
+          25
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HCFC22_JPL06.nc",
+      "sha256": "3142dd1294a242c33b76f8fd542411b30e0ad8874df185b08b7856444b6ffa0f",
+      "bytes": 9598,
+      "variables": {
+        "wavelength": [
+          26
+        ],
+        "cross_section_parameters": [
+          1,
+          26
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HCl_1.nc",
+      "sha256": "a64ea111a163256b0c5db602a36f8a7461aadf8c8a043bfb7a2dd88fa419eaa0",
+      "bytes": 8402,
+      "variables": {
+        "wavelength": [
+          31
+        ],
+        "cross_section_parameters": [
+          1,
+          31
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HF_1.nc",
+      "sha256": "44fc3a2495566027b6050cab93ccce3a8ae4bf7e6af11a1a0d140917064eb9d5",
+      "bytes": 8687,
+      "variables": {
+        "wavelength": [
+          39
+        ],
+        "cross_section_parameters": [
+          1,
+          39
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HNO2_1.nc",
+      "sha256": "ffc5f4afaaa9b78dfe99ecccd0a92d63d4e56f9ca4c404214d425ac7e293fb7f",
+      "bytes": 10978,
+      "variables": {
+        "wavelength": [
+          192
+        ],
+        "cross_section_parameters": [
+          1,
+          192
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HNO3_1.nc",
+      "sha256": "a4fcf8c87ce485c02389c6a27fad1f35da7238070d504048b8ccab80ad52e7e3",
+      "bytes": 9997,
+      "variables": {
+        "wavelength": [
+          83
+        ],
+        "cross_section_parameters": [
+          2,
+          83
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HNO3_JPL06.nc",
+      "sha256": "b78f3eb54b0e2d862fd6949a919ffe5021a89a16c1b061123334a63f73605077",
+      "bytes": 3436,
+      "variables": {
+        "wavelength": [
+          80
+        ],
+        "cross_section_parameters": [
+          2,
+          80
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HNO4_1.nc",
+      "sha256": "21c5097ae15d0ed1640fcb9c64b62efe00109da1ca704c29a8218af3e5a315ae",
+      "bytes": 8770,
+      "variables": {
+        "wavelength": [
+          54
+        ],
+        "cross_section_parameters": [
+          1,
+          54
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HO2NO2_JPL06.nc",
+      "sha256": "b8b63fce1f47b85d60de392a9cba1cf2f28a48cd244a4f1e8db031d034916d93",
+      "bytes": 2704,
+      "variables": {
+        "wavelength": [
+          54
+        ],
+        "cross_section_parameters": [
+          1,
+          54
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HO2NO2_temp_JPL06.nc",
+      "sha256": "69da08e4835f1a3a23b69de8c529abe29bbfcc8c23298bb31405df9b993fa553",
+      "bytes": 2992,
+      "variables": {
+        "wavelength": [
+          36
+        ],
+        "temperature_parameters": [
+          3,
+          36
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HO2_1.nc",
+      "sha256": "5625f33bb84b2025ef64b6f7226b49d22f8117c37c80d8280bf39f8c208eae69",
+      "bytes": 8367,
+      "variables": {
+        "wavelength": [
+          15
+        ],
+        "cross_section_parameters": [
+          1,
+          15
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HOCH2CHO_1.nc",
+      "sha256": "46de0b0bbe0e76fe4e3e9d3f048ab0f991d5adf24196df569a9a9322cc8042c3",
+      "bytes": 8914,
+      "variables": {
+        "wavelength": [
+          63
+        ],
+        "cross_section_parameters": [
+          1,
+          63
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HOCH2CHO_tyndall.nc",
+      "sha256": "5825f214e478773572a9f72d930149ba950f9996e6f383915ed0a99b8791dc66",
+      "bytes": 2608,
+      "variables": {
+        "wavelength": [
+          131
+        ],
+        "cross_section_parameters": [
+          1,
+          131
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HOCH2OOH_1.nc",
+      "sha256": "66c8b6278bb5bffd40d8a2f855a9eb840417057fa5caa799b48a8eac50badae1",
+      "bytes": 8418,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HOCl_1.nc",
+      "sha256": "fb4cd856d87b83c342de0d689298d23587ff9e89e685fd22b95abf80132528a4",
+      "bytes": 9776,
+      "variables": {
+        "wavelength": [
+          111
+        ],
+        "cross_section_parameters": [
+          1,
+          111
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/HONO_1.nc",
+      "sha256": "3c27461ad66ad53a0e76a90f3b77d686a87c7e7059d61b12bbf02df11f0a23e6",
+      "bytes": 11090,
+      "variables": {
+        "wavelength": [
+          192
+        ],
+        "cross_section_parameters": [
+          1,
+          192
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/Hydroxyacetone_1.nc",
+      "sha256": "d688d1c2699a64c016c16c9c1ddf5866a6ddcf6b224c26ca2359bdd9496ba83d",
+      "bytes": 9442,
+      "variables": {
+        "wavelength": [
+          96
+        ],
+        "cross_section_parameters": [
+          1,
+          96
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/I2_1.nc",
+      "sha256": "b2c270750bca58a7817dfe6fb7810504437fa845ef1068b3c087848cf2bafc69",
+      "bytes": 9570,
+      "variables": {
+        "wavelength": [
+          104
+        ],
+        "cross_section_parameters": [
+          1,
+          104
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/IOH_1.nc",
+      "sha256": "5a90ce7ad629f21f6c15c76c232c2ce99ee1c8666fa0d3fa1b1ccc02c93653f4",
+      "bytes": 9522,
+      "variables": {
+        "wavelength": [
+          101
+        ],
+        "cross_section_parameters": [
+          1,
+          101
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/IO_1.nc",
+      "sha256": "9a0d237d43265a39509bd869014362e570d7f7c4e9ba9cae5d183168cd68765e",
+      "bytes": 10034,
+      "variables": {
+        "wavelength": [
+          133
+        ],
+        "cross_section_parameters": [
+          1,
+          133
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/MVK_1.nc",
+      "sha256": "803dcf08b96872c017b22d1e08436136acde513b8b59302b607f1d3da6a732ec",
+      "bytes": 10242,
+      "variables": {
+        "wavelength": [
+          146
+        ],
+        "cross_section_parameters": [
+          1,
+          146
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/Methacrolein_1.nc",
+      "sha256": "7893198f56a88908fe2f29a756db8cdb04d65ff7de54ebb9aadea3242bb2609d",
+      "bytes": 10242,
+      "variables": {
+        "wavelength": [
+          146
+        ],
+        "cross_section_parameters": [
+          1,
+          146
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/N2O5_1.nc",
+      "sha256": "7ae2fcbda92bfd8be32bcefc39c75d5c3550667e1ade3ed85ce670ea50babcce",
+      "bytes": 9653,
+      "variables": {
+        "wavelength": [
+          103
+        ],
+        "cross_section_parameters": [
+          1,
+          103
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/N2O5_2.nc",
+      "sha256": "e84a9cab11fa0114d29950b18fe5f7763f5d4a203d1ebb6766faeaba50a51a65",
+      "bytes": 8133,
+      "variables": {
+        "wavelength": [
+          8
+        ],
+        "cross_section_parameters": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/N2O5_JPL06.nc",
+      "sha256": "6b05d598d658c1885c04dcf8a2e285f4fdbda7113df670ff320053f4ed652b48",
+      "bytes": 11606,
+      "variables": {
+        "wavelength": [
+          103
+        ],
+        "cross_section_parameters": [
+          1,
+          103
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/N2O_JPL19.nc",
+      "sha256": "0c017195f85b6152b270d913f5a975d63d423c404ae7c9105b95a78609d745c0",
+      "bytes": 8530,
+      "variables": {
+        "wavelength": [
+          71
+        ],
+        "cross_section_parameters": [
+          1,
+          71
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/NO2_1.nc",
+      "sha256": "1edf2c7c3fa447a8c411c741750be105202f05444d7ff4814d125a74a3d6004b",
+      "bytes": 11042,
+      "variables": {
+        "wavelength": [
+          81
+        ],
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          2,
+          81
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/NO3-(aq)_1.nc",
+      "sha256": "1684585f8100b621defd2f970d853fba7cd9edfb807216b13609c95737f9c593",
+      "bytes": 8595,
+      "variables": {
+        "wavelength": [
+          43
+        ],
+        "cross_section_parameters": [
+          1,
+          43
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/NO3_1.nc",
+      "sha256": "df71a86253d62f2235b970ed5009990d1c3319516e0fc03493a2a024f7f33821",
+      "bytes": 12530,
+      "variables": {
+        "wavelength": [
+          289
+        ],
+        "cross_section_parameters": [
+          1,
+          289
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/NOCl_1.nc",
+      "sha256": "6a37379d63e43c0030cea5003e202c1817d1caf43b568a65c7c0e223657a15ce",
+      "bytes": 18669,
+      "variables": {
+        "wavelength": [
+          141
+        ],
+        "temperature": [
+          6
+        ],
+        "cross_section_parameters": [
+          6,
+          141
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O2_1.nc",
+      "sha256": "bda552277f0099ef3218968fa58ac84c41e2852bef2b726b268b85bb9a2f1b34",
+      "bytes": 9458,
+      "variables": {
+        "wavelength": [
+          97
+        ],
+        "cross_section_parameters": [
+          1,
+          97
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O2_JPL06.nc",
+      "sha256": "7bd5085add4b957b0f7308b761859f1f80dbd9f6f419c24cd8b35492e83f4fdc",
+      "bytes": 2420,
+      "variables": {
+        "wavelength": [
+          97
+        ],
+        "cross_section_parameters": [
+          1,
+          97
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O2_parameters.txt",
+      "sha256": "c410c4db24620128aa97fde8e92a229ce0911d4c6b753dda89950fcf100be468",
+      "bytes": 16824
+    },
+    {
+      "path": "data/cross_sections/O3_1.nc",
+      "sha256": "7440a28625d4efa5d1e6fb572481b4d56a2311d8b15182257372540bdf20904a",
+      "bytes": 1027060,
+      "variables": {
+        "wavelength": [
+          63501
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          63501
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_2.nc",
+      "sha256": "1434585d9c54cb3592ccadeadf635a4b9682e13d2243a6d851184c0b083c161a",
+      "bytes": 610512,
+      "variables": {
+        "wavelength": [
+          15001
+        ],
+        "temperature": [
+          4
+        ],
+        "cross_section_parameters": [
+          4,
+          15001
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_3.nc",
+      "sha256": "f3f349c0878d32f1ea9c9c48afa9ecf2f8d7a8cb29986f53325ee86c125e4095",
+      "bytes": 14193,
+      "variables": {
+        "wavelength": [
+          158
+        ],
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          2,
+          158
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_4.nc",
+      "sha256": "7676bd8464258361db1e6411fbbfc2536cf0fd3564f7bcf3760b625ffa1f50ec",
+      "bytes": 14421,
+      "variables": {
+        "wavelength": [
+          167
+        ],
+        "temperature": [
+          2
+        ],
+        "cross_section_parameters": [
+          2,
+          167
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_JPL06_218K.nc",
+      "sha256": "1595a3bf5c184882782fb65db1c5636e8fb6c63b60424069d4cf1d37131750a8",
+      "bytes": 2860,
+      "variables": {
+        "wavelength": [
+          65
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          65
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_JPL06_298K.nc",
+      "sha256": "6ca7f2d9136507c3db1407f5fd442738f31c0ba0e3de057277071607df6c3a60",
+      "bytes": 5116,
+      "variables": {
+        "wavelength": [
+          168
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          168
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/O3_JPL06_base.nc",
+      "sha256": "6f7844179ee37fd52d209a79cdf299a04530c4335b6e5125cec151b9dc595ef4",
+      "bytes": 6124,
+      "variables": {
+        "wavelength": [
+          218
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          218
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/OCS_1.nc",
+      "sha256": "9194431d3fc70a0f67d3a57ff7b1b2ed07c5cf98aebe6efe2bf1830de13fdd19",
+      "bytes": 9907,
+      "variables": {
+        "wavelength": [
+          125
+        ],
+        "cross_section_parameters": [
+          1,
+          125
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/OClO_1.nc",
+      "sha256": "f48e9b1e746b5941a63c284bd3f0e5d4dbba55252bf83262a2d9118c8604a922",
+      "bytes": 27708,
+      "variables": {
+        "wavelength": [
+          1068
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          1068
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/OClO_2.nc",
+      "sha256": "ba9c266494eda071ea80f655c28204df038c4f965f6c14399f2d69ce34934696",
+      "bytes": 27700,
+      "variables": {
+        "wavelength": [
+          1067
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          1067
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/OClO_3.nc",
+      "sha256": "6c9a386b01b309d4c67150bf91e2454bf2d2032e5ed47bc72e6f983be2e54b75",
+      "bytes": 27727,
+      "variables": {
+        "wavelength": [
+          1068
+        ],
+        "temperature": [
+          1
+        ],
+        "cross_section_parameters": [
+          1,
+          1068
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/PAN_1.nc",
+      "sha256": "5d9d8798fd4164300f74ea3639ac88db818cdfe4ab68121fe764870ea13d522e",
+      "bytes": 10367,
+      "variables": {
+        "wavelength": [
+          78
+        ],
+        "cross_section_parameters": [
+          2,
+          78
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/PPN_1.nc",
+      "sha256": "5ea1ce674021f7057c0c0da76b5d0e3cd6c064dd7556a45c55545c748065261c",
+      "bytes": 9713,
+      "variables": {
+        "wavelength": [
+          66
+        ],
+        "cross_section_parameters": [
+          2,
+          66
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/SF6_1.nc",
+      "sha256": "be4762e5bae4cb1524586ed3c81a559e5eb790180fc91f7a10b9910f57bce4cd",
+      "bytes": 8659,
+      "variables": {
+        "wavelength": [
+          14
+        ],
+        "cross_section_parameters": [
+          1,
+          14
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/SO2_1.nc",
+      "sha256": "738cc2c661aac11ea2403334fa568a48e658ed501e19a5c00f5146114185b6a0",
+      "bytes": 19171,
+      "variables": {
+        "wavelength": [
+          704
+        ],
+        "cross_section_parameters": [
+          1,
+          704
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/SO2_Mills.nc",
+      "sha256": "dc9c3d5b6014d69a90b8f17c5a8afe580b093d062b2c72e8a48f4fba73f62cac",
+      "bytes": 9680,
+      "variables": {
+        "wavelength": [
+          125
+        ],
+        "cross_section_parameters": [
+          1,
+          125
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/SO3_1.nc",
+      "sha256": "6cf183ebc65182555604812f1130bf891986548379fc1e1f81097badf2a7fc80",
+      "bytes": 9997,
+      "variables": {
+        "wavelength": [
+          125
+        ],
+        "cross_section_parameters": [
+          1,
+          125
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/SO_1.nc",
+      "sha256": "9f354c33c6b853227d2aae61429ebb9cd3f36014bee39ccaea821fa7ce11df17",
+      "bytes": 9996,
+      "variables": {
+        "wavelength": [
+          125
+        ],
+        "cross_section_parameters": [
+          1,
+          125
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/nC3H7ONO2_1.nc",
+      "sha256": "6af134f281d53a0d10e9cd6fa7d24b04f2d502e5d6a59cf8d27a2e3c3e977453",
+      "bytes": 8418,
+      "variables": {
+        "wavelength": [
+          32
+        ],
+        "cross_section_parameters": [
+          1,
+          32
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/perfluoro 1-iodopropane_1.nc",
+      "sha256": "6c11c62bc5bb45bab7f8a6e61f45cddf43db24ced1e947b19e9b0b389d327e8c",
+      "bytes": 8162,
+      "variables": {
+        "wavelength": [
+          16
+        ],
+        "cross_section_parameters": [
+          1,
+          16
+        ]
+      }
+    },
+    {
+      "path": "data/cross_sections/t-butyl-nitrite_1.nc",
+      "sha256": "b720ab96aa82abfc0341e1021c9b2246d4d057d1cc54509356816470b25489d2",
+      "bytes": 9442,
+      "variables": {
+        "wavelength": [
+          96
+        ],
+        "cross_section_parameters": [
+          1,
+          96
+        ]
+      }
+    },
+    {
+      "path": "data/dose_rates.json",
+      "sha256": "c45c5a886c70c5475d537b423620b1d1c7d654d7f8ae7b56708ed06c62dc3f61",
+      "bytes": 7094
+    },
+    {
+      "path": "data/grids/wavelength/cam.csv",
+      "sha256": "5890ea2bbeb2b853e22104c02fa0f6d332d6f99850d0cb0a2e1d321c9570c45d",
+      "bytes": 491
+    },
+    {
+      "path": "data/grids/wavelength/combined.grid",
+      "sha256": "740bec041ab0e56d4bbea06234542abc2c25c497bf7fca98c0749e706ed3b4d2",
+      "bytes": 1732
+    },
+    {
+      "path": "data/grids/wavelength/fast_tuv.grid",
+      "sha256": "184c1d0f492b0a34f76c1cfc01652ccb3adbedf27bc022c5ab9295ec6c42993d",
+      "bytes": 848
+    },
+    {
+      "path": "data/grids/wavelength/isaksen.grid",
+      "sha256": "2f2f68bd0200d2bd2dcd1381937b16a1de8ae06113a5c726578b9fac5833820d",
+      "bytes": 6971
+    },
+    {
+      "path": "data/grids/wavelength/kockarts.grid",
+      "sha256": "3bfac4327e1b6c810c9e9763e99005af87d034ac2f612d4b88f9063e1f092490",
+      "bytes": 432
+    },
+    {
+      "path": "data/photolysis_rate_constants.json",
+      "sha256": "bd2829d19865afdf1b2929b9279f017d34fce6cacefe30bceb93ca23131bc50d",
+      "bytes": 42515
+    },
+    {
+      "path": "data/profiles/atmosphere/atmmod.afglmw.100",
+      "sha256": "9bfa36564439d7e8850c89000cec02d0b180a170116d0d9ba244581f68304ac5",
+      "bytes": 11203
+    },
+    {
+      "path": "data/profiles/atmosphere/o3column.dat",
+      "sha256": "b46bb84a7e7049388c7ec231f71a210b00b84d302c17d50964bd09a1b6277b43",
+      "bytes": 2254
+    },
+    {
+      "path": "data/profiles/atmosphere/toms7.78_93.ave",
+      "sha256": "c43373784b8af2869643338ce8803627eab62ae8fe1be1f14a53bf6b3b807733",
+      "bytes": 1962
+    },
+    {
+      "path": "data/profiles/atmosphere/ussa.dens",
+      "sha256": "d0179134e83e8297cd8e1b28d96df1ec39b28dc1f1644424e52da5ac0e257ee5",
+      "bytes": 1621
+    },
+    {
+      "path": "data/profiles/atmosphere/ussa.ozone",
+      "sha256": "a811fb7697e7ac7671560938be07a4bad0ebd3322bf8e4e19f8ea4ba59572c0c",
+      "bytes": 800
+    },
+    {
+      "path": "data/profiles/atmosphere/ussa.temp",
+      "sha256": "6e4c307127404649c26a9cf844aa5ee34e83c512f64c6282988071dfa0875d93",
+      "bytes": 1464
+    },
+    {
+      "path": "data/profiles/solar/atlas3_1994_317_a.dat",
+      "sha256": "7f58fb1a36af1cbbb211742c9b81a6d86996841a8744e172837ddf36eeec06dc",
+      "bytes": 134282
+    },
+    {
+      "path": "data/profiles/solar/neckel.flx",
+      "sha256": "727c29b2367bb5b09cbdc3e29885c45f6002cee7d22b5c5bdc7eccaac89aa0fa",
+      "bytes": 12915
+    },
+    {
+      "path": "data/profiles/solar/sao2010.solref.converted",
+      "sha256": "b2dcafe6bd98fd9ef7227677f8ee5dca6f077ff1ae281eb3a9e5e2bb1bfe71f0",
+      "bytes": 2082665
+    },
+    {
+      "path": "data/profiles/solar/susim_hi.flx",
+      "sha256": "1abb673db750d1654680fe70223f320f22cff1022dfa506dd301824cb08ffcdb",
+      "bytes": 145612
+    },
+    {
+      "path": "data/quantum_yields/C2H5CHO_1.nc",
+      "sha256": "0148800177cd063e901b36cc58bc65a56a4e018a2b759cc06c110167c337aa51",
+      "bytes": 8002,
+      "variables": {
+        "wavelength": [
+          6
+        ],
+        "quantum_yield_parameters": [
+          1,
+          6
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/CH2O_1.nc",
+      "sha256": "580530b7c67dc8d42cd9c1de55b3921da01016ebc9e54a93e96ee0c47829444a",
+      "bytes": 10594,
+      "variables": {
+        "wavelength": [
+          112
+        ],
+        "quantum_yield_parameters": [
+          2,
+          112
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/CH3CHO_1.nc",
+      "sha256": "907bfd575fecc38bc76eeb0addccbd7ff2334ff0ccbd43605ece0ad8ba055804",
+      "bytes": 8194,
+      "variables": {
+        "wavelength": [
+          12
+        ],
+        "quantum_yield_parameters": [
+          2,
+          12
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/CHOCHO-CH2O_CO_1.nc",
+      "sha256": "5d2c7e59623aae281f5525c13d803a1bb57a75c2b85b8cd2345866183d94d2dc",
+      "bytes": 8546,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "quantum_yield_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/CHOCHO-H2_CO_CO_1.nc",
+      "sha256": "2c68e74b76fd42a0246835c9e0b29456e87d40e04035a56e8a21a2a2a4383cd4",
+      "bytes": 8546,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "quantum_yield_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/CHOCHO-HCO_HCO_1.nc",
+      "sha256": "4f929caebce28ca69928564bdc41011de358fde543a2328f581ec3fefe72013e",
+      "bytes": 8546,
+      "variables": {
+        "wavelength": [
+          40
+        ],
+        "quantum_yield_parameters": [
+          1,
+          40
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/H2O_2H_O3P.nc",
+      "sha256": "bf7086e98be35996b75ee60aa08cf9200d6b60048665f57325caf9e643189f10",
+      "bytes": 704,
+      "variables": {
+        "wavelength": [
+          8
+        ],
+        "quantum_yield_parameters": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/H2O_H2_O1D.nc",
+      "sha256": "d26f29f222fc98425cdd2c6e71babbe3b7b9197e3d709a99a9824e3be20a80f6",
+      "bytes": 704,
+      "variables": {
+        "wavelength": [
+          8
+        ],
+        "quantum_yield_parameters": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/H2O_H_OH.nc",
+      "sha256": "503bc4e3289b08772724e52e8b41379d0548f9f79a6cb0826f3cdb521adbe05b",
+      "bytes": 700,
+      "variables": {
+        "wavelength": [
+          8
+        ],
+        "quantum_yield_parameters": [
+          1,
+          8
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/H2SO4_mills.nc",
+      "sha256": "2e1c01f2a1d0d70249ee8f730937802329bb715423046f0d6f6c699af8a48861",
+      "bytes": 1856,
+      "variables": {
+        "wavelength": [
+          101
+        ],
+        "quantum_yield_parameters": [
+          1,
+          101
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/I2_1.nc",
+      "sha256": "d549b718214862bc7ea0fd0d05ef44e0de7c0057cd51f03483844de3b07336c7",
+      "bytes": 8098,
+      "variables": {
+        "wavelength": [
+          12
+        ],
+        "quantum_yield_parameters": [
+          1,
+          12
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/NO2_1.nc",
+      "sha256": "b6882fc1e7b547590d48d2386e96032bed3a2f2c794670579dbcd9f3b7a0c937",
+      "bytes": 10610,
+      "variables": {
+        "wavelength": [
+          25
+        ],
+        "temperature": [
+          2
+        ],
+        "quantum_yield_parameters": [
+          2,
+          25
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/NO3-NO+O2_1.nc",
+      "sha256": "6b135a94876e6fae2aec03a548daba79b9174a585bebc02753ce50cfa4745922",
+      "bytes": 10973,
+      "variables": {
+        "wavelength": [
+          56
+        ],
+        "temperature": [
+          3
+        ],
+        "quantum_yield_parameters": [
+          3,
+          56
+        ]
+      }
+    },
+    {
+      "path": "data/quantum_yields/NO3-NO2+O(3P)_1.nc",
+      "sha256": "3fa6b71134a9ad36944adbf5a2b17316faf2cc53f66bccb19362be9f4f6480f4",
+      "bytes": 10973,
+      "variables": {
+        "wavelength": [
+          56
+        ],
+        "temperature": [
+          3
+        ],
+        "quantum_yield_parameters": [
+          3,
+          56
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Cataract, pig(Oriowo et al.,2001)_spectral_wght_1.nc",
+      "sha256": "8c5e26df1cffc97179d9d140b2a8226a9daf0bd237b65c270305483f476cc2b6",
+      "bytes": 8195,
+      "variables": {
+        "wavelength": [
+          18
+        ],
+        "spectral_weight_parameters": [
+          1,
+          18
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/DNA_damage_in_vitro(Setlow,1974)_spectral_wght_1.nc",
+      "sha256": "662679f43c1a0bfd1e4096eaf6f41e11771917f81a9a4cdab3a988e0426bbbcd",
+      "bytes": 9383,
+      "variables": {
+        "wavelength": [
+          55
+        ],
+        "spectral_weight_parameters": [
+          1,
+          55
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Eppley-UV-Photometer_spectral_wght_1.nc",
+      "sha256": "1d51b12b143ab50127f6dd0a35ce851f149d27f9200525843290650664a37a54",
+      "bytes": 8211,
+      "variables": {
+        "wavelength": [
+          19
+        ],
+        "spectral_weight_parameters": [
+          1,
+          19
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Erythema,humans(Anders et al.,1995)_spectral_wght_1.nc",
+      "sha256": "dbe6ff72cfd2236d4a23e130532a671599ace681fa3a1965c91fcfa4fc7265f4",
+      "bytes": 8355,
+      "variables": {
+        "wavelength": [
+          28
+        ],
+        "spectral_weight_parameters": [
+          1,
+          28
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/NMSC (CIE 2006)_spectral_wght_1.nc",
+      "sha256": "da39e229a9dc8c6fe834b571bd09dda8493343e3dd13a6cdee59294cbe19bfb7",
+      "bytes": 10417,
+      "variables": {
+        "wavelength": [
+          151
+        ],
+        "spectral_weight_parameters": [
+          1,
+          151
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Occupational TLV (ACGIH,1992)_spectral_wght_1.nc",
+      "sha256": "ad82a60831d5a978ca3ce5d57e23f8cc6904c89c080aff4872cf758e5227a087",
+      "bytes": 8803,
+      "variables": {
+        "wavelength": [
+          56
+        ],
+        "spectral_weight_parameters": [
+          1,
+          56
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Phytoplankton, phaeo(Cullen et al. 1992)_spectral_wght_1.nc",
+      "sha256": "1e36e784c1cbd0f2bacbd2fb012c68651759075b47b5bff8ab3a9644b48e7a47",
+      "bytes": 9603,
+      "variables": {
+        "wavelength": [
+          106
+        ],
+        "spectral_weight_parameters": [
+          1,
+          106
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Phytoplankton, proro(Cullen et al. 1992)_spectral_wght_1.nc",
+      "sha256": "32b088ef6bc4fc8fbebcb9f9e8a75fbdf11aef2b3b188fd18597c1f8484d5449",
+      "bytes": 9507,
+      "variables": {
+        "wavelength": [
+          100
+        ],
+        "spectral_weight_parameters": [
+          1,
+          100
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/Previtamin-D3 (CIE 2006)_spectral_wght_1.nc",
+      "sha256": "201fb035fdec99b2d66ec4e564a0cd2f8d5ed83f7ecd6d991ebce5eccdd73a54",
+      "bytes": 9171,
+      "variables": {
+        "wavelength": [
+          79
+        ],
+        "spectral_weight_parameters": [
+          1,
+          79
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/RB-Meter,model_501_spectral_wght_1.nc",
+      "sha256": "5b537fb8fd6068d55b35528962b6d7009087b3d192898225327e95f3e813c23f",
+      "bytes": 8819,
+      "variables": {
+        "wavelength": [
+          57
+        ],
+        "spectral_weight_parameters": [
+          1,
+          57
+        ]
+      }
+    },
+    {
+      "path": "data/spectral_weights/SCUP-human(de Gruijl and van der Leun,1994)_spectral_wght_1.nc",
+      "sha256": "50afa69bd0d0a7f41258aec97e729f2cfe8a2fba7a5297d144e0190063ad0e41",
+      "bytes": 8355,
+      "variables": {
+        "wavelength": [
+          28
+        ],
+        "spectral_weight_parameters": [
+          1,
+          28
+        ]
+      }
+    }
+  ]
+}

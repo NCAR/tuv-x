@@ -1,0 +1,18 @@
+{
+  "repository": "https://github.com/yaml/libyaml",
+  "tag": "0.2.5",
+  "commit": "2c891fc7a770e8ba2fec34fc6b545c672beb37e6",
+  "sha256": {
+    "License": "c40112449f254b9753045925248313e9270efa36d226b22d82d4cc6c43c57f29",
+    "include/yaml.h": "de39c9fc2b2c8584775e6d0dc0f13c8e778ceba47d419cff9d85465ca35d6954",
+    "src/api.c": "71f9263a2c77237762c8fa5e7c3d2bdd35723ecf1e2898222c7a603a5bf3f2db",
+    "src/dumper.c": "56fe41a1db73e1b9342b9381856e1fade8ea339a0b723bef90e7e1e8638bc441",
+    "src/emitter.c": "fbec4f702153929ad1421636ab0f5ecded140f0f37014d5ab3c65dfecd7e0743",
+    "src/loader.c": "68424f0b29e16434e7f2c0838b26dd4b68e04b567ad40f4f4c1bc61cd8e93479",
+    "src/parser.c": "b418ed8d6ef7e86dbd0e59c8dc7a00c8e48200b0252dd41e25d00d4616c7b2dc",
+    "src/reader.c": "c428a44b177391557bdf49177c1dc0216edf2a2bbe0e24ca2ef2725ef7f01e9d",
+    "src/scanner.c": "bc3b30ceec0c696925e9703845874d7fafefb42bfbd3006dc4a02fc6d646f2d1",
+    "src/writer.c": "44a75c870a0b7039e37b457850b31748a69ce3bf1bf39950e7b855acef472de2",
+    "src/yaml_private.h": "8dffe95c784665eba4ee88169456ebd41137a6d80ad13d536df6ad10d7a4d459"
+  }
+}

@@ -1,0 +1,150 @@
+[
+  {
+    "path": "test/data/cross_sections/cross_section.acetone.config.json",
+    "sha256": "4a374e898da94d571c6b90ce006bea2d027ff127d6a909a9df1192120a586aa1"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.base.config.json",
+    "sha256": "a3285f3e1a9572221011a6956240f62fb50887e0ccafc00802a9bcdf4bc1a09e"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.ccl4.config.json",
+    "sha256": "7824b486bc5a9dc9312e0789e37626d8e8e2d0105b3e4c32ccf29c3a36418e8c"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.cfc-11.config.json",
+    "sha256": "2fea499f93114ed55f0c33f0680775d58cb7f9cd78417ef9688753d874fbfa9c"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.ch2o.config.json",
+    "sha256": "3787e03760672d134e43ee3d4e775aa45c8e1d68f9b697cfc88ebcece5fffc76"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.ch3ono2_ch3o_no2.config.json",
+    "sha256": "d8b66a2a0a387f0934abbc61e879bb77ea979efad4ce244066eec8528960a8aa"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.chbr3.config.json",
+    "sha256": "8d124f0b456b2e30cf469b0577c66ae846a52fa57c686c4b6dc4b83f29cf7aad"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.chcl3.config.json",
+    "sha256": "bd4704beb12035a4ff5bf4b382fc7a83538a896f02bf02da929a50d66384abcf"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.cl2_cl_cl.config.json",
+    "sha256": "c77cc8b47816af174aa7f732969983c31936602ed4b0aae6131e48f1c4051500"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.clono2.config.json",
+    "sha256": "98067b9ee1a7f6930fb3d95b67255f278be216a8e17698c8d6d22883ba75d548"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.h2o2-oh_oh.config.json",
+    "sha256": "390f4bcb507da2af7dfe6981b9adb1f902a4bdca38bfdbfa36378ad8cb74e78c"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.hcfc.config.json",
+    "sha256": "d73a7ce5dca4346eb687bc9992265d23e6a8563b1d6f5a28490b8c475a78da93"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.hno3-oh_no2.config.json",
+    "sha256": "13801ccee7af3bc0a256a26367a7cdfe9853800158f353c55a34a9200522a9d3"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.hobr-oh_br.config.json",
+    "sha256": "3683185859b1e725cccc97aa9f5779753c0c30dd0b91747648c21248b598b168"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.n2o-n2_o1d.config.json",
+    "sha256": "3683185859b1e725cccc97aa9f5779753c0c30dd0b91747648c21248b598b168"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.n2o5-no2_no3.config.json",
+    "sha256": "40bf9b4f7a1c2d379477c8bfe00bfb06e01a1b4f47b8ce0a1e90394490f21301"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.nitroxy.config.json",
+    "sha256": "f1a6ca1fffecaa9aa3b84f4d491135b720755e4b8a4174d6b2d4ec2a2168df3e"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.no2_tint.config.json",
+    "sha256": "d1d1c04d37774235aca45275a6aa97fe98236ad638bb083959177624a07a3bbc"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.o3_tint.config.json",
+    "sha256": "b7f1857e78abd0ca5a54e581b0c1cf9b0b31dabc8072e49c075f79733f6549e9"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.oclo.config.json",
+    "sha256": "3965f95c66ca3ab0ea0d9ea49f965be761192e8952a765cead270be28632433f"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.rayliegh.config.json",
+    "sha256": "ea2f1f8a2f1246f710a13100d7bfd97ecf5b012bd0f07f298bf03ab0a641f751"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.rono2.config.json",
+    "sha256": "1f77e7825063734dfe0c55b32e19306034aad861f3b3cd5f9c8d627b4df02b7e"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.t_butyl_nitrate.config.json",
+    "sha256": "acbe99a289932e0f42f18d9fa23f2047887ce7802df7ec921c7046c5abc12b97"
+  },
+  {
+    "path": "test/data/cross_sections/cross_section.tint.config.json",
+    "sha256": "b0bfa6771fe86431bb0436a32f350900ef56046f1666dfb51f97ec7f19c61a12"
+  },
+  {
+    "path": "test/data/quantum_yields/base.config.json",
+    "sha256": "62787f8261679098cb9dbff6d9219e3a220142f7fd1a494af420a0f0ff94bc75"
+  },
+  {
+    "path": "test/data/quantum_yields/h2so4_mills.config.json",
+    "sha256": "01254a4b2ae961bbcfe8da339570e0fc862a1cab62b3b72b4a2402e5be09ede6"
+  },
+  {
+    "path": "test/data/spectral_weights/base.json",
+    "sha256": "72d3c0e40a63605f1542d3e737900f0f1a710a388e3b0ef7be34f05bbfa7f027"
+  },
+  {
+    "path": "test/data/spectral_weights/gaussian.json",
+    "sha256": "d007a2f654b8022ca1056e32c5b4bdb0c000a6d911a3e2b4cb749f10ac14eb62"
+  },
+  {
+    "path": "test/data/spectral_weights/notch_filter.json",
+    "sha256": "2007666d4cb9ce718805ae10071f6564aace4234f3f2faefed56fc4214c31083"
+  },
+  {
+    "path": "test/data/heating_rates.json",
+    "sha256": "a29c9ad779d19ad0884a753e4edcfd548ad0b23cb81ceb1148f8dde4668e7e67"
+  },
+  {
+    "path": "test/data/photorates.test.config.json",
+    "sha256": "6a09ecbb4a708ea2c367ff45afecde5f27f0cb14277ef4eff71fba9c2fa1821f"
+  },
+  {
+    "path": "examples/ts1_tsmlt.json",
+    "sha256": "d62065148834640554b989bb3983d8f7646facbddc72a5418d617c3cd803f28d"
+  },
+  {
+    "path": "examples/tuv_5_4.json",
+    "sha256": "4d4ce86bf02b633efe863a7c1573f9e41fac76e2170f9e50c6231414b79c1ff3"
+  },
+  {
+    "path": "data/dose_rates.json",
+    "sha256": "c45c5a886c70c5475d537b423620b1d1c7d654d7f8ae7b56708ed06c62dc3f61"
+  },
+  {
+    "path": "data/photolysis_rate_constants.json",
+    "sha256": "bd2829d19865afdf1b2929b9279f017d34fce6cacefe30bceb93ca23131bc50d"
+  },
+  {
+    "path": "test/data/cross_sections/util/taylor.config.json",
+    "sha256": "ca7728bc25d0e156624960fffb005e790116b5fde8514481ff6c02f16fbdd41d"
+  },
+  {
+    "path": "test/data/cross_sections/util/burkholder.config.json",
+    "sha256": "da01de4f549bd88efa9b3c3f3afe7c03dfa50093ad96539cdcd7eaa2730f15c9"
+  }
+]
