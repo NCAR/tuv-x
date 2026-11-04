@@ -333,8 +333,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  type(profile_updater_t) function get_updater( this, profile, found )        &
-      result( updater )
+  function get_updater( this, profile, found ) result( updater )
     ! returns an updater for a `profile_from_host_t` profile
     !
     ! If the optional `found` argument is omitted, an error is returned if the
@@ -345,6 +344,7 @@ contains
     use tuvx_profile_from_host,        only : profile_from_host_t,            &
                                               profile_updater_t
 
+    type(profile_updater_t) :: updater ! The updater for the requested profile
     class(profile_warehouse_t), intent(in)  :: this    ! profile warehouse
     class(profile_t),           intent(in)  :: profile ! the profile to find in the warehouse
     logical, optional,          intent(out) :: found   ! flag indicating whether the profile was found
