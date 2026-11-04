@@ -360,8 +360,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  type(radiator_updater_t) function get_updater( this, radiator, found )      &
-      result( updater )
+  function get_updater( this, radiator, found ) result( updater )
     ! returns an updater for a `radiator_from_host_t` radiator
     !
     ! If the optional `found` argument is omitted, an error is returned if the
@@ -372,6 +371,7 @@ contains
     use tuvx_radiator_from_host,       only : radiator_from_host_t,           &
                                               radiator_updater_t
 
+    type(radiator_updater_t) :: updater ! The updater for the requested radiator
     class(radiator_warehouse_t), intent(in)  :: this     ! radiator warehouse
     class(radiator_t),           intent(in)  :: radiator ! the radiator to find in the warehouse
     logical, optional,           intent(out) :: found    ! flag indicating whether the

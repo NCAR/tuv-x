@@ -328,8 +328,7 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  type(grid_updater_t) function get_updater( this, grid, found )              &
-      result( updater )
+  function get_updater( this, grid, found ) result( updater )
     ! returns an updater for a `grid_from_host_t` grid
     !
     ! If the optional `found` flag is omitted, an error is returned if the
@@ -339,6 +338,7 @@ contains
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_from_host,           only : grid_from_host_t, grid_updater_t
 
+    type(grid_updater_t) :: updater ! The updater for the requested grid
     class(grid_warehouse_t), intent(in)  :: this ! This :f:type:`~tuvx_grid_warehouse/grid_warehouse_t`
     class(grid_t),           intent(in)  :: grid ! The grid to find in the warehouse
     logical, optional,       intent(out) :: found ! Flag indicating whether the grid was found
