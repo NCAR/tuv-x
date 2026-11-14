@@ -13,6 +13,8 @@ create_standard_test(NAME radiative_transfer_mpi SOURCES mpi.F90)
 
 create_standard_test(NAME solver_from_host SOURCES solver_from_host.F90)
 create_standard_test(NAME column_optimization SOURCES column_optimization.F90)
+create_standard_test(NAME prepared_spectra SOURCES prepared_spectra.F90)
+create_standard_test(NAME prepared_model SOURCES prepared_model.F90)
 
 # windows doesn't run .sh files
 if(NOT WIN32)

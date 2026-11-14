@@ -10,7 +10,6 @@ module tuvx_radiator
   use musica_mpi,                    only : musica_mpi_pack, musica_mpi_pack_size, musica_mpi_unpack
   use musica_string,                 only : string_t
   use tuvx_constants,                only : largest, precis
-  use tuvx_cross_section,            only : cross_section_t
   use tuvx_cross_section_warehouse,  only : cross_section_warehouse_ptr
   use tuvx_cross_section_warehouse,  only : cross_section_warehouse_t
   use tuvx_diagnostic_util,          only : diagout
@@ -183,7 +182,6 @@ contains
     class(grid_t),          pointer :: z_grid
     class(grid_t),          pointer :: lambda_grid
     class(profile_t),       pointer :: radiator_profile
-    class(cross_section_t), pointer :: radiator_cross_section
 
     ! get specific grids and profiles
     z_grid => grid_warehouse%get_grid( this%height_grid_ )
@@ -191,9 +189,6 @@ contains
 
     radiator_profile =>                                                       &
       profile_warehouse%get_profile( this%radiator_profile_ )
-
-    radiator_cross_section =>                                                 &
-      cross_section_warehouse%get( this%cross_section_ )
 
     ! check radiator state type allocation
     call assert_msg( 345645215, allocated( this%state_%layer_OD_ ),           &
@@ -204,9 +199,7 @@ contains
                      "Radiator profiles must provide layer densities" )
 
     ! set radiator state members
-    cross_section = radiator_cross_section%calculate( grid_warehouse,         &
-                                                      profile_warehouse,      &
-                                                      at_mid_point = .true. )
+    cross_section = cross_section_warehouse%calculate(this%cross_section_,grid_warehouse,profile_warehouse,.true.)
     call diagout( 'o2xs.new', cross_section, this%enable_diagnostics_ )
     do w_index = 1,lambda_grid%ncells_
       this%state_%layer_OD_(:,w_index) = radiator_profile%layer_dens_         &
@@ -225,7 +218,6 @@ contains
     deallocate( z_grid )
     deallocate( lambda_grid )
     deallocate( radiator_profile )
-    deallocate( radiator_cross_section )
 
   end subroutine update_state
 

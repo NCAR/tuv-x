@@ -23,6 +23,9 @@ module tuvx_heating_rates
   use tuvx_solver,                   only : radiation_field_t
   use tuvx_spherical_geometry,       only : spherical_geometry_t
 
+  use tuvx_prepared_spectra, only : spectrum_cache_t, spectrum_plan_t, rate_plan_t, prepare_rate, integrate_rate
+
+  use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
   implicit none
 
   private
@@ -59,7 +62,11 @@ module tuvx_heating_rates
                                                  ! corrections to the cross-section in the
                                                  ! Lyman-Alpha and Schumann-Runge bands should
                                                  ! be applied
+    type(spectrum_cache_t), pointer :: spectrum_cache_ => null()
+    logical :: own_spectrum_cache_ = .false.
+    type(rate_plan_t), allocatable :: prepared_rates_(:)
   contains
+    procedure :: set_spectrum_cache
     !> Calulates the heating rates
     procedure :: get
     !> Returns the names of each photolysis reaction with a heating rate
@@ -82,6 +89,15 @@ module tuvx_heating_rates
   end interface heating_rates_t
 
 contains
+
+  subroutine set_spectrum_cache(this,cache)
+    class(heating_rates_t), intent(inout) :: this
+    type(spectrum_cache_t), pointer, intent(in) :: cache
+    if( this%own_spectrum_cache_ .and. associated(this%spectrum_cache_) ) deallocate(this%spectrum_cache_)
+    this%spectrum_cache_ => cache
+    this%own_spectrum_cache_ = .false.
+    if( allocated(this%prepared_rates_) ) deallocate(this%prepared_rates_)
+  end subroutine set_spectrum_cache
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   !> heating_rates_t constructor
@@ -230,13 +246,13 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  !> calculate heating rates
+  !> Calculate heating rates
   subroutine get( this, la_srb, spherical_geometry, grids, profiles,          &
                   radiation_field, heating_rates )
 
 
     !> Heating rate collection
-    class(heating_rates_t),      intent(in)    :: this
+    class(heating_rates_t),      intent(inout) :: this
     !> Lyman Alpha and Schumann-Runge bands
     class(la_sr_bands_t),        intent(inout) :: la_srb
     !> Spherical geometry
@@ -258,6 +274,15 @@ contains
     real(kind=dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     integer :: i_rate, n_rates, i_height, i_wavelength
 
+    type(spectrum_plan_t), pointer :: cs_plan, qy_plan
+    logical :: prepared, oxygen
+    logical, allocatable :: oxygen_bands(:)
+
+    if( .not. associated(this%spectrum_cache_) ) then
+      allocate(this%spectrum_cache_)
+      this%own_spectrum_cache_ = .true.
+    end if
+    if( this%own_spectrum_cache_ ) call this%spectrum_cache_%begin_column(grids,profiles)
     heights => grids%get_grid( this%height_grid_ )
     wavelengths => grids%get_grid( this%wavelength_grid_ )
     etfl => profiles%get_profile( this%etfl_profile_ )
@@ -276,8 +301,46 @@ contains
       actinic_flux = 0.0_dk
     end where
 
-    do i_rate = 1, n_rates
+    allocate(oxygen_bands(wavelengths%ncells_))
+    oxygen_bands = .false.
+    if( size(this%o2_rate_indices_) > 0 ) then
+      if( la_srb%has_la ) oxygen_bands(la_srb%ila) = .true.
+      if( la_srb%has_srb ) oxygen_bands(la_srb%isrb:la_srb%isrb+16) = .true.
+    end if
+    prepared = this%spectrum_cache_%usable .and. all(ieee_is_finite(actinic_flux))
+    if( allocated(this%prepared_rates_) ) then
+      if( size(this%prepared_rates_) /= n_rates ) deallocate(this%prepared_rates_)
+    end if
+    if( .not. allocated(this%prepared_rates_) ) allocate(this%prepared_rates_(n_rates))
+rate_loop: do i_rate = 1, n_rates
     associate( params => this%heating_parameters_( i_rate ) )
+      if( prepared ) then
+        cs_plan => this%spectrum_cache_%cross_section(params%cross_section_%val_,grids,profiles)
+        qy_plan => this%spectrum_cache_%quantum_yield(params%quantum_yield_%val_,grids,profiles)
+        oxygen = any(this%o2_rate_indices_ == i_rate)
+        associate(r => this%prepared_rates_(i_rate))
+          if( r%generation /= this%spectrum_cache_%generation ) then
+            call prepare_rate(r,cs_plan,qy_plan,this%spectrum_cache_%generation,oxygen,params%energy_,oxygen_bands)
+          else if( any(r%energy /= params%energy_) ) then
+            call prepare_rate(r,cs_plan,qy_plan,this%spectrum_cache_%generation,oxygen,params%energy_,oxygen_bands)
+          end if
+          if( oxygen ) then
+            if( cs_plan%oxygen_epoch /= this%spectrum_cache_%epoch ) then
+              allocate(air_vertical_column(air%ncells_),air_slant_column(air%ncells_+1))
+              call spherical_geometry%air_mass(air%exo_layer_dens_,air_vertical_column,air_slant_column)
+              cs_plan%oxygen = cs_plan%materialize()
+              call la_srb%cross_section(grids,profiles,air_vertical_column,air_slant_column, &
+                                        cs_plan%oxygen,spherical_geometry)
+              cs_plan%oxygen_epoch = this%spectrum_cache_%epoch
+              deallocate(air_vertical_column,air_slant_column)
+            end if
+            call integrate_rate(r,actinic_flux,params%scaling_factor_,heating_rates(:,i_rate),cs_plan%oxygen)
+          else
+            call integrate_rate(r,actinic_flux,params%scaling_factor_,heating_rates(:,i_rate))
+          end if
+        end associate
+        cycle rate_loop
+      end if
       cross_section = params%cross_section_%val_%calculate_column( grids, profiles )
       quantum_yield = params%quantum_yield_%val_%calculate_column( grids, profiles )
 
@@ -308,12 +371,13 @@ contains
       end do
       heating_rates(:,i_rate) = heating_rates(:,i_rate) * params%scaling_factor_
     end associate
-    end do
+    end do rate_loop
 
     deallocate( heights )
     deallocate( wavelengths )
     deallocate( etfl )
     deallocate( air )
+
 
   end subroutine get
 
@@ -573,6 +637,8 @@ contains
     type(heating_rates_t), intent(inout) :: this
 
     integer :: i_rate
+
+    if( this%own_spectrum_cache_ .and. associated(this%spectrum_cache_) ) deallocate(this%spectrum_cache_)
 
     if( allocated( this%heating_parameters_ ) ) then
       do i_rate = 1, size( this%heating_parameters_ )

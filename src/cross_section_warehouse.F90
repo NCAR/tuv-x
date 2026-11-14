@@ -8,6 +8,7 @@ module tuvx_cross_section_warehouse
   use musica_string,                   only : string_t
   use tuvx_cross_section,              only : cross_section_ptr
 
+  use tuvx_prepared_spectra, only : spectrum_cache_t, spectrum_plan_t
   implicit none
 
   private
@@ -15,9 +16,11 @@ module tuvx_cross_section_warehouse
 
   !> Radiative tranfser cross section type
   type cross_section_warehouse_t
+    type(spectrum_cache_t), pointer :: spectrum_cache_ => null()
     type(cross_section_ptr), allocatable :: cross_sections_(:) ! A:f:type:`~tuvx_cross_section/cross_section_ptr`
     type(string_t), allocatable          :: handles_(:) ! cross section "handle"
   contains
+    procedure :: calculate
     !> Get a copy of a specific cross section
     procedure, private :: get_copy_char, get_copy_string
     procedure, private :: get_copy_ptr
@@ -54,6 +57,27 @@ module tuvx_cross_section_warehouse
   end type cross_section_warehouse_ptr
 
 contains
+
+  function calculate(this,ptr,grids,profiles,midpoint) result(values)
+    use musica_constants, only : dk => musica_dk
+    use tuvx_grid_warehouse, only : grid_warehouse_t
+    use tuvx_profile_warehouse, only : profile_warehouse_t
+    class(cross_section_warehouse_t), intent(inout) :: this
+    type(cross_section_warehouse_ptr), intent(in) :: ptr
+    type(grid_warehouse_t), intent(inout) :: grids
+    type(profile_warehouse_t), intent(inout) :: profiles
+    logical, intent(in) :: midpoint
+    real(dk), allocatable :: values(:,:)
+    type(spectrum_plan_t), pointer :: p
+    if( associated(this%spectrum_cache_) ) then
+      if( this%spectrum_cache_%usable ) then
+        p => this%spectrum_cache_%cross_section(this%cross_sections_(ptr%index_)%val_,grids,profiles,midpoint)
+        values = p%materialize()
+        return
+      end if
+    end if
+    values = this%cross_sections_(ptr%index_)%val_%calculate(grids,profiles,midpoint)
+  end function
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

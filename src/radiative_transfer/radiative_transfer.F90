@@ -22,6 +22,7 @@ module tuvx_radiative_transfer
   use tuvx_solver_factory,           only : solver_allocate, solver_builder, solver_type_name
   use tuvx_spherical_geometry,       only : spherical_geometry_t
 
+  use tuvx_prepared_spectra, only : spectrum_cache_t
   implicit none
   private
 
@@ -42,6 +43,7 @@ module tuvx_radiative_transfer
     type(profile_warehouse_ptr)                 :: air_profile_ ! pointer to the air profile in the profile warehouse
     integer                                     :: n_layers_    ! number of vertical layers in the height grid
   contains
+    procedure :: set_spectrum_cache
     procedure :: name => component_name
     procedure :: description
     procedure :: calculate
@@ -64,6 +66,12 @@ module tuvx_radiative_transfer
   end interface radiative_transfer_t
 
 contains
+
+  subroutine set_spectrum_cache(this,cache)
+    class(radiative_transfer_t), intent(inout) :: this
+    type(spectrum_cache_t), pointer, intent(in) :: cache
+    if( associated(this%cross_section_warehouse_) ) this%cross_section_warehouse_%spectrum_cache_ => cache
+  end subroutine
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -158,7 +166,8 @@ contains
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   subroutine calculate( this, la_srb, spherical_geometry, grid_warehouse,     &
-      profile_warehouse, radiation_field )
+      profile_warehouse, radiation_field, radiation_scale )
+    use tuvx_solver_delta_eddington, only : solver_delta_eddington_t
     ! Calculate the radiation field
 
     class(radiative_transfer_t),       intent(inout) :: this               ! A :f:type:`~tuvx_radiative_transfer/radxfer_component_core_t`
@@ -168,6 +177,8 @@ contains
     type(la_sr_bands_t),               intent(inout) :: la_srb             ! A :f:type:`~tuvx_la_sr_bands/la_sr_bands_t`
 
     type(radiation_field_t), pointer, intent(out)   :: radiation_field
+
+    real(dk), optional, intent(in) :: radiation_scale
 
     ! Local variables
     character(len=*), parameter          :: Iam = 'radXfer component calculate: '
@@ -211,11 +222,20 @@ contains
 
     zenithAngle = spherical_geometry%solar_zenith_angle_
     associate( theSolver => this%solver_ )
+    if( present(radiation_scale) ) then
+      select type(theSolver)
+      type is(solver_delta_eddington_t)
+        radiation_field => theSolver%update_scaled_radiation_field(zenithAngle,nlyr,spherical_geometry, &
+                             grid_warehouse,profile_warehouse,this%radiator_warehouse_,radiation_scale)
+        return
+      end select
+    end if
     radiation_field => theSolver%update_radiation_field(                      &
                      zenithAngle, nlyr, spherical_geometry,                   &
                      grid_warehouse, profile_warehouse,                       &
                      this%radiator_warehouse_ )
     end associate
+    if( present(radiation_scale) ) call radiation_field%apply_scale_factor(radiation_scale)
 
   end subroutine calculate
 

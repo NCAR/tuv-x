@@ -30,6 +30,7 @@ module tuvx_solver_delta_eddington
      type(profile_warehouse_ptr) :: surface_albedo_profile_
   contains
     procedure :: update_radiation_field
+    procedure :: update_scaled_radiation_field
     !> Scalar reference retained for numerical regression tests
     procedure :: update_radiation_field_reference
     procedure :: pack_size
@@ -91,16 +92,34 @@ contains
   ! The lane dimension is contiguous, so each layer and elimination row
   ! processes independent wavelengths together. Arithmetic within each lane
   ! follows the scalar reference, including the tridiagonal reciprocal.
-  function update_radiation_field( this, solar_zenith_angle, n_layers,        &
-      spherical_geometry, grid_warehouse, profile_warehouse,                  &
-      radiator_warehouse ) result( radiation_field )
+  function update_radiation_field(this,solar_zenith_angle,n_layers,spherical_geometry, &
+                                  grid_warehouse,profile_warehouse,radiator_warehouse) result(radiation_field)
+    use tuvx_grid_warehouse, only : grid_warehouse_t
+    use tuvx_profile_warehouse, only : profile_warehouse_t
+    use tuvx_radiator_warehouse, only : radiator_warehouse_t
+    use tuvx_spherical_geometry, only : spherical_geometry_t
+    class(solver_delta_eddington_t), intent(inout) :: this
+    real(dk), intent(in) :: solar_zenith_angle
+    integer, intent(in) :: n_layers
+    type(spherical_geometry_t), intent(inout) :: spherical_geometry
+    type(grid_warehouse_t), intent(inout) :: grid_warehouse
+    type(profile_warehouse_t), intent(inout) :: profile_warehouse
+    type(radiator_warehouse_t), intent(inout) :: radiator_warehouse
+    type(radiation_field_t), pointer :: radiation_field
+    radiation_field => this%update_scaled_radiation_field(solar_zenith_angle,n_layers,spherical_geometry, &
+                          grid_warehouse,profile_warehouse,radiator_warehouse,1.0_dk)
+  end function
 
+  function update_scaled_radiation_field( this, solar_zenith_angle, n_layers,        &
+      spherical_geometry, grid_warehouse, profile_warehouse,                  &
+      radiator_warehouse, scale ) result( radiation_field )
+
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
     use tuvx_solver, only : scalar_exp
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
     use tuvx_profile,                  only : profile_t
     use tuvx_profile_warehouse,        only : profile_warehouse_t
-    use tuvx_radiator,                 only : radiator_state_t
     use tuvx_radiator_warehouse,       only : radiator_warehouse_t
     use tuvx_spherical_geometry,       only : spherical_geometry_t
 
@@ -115,6 +134,11 @@ contains
 
     type(radiation_field_t),   pointer       :: radiation_field
 
+    real(dk), intent(in) :: scale
+    real(dk) :: scatter, absorb, asymmetry, scattered, optical_depth, single_scattering
+    real(dk) :: row_a, row_b, row_d, row_e
+    integer :: i_radiator, level_index
+    logical :: valid_optics
     integer, parameter :: block_size = 16
     integer :: lane, first_wavelength, n_lanes
     real(dk) :: direct(block_size,0:n_layers), cp(block_size,2*n_layers), denom
@@ -132,12 +156,12 @@ contains
     real(dk)    :: cup( block_size, n_layers ), cdn( block_size, n_layers )
     real(dk)    :: cuptn( block_size, n_layers ), cdntn( block_size, n_layers )
     real(dk)    :: mu1( block_size, n_layers )
-    real(dk)    :: a( block_size, 2 * n_layers ), b( block_size, 2 * n_layers ), d( block_size, 2 * n_layers )
-    real(dk)    :: e( block_size, 2 * n_layers ), y( block_size, 2 * n_layers )
+    real(dk)    :: y( block_size, 2 * n_layers )
 
     real(dk) :: pifs, fdn0, surfem, tempg
     real(dk) :: f, g, om
-    real(dk) :: gam1, gam2, gam3, gam4
+    real(dk) :: gam1(block_size), gam2(block_size), gam3(block_size), gam4(block_size)
+    real(dk) :: layer_exponential(block_size), layer_albedo(block_size)
     real(dk) :: gi( block_size, n_layers ), omi( block_size, n_layers )
 
     integer     :: mrows, lev
@@ -151,7 +175,6 @@ contains
     real(dk), parameter                  :: eps    = 1.e-3_dk
 
     integer                              :: nlambda, lambdaNdx
-    type(radiator_state_t)               :: atmRadiatorState
     class(grid_t),    pointer            :: zGrid
     class(grid_t),    pointer            :: lambdaGrid
     class(profile_t), pointer            :: surfaceAlbedo
@@ -159,6 +182,29 @@ contains
     if( .not. this%use_blocked_ ) then
       radiation_field => this%update_radiation_field_reference( solar_zenith_angle, n_layers, &
           spherical_geometry, grid_warehouse, profile_warehouse, radiator_warehouse )
+      call radiation_field%apply_scale_factor(scale)
+      return
+    end if
+    valid_optics = .true.
+    do i_radiator = 1, size(radiator_warehouse%radiators_)
+      associate(state => radiator_warehouse%radiators_(i_radiator)%val_%state_)
+        if( .not. all(ieee_is_finite(state%layer_OD_)) .or. &
+            .not. all(ieee_is_finite(state%layer_SSA_)) .or. &
+            .not. all(ieee_is_finite(state%layer_G_)) ) then
+          valid_optics = .false.
+          exit
+        end if
+        if( any(state%layer_OD_ < 0) .or. any(state%layer_SSA_ < 0) .or. &
+            any(state%layer_SSA_ > 1) .or. any(abs(state%layer_G_) >= 1) ) then
+          valid_optics = .false.
+          exit
+        end if
+      end associate
+    end do
+    if( .not. valid_optics ) then
+      radiation_field => this%update_radiation_field_reference(solar_zenith_angle,n_layers, &
+                          spherical_geometry,grid_warehouse,profile_warehouse,radiator_warehouse)
+      call radiation_field%apply_scale_factor(scale)
       return
     end if
     zGrid => grid_warehouse%get_grid( this%height_grid_ )
@@ -168,10 +214,6 @@ contains
 
     nlambda = lambdaGrid%ncells_
     radiation_field => radiation_field_t( n_layers + 1, nlambda )
-
-    allocate( atmRadiatorState%layer_G_( n_layers, nlambda, 1 ) )
-    ! Create cumulative state from all radiators
-    call radiator_warehouse%accumulate_states( atmRadiatorState )
 
     ! MU = cosine of solar zenith angle
     ! RSFC = surface albedo
@@ -209,13 +251,29 @@ contains
       do i = 1, n_layers
         do lane = 1, n_lanes
           lambdaNdx = first_wavelength + lane - 1
-          g = atmRadiatorState%layer_G_( n_layers+1-i, lambdaNdx, 1 )
-          om = atmRadiatorState%layer_SSA_( n_layers+1-i, lambdaNdx )
-          f = g * g
-          gi(lane,i) = ( g - f ) / ( rONE - f )
-          omi(lane,i) = ( rONE - f ) * om / ( rONE - om * f )
-          taun(lane,i) = ( rONE - om * f ) * &
-                           atmRadiatorState%layer_OD_( n_layers+1-i, lambdaNdx )
+          scatter = 0
+          absorb = 0
+          asymmetry = 0
+          do i_radiator = 1, size(radiator_warehouse%radiators_)
+            associate(state => radiator_warehouse%radiators_(i_radiator)%val_%state_)
+              optical_depth = state%layer_OD_(n_layers+1-i,lambdaNdx)
+              single_scattering = state%layer_SSA_(n_layers+1-i,lambdaNdx)
+              scattered = optical_depth*single_scattering
+              scatter = scatter+scattered
+              absorb = absorb+optical_depth*(1.0_dk-single_scattering)
+              asymmetry = asymmetry+state%layer_G_(n_layers+1-i,lambdaNdx,1)*scattered
+            end associate
+          end do
+          scatter = max(scatter,1.0_dk/largest)
+          absorb = max(absorb,1.0_dk/largest)
+          optical_depth = scatter+absorb
+          om = 1.0_dk/largest
+          if( scatter /= 1.0_dk/largest ) om = scatter/optical_depth
+          g = asymmetry/scatter
+          f = g*g
+          gi(lane,i) = (g-f)/(rONE-f)
+          omi(lane,i) = (rONE-f)*om/(rONE-om*f)
+          taun(lane,i) = (rONE-om*f)*optical_depth
         end do
       end do
 
@@ -256,6 +314,7 @@ contains
           tempg = min( abs( g ), rONE - precis )
           g = sign( tempg, g )
           om = min( om, rONE - precis )
+          layer_albedo(lane) = om
 
           if( nid( i ) >= 0 ) then
             if( tausla(lane,i) == tausla(lane,i - 1) ) then
@@ -272,21 +331,29 @@ contains
           !** save mu1 for each approx. for use in converting irradiance to actinic flux
           ! Eddington approximation(Joseph et al., 1976, JAS, 33, 2452):
 
-          gam1 =   ( 7._dk - om * ( 4._dk + 3._dk * g ) ) / 4._dk
-          gam2 = - ( rONE - om * ( 4._dk - 3._dk * g ) ) / 4._dk
-          gam3 =   ( rTWO - 3._dk * g * mu ) / 4._dk
-          gam4 =   rONE - gam3
+          gam1(lane) =   ( 7._dk - om * ( 4._dk + 3._dk * g ) ) / 4._dk
+          gam2(lane) = - ( rONE - om * ( 4._dk - 3._dk * g ) ) / 4._dk
+          gam3(lane) =   ( rTWO - 3._dk * g * mu ) / 4._dk
+          gam4(lane) =   rONE - gam3(lane)
           mu1(lane,i) = 0.5_dk
 
-          lam(lane,i) = sqrt( gam1 * gam1 - gam2 * gam2 )
+          lam(lane,i) = sqrt( gam1(lane) * gam1(lane) - gam2(lane) * gam2(lane) )
 
-          if( gam2 /= rZERO) then
-            bgam(lane,i) = ( gam1 - lam(lane,i) ) / gam2
+          if( gam2(lane) /= rZERO) then
+            bgam(lane,i) = ( gam1(lane) - lam(lane,i) ) / gam2(lane)
           else
             bgam(lane,i) = rZERO
           endif
 
-          expon = scalar_exp( - lam(lane,i) * taun(lane,i) )
+        end do
+        ! Keep scalar libm calls separate so the coefficient algebra on either
+        ! side can vectorize across independent lanes without vector math.
+        do lane = 1, n_lanes
+          layer_exponential(lane) = scalar_exp(-lam(lane,i)*taun(lane,i))
+        end do
+        do lane = 1, n_lanes
+          expon = layer_exponential(lane)
+          om = layer_albedo(lane)
 
           ! e1 - e4 = pg 16,292 equation 44
 
@@ -307,9 +374,9 @@ contains
           temp   = max( eps, abs( divisr ) )
           divisr = sign( temp, divisr )
 
-          up = om * pifs * ( ( gam1 - rONE / mu2(lane,i) ) * gam3 + gam4 * gam2 ) &
+          up = om * pifs * ( ( gam1(lane) - rONE / mu2(lane,i) ) * gam3(lane) + gam4(lane) * gam2(lane) ) &
                / divisr
-          dn = om * pifs * ( ( gam1 + rONE / mu2(lane,i) ) * gam4 + gam2 * gam3 ) &
+          dn = om * pifs * ( ( gam1(lane) + rONE / mu2(lane,i) ) * gam4(lane) + gam2(lane) * gam3(lane) ) &
                / divisr
 
           ! cup and cdn are when tau is equal to zero
@@ -323,77 +390,46 @@ contains
         end do
       enddo layer_loop
 
-      !**************** set up matrix ******
-      ! ssfc = pg 16,292 equation 37  where pi Fs is one (unity).
-
-
-
-      ! MROWS = the number of rows in the matrix
-
-      mrows = 2 * n_layers
-
-      ! the following are from pg 16,292  equations 39 - 43.
-      ! set up first row of matrix:
-
+      ! Assemble each tridiagonal row immediately before eliminating it.
+      ! The row formulas and reciprocal follow the scalar LINPACK routine.
+      mrows = 2*n_layers
       do lane = 1, n_lanes
-      a(lane,1) = rZERO
-      b(lane,1) = e1(lane,1)
-      d(lane,1) = -e2(lane,1)
-      e(lane,1) = fdn0 - cdn(lane,1)
+        cp(lane,1) = -e2(lane,1)/e1(lane,1)
+        y(lane,1) = (fdn0-cdn(lane,1))/e1(lane,1)
       end do
-
-      ! set up odd rows 3 thru (MROWS - 1):
-
-      i = 0
-      do row = 3, mrows - 1, 2
-         i = i + 1
-         do lane = 1, n_lanes
-         a(lane,row) = e2(lane,i) * e3(lane,i) - e4(lane,i) * e1(lane,i)
-         b(lane,row) = e1(lane,i) * e1(lane,i + 1) - e3(lane,i) * e3(lane,i + 1)
-         d(lane,row) = e3(lane,i) * e4(lane,i + 1) - e1(lane,i) * e2(lane,i + 1)
-         e(lane,row) = e3(lane,i) * ( cup(lane,i + 1) - cuptn(lane,i) )                   &
-                    + e1(lane,i) * ( cdntn(lane,i) - cdn(lane,i + 1) )
-         end do
-      enddo
-
-      ! set up even rows 2 thru (MROWS - 2):
-
-      i = 0
-      do row = 2, mrows - 2, 2
-         i = i + 1
-         do lane = 1, n_lanes
-         a(lane,row) = e2(lane,i + 1) * e1(lane,i) - e3(lane,i) * e4(lane,i + 1)
-         b(lane,row) = e2(lane,i) * e2(lane,i + 1) - e4(lane,i) * e4(lane,i + 1)
-         d(lane,row) = e1(lane,i + 1) * e4(lane,i + 1) - e2(lane,i + 1) * e3(lane,i + 1)
-         e(lane,row) = ( cup(lane,i + 1) - cuptn(lane,i) ) * e2(lane,i + 1)               &
-                    - ( cdn(lane,i + 1) - cdntn(lane,i) ) * e4(lane,i + 1)
-         end do
-      enddo
-
-      ! set up last row of matrix at MROWS:
-
-      do lane = 1, n_lanes
-      lambdaNdx = first_wavelength + lane - 1
-      ssfc = surfaceAlbedo%mid_val_(lambdaNdx) * mu * direct(lane,n_layers) * pifs + surfem
-      a(lane,mrows) = e1(lane,n_layers) - surfaceAlbedo%mid_val_(lambdaNdx) * e3(lane,n_layers)
-      b(lane,mrows) = e2(lane,n_layers) - surfaceAlbedo%mid_val_(lambdaNdx) * e4(lane,n_layers)
-      d(lane,mrows) = rZERO
-      e(lane,mrows) = ssfc - cuptn(lane,n_layers) + surfaceAlbedo%mid_val_(lambdaNdx) * cdntn(lane,n_layers)
-
-      end do
-
-      ! solve tri-diagonal system:
-
-      do lane = 1, n_lanes
-        cp(lane,1) = d(lane,1) / b(lane,1)
-        y(lane,1) = e(lane,1) / b(lane,1)
-      end do
-      do row = 2, mrows
+      do i = 1, n_layers-1
+        row = 2*i
         do lane = 1, n_lanes
-          denom = 1.0 / ( b(lane,row) - a(lane,row) * cp(lane,row-1) )
-          cp(lane,row) = d(lane,row) * denom
-          y(lane,row) = ( e(lane,row) - a(lane,row) * y(lane,row-1) ) * denom
+          row_a = e2(lane,i+1)*e1(lane,i)-e3(lane,i)*e4(lane,i+1)
+          row_b = e2(lane,i)*e2(lane,i+1)-e4(lane,i)*e4(lane,i+1)
+          row_d = e1(lane,i+1)*e4(lane,i+1)-e2(lane,i+1)*e3(lane,i+1)
+          row_e = (cup(lane,i+1)-cuptn(lane,i))*e2(lane,i+1) &
+                  -(cdn(lane,i+1)-cdntn(lane,i))*e4(lane,i+1)
+          denom = 1.0/(row_b-row_a*cp(lane,row-1))
+          cp(lane,row) = row_d*denom
+          y(lane,row) = (row_e-row_a*y(lane,row-1))*denom
         end do
+        row = row+1
+        do lane = 1, n_lanes
+          row_a = e2(lane,i)*e3(lane,i)-e4(lane,i)*e1(lane,i)
+          row_b = e1(lane,i)*e1(lane,i+1)-e3(lane,i)*e3(lane,i+1)
+          row_d = e3(lane,i)*e4(lane,i+1)-e1(lane,i)*e2(lane,i+1)
+          row_e = e3(lane,i)*(cup(lane,i+1)-cuptn(lane,i)) &
+                  +e1(lane,i)*(cdntn(lane,i)-cdn(lane,i+1))
+          denom = 1.0/(row_b-row_a*cp(lane,row-1))
+          cp(lane,row) = row_d*denom
+          y(lane,row) = (row_e-row_a*y(lane,row-1))*denom
+        end do
+      end do
+      do lane = 1, n_lanes
+        lambdaNdx = first_wavelength+lane-1
+        ssfc = surfaceAlbedo%mid_val_(lambdaNdx)*mu*direct(lane,n_layers)*pifs+surfem
+        row_a = e1(lane,n_layers)-surfaceAlbedo%mid_val_(lambdaNdx)*e3(lane,n_layers)
+        row_b = e2(lane,n_layers)-surfaceAlbedo%mid_val_(lambdaNdx)*e4(lane,n_layers)
+        row_e = ssfc-cuptn(lane,n_layers)+surfaceAlbedo%mid_val_(lambdaNdx)*cdntn(lane,n_layers)
+        denom = 1.0/(row_b-row_a*cp(lane,mrows-1))
+        cp(lane,mrows) = rZERO*denom
+        y(lane,mrows) = (row_e-row_a*y(lane,mrows-1))*denom
       end do
       do row = mrows-1, 1, -1
         do lane = 1, n_lanes
@@ -412,33 +448,41 @@ contains
                  fdr => radiation_field%fdr_( :, lambdaNdx ),                 &
                  fup => radiation_field%fup_( :, lambdaNdx ),                 &
                  fdn => radiation_field%fdn_( :, lambdaNdx ) )
-      fdr(1) = pifs * direct(lane,0)
-      edr(1) = mu * fdr(1)
-      edn(1) = fdn0
-      eup(1) =  y(lane,1) * e3(lane,1) - y(lane,2) * e4(lane,1) + cup(lane,1)
-      fdn(1) = edn(1) / mu1(lane,1)
-      fup(1) = eup(1) / mu1(lane,1)
+      fdr(n_layers+1) = pifs * direct(lane,0)
+      edr(n_layers+1) = mu * fdr(n_layers+1)
+      edn(n_layers+1) = fdn0
+      eup(n_layers+1) =  y(lane,1) * e3(lane,1) - y(lane,2) * e4(lane,1) + cup(lane,1)
+      fdn(n_layers+1) = edn(n_layers+1) / mu1(lane,1)
+      fup(n_layers+1) = eup(n_layers+1) / mu1(lane,1)
+
+      fdr(n_layers+1) = fdr(n_layers+1)*scale
+      fup(n_layers+1) = fup(n_layers+1)*scale
+      fdn(n_layers+1) = fdn(n_layers+1)*scale
+      edr(n_layers+1) = edr(n_layers+1)*scale
+      eup(n_layers+1) = eup(n_layers+1)*scale
+      edn(n_layers+1) = edn(n_layers+1)*scale
 
       j   = 1
       row = 1
       do lev = 2, n_layers + 1
-         fdr( lev ) = pifs * direct(lane,lev-1)
-         edr( lev ) = mu * fdr( lev )
-         edn( lev ) = y(lane,row) * e3(lane,j) + y(lane,row + 1) * e4(lane,j) + cdntn(lane,j)
-         eup( lev ) = y(lane,row) * e1(lane,j) + y(lane,row + 1) * e2(lane,j) + cuptn(lane,j)
-         fdn( lev ) = edn( lev ) / mu1(lane,j)
-         fup( lev ) = eup( lev ) / mu1(lane,j)
+         level_index = n_layers+2-lev
+         fdr( level_index ) = pifs * direct(lane,lev-1)
+         edr( level_index ) = mu * fdr( level_index )
+         edn( level_index ) = y(lane,row) * e3(lane,j) + y(lane,row + 1) * e4(lane,j) + cdntn(lane,j)
+         eup( level_index ) = y(lane,row) * e1(lane,j) + y(lane,row + 1) * e2(lane,j) + cuptn(lane,j)
+         fdn( level_index ) = edn( level_index ) / mu1(lane,j)
+         fup( level_index ) = eup( level_index ) / mu1(lane,j)
+
+         fdr(level_index) = fdr(level_index)*scale
+         fup(level_index) = fup(level_index)*scale
+         fdn(level_index) = fdn(level_index)*scale
+         edr(level_index) = edr(level_index)*scale
+         eup(level_index) = eup(level_index)*scale
+         edn(level_index) = edn(level_index)*scale
 
          row = row + 2
          j = j + 1
       enddo
-      ! transform from top-down to buttom-up
-      fdr = fdr( n_layers + 1 : 1 : -1 )
-      fup = fup( n_layers + 1 : 1 : -1 )
-      fdn = fdn( n_layers + 1 : 1 : -1 )
-      edr = edr( n_layers + 1 : 1 : -1 )
-      eup = eup( n_layers + 1 : 1 : -1 )
-      edn = edn( n_layers + 1 : 1 : -1 )
 
       end associate
       end do
@@ -451,7 +495,7 @@ contains
     deallocate( lambdaGrid )
     deallocate( surfaceAlbedo )
 
-  end function update_radiation_field
+  end function update_scaled_radiation_field
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

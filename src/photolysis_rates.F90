@@ -13,6 +13,8 @@ module tuvx_photolysis_rates
   use tuvx_profile_warehouse,          only : profile_warehouse_ptr
   use tuvx_quantum_yield,              only : quantum_yield_ptr
 
+  use tuvx_prepared_spectra, only : spectrum_cache_t, spectrum_plan_t, rate_plan_t, prepare_rate, integrate_rate
+
   implicit none
 
   private
@@ -38,7 +40,11 @@ module tuvx_photolysis_rates
     type(profile_warehouse_ptr) :: etfl_profile_
     ! Air density profile
     type(profile_warehouse_ptr) :: air_profile_
+    type(spectrum_cache_t), pointer :: spectrum_cache_ => null()
+    logical :: own_spectrum_cache_ = .false.
+    type(rate_plan_t), allocatable :: prepared_rates_(:)
   contains
+    procedure :: set_spectrum_cache
     ! Adds a photolysis rate to the collection
     procedure :: add
     ! Returns the photolysis rate constants for a given set of conditions
@@ -67,6 +73,15 @@ module tuvx_photolysis_rates
   end interface
 
 contains
+
+  subroutine set_spectrum_cache(this,cache)
+    class(photolysis_rates_t), intent(inout) :: this
+    type(spectrum_cache_t), pointer, intent(in) :: cache
+    if( this%own_spectrum_cache_ .and. associated(this%spectrum_cache_) ) deallocate(this%spectrum_cache_)
+    this%spectrum_cache_ => cache
+    this%own_spectrum_cache_ = .false.
+    if( allocated(this%prepared_rates_) ) deallocate(this%prepared_rates_)
+  end subroutine set_spectrum_cache
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -267,6 +282,7 @@ contains
   subroutine get( this, la_srb, spherical_geometry, grid_warehouse,           &
       profile_warehouse, radiation_field, photolysis_rates, file_tag )
 
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
     use musica_assert,                 only : assert_msg, die_msg
     use tuvx_diagnostic_util,          only : diagout
     use tuvx_grid_warehouse,           only : grid_warehouse_t
@@ -307,6 +323,15 @@ contains
     class(profile_t), pointer :: airProfile
     class(profile_t), pointer :: etfl
 
+    type(spectrum_plan_t), pointer :: cs_plan, qy_plan
+    logical :: prepared, oxygen
+    logical, allocatable :: oxygen_bands(:)
+
+    if( .not. associated(this%spectrum_cache_) ) then
+      allocate(this%spectrum_cache_)
+      this%own_spectrum_cache_ = .true.
+    end if
+    if( this%own_spectrum_cache_ ) call this%spectrum_cache_%begin_column(grid_warehouse,profile_warehouse)
     zGrid => grid_warehouse%get_grid( this%height_grid_ )
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
     etfl  => profile_warehouse%get_profile( this%etfl_profile_ )
@@ -330,8 +355,45 @@ contains
       allocate( xsqyWrk(0) )
     end if
 
-rate_loop:                                                                    &
-    do rateNdx = 1, nRates
+    allocate(oxygen_bands(lambdaGrid%ncells_))
+    oxygen_bands = .false.
+    if( size(this%o2_rate_indices_) > 0 ) then
+      if( la_srb%has_la ) oxygen_bands(la_srb%ila) = .true.
+      if( la_srb%has_srb ) oxygen_bands(la_srb%isrb:la_srb%isrb+16) = .true.
+    end if
+    prepared = this%spectrum_cache_%usable .and. all(ieee_is_finite(actinicFlux))
+    prepared = prepared .and. .not. this%enable_diagnostics_
+    if( allocated(this%prepared_rates_) ) then
+      if( size(this%prepared_rates_) /= nRates ) deallocate(this%prepared_rates_)
+    end if
+    if( .not. allocated(this%prepared_rates_) ) allocate(this%prepared_rates_(nRates))
+rate_loop: do rateNdx = 1, nRates
+      if( prepared ) then
+        cs_plan => this%spectrum_cache_%cross_section(this%cross_sections_(rateNdx)%val_,grid_warehouse,profile_warehouse)
+        qy_plan => this%spectrum_cache_%quantum_yield(this%quantum_yields_(rateNdx)%val_,grid_warehouse,profile_warehouse)
+        oxygen = any(this%o2_rate_indices_ == rateNdx)
+        associate(r => this%prepared_rates_(rateNdx))
+          if( r%generation /= this%spectrum_cache_%generation ) &
+            call prepare_rate(r,cs_plan,qy_plan,this%spectrum_cache_%generation,oxygen,oxygen_bands=oxygen_bands)
+          if( oxygen ) then
+            if( cs_plan%oxygen_epoch /= this%spectrum_cache_%epoch ) then
+              airProfile => profile_warehouse%get_profile(this%air_profile_)
+              allocate(air_vertical_column(airProfile%ncells_),air_slant_column(airProfile%ncells_+1))
+              call spherical_geometry%air_mass(airProfile%exo_layer_dens_,air_vertical_column,air_slant_column)
+              cs_plan%oxygen = cs_plan%materialize()
+              call la_srb%cross_section(grid_warehouse,profile_warehouse,air_vertical_column,air_slant_column, &
+                                        cs_plan%oxygen,spherical_geometry)
+              cs_plan%oxygen_epoch = this%spectrum_cache_%epoch
+              deallocate(air_vertical_column,air_slant_column)
+              deallocate(airProfile)
+            end if
+            call integrate_rate(r,actinicFlux,this%scaling_factors_(rateNdx),photolysis_rates(:,rateNdx),cs_plan%oxygen)
+          else
+            call integrate_rate(r,actinicFlux,this%scaling_factors_(rateNdx),photolysis_rates(:,rateNdx))
+          end if
+        end associate
+        cycle rate_loop
+      end if
       associate( calc_ftn => this%cross_sections_( rateNdx )%val_ )
         cross_section = calc_ftn%calculate_column( grid_warehouse, profile_warehouse )
       end associate
@@ -707,6 +769,8 @@ rate_loop:                                                                    &
     type(photolysis_rates_t), intent(inout) :: this
 
     integer :: ndx
+
+    if( this%own_spectrum_cache_ .and. associated(this%spectrum_cache_) ) deallocate(this%spectrum_cache_)
 
     if( allocated( this%cross_sections_ ) ) then
       do ndx = 1,size( this%cross_sections_ )

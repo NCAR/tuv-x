@@ -258,14 +258,16 @@ contains
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-  subroutine calculate_column( this, temperatures, wavelengths, cross_sections )
+  subroutine calculate_column( this, temperatures, wavelengths, cross_sections, wavelength_powers )
     ! Cross sections are (wavelength, height), initialized with the base data.
     ! Only the exact exponential parameterization uses the hoisted powers;
     ! other parameterizations retain their own dynamic dispatch.
     class(temperature_parameterization_t), intent(in) :: this
     real(dk), intent(in) :: temperatures(:), wavelengths(:)
     real(dk), intent(inout) :: cross_sections(:,:)
-    real(dk), allocatable :: powers(:,:)
+    real(dk), optional, target, intent(in) :: wavelength_powers(:,:)
+    real(dk), allocatable, target :: computed_powers(:,:)
+    real(dk), pointer :: powers(:,:)
     real(dk) :: temp, temp_xs(size(wavelengths))
     integer :: i_height, i_lp, i_range, w_min, w_max
 
@@ -273,11 +275,15 @@ contains
     type is( temperature_parameterization_t )
       w_min = this%min_wavelength_index_
       w_max = this%max_wavelength_index_
-      allocate( powers(w_max-w_min+1,size(this%lp_)) )
-      do i_lp = 1, size(this%lp_)
-        powers(:,i_lp) = ( wavelengths(w_min:w_max) - &
-                            this%base_wavelength_ )**this%lp_(i_lp)
-      end do
+      if( present(wavelength_powers) ) then
+        powers => wavelength_powers
+      else
+        allocate(computed_powers(w_max-w_min+1,size(this%lp_)))
+        powers => computed_powers
+        do i_lp = 1, size(this%lp_)
+          powers(:,i_lp) = (wavelengths(w_min:w_max)-this%base_wavelength_)**this%lp_(i_lp)
+        end do
+      end if
       do i_height = 1, size(temperatures)
         do i_range = 1, size( this%ranges_ )
         associate( temp_range => this%ranges_( i_range ) )

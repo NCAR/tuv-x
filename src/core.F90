@@ -7,6 +7,7 @@ module tuvx_core
   use musica_config,                   only : config_t
   use musica_string,                   only : string_t
   use musica_constants,                only : dk => musica_dk
+  use tuvx_prepared_spectra, only : spectrum_cache_t
   use tuvx_dose_rates,                 only : dose_rates_t
   use tuvx_grid_warehouse,             only : grid_warehouse_t
   use tuvx_heating_rates,              only : heating_rates_t
@@ -36,10 +37,15 @@ module tuvx_core
     type(dose_rates_t),          pointer :: dose_rates_ => null()
     type(heating_rates_t),       pointer :: heating_rates_ => null()
     type(radiation_field_t),     pointer :: radiation_field_ => null()
+    type(spectrum_cache_t), pointer :: spectrum_cache_ => null()
+    logical :: prepared_execution_ = .true.
     logical                              :: enable_diagnostics_ ! determines if diagnostic output is written or not
   contains
     ! Calculate photolysis rate constants, dose rates, and heating rates
     procedure :: run
+    procedure :: set_prepared_execution
+    procedure :: invalidate_prepared
+    procedure, private :: attach_spectrum_cache
     ! Returns a grid from the warehouse
     procedure :: get_grid
     ! Returns the grid warehouse
@@ -92,6 +98,28 @@ module tuvx_core
 
 contains
 
+  subroutine attach_spectrum_cache(this)
+    class(core_t), intent(inout) :: this
+    if( .not. associated(this%spectrum_cache_) ) allocate(this%spectrum_cache_)
+    this%spectrum_cache_%enabled = this%prepared_execution_
+    if( associated(this%photolysis_rates_) ) call this%photolysis_rates_%set_spectrum_cache(this%spectrum_cache_)
+    if( associated(this%heating_rates_) ) call this%heating_rates_%set_spectrum_cache(this%spectrum_cache_)
+    if( associated(this%dose_rates_) ) call this%dose_rates_%set_spectrum_cache(this%spectrum_cache_)
+    if( associated(this%radiative_transfer_) ) call this%radiative_transfer_%set_spectrum_cache(this%spectrum_cache_)
+  end subroutine
+  subroutine invalidate_prepared(this)
+    class(core_t), intent(inout) :: this
+    if( associated(this%spectrum_cache_) ) call this%spectrum_cache_%clear()
+    call this%attach_spectrum_cache()
+  end subroutine
+  subroutine set_prepared_execution(this,enabled)
+    class(core_t), intent(inout) :: this
+    logical, intent(in) :: enabled
+    this%prepared_execution_ = enabled
+    if( .not. associated(this%spectrum_cache_) ) call this%attach_spectrum_cache()
+    this%spectrum_cache_%enabled = enabled
+  end subroutine
+
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
   function constructor_file_path( config_file_path, grids, profiles, &
@@ -136,7 +164,7 @@ contains
     logical                     :: found
     type(config_t)              :: child_config
     class(profile_t),  pointer  :: aprofile
-    type(string_t)              :: required_keys(4), optional_keys(3)
+    type(string_t)              :: required_keys(4), optional_keys(4), execution
 
     ! Check json configuration file for basic structure, integrity
     required_keys(1) = "radiative transfer"
@@ -146,12 +174,17 @@ contains
     optional_keys(1) = "photolysis"
     optional_keys(2) = "dose rates"
     optional_keys(3) = "enable diagnostics"
+    optional_keys(4) = "column execution"
     call assert_msg( 255400232,                                               &
                      config%validate( required_keys, optional_keys ),    &
                      "Bad configuration data format for tuv-x core." )
 
     ! Instantiate photolysis core
     allocate( new_core )
+    call config%get('column execution',execution,Iam,default='prepared')
+    call assert_msg(255400233,execution == 'prepared' .or. execution == 'generic', &
+                     'Column execution must be prepared or generic')
+    new_core%prepared_execution_ = execution == 'prepared'
 
     call config%get( 'enable diagnostics', new_core%enable_diagnostics_,  &
       Iam, default=.false. )
@@ -225,6 +258,8 @@ contains
                                             new_core%profile_warehouse_ )
 
 
+    call new_core%attach_spectrum_cache()
+
   end function constructor_config
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -244,7 +279,7 @@ contains
     real(dk),                   intent(in)    :: earth_sun_distance             ! [AU]
     real(dk),         optional, intent(out)   :: photolysis_rate_constants(:,:) ! (vertical level, reaction) [s-1]
     real(dk),         optional, intent(out)   :: dose_rates(:,:)                ! (vertical level, reaction) [s-1]
-    real(dk),         optional, intent(out)   :: heating_rates(:,:)             ! (vertical level, reaction) [J s-1]  
+    real(dk),         optional, intent(out)   :: heating_rates(:,:)             ! (vertical level, reaction) [J s-1]
     character(len=*), optional, intent(in)    :: diagnostic_label               ! label used in diagnostic file names
 
     ! Local variables
@@ -253,6 +288,9 @@ contains
     class(radiator_t),          pointer :: radiator
     type(warehouse_iterator_t), pointer :: warehouse_iter
     character(len=:), allocatable       :: diag_label
+
+    if( .not. associated(this%spectrum_cache_) ) call this%attach_spectrum_cache()
+    call this%spectrum_cache_%begin_column(this%grid_warehouse_,this%profile_warehouse_)
 
     if( present( diagnostic_label ) ) then
       diag_label = diagnostic_label
@@ -265,18 +303,17 @@ contains
         deallocate( this%radiation_field_ )
     call this%spherical_geometry_%set_parameters( solar_zenith_angle,         &
                                                   this%grid_warehouse_ )
-    call this%radiative_transfer_%calculate( this%la_sr_bands_,               &
-                                             this%spherical_geometry_,        &
-                                             this%grid_warehouse_,            &
-                                             this%profile_warehouse_,         &
-                                             this%radiation_field_ )
     if( this%enable_diagnostics_ ) then
-      call diagout( 'radField.' // diag_label // '.new',                      &
-                    this%radiation_field_%fdr_ + this%radiation_field_%fup_ + &
-                    this%radiation_field_%fdn_, this%enable_diagnostics_  )
+      call this%radiative_transfer_%calculate(this%la_sr_bands_,this%spherical_geometry_, &
+          this%grid_warehouse_,this%profile_warehouse_,this%radiation_field_)
+      call diagout('radField.'//diag_label//'.new', &
+          this%radiation_field_%fdr_+this%radiation_field_%fup_+this%radiation_field_%fdn_, &
+          this%enable_diagnostics_)
+      call this%radiation_field_%apply_scale_factor(earth_sun_distance)
+    else
+      call this%radiative_transfer_%calculate(this%la_sr_bands_,this%spherical_geometry_, &
+          this%grid_warehouse_,this%profile_warehouse_,this%radiation_field_,earth_sun_distance)
     end if
-    ! scale the radiation field by the Earth-Sun distance
-    call this%radiation_field_%apply_scale_factor( earth_sun_distance )
     if( associated( this%photolysis_rates_ ) .and.                            &
         present( photolysis_rate_constants ) ) then
       call this%photolysis_rates_%get( this%la_sr_bands_,                     &
@@ -716,7 +753,8 @@ contains
       pack_size = pack_size + this%la_sr_bands_%pack_size( comm )
     end if
     pack_size = pack_size +                                                   &
-        musica_mpi_pack_size( this%enable_diagnostics_ , comm )
+        musica_mpi_pack_size( this%enable_diagnostics_ , comm ) + &
+        musica_mpi_pack_size( this%prepared_execution_, comm )
     pack_size = pack_size +                                                   &
         musica_mpi_pack_size( associated( this%radiative_transfer_ ), comm )
     if( associated( this%radiative_transfer_ ) ) then
@@ -781,6 +819,7 @@ contains
       call this%la_sr_bands_%mpi_pack( buffer, position, comm )
     end if
     call musica_mpi_pack( buffer, position, this%enable_diagnostics_ , comm )
+    call musica_mpi_pack( buffer, position, this%prepared_execution_, comm )
     call musica_mpi_pack( buffer, position,                                   &
                           associated( this%radiative_transfer_ ), comm )
     if( associated( this%radiative_transfer_ ) ) then
@@ -845,6 +884,7 @@ contains
       call this%la_sr_bands_%mpi_unpack( buffer, position, comm )
     end if
     call musica_mpi_unpack( buffer, position, this%enable_diagnostics_, comm )
+    call musica_mpi_unpack( buffer, position, this%prepared_execution_, comm )
     call musica_mpi_unpack( buffer, position, alloced, comm )
     if( alloced ) then
       allocate( this%radiative_transfer_ )
@@ -865,6 +905,7 @@ contains
       allocate( this%heating_rates_ )
       call this%heating_rates_%mpi_unpack( buffer, position, comm )
     end if
+    call this%attach_spectrum_cache()
     call assert( 332208077, position - prev_pos <= this%pack_size( comm ) )
 #endif
 
@@ -877,6 +918,14 @@ contains
 
     !> Photolysis core
     type(core_t), intent(inout) :: this
+    type(spectrum_cache_t), pointer :: no_cache => null()
+
+    ! Detach borrowers before destroying their cache; none owns its source spectra.
+    if( associated(this%photolysis_rates_) ) call this%photolysis_rates_%set_spectrum_cache(no_cache)
+    if( associated(this%heating_rates_) ) call this%heating_rates_%set_spectrum_cache(no_cache)
+    if( associated(this%dose_rates_) ) call this%dose_rates_%set_spectrum_cache(no_cache)
+    if( associated(this%radiative_transfer_) ) call this%radiative_transfer_%set_spectrum_cache(no_cache)
+    if( associated(this%spectrum_cache_) ) deallocate(this%spectrum_cache_)
 
     if( associated( this%grid_warehouse_ ) ) then
       deallocate( this%grid_warehouse_ )

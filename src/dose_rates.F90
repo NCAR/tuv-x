@@ -12,10 +12,18 @@ module tuvx_dose_rates
   use tuvx_profile_warehouse,          only : profile_warehouse_ptr
   use tuvx_profile,                    only : profile_t
 
+  use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
+  use tuvx_prepared_spectra, only : spectrum_cache_t
+
   implicit none
 
   private
   public :: dose_rates_t
+
+  type dose_plan_t
+    real(dk), allocatable :: weights(:)
+    integer, allocatable :: indices(:)
+  end type
 
   !> Photolysis rate constant calculator
   type :: dose_rates_t
@@ -31,7 +39,11 @@ module tuvx_dose_rates
     type(grid_warehouse_ptr) :: wavelength_grid_
     ! Extraterrestrial flux profile
     type(profile_warehouse_ptr) :: etfl_profile_
+    type(dose_plan_t), allocatable :: prepared_(:)
+    real(dk), allocatable :: prepared_wavelengths_(:), prepared_edges_(:)
+    type(spectrum_cache_t), pointer :: spectrum_cache_ => null()
   contains
+    procedure :: set_spectrum_cache
     ! Returns the dose rates for a given set of conditions
     procedure :: get
     ! Returns the names of each dose rate
@@ -55,6 +67,13 @@ module tuvx_dose_rates
   end interface
 
 contains
+
+  subroutine set_spectrum_cache(this,cache)
+    class(dose_rates_t), intent(inout) :: this
+    type(spectrum_cache_t), pointer, intent(in) :: cache
+    this%spectrum_cache_ => cache
+    if( allocated(this%prepared_) ) deallocate(this%prepared_)
+  end subroutine
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -195,13 +214,15 @@ contains
 
     ! Local variables
     character(len=*), parameter :: Iam = "dose rates calculator:"
-    integer               :: wavNdx, rateNdx, nRates
+    integer               :: wavNdx, rateNdx, nRates, i_term, i_wl
     real(dk), allocatable :: spectral_weight(:)
     real(dk), allocatable :: tmp_spectral_weight(:)
     real(dk), allocatable :: sirrad(:,:)
     class(grid_t),    pointer :: zGrid
     class(grid_t),    pointer :: lambdaGrid
     class(profile_t), pointer :: etfl
+
+    logical :: prepared, changed
 
     zGrid => grid_warehouse%get_grid( this%height_grid_ )
     lambdaGrid => grid_warehouse%get_grid( this%wavelength_grid_ )
@@ -230,8 +251,40 @@ contains
       sirrad = 0.0_dk
     end where
 
+    prepared = all(ieee_is_finite(sirrad))
+    if( associated(this%spectrum_cache_) ) prepared = prepared .and. this%spectrum_cache_%usable
+    if( prepared ) then
+      changed = .not. allocated(this%prepared_)
+      if( .not. changed ) changed = size(this%prepared_) /= nRates .or. &
+          size(this%prepared_wavelengths_) /= lambdaGrid%ncells_
+      if( .not. changed ) changed = any(this%prepared_wavelengths_ /= lambdaGrid%mid_) .or. &
+                                   any(this%prepared_edges_ /= lambdaGrid%edge_)
+      if( changed ) then
+        if( allocated(this%prepared_) ) deallocate(this%prepared_)
+        allocate(this%prepared_(nRates))
+        this%prepared_wavelengths_ = lambdaGrid%mid_
+        this%prepared_edges_ = lambdaGrid%edge_
+        do rateNdx = 1, nRates
+          this%prepared_(rateNdx)%weights = this%spectral_weights_(rateNdx)%val_%calculate( &
+                                               grid_warehouse,profile_warehouse)
+          this%prepared_(rateNdx)%indices = pack([(i_wl,i_wl=1,lambdaGrid%ncells_)], &
+                                                 this%prepared_(rateNdx)%weights /= 0)
+        end do
+      end if
+    end if
+
 rate_loop:                                                                    &
     do rateNdx = 1, nRates
+      if( prepared ) then
+        if( this%enable_diagnostics_ ) tmp_spectral_weight = &
+            [tmp_spectral_weight,this%prepared_(rateNdx)%weights]
+        dose_rates(:,rateNdx) = 0
+        do i_term = 1, size(this%prepared_(rateNdx)%indices)
+          i_wl = this%prepared_(rateNdx)%indices(i_term)
+          dose_rates(:,rateNdx) = dose_rates(:,rateNdx)+sirrad(:,i_wl)*this%prepared_(rateNdx)%weights(i_wl)
+        end do
+        cycle rate_loop
+      end if
       associate( calc_ftn => this%spectral_weights_( rateNdx )%val_ )
         spectral_weight = calc_ftn%calculate( grid_warehouse,                 &
                                               profile_warehouse )
