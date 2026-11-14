@@ -60,6 +60,8 @@ module tuvx_temperature_parameterization
     !> Calculate the cross section value for a specific temperature
     !! and wavelength
     procedure :: calculate => calculate
+    !> Evaluate a column with wavelength-only powers shared across heights
+    procedure, non_overridable :: calculate_column
     !> Returns the number of bytes required to pack the parameterization
     !! onto a character buffer
     procedure :: pack_size => pack_size
@@ -253,6 +255,67 @@ contains
     end associate
 
   end function merge_wavelength_grids
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  subroutine calculate_column( this, temperatures, wavelengths, cross_sections )
+    ! Cross sections are (wavelength, height), initialized with the base data.
+    ! Only the exact exponential parameterization uses the hoisted powers;
+    ! other parameterizations retain their own dynamic dispatch.
+    class(temperature_parameterization_t), intent(in) :: this
+    real(dk), intent(in) :: temperatures(:), wavelengths(:)
+    real(dk), intent(inout) :: cross_sections(:,:)
+    real(dk), allocatable :: powers(:,:)
+    real(dk) :: temp, temp_xs(size(wavelengths))
+    integer :: i_height, i_lp, i_range, w_min, w_max
+
+    select type( this )
+    type is( temperature_parameterization_t )
+      w_min = this%min_wavelength_index_
+      w_max = this%max_wavelength_index_
+      allocate( powers(w_max-w_min+1,size(this%lp_)) )
+      do i_lp = 1, size(this%lp_)
+        powers(:,i_lp) = ( wavelengths(w_min:w_max) - &
+                            this%base_wavelength_ )**this%lp_(i_lp)
+      end do
+      do i_height = 1, size(temperatures)
+        do i_range = 1, size( this%ranges_ )
+        associate( temp_range => this%ranges_( i_range ) )
+          if( temperatures(i_height) < temp_range%min_temperature_ .or.       &
+              temperatures(i_height) > temp_range%max_temperature_ ) cycle
+          if( temp_range%is_fixed_ ) then
+            temp = temp_range%fixed_temperature_
+          else
+            temp = temperatures(i_height)
+          end if
+          if ( this%is_temperature_inverted_ ) then
+            temp = this%base_temperature_ - temp
+          else
+            temp = temp - this%base_temperature_
+          end if
+          temp_xs(:) = 0.0_dk
+          do i_lp = 1, size( this%lp_ )
+            temp_xs( w_min:w_max ) = temp_xs( w_min:w_max ) +                     &
+                ( this%AA_( i_lp ) + temp * this%BB_( i_lp ) ) *                  &
+                  powers(:,i_lp)
+          end do
+          if (this%is_base_10_) then
+            cross_sections( w_min:w_max, i_height ) = cross_sections( w_min:w_max, i_height )           &
+                                           + 10**temp_xs( w_min:w_max )
+          else
+            cross_sections( w_min:w_max, i_height ) = cross_sections( w_min:w_max, i_height )           &
+                                           + exp( temp_xs( w_min:w_max ) )
+          end if
+        end associate
+        end do
+
+      end do
+    class default
+      do i_height = 1, size(temperatures)
+        call this%calculate( temperatures(i_height), wavelengths, cross_sections(:,i_height) )
+      end do
+    end select
+  end subroutine calculate_column
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

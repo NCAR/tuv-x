@@ -9,7 +9,7 @@ module tuvx_solver
   implicit none
 
   private
-  public :: solver_t, radiation_field_t, slant_optical_depth
+  public :: solver_t, radiation_field_t, slant_optical_depth, scalar_exp
 
   type :: radiation_field_t
     real(dk), allocatable :: edr_(:,:) ! Contribution of the direct component to the total spectral irradiance (vertical interface, wavelength)
@@ -262,6 +262,16 @@ contains
     if( allocated( this%fdn_ ) ) deallocate( this%fdn_ )
 
   end subroutine finalize
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  real(dk) function scalar_exp( value )
+    ! Keep the scalar libm evaluation used by the reference solver. A separate
+    ! non-pure procedure prevents compilers from substituting vector math
+    ! approximations when wavelengths are evaluated together.
+    real(dk), intent(in) :: value
+    scalar_exp = exp(value)
+  end function scalar_exp
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

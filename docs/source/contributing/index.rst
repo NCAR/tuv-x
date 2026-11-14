@@ -11,3 +11,4 @@ Learn how to add new science code, make bug fixes, or update the documentation.
 
    contributors_guide
    build_the_docs
+   column_optimization

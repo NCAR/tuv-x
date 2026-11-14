@@ -253,10 +253,10 @@ contains
     character(len=*), parameter :: Iam = 'heating rates get'
     class(grid_t), pointer :: heights, wavelengths
     class(profile_t), pointer :: etfl, air
-    real(kind=dk), allocatable :: actinic_flux(:,:), xsqy(:,:)
+    real(kind=dk), allocatable :: actinic_flux(:,:)
     real(kind=dk), allocatable :: cross_section(:,:), quantum_yield(:,:)
     real(kind=dk), allocatable :: air_vertical_column(:), air_slant_column(:)
-    integer :: i_rate, n_rates, i_height
+    integer :: i_rate, n_rates, i_height, i_wavelength
 
     heights => grids%get_grid( this%height_grid_ )
     wavelengths => grids%get_grid( this%wavelength_grid_ )
@@ -268,10 +268,9 @@ contains
                  size( heating_rates, 1 ) .eq. heights%ncells_ + 1 .and.      &
                  size( heating_rates, 2 ) .eq. n_rates )
 
-    actinic_flux = transpose( radiation_field%fdr_ + radiation_field%fup_ +   &
-                              radiation_field%fdn_ )
-    do i_height = 1, heights%ncells_ + 1
-      actinic_flux( :, i_height ) = actinic_flux( :, i_height ) * etfl%mid_val_
+    actinic_flux = radiation_field%fdr_ + radiation_field%fup_ + radiation_field%fdn_
+    do i_wavelength = 1, size( actinic_flux, 2 )
+      actinic_flux(:,i_wavelength) = actinic_flux(:,i_wavelength) * etfl%mid_val_(i_wavelength)
     end do
     where( actinic_flux < 0.0_dk )
       actinic_flux = 0.0_dk
@@ -279,11 +278,13 @@ contains
 
     do i_rate = 1, n_rates
     associate( params => this%heating_parameters_( i_rate ) )
-      cross_section = params%cross_section_%val_%calculate( grids, profiles )
-      quantum_yield = params%quantum_yield_%val_%calculate( grids, profiles )
+      cross_section = params%cross_section_%val_%calculate_column( grids, profiles )
+      quantum_yield = params%quantum_yield_%val_%calculate_column( grids, profiles )
 
       ! O2 photolysis can have special la & srb band handling
       if( any( this%o2_rate_indices_ == i_rate ) ) then
+        if( size( cross_section, 1 ) == 1 ) &
+          cross_section = spread( cross_section(1,:), 1, heights%ncells_ + 1 )
         allocate( air_vertical_column( air%ncells_ ),                         &
                   air_slant_column( air%ncells_ + 1 ) )
         call spherical_geometry%air_mass( air%exo_layer_dens_,                &
@@ -295,13 +296,17 @@ contains
         deallocate( air_vertical_column, air_slant_column )
       end if
 
-      xsqy = transpose( cross_section * quantum_yield )
-      do i_height = 1, heights%ncells_ + 1
-        heating_rates( i_height, i_rate ) =                                   &
-            dot_product( actinic_flux( :, i_height ),                         &
-                         params%energy_(:) * xsqy( :, i_height ) ) *          &
-            params%scaling_factor_
+      heating_rates(:,i_rate) = 0.0_dk
+      do i_wavelength = 1, size( actinic_flux, 2 )
+        do i_height = 1, heights%ncells_ + 1
+          heating_rates(i_height,i_rate) = heating_rates(i_height,i_rate) + &
+              actinic_flux(i_height,i_wavelength) * &
+              ( params%energy_(i_wavelength) * &
+                ( cross_section(min(i_height,size(cross_section,1)),i_wavelength) * &
+                  quantum_yield(min(i_height,size(quantum_yield,1)),i_wavelength) ) )
+        end do
       end do
+      heating_rates(:,i_rate) = heating_rates(:,i_rate) * params%scaling_factor_
     end associate
     end do
 

@@ -36,6 +36,7 @@ cmake_dependent_option(TUVX_ENABLE_OPENMP "Enable OpenMP support" OFF "TUVX_ENAB
 option(TUVX_ENABLE_LAPACK "Enable LAPACK" OFF)
 option(TUVX_ENABLE_TESTS "Build tests" ON)
 option(TUVX_ENABLE_BENCHMARK "Build benchmark examples" OFF)
+option(TUVX_ENABLE_COLUMN_BENCHMARK "Build the column sweep benchmark" OFF)
 option(TUVX_ENABLE_COVERAGE "Enable code coverage output" OFF)
 option(TUVX_ENABLE_MEMCHECK "Enable memory checking in tests" OFF)
 option(TUVX_ENABLE_REGRESSION_TESTS "Enable regression tests" ON)
@@ -172,6 +173,11 @@ endif()
 
 if(TUVX_ENABLE_BENCHMARK AND TUVX_ENABLE_LAPACK AND NOT TUVX_DOCS_ONLY)
   add_subdirectory(benchmark)
+endif()
+
+if(TUVX_ENABLE_COLUMN_BENCHMARK AND NOT TUVX_DOCS_ONLY)
+  add_executable(tuvx_column_sweep benchmark/column_sweep.F90)
+  target_link_libraries(tuvx_column_sweep PRIVATE musica::tuvx)
 endif()
 
 ################################################################################

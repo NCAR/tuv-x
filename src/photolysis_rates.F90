@@ -294,12 +294,11 @@ contains
 
     !> Local variables
     character(len=*), parameter :: Iam = "photolysis rates calculator"
-    integer               :: vertNdx, rateNdx, nRates
+    integer               :: vertNdx, rateNdx, nRates, wavNdx
     real(dk), allocatable :: air_vertical_column(:), air_slant_column(:)
     real(dk), allocatable :: xsqyWrk(:)
     real(dk), allocatable :: cross_section(:,:)
     real(dk), allocatable :: quantum_yield(:,:)
-    real(dk), allocatable :: xsqy(:,:)
     real(dk), allocatable :: actinicFlux(:,:)
     character(len=:),  allocatable :: annotatedRate
     character(len=64), allocatable :: annotatedjlabel(:)
@@ -318,11 +317,10 @@ contains
                      size( photolysis_rates, 2 ) == nRates,                   &
                      "Bad shape for photolysis rate constant array" )
 
-    actinicFlux = transpose( radiation_field%fdr_ + radiation_field%fup_ +    &
-                             radiation_field%fdn_ )
-    do vertNdx = 1, zGrid%ncells_ + 1
-      actinicFlux( :, vertNdx ) = actinicFlux( :, vertNdx ) * etfl%mid_val_
-    enddo
+    actinicFlux = radiation_field%fdr_ + radiation_field%fup_ + radiation_field%fdn_
+    do wavNdx = 1, size( actinicFlux, 2 )
+      actinicFlux(:,wavNdx) = actinicFlux(:,wavNdx) * etfl%mid_val_(wavNdx)
+    end do
     where( actinicFlux < 0.0_dk )
       actinicFlux = 0.0_dk
     end where
@@ -335,11 +333,19 @@ contains
 rate_loop:                                                                    &
     do rateNdx = 1, nRates
       associate( calc_ftn => this%cross_sections_( rateNdx )%val_ )
-        cross_section = calc_ftn%calculate( grid_warehouse, profile_warehouse )
+        cross_section = calc_ftn%calculate_column( grid_warehouse, profile_warehouse )
       end associate
       associate( calc_ftn => this%quantum_yields_( rateNdx )%val_ )
-        quantum_yield = calc_ftn%calculate( grid_warehouse, profile_warehouse )
+        quantum_yield = calc_ftn%calculate_column( grid_warehouse, profile_warehouse )
       end associate
+
+      ! Diagnostics and O2 corrections consume full height-resolved arrays.
+      if( this%enable_diagnostics_ .or. any( this%o2_rate_indices_ == rateNdx ) ) then
+        if( size( cross_section, 1 ) == 1 ) &
+          cross_section = spread( cross_section(1,:), 1, zGrid%ncells_ + 1 )
+        if( size( quantum_yield, 1 ) == 1 ) &
+          quantum_yield = spread( quantum_yield(1,:), 1, zGrid%ncells_ + 1 )
+      end if
 
       ! O2 photolysis can have special la & srb band handling
       if( any( this%o2_rate_indices_ == rateNdx ) ) then
@@ -370,15 +376,19 @@ rate_loop:                                                                    &
       end associate
       end if
 
-      if (.not. allocated( xsqy ) ) then
-        allocate( xsqy( size( cross_section, 2 ), size( cross_section, 1 ) ) )
-      end if
-      xsqy = transpose( cross_section * quantum_yield )
-      do vertNdx = 1, zGrid%ncells_ + 1
-        photolysis_rates( vertNdx, rateNdx ) =                                &
-            dot_product( actinicFlux( :, vertNdx ), xsqy( :, vertNdx ) ) *    &
-            this%scaling_factors_( rateNdx )
-      enddo
+      ! Wavelengths remain in ascending order. Each iteration updates all
+      ! heights contiguously, using one row for column-independent factors.
+      photolysis_rates(:,rateNdx) = 0.0_dk
+      do wavNdx = 1, size( actinicFlux, 2 )
+        do vertNdx = 1, zGrid%ncells_ + 1
+          photolysis_rates(vertNdx,rateNdx) = photolysis_rates(vertNdx,rateNdx) + &
+              actinicFlux(vertNdx,wavNdx) * &
+              ( cross_section(min(vertNdx,size(cross_section,1)),wavNdx) * &
+                quantum_yield(min(vertNdx,size(quantum_yield,1)),wavNdx) )
+        end do
+      end do
+      photolysis_rates(:,rateNdx) = photolysis_rates(:,rateNdx) * &
+                                    this%scaling_factors_(rateNdx)
       if( allocated( cross_section ) ) deallocate( cross_section )
       if( allocated( quantum_yield ) ) deallocate( quantum_yield )
     end do rate_loop

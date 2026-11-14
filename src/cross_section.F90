@@ -64,6 +64,8 @@ module tuvx_cross_section
   contains
     !> Calculate the cross section
     procedure :: calculate
+    !> One height row for a base spectrum; full column for derived kernels
+    procedure, non_overridable :: calculate_column
     !> Add points to the cross section grid based on configuration data
     procedure :: add_points
     ! Returns the number of bytes needed to pack the cross section onto a
@@ -388,6 +390,36 @@ contains
     deallocate( wavelengths )
 
   end subroutine cross_section_from_config
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function calculate_column( this, grid_warehouse, profile_warehouse ) result( values )
+    ! Base tables and band overrides do not depend on the atmospheric column.
+    ! Keep a single row instead of broadcasting them over every height.
+    use tuvx_grid_warehouse, only : grid_warehouse_t
+    use tuvx_profile_warehouse, only : profile_warehouse_t
+
+    class(cross_section_t), intent(in) :: this
+    type(grid_warehouse_t), intent(inout) :: grid_warehouse
+    type(profile_warehouse_t), intent(inout) :: profile_warehouse
+    real(dk), allocatable :: values(:,:)
+    real(dk), allocatable :: spectrum(:)
+    integer :: i_override
+
+    select type( this )
+    type is( cross_section_t )
+      spectrum = this%cross_section_parms(1)%array(:,1)
+      if( allocated( this%overrides_ ) ) then
+        do i_override = 1, size( this%overrides_ )
+          call this%overrides_( i_override )%apply( spectrum )
+        end do
+      end if
+      allocate( values( 1, size( spectrum ) ) )
+      values(1,:) = spectrum
+    class default
+      values = this%calculate( grid_warehouse, profile_warehouse )
+    end select
+  end function calculate_column
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

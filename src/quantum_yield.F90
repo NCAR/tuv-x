@@ -60,6 +60,8 @@ module tuvx_quantum_yield
     type(override_t), allocatable :: overrides_(:)
   contains
     procedure :: calculate => run
+    !> One height row for a base spectrum; full column for derived kernels
+    procedure, non_overridable :: calculate_column
     procedure :: add_points
     ! returns the number of bytes required to pack the object onto a buffer
     procedure :: pack_size
@@ -249,6 +251,36 @@ file_loop: &
     deallocate( lambdaGrid )
 
   end subroutine base_constructor
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+  function calculate_column( this, grid_warehouse, profile_warehouse ) result( values )
+    ! Base tables and band overrides do not depend on the atmospheric column.
+    ! Keep a single row instead of broadcasting them over every height.
+    use tuvx_grid_warehouse, only : grid_warehouse_t
+    use tuvx_profile_warehouse, only : profile_warehouse_t
+
+    class(quantum_yield_t), intent(in) :: this
+    type(grid_warehouse_t), intent(inout) :: grid_warehouse
+    type(profile_warehouse_t), intent(inout) :: profile_warehouse
+    real(dk), allocatable :: values(:,:)
+    real(dk), allocatable :: spectrum(:)
+    integer :: i_override
+
+    select type( this )
+    type is( quantum_yield_t )
+      spectrum = this%quantum_yield_parms(1)%array(:,1)
+      if( allocated( this%overrides_ ) ) then
+        do i_override = 1, size( this%overrides_ )
+          call this%overrides_( i_override )%apply( spectrum )
+        end do
+      end if
+      allocate( values( 1, size( spectrum ) ) )
+      values(1,:) = spectrum
+    class default
+      values = this%calculate( grid_warehouse, profile_warehouse )
+    end select
+  end function calculate_column
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 

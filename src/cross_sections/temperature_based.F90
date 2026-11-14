@@ -201,11 +201,10 @@ contains
     character(len=*),  parameter :: Iam =                                      &
       'Temperature-based cross section calculate'
     real(kind=dk),   parameter :: deltax = 1.0e-5
-    class(grid_t),     pointer :: heights
     class(grid_t),     pointer :: wavelengths
     class(profile_t),  pointer :: temperatures
-    real(kind=dk)              :: temperature
-    real(kind=dk), allocatable :: raw_data(:), raw_wl(:)
+    real(kind=dk), allocatable :: raw_data(:), raw_wl(:), column_data(:,:), column_temperatures(:)
+    integer, allocatable :: data_indices(:)
     logical                    :: l_at_mid_point
     integer                    :: i_wl, i_height
 
@@ -223,24 +222,36 @@ contains
       allocate( cross_section( temperatures%size( ) + 1,                      &
                                wavelengths%size( ) ) )
     end if
+    if( l_at_mid_point ) then
+      column_temperatures = temperatures%mid_val_
+    else
+      column_temperatures = temperatures%edge_val_
+    end if
+    column_data = spread( this%raw_data_, 2, size(cross_section,1) )
+    call this%parameterization_%calculate_column( column_temperatures, &
+                                                   this%raw_wavelengths_, column_data )
+    ! Extend the wavelength grid once, retaining add_point's validation and
+    ! ordering. All four added data values are zero at every height.
+    raw_wl = this%raw_wavelengths_
+    raw_data = this%raw_data_
+    call add_point( x = raw_wl, y = raw_data,                               &
+                    xnew = ( 1.0_dk - deltax ) * raw_wl(1), ynew = 0.0_dk )
+    call add_point( x = raw_wl, y = raw_data,                               &
+                    xnew = 0.0_dk, ynew = 0.0_dk )
+    call add_point( x = raw_wl, y = raw_data,                               &
+                    xnew = ( 1.0_dk + deltax ) * raw_wl( size( raw_wl ) ),  &
+                    ynew = 0.0_dk )
+    call add_point( x = raw_wl, y = raw_data,                               &
+                    xnew = 1.0e38_dk, ynew = 0.0_dk )
+    ! Locate original points rather than assuming where the extrapolation
+    ! points were inserted (the conserving interpolator accepts any grid).
+    allocate(data_indices(size(this%raw_wavelengths_)))
+    do i_wl = 1, size(data_indices)
+      data_indices(i_wl) = findloc(raw_wl,this%raw_wavelengths_(i_wl),dim=1)
+    end do
     do i_height = 1, size( cross_section, 1 )
-      if( l_at_mid_point ) then
-        temperature = temperatures%mid_val_( i_height )
-      else
-        temperature = temperatures%edge_val_( i_height )
-      end if
-      raw_data = this%raw_data_
-      raw_wl   = this%raw_wavelengths_
-      call this%parameterization_%calculate( temperature, raw_wl, raw_data )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = ( 1.0_dk - deltax ) * raw_wl(1), ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = 0.0_dk, ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = ( 1.0_dk + deltax ) * raw_wl( size( raw_wl ) ),  &
-                      ynew = 0.0_dk )
-      call add_point( x = raw_wl, y = raw_data,                               &
-                      xnew = 1.0e38_dk, ynew = 0.0_dk )
+      raw_data = 0.0_dk
+      raw_data(data_indices) = column_data(:,i_height)
       cross_section( i_height, : ) =                                          &
           this%interpolator_%interpolate( x_target = wavelengths%edge_,       &
                                           x_source = raw_wl,                  &
