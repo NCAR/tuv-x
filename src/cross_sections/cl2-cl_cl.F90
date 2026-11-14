@@ -103,7 +103,9 @@ contains
       modelTemp = temperature%edge_val_
     endif
 
-    allocate( wrkCrossSection( lambdaGrid%ncells_, zGrid%ncells_ + 1 ) )
+    ! One column per evaluated height: layer mid-points have one fewer than
+    ! interfaces, and every element is assigned below.
+    allocate( wrkCrossSection( lambdaGrid%ncells_, nzdim ) )
 
     associate( wc => lambdaGrid%mid_ )
     do vertNdx = 1, nzdim

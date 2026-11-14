@@ -36,6 +36,12 @@ program test_column_optimization
       end do
     end do
   end do
+  ! Optical states the blocked arithmetic does not reproduce use the scalar
+  ! reference for the whole field, whichever block they are found in.
+  do k = 1, 5
+    call test_solver(7,33,5,corruption=k)
+    call test_solver(81,16,5,corruption=k)
+  end do
   call musica_mpi_finalize()
 contains
   subroutine compare(a,b,absolute_scale)
@@ -53,8 +59,21 @@ contains
     call assert(581964323, all(abs(a-b) <= 1024*epsilon(1.0_dk)*max(abs(a),abs(b),floor)))
   end subroutine compare
 
-  subroutine test_solver(n,nw,regime)
+  subroutine compare_identical(a,b)
+    use, intrinsic :: ieee_arithmetic, only : ieee_is_nan
+    real(dk), intent(in) :: a(:,:), b(:,:)
+    call assert(581964326, all(shape(a) == shape(b)))
+    call assert(581964327, all(ieee_is_nan(a) .eqv. ieee_is_nan(b)))
+    call assert(581964328, all(ieee_is_nan(a) .or. a == b))
+  end subroutine compare_identical
+
+  subroutine test_solver(n,nw,regime,corruption)
+    use, intrinsic :: ieee_arithmetic, only : ieee_value, ieee_quiet_nan, ieee_positive_inf
+    use, intrinsic :: ieee_exceptions, only : ieee_status_type, ieee_get_status, ieee_set_status, &
+        ieee_set_halting_mode, ieee_invalid, ieee_overflow, ieee_divide_by_zero
     integer, intent(in) :: n, nw, regime
+    integer, optional, intent(in) :: corruption
+    type(ieee_status_type) :: saved_status
     type(grid_warehouse_t) :: grids
     type(profile_warehouse_t) :: profiles
     type(radiator_warehouse_t) :: radiators
@@ -103,6 +122,26 @@ contains
         end select
       end associate
     end do
+    if( present(corruption) ) then
+      ! The reference may raise exceptions for these states; keep its flags
+      ! and halting modes out of the remaining tests.
+      call ieee_get_status(saved_status)
+      call ieee_set_halting_mode(ieee_invalid,.false.)
+      call ieee_set_halting_mode(ieee_overflow,.false.)
+      call ieee_set_halting_mode(ieee_divide_by_zero,.false.)
+      select case(corruption)
+      case(1)
+        radiators%radiators_(2)%val_%state_%layer_SSA_(n,nw) = 1.5_dk
+      case(2)
+        radiators%radiators_(1)%val_%state_%layer_G_(1,1,1) = 1.0_dk
+      case(3)
+        radiators%radiators_(2)%val_%state_%layer_OD_(n/2+1,nw) = -1.0e-3_dk
+      case(4)
+        radiators%radiators_(1)%val_%state_%layer_OD_(1,nw) = ieee_value(1.0_dk,ieee_quiet_nan)
+      case(5)
+        radiators%radiators_(2)%val_%state_%layer_SSA_(1,max(1,nw-1)) = ieee_value(1.0_dk,ieee_positive_inf)
+      end select
+    end if
     call config%add('type','delta eddington','column optimization test')
     solver => solver_delta_eddington_t(config,grids,profiles)
     call config%add('execution','scalar','column optimization test')
@@ -129,15 +168,25 @@ contains
         call geometry%set_parameters(angles(angle),grids)
         field => solver%update_radiation_field(angles(angle),n,geometry,grids,profiles,radiators)
         reference => scalar_solver%update_radiation_field(angles(angle),n,geometry,grids,profiles,radiators)
-        call compare(field%fdr_,reference%fdr_,1.0_dk)
-        call compare(field%fdn_,reference%fdn_,1.0_dk)
-        call compare(field%fup_,reference%fup_,1.0_dk)
-        call compare(field%edr_,reference%edr_,1.0_dk)
-        call compare(field%edn_,reference%edn_,1.0_dk)
-        call compare(field%eup_,reference%eup_,1.0_dk)
+        if( present(corruption) ) then
+          call compare_identical(field%fdr_,reference%fdr_)
+          call compare_identical(field%fdn_,reference%fdn_)
+          call compare_identical(field%fup_,reference%fup_)
+          call compare_identical(field%edr_,reference%edr_)
+          call compare_identical(field%edn_,reference%edn_)
+          call compare_identical(field%eup_,reference%eup_)
+        else
+          call compare(field%fdr_,reference%fdr_,1.0_dk)
+          call compare(field%fdn_,reference%fdn_,1.0_dk)
+          call compare(field%fup_,reference%fup_,1.0_dk)
+          call compare(field%edr_,reference%edr_,1.0_dk)
+          call compare(field%edn_,reference%edn_,1.0_dk)
+          call compare(field%eup_,reference%eup_,1.0_dk)
+        end if
         deallocate(field,reference)
       end do
     end do
+    if( present(corruption) ) call ieee_set_status(saved_status)
     deallocate(solver,scalar_solver,geometry)
   end subroutine test_solver
 

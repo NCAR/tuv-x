@@ -17015,6 +17015,50 @@
           }
         ]
       }
+    },
+    {
+      "role": 0,
+      "origin": "additional/o3-jpl06",
+      "grid": {
+        "name": "wavelength",
+        "type": "from csv file",
+        "units": "nm",
+        "file path": "data/grids/wavelength/combined.grid"
+      },
+      "spectrum": {
+        "type": "O3 JPL06",
+        "base netcdf file": {
+          "file path": "data/cross_sections/O3_1.nc"
+        },
+        "low-temperature netcdf file": {
+          "file path": "data/cross_sections/O3_JPL06_218K.nc"
+        },
+        "high-temperature netcdf file": {
+          "file path": "data/cross_sections/O3_JPL06_298K.nc"
+        }
+      }
+    },
+    {
+      "role": 0,
+      "origin": "additional/o3-jpl06",
+      "grid": {
+        "name": "wavelength",
+        "type": "from csv file",
+        "units": "nm",
+        "file path": "data/grids/wavelength/cam.csv"
+      },
+      "spectrum": {
+        "type": "O3 JPL06",
+        "base netcdf file": {
+          "file path": "data/cross_sections/O3_1.nc"
+        },
+        "low-temperature netcdf file": {
+          "file path": "data/cross_sections/O3_JPL06_218K.nc"
+        },
+        "high-temperature netcdf file": {
+          "file path": "data/cross_sections/O3_JPL06_298K.nc"
+        }
+      }
     }
   ],
   "provenance": [

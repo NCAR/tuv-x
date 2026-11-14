@@ -918,9 +918,10 @@ contains
 
     !> Photolysis core
     type(core_t), intent(inout) :: this
-    type(spectrum_cache_t), pointer :: no_cache => null()
+    type(spectrum_cache_t), pointer :: no_cache
 
     ! Detach borrowers before destroying their cache; none owns its source spectra.
+    nullify( no_cache )
     if( associated(this%photolysis_rates_) ) call this%photolysis_rates_%set_spectrum_cache(no_cache)
     if( associated(this%heating_rates_) ) call this%heating_rates_%set_spectrum_cache(no_cache)
     if( associated(this%dose_rates_) ) call this%dose_rates_%set_spectrum_cache(no_cache)

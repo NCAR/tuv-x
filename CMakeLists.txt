@@ -177,7 +177,11 @@ endif()
 
 if(TUVX_ENABLE_COLUMN_BENCHMARK AND NOT TUVX_DOCS_ONLY)
   add_executable(tuvx_column_sweep benchmark/column_sweep.F90)
+  set_target_properties(tuvx_column_sweep PROPERTIES LINKER_LANGUAGE Fortran)
   target_link_libraries(tuvx_column_sweep PRIVATE musica::tuvx)
+  if(TUVX_ENABLE_OPENMP)
+    target_link_libraries(tuvx_column_sweep PRIVATE OpenMP::OpenMP_Fortran)
+  endif()
 endif()
 
 ################################################################################

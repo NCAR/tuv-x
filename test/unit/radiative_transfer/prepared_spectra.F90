@@ -53,7 +53,7 @@ program test_prepared_spectra
   type(config_t), allocatable :: cases(:)
   type(spectrum_cache_t) :: cache
   type(custom_cross_section_t), target :: custom
-  type(spectrum_plan_t), pointer :: plan, duplicate
+  type(spectrum_plan_t), pointer :: plan, duplicate, midpoint_plan
   class(grid_warehouse_t), pointer :: grids
   type(profile_warehouse_t) :: profiles
   type(profile_from_host_t), pointer :: temperature, air, unused_temperature, unused_air
@@ -64,6 +64,10 @@ program test_prepared_spectra
   integer :: i,j,role,column,comparisons,variable,total
   real(dk), parameter :: edges(*) = [180.0_dk,200.0_dk,210.0_dk,218.0_dk,233.0_dk, &
       250.0_dk,273.0_dk,295.0_dk,298.0_dk,300.0_dk,320.0_dk,350.0_dk,400.0_dk]
+  ! Temperatures beyond every clamp, down to and up to the prepared limits
+  real(dk), parameter :: extremes(*) = [1.0_dk,60.0_dk,120.0_dk,150.0_dk,179.0_dk,263.0_dk, &
+      420.0_dk,600.0_dk,1000.0_dk,3000.0_dk,10000.0_dk]
+  integer, parameter :: columns = 8
 
   call musica_mpi_init()
   ! The constructor catalogue includes deliberately large unit-test table
@@ -111,12 +115,25 @@ program test_prepared_spectra
       qy => quantum_yield_builder(spec_config,grids,profiles)
       qy_duplicate => quantum_yield_builder(spec_config,grids,profiles)
     end if
-    do column = 1, 6
-      temperature%edge_val_ = [(edges(mod(j*7+column,size(edges))+1)+0.123_dk,j=1,nl+1)]
-      temperature%mid_val_ = [(edges(mod(j*7+column,size(edges))+1)+0.123_dk,j=1,nl)]
+    do column = 1, columns
+      ! Interfaces and mid-points have different values, so a plan that read
+      ! the wrong set would be detected. Column 7 uses the branch
+      ! temperatures exactly; column 8 goes beyond every clamp.
+      select case(column)
+      case(7)
+        temperature%edge_val_ = [(edges(mod(j*7+column,size(edges))+1),j=1,nl+1)]
+        temperature%mid_val_ = [(edges(mod(j*5+column,size(edges))+1),j=1,nl)]
+      case(8)
+        temperature%edge_val_ = [(extremes(mod(j*7,size(extremes))+1),j=1,nl+1)]
+        temperature%mid_val_ = [(extremes(mod(j*5+3,size(extremes))+1),j=1,nl)]
+      case default
+        temperature%edge_val_ = [(edges(mod(j*7+column,size(edges))+1)+0.123_dk,j=1,nl+1)]
+        temperature%mid_val_ = [(edges(mod(j*5+column+2,size(edges))+1)+0.321_dk,j=1,nl)]
+      end select
       air%edge_val_ = [(real(mod(j+column,7),dk)*.7e19_dk,j=1,nl+1)]
-      air%mid_val_ = [(real(mod(j+column,7),dk)*.7e19_dk,j=1,nl)]
+      air%mid_val_ = [(real(mod(j+column+3,7),dk)*.7e19_dk,j=1,nl)]
       call cache%begin_column(grids,profiles)
+      call assert(826130016,cache%usable)
       if( role == 0 ) then
         plan => cache%cross_section(cs,grids,profiles)
         duplicate => cache%cross_section(cs_duplicate,grids,profiles)
@@ -133,6 +150,19 @@ program test_prepared_spectra
       end if
       call compare(plan%materialize(),expected,i,column,origin%to_char())
       comparisons = comparisons+size(expected)
+      if( role == 0 ) then
+        ! Radiators use plans evaluated at layer mid-points.
+        midpoint_plan => cache%cross_section(cs,grids,profiles,.true.)
+        duplicate => cache%cross_section(cs_duplicate,grids,profiles,.true.)
+        expected = cs%calculate(grids,profiles,.true.)
+        call assert(826130017,associated(midpoint_plan,duplicate) .and. .not. associated(midpoint_plan,plan))
+        if( .not. midpoint_plan%guarded .and. all(ieee_is_finite(expected)) ) then
+          print *, 'Constant classification guard failed at mid-points:',i,origin%to_char()
+          stop 1
+        end if
+        call compare(midpoint_plan%materialize(),expected,i,column,origin%to_char())
+        comparisons = comparisons+size(expected)
+      end if
     end do
     variable = variable+count(plan%varying)
     total = total+size(plan%varying)

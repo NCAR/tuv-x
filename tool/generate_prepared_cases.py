@@ -113,6 +113,15 @@ def generate(source):
             'constant value':0.1,'coefficients':coeff,'minimum wavelength':200,
             'maximum wavelength':330, 'override bands':[{'band':'range',
                 'minimum wavelength':300,'maximum wavelength':400,'value':0.33}]}))
+    # No upstream scenario constructs the JPL06 ozone cross section. Use its
+    # compiled tables on both example wavelength grids.
+    cam = {'name': 'wavelength', 'type': 'from csv file', 'units': 'nm',
+           'file path': 'data/grids/wavelength/cam.csv'}
+    for wavelengths in (combined, cam):
+        cases.append((0, 'additional/o3-jpl06', wavelengths, {'type': 'O3 JPL06',
+            'base netcdf file': {'file path': 'data/cross_sections/O3_1.nc'},
+            'low-temperature netcdf file': {'file path': 'data/cross_sections/O3_JPL06_218K.nc'},
+            'high-temperature netcdf file': {'file path': 'data/cross_sections/O3_JPL06_298K.nc'}}))
     rows = [dict(role=role, origin=origin, grid=grid, spectrum=config)
             for role, origin, grid, config in cases if role in (0, 1)]
     return json.dumps(dict(cases=rows, provenance=provenance), indent=2)+"\n"
