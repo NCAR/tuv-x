@@ -292,6 +292,13 @@ contains
     call assert( 966855732,                                                   &
                  size( heating_rates, 1 ) .eq. heights%ncells_ + 1 .and.      &
                  size( heating_rates, 2 ) .eq. n_rates )
+    if( n_rates == 0 ) then
+      deallocate( heights )
+      deallocate( wavelengths )
+      deallocate( etfl )
+      deallocate( air )
+      return
+    end if
 
     actinic_flux = radiation_field%fdr_ + radiation_field%fup_ + radiation_field%fdn_
     do i_wavelength = 1, size( actinic_flux, 2 )

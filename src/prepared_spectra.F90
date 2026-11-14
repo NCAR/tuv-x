@@ -806,8 +806,10 @@ reference_loop: do r = 1, 3
     real(dk), intent(out) :: values(:,:)
     real(dk), pointer :: temperatures(:)
     real(dk), allocatable :: unique_temperatures(:), raw(:,:), keys(:,:), unique_keys(:,:), interpolated(:,:)
+    real(dk), allocatable :: signature(:), unique_signature(:), extended(:,:), area(:)
     integer, allocatable :: level_index(:)
-    real(dk) :: slope,b1,b2,area
+    real(dk) :: slope,b1,b2,delta,left,right,weight,code
+    logical :: free
     integer :: i,r,j,k,n,nranges,u,w,segment
     nullify(temperatures)
     do i = 1, size(profiles%profiles_)
@@ -826,26 +828,42 @@ reference_loop: do r = 1, 3
         nranges = size(p%ranges_)
         n = size(temperatures)
         allocate(keys(2*nranges,n),unique_keys(2*nranges,n),level_index(n),unique_temperatures(n))
+        allocate(signature(n),unique_signature(n))
         keys = 0
         do i = 1, n
+          ! The signature is equal whenever the keys are equal, so it rejects
+          ! most candidates with one comparison: the temperature when a
+          ! non-fixed range is active, otherwise a code of the active ranges.
+          free = .false.
+          code = 0
           do r = 1, nranges
+            code = 2*code
             if( temperatures(i) < p%ranges_(r)%min_temperature_ .or. &
                 temperatures(i) > p%ranges_(r)%max_temperature_ ) cycle
+            code = code+1
             keys(2*r-1,i) = 1
             keys(2*r,i) = temperatures(i)
-            if( p%ranges_(r)%is_fixed_ ) keys(2*r,i) = p%ranges_(r)%fixed_temperature_
+            if( p%ranges_(r)%is_fixed_ ) then
+              keys(2*r,i) = p%ranges_(r)%fixed_temperature_
+            else
+              free = .true.
+            end if
           end do
+          signature(i) = -1-code
+          if( free ) signature(i) = temperatures(i)
         end do
         ! Equal effective temperatures in every active range have identical
         ! raw spectra, including overlapping/fixed ranges and out-of-range rows.
         u = 0
         do i = 1, n
           do j = 1, u
+            if( signature(i) /= unique_signature(j) ) cycle
             if( all(keys(:,i) == unique_keys(:,j)) ) exit
           end do
           if( j > u ) then
             u = j
             unique_keys(:,u) = keys(:,i)
+            unique_signature(u) = signature(i)
             unique_temperatures(u) = temperatures(i)
           end if
           level_index(i) = j
@@ -857,23 +875,34 @@ reference_loop: do r = 1, 3
           call p%calculate_column(unique_temperatures(:u),cs%raw_wavelengths_,raw)
         end if
       end associate
-      allocate(interpolated(u,size(values,2)))
-      do j = 1, u
-        g%raw_values(g%raw_positions) = raw(:,j)
-        do w = 1, size(values,2)
-          area = 0
-          do segment = g%segment_start(w),g%segment_start(w+1)-1
-            k = g%segment_index(segment)
-            slope = (g%raw_values(k+1)-g%raw_values(k))/g%segment_delta(segment)
-            b1 = g%raw_values(k)+slope*g%segment_left(segment)
-            b2 = g%raw_values(k)+slope*g%segment_right(segment)
-            area = area+g%segment_area(segment)*(b2+b1)
-          end do
-          interpolated(j,w) = area/g%target_width(w)
-        end do
+      ! Interpolate all unique levels together: each level keeps the scalar
+      ! segment order, and the level dimension is contiguous.
+      allocate(extended(u,size(g%raw_grid)),interpolated(u,size(values,2)),area(u))
+      extended = 0
+      do r = 1, size(g%raw_positions)
+        extended(:,g%raw_positions(r)) = raw(r,:)
       end do
-      do i = 1, size(values,1)
-        values(i,:) = interpolated(level_index(i),:)
+      do w = 1, size(values,2)
+        area = 0
+        do segment = g%segment_start(w),g%segment_start(w+1)-1
+          k = g%segment_index(segment)
+          delta = g%segment_delta(segment)
+          left = g%segment_left(segment)
+          right = g%segment_right(segment)
+          weight = g%segment_area(segment)
+          do j = 1, u
+            slope = (extended(j,k+1)-extended(j,k))/delta
+            b1 = extended(j,k)+slope*left
+            b2 = extended(j,k)+slope*right
+            area(j) = area(j)+weight*(b2+b1)
+          end do
+        end do
+        interpolated(:,w) = area/g%target_width(w)
+      end do
+      do w = 1, size(values,2)
+        do i = 1, size(values,1)
+          values(i,w) = interpolated(level_index(i),w)
+        end do
       end do
     end select
   end subroutine
@@ -1068,8 +1097,9 @@ reference_loop: do r = 1, 3
     type(spectrum_plan_t), intent(inout) :: p
     type(profile_warehouse_t), intent(in) :: profiles
     real(dk), pointer :: temperature(:),air(:)
-    real(dk) :: t,bb,alpha,chi,q2,qfac1,qfac2,t300,arg,fco,fac,c1,c2,c3,c4,ozone,value
-    integer :: i,j,k,nz,table,first_table
+    real(dk) :: t,bb,alpha,q2,qfac1,qfac2,t300,arg,fco,fac,c1,c2,c3,c4,a2,a3,a4,term,value
+    real(dk), allocatable :: row(:)
+    integer :: i,j,k,nz,nw,pos,table,first_table,last_table
     real(dk) :: fraction
     handled = p%kernel /= 0
     if( .not. handled ) return
@@ -1235,147 +1265,360 @@ reference_loop: do r = 1, 3
         end do
       end select
     end if
-    do k = 1, size(p%varying)
-      if( .not. p%varying(k) ) cycle
-      do i = 1, nz
-        associate(a => p%coefficient(k,:),z => p%level(i,:))
-          select case(p%kernel)
-          case(1,2)
-            value = p%source_cs%cross_section_parms(1)%array(k,1)*10.0_dk**(a(1)*z(1))
-          case(3)
-            value = p%source_cs%cross_section_parms(1)%array(k,1)*exp(z(1)*a(1))
-          case(4)
-            value = p%source_cs%cross_section_parms(1)%array(k,1)* &
-                      exp(p%source_cs%cross_section_parms(1)%array(k,2)*z(1))
-          case(5)
-            value = p%source_cs%cross_section_parms(1)%array(k,1)
-            if( temperature(i) > 210 .and. temperature(i) < 300 ) value = exp(a(1)*z(1)-a(2))
-          case(6)
-            value = z(3)*(27.3_dk*exp(z(1)*a(1))+.932_dk*exp(z(2)*a(2)))
-          case(7)
-            value = (z(1)*a(1)+z(2)*a(2))*1.e-21_dk
-          case(8)
-            value = exp(a(1)+z(1)*a(2))
-          case(9)
-            value = 0
-            do j = 1, size(p%source_cs%cross_section_parms(1)%array,1)
-              value = value+z(j)*a(j)
-            end do
-            value = exp(value)
-          case(14)
-            associate(q => p%source_cs%cross_section_parms(1)%array)
-              value = q(k,1)*(1.0_dk+z(1)*(q(k,2)+z(1)*(q(k,3)+z(1)*q(k,4))))
-            end associate
-          case(15)
-            associate(q => p%source_cs%cross_section_parms(1)%array)
-              value = q(k,1)+q(k,2)*z(1)
-            end associate
-          case(16)
-            associate(q => p%source_cs%cross_section_parms(1)%array)
-              value = q(k,1)*(1.0_dk+z(1)*(q(k,2)+z(1)*q(k,3)))
-            end associate
-          case(17)
-            j = int(z(1))
-            associate(q => p%source_cs%cross_section_parms)
-              if( j == -1 ) then
-                value = q(1)%array(k,1)
-              else if( j == -2 ) then
-                value = q(size(q))%array(k,1)
-              else
-                value = q(j)%array(k,1)+z(2)*(q(j+1)%array(k,1)-q(j)%array(k,1))
-              end if
-            end associate
-          case(10)
-            value = p%source_cs%cross_section_parms(1)%array(k,1)*10.0_dk**(a(1)*z(1)/z(2))
-          case(11)
-            if( temperature(i) < 218 ) then
-              value = a(1)
-            else if( temperature(i) <= 298 ) then
-              value = a(1)+a(2)*(temperature(i)-218.0_dk)
-            else
-              value = a(3)
-            end if
-          case(12,13)
-            value = 0
-            first_table = 1
-            table = size(p%source_cs%cross_section_parms)
-            if( p%kernel == 13 ) then
-              first_table = p%table_index(k)
-              table = first_table
-            end if
-            do j = first_table, table
-              block
-                integer :: index
-                index = int(z(2*j-1))
-                associate(q => p%source_cs%cross_section_parms(j)%array)
-                  value = value+q(k,index)+z(2*j)*(q(k,index+1)-q(k,index))
-                end associate
-              end block
-            end do
-          case(101,102)
-            value = .0765_dk+z(1)*a(1)+z(2)*a(2)+z(3)*a(3)
-            if( p%kernel == 102 ) value = 1-value
-          case(103)
-            value = min(a(1)/z(1),1.0_dk)
-          case(105)
-            t = a(1)*(1+a(2)*z(1))
-            value = 1/(a(3)+t*air(i))
-          case(106)
-            value = min(1.0_dk,max(0.0_dk,a(1)/(1+a(2)*z(1))))
-          case(107)
-            value = min(1.0_dk,1/(1+a(1)*z(1)))
-          case(108)
-            value = a(1)/(a(1)+a(2)*z(1))
-          case(109,110,111)
-            value = z(1)
-          case(112)
-            value = a(1)/(a(1)+z(1))
-            if( i == nz ) value = 1
-          case(113,114)
-            value = 0
-            select type(q => p%source_qy)
-            type is(quantum_yield_tint_t)
-              do table = 1, size(q%parameters)
-                j = int(z(2*table-1))
-                value = value+q%parameters(table)%array(k,j)+z(2*table) &
-                        *(q%parameters(table)%array(k,j+1)-q%parameters(table)%array(k,j))
-              end do
-            type is(quantum_yield_no2_tint_t)
-              do table = 1, size(q%parameters)
-                j = int(z(2*table-1))
-                value = value+q%parameters(table)%array(k,j)+z(2*table) &
-                        *(q%parameters(table)%array(k,j+1)-q%parameters(table)%array(k,j))
-              end do
-              value = max(value,0.0_dk)
-            end select
-          case(104)
-            arg = z(2)*a(1)
-            if( arg > 80 ) then
-              c1 = 5.e34_dk
-            else
-              c1 = exp(arg)*z(1)/(1-z(1))
-            end if
-            fco = 1/(1+c1)
-            if( p%wavelength(k) < 302 ) then
-              c1 = z(3)*exp(-z(4)*a(3))
-              fac = (1-fco)/(1+c1*air(i))
-            else
-              c2 = z(5)*exp(-z(6)*a(4))
-              c3 = z(7)*exp(-z(8)*(a(2)-z(9))**2)
-              c4 = z(10)*exp(-z(11)*a(4))
-              fac = (1-fco)*(1+c3+c4*air(i))/((1+c3+c2*air(i))*(1+c4*air(i)))
-            end if
-            value = 0
-            select type(q => p%source_qy)
-            type is(quantum_yield_ch3coch3_ch3co_ch3_t)
-              if( q%do_CO_ ) value = value+fco
-              if( q%do_CH3CO_ ) value = value+fac
-            end select
-          end select
-          p%values(i,p%position(k)) = value
-        end associate
+    ! Each kernel hoists its wavelength coefficients and then loops over
+    ! contiguous heights, so the arithmetic and math-library calls vectorize
+    ! as the generic array expressions do. Every expression keeps the operand
+    ! order of the generic calculator; no element is evaluated speculatively.
+    nw = size(p%varying)
+    select case(p%kernel)
+    case(1,2)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = c1*10.0_dk**(c2*p%level(i,1))
+        end do
       end do
-    end do
+    case(3)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = c1*exp(p%level(i,1)*c2)
+        end do
+      end do
+    case(4)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%source_cs%cross_section_parms(1)%array(k,2)
+        do i = 1, nz
+          p%values(i,pos) = c1*exp(c2*p%level(i,1))
+        end do
+      end do
+    case(5)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%coefficient(k,1)
+        c3 = p%coefficient(k,2)
+        do i = 1, nz
+          if( temperature(i) > 210 .and. temperature(i) < 300 ) then
+            p%values(i,pos) = exp(c2*p%level(i,1)-c3)
+          else
+            p%values(i,pos) = c1
+          end if
+        end do
+      end do
+    case(6)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        do i = 1, nz
+          p%values(i,pos) = p%level(i,3)*(27.3_dk*exp(p%level(i,1)*c1)+.932_dk*exp(p%level(i,2)*c2))
+        end do
+      end do
+    case(7)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        do i = 1, nz
+          p%values(i,pos) = (p%level(i,1)*c1+p%level(i,2)*c2)*1.e-21_dk
+        end do
+      end do
+    case(8)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        do i = 1, nz
+          p%values(i,pos) = exp(c1+p%level(i,1)*c2)
+        end do
+      end do
+    case(9)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        p%values(:,pos) = 0
+        do j = 1, size(p%source_cs%cross_section_parms(1)%array,1)
+          c1 = p%coefficient(k,j)
+          do i = 1, nz
+            p%values(i,pos) = p%values(i,pos)+p%level(i,j)*c1
+          end do
+        end do
+        do i = 1, nz
+          p%values(i,pos) = exp(p%values(i,pos))
+        end do
+      end do
+    case(10)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = c1*10.0_dk**(c2*p%level(i,1)/p%level(i,2))
+        end do
+      end do
+    case(11)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        c3 = p%coefficient(k,3)
+        do i = 1, nz
+          if( temperature(i) < 218 ) then
+            p%values(i,pos) = c1
+          else if( temperature(i) <= 298 ) then
+            p%values(i,pos) = c1+c2*(temperature(i)-218.0_dk)
+          else
+            p%values(i,pos) = c3
+          end if
+        end do
+      end do
+    case(12,13)
+      ! Sum the bracketing-table interpolations in table order.
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        first_table = 1
+        last_table = size(p%source_cs%cross_section_parms)
+        if( p%kernel == 13 ) then
+          first_table = p%table_index(k)
+          last_table = first_table
+        end if
+        p%values(:,pos) = 0
+        do table = first_table, last_table
+          associate(q => p%source_cs%cross_section_parms(table)%array)
+            do i = 1, nz
+              j = int(p%level(i,2*table-1))
+              p%values(i,pos) = p%values(i,pos)+q(k,j)+p%level(i,2*table)*(q(k,j+1)-q(k,j))
+            end do
+          end associate
+        end do
+      end do
+    case(14)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%source_cs%cross_section_parms(1)%array(k,2)
+        c3 = p%source_cs%cross_section_parms(1)%array(k,3)
+        c4 = p%source_cs%cross_section_parms(1)%array(k,4)
+        do i = 1, nz
+          p%values(i,pos) = c1*(1.0_dk+p%level(i,1)*(c2+p%level(i,1)*(c3+p%level(i,1)*c4)))
+        end do
+      end do
+    case(15)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%source_cs%cross_section_parms(1)%array(k,2)
+        do i = 1, nz
+          p%values(i,pos) = c1+c2*p%level(i,1)
+        end do
+      end do
+    case(16)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%source_cs%cross_section_parms(1)%array(k,1)
+        c2 = p%source_cs%cross_section_parms(1)%array(k,2)
+        c3 = p%source_cs%cross_section_parms(1)%array(k,3)
+        do i = 1, nz
+          p%values(i,pos) = c1*(1.0_dk+p%level(i,1)*(c2+p%level(i,1)*c3))
+        end do
+      end do
+    case(17)
+      associate(q => p%source_cs%cross_section_parms)
+        allocate(row(size(q)))
+        do k = 1, nw
+          if( .not. p%varying(k) ) cycle
+          pos = p%position(k)
+          do j = 1, size(q)
+            row(j) = q(j)%array(k,1)
+          end do
+          do i = 1, nz
+            j = int(p%level(i,1))
+            if( j == -1 ) then
+              p%values(i,pos) = row(1)
+            else if( j == -2 ) then
+              p%values(i,pos) = row(size(row))
+            else
+              p%values(i,pos) = row(j)+p%level(i,2)*(row(j+1)-row(j))
+            end if
+          end do
+        end do
+      end associate
+    case(101)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        c3 = p%coefficient(k,3)
+        do i = 1, nz
+          p%values(i,pos) = .0765_dk+p%level(i,1)*c1+p%level(i,2)*c2+p%level(i,3)*c3
+        end do
+      end do
+    case(102)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        c3 = p%coefficient(k,3)
+        do i = 1, nz
+          value = .0765_dk+p%level(i,1)*c1+p%level(i,2)*c2+p%level(i,3)*c3
+          p%values(i,pos) = 1-value
+        end do
+      end do
+    case(103)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = min(c1/p%level(i,1),1.0_dk)
+        end do
+      end do
+    case(104)
+      select type(q => p%source_qy)
+      type is(quantum_yield_ch3coch3_ch3co_ch3_t)
+        do k = 1, nw
+          if( .not. p%varying(k) ) cycle
+          pos = p%position(k)
+          c1 = p%coefficient(k,1)
+          c2 = p%coefficient(k,2)
+          c3 = p%coefficient(k,3)
+          c4 = p%coefficient(k,4)
+          do i = 1, nz
+            arg = p%level(i,2)*c1
+            if( arg > 80 ) then
+              term = 5.e34_dk
+            else
+              term = exp(arg)*p%level(i,1)/(1-p%level(i,1))
+            end if
+            fco = 1/(1+term)
+            if( p%wavelength(k) < 302 ) then
+              term = p%level(i,3)*exp(-p%level(i,4)*c3)
+              fac = (1-fco)/(1+term*air(i))
+            else
+              a2 = p%level(i,5)*exp(-p%level(i,6)*c4)
+              a3 = p%level(i,7)*exp(-p%level(i,8)*(c2-p%level(i,9))**2)
+              a4 = p%level(i,10)*exp(-p%level(i,11)*c4)
+              fac = (1-fco)*(1+a3+a4*air(i))/((1+a3+a2*air(i))*(1+a4*air(i)))
+            end if
+            value = 0
+            if( q%do_CO_ ) value = value+fco
+            if( q%do_CH3CO_ ) value = value+fac
+            p%values(i,pos) = value
+          end do
+        end do
+      end select
+    case(105)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        c3 = p%coefficient(k,3)
+        do i = 1, nz
+          term = c1*(1+c2*p%level(i,1))
+          p%values(i,pos) = 1/(c3+term*air(i))
+        end do
+      end do
+    case(106)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        do i = 1, nz
+          p%values(i,pos) = min(1.0_dk,max(0.0_dk,c1/(1+c2*p%level(i,1))))
+        end do
+      end do
+    case(107)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = min(1.0_dk,1/(1+c1*p%level(i,1)))
+        end do
+      end do
+    case(108)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        c2 = p%coefficient(k,2)
+        do i = 1, nz
+          p%values(i,pos) = c1/(c1+c2*p%level(i,1))
+        end do
+      end do
+    case(109,110,111)
+      ! These yields depend on height only.
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        p%values(:,p%position(k)) = p%level(:nz,1)
+      end do
+    case(112)
+      do k = 1, nw
+        if( .not. p%varying(k) ) cycle
+        pos = p%position(k)
+        c1 = p%coefficient(k,1)
+        do i = 1, nz
+          p%values(i,pos) = c1/(c1+p%level(i,1))
+        end do
+        p%values(nz,pos) = 1
+      end do
+    case(113,114)
+      select type(q => p%source_qy)
+      type is(quantum_yield_tint_t)
+        do k = 1, nw
+          if( .not. p%varying(k) ) cycle
+          pos = p%position(k)
+          p%values(:,pos) = 0
+          do table = 1, size(q%parameters)
+            do i = 1, nz
+              j = int(p%level(i,2*table-1))
+              p%values(i,pos) = p%values(i,pos)+q%parameters(table)%array(k,j)+p%level(i,2*table) &
+                                *(q%parameters(table)%array(k,j+1)-q%parameters(table)%array(k,j))
+            end do
+          end do
+        end do
+      type is(quantum_yield_no2_tint_t)
+        do k = 1, nw
+          if( .not. p%varying(k) ) cycle
+          pos = p%position(k)
+          p%values(:,pos) = 0
+          do table = 1, size(q%parameters)
+            do i = 1, nz
+              j = int(p%level(i,2*table-1))
+              p%values(i,pos) = p%values(i,pos)+q%parameters(table)%array(k,j)+p%level(i,2*table) &
+                                *(q%parameters(table)%array(k,j+1)-q%parameters(table)%array(k,j))
+            end do
+          end do
+          do i = 1, nz
+            p%values(i,pos) = max(p%values(i,pos),0.0_dk)
+          end do
+        end do
+      end select
+    end select
   end function
 
   subroutine bracket_value(temperature,axis,delta,clamp,index,fraction)

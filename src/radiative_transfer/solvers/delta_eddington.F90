@@ -114,7 +114,6 @@ contains
       spherical_geometry, grid_warehouse, profile_warehouse,                  &
       radiator_warehouse, scale ) result( radiation_field )
 
-    use, intrinsic :: ieee_arithmetic, only : ieee_is_finite
     use tuvx_solver, only : scalar_exp
     use tuvx_grid,                     only : grid_t
     use tuvx_grid_warehouse,           only : grid_warehouse_t
@@ -137,8 +136,9 @@ contains
     real(dk), intent(in) :: scale
     real(dk) :: scatter, absorb, asymmetry, scattered, optical_depth, single_scattering
     real(dk) :: row_a, row_b, row_d, row_e
-    integer :: i_radiator, level_index
-    logical :: valid_optics
+    real(dk) :: flux_direct, irradiance_direct, irradiance_down, irradiance_up
+    real(dk) :: above_floor
+    integer :: i_radiator, level_index, source_layer, n_invalid
     integer, parameter :: block_size = 16
     integer :: lane, first_wavelength, n_lanes
     real(dk) :: direct(block_size,0:n_layers), cp(block_size,2*n_layers), denom
@@ -155,8 +155,11 @@ contains
     real(dk)    :: e3( block_size, n_layers ), e4( block_size, n_layers )
     real(dk)    :: cup( block_size, n_layers ), cdn( block_size, n_layers )
     real(dk)    :: cuptn( block_size, n_layers ), cdntn( block_size, n_layers )
-    real(dk)    :: mu1( block_size, n_layers )
     real(dk)    :: y( block_size, 2 * n_layers )
+    ! Radiator sums are stored bottom-up with layers contiguous, as the
+    ! radiator states are
+    real(dk)    :: scatter_sum( n_layers, block_size ), absorb_sum( n_layers, block_size )
+    real(dk)    :: asymmetry_sum( n_layers, block_size )
 
     real(dk) :: pifs, fdn0, surfem, tempg
     real(dk) :: f, g, om
@@ -171,8 +174,12 @@ contains
 
     ! Local variables
     real(dk), parameter                  :: largest = 1.e36_dk
+    real(dk), parameter                  :: kfloor = rONE / largest
     real(dk), parameter                  :: precis = 1.e-7_dk
     real(dk), parameter                  :: eps    = 1.e-3_dk
+    ! The Eddington approximation uses mu1 = 1/2 in every layer. Dividing by
+    ! this power of two is exact.
+    real(dk), parameter                  :: mu1    = 0.5_dk
 
     integer                              :: nlambda, lambdaNdx
     class(grid_t),    pointer            :: zGrid
@@ -182,28 +189,6 @@ contains
     if( .not. this%use_blocked_ ) then
       radiation_field => this%update_radiation_field_reference( solar_zenith_angle, n_layers, &
           spherical_geometry, grid_warehouse, profile_warehouse, radiator_warehouse )
-      call radiation_field%apply_scale_factor(scale)
-      return
-    end if
-    valid_optics = .true.
-    do i_radiator = 1, size(radiator_warehouse%radiators_)
-      associate(state => radiator_warehouse%radiators_(i_radiator)%val_%state_)
-        if( .not. all(ieee_is_finite(state%layer_OD_)) .or. &
-            .not. all(ieee_is_finite(state%layer_SSA_)) .or. &
-            .not. all(ieee_is_finite(state%layer_G_)) ) then
-          valid_optics = .false.
-          exit
-        end if
-        if( any(state%layer_OD_ < 0) .or. any(state%layer_SSA_ < 0) .or. &
-            any(state%layer_SSA_ > 1) .or. any(abs(state%layer_G_) >= 1) ) then
-          valid_optics = .false.
-          exit
-        end if
-      end associate
-    end do
-    if( .not. valid_optics ) then
-      radiation_field => this%update_radiation_field_reference(solar_zenith_angle,n_layers, &
-                          spherical_geometry,grid_warehouse,profile_warehouse,radiator_warehouse)
       call radiation_field%apply_scale_factor(scale)
       return
     end if
@@ -248,28 +233,64 @@ contains
       ! delta discrete ordinate, Practical Improved Flux Method, delta function,
       ! and Hybrid modified Eddington-delta function methods approximations
 
-      do i = 1, n_layers
-        do lane = 1, n_lanes
-          lambdaNdx = first_wavelength + lane - 1
-          scatter = 0
-          absorb = 0
-          asymmetry = 0
-          do i_radiator = 1, size(radiator_warehouse%radiators_)
-            associate(state => radiator_warehouse%radiators_(i_radiator)%val_%state_)
-              optical_depth = state%layer_OD_(n_layers+1-i,lambdaNdx)
-              single_scattering = state%layer_SSA_(n_layers+1-i,lambdaNdx)
+      ! Mix the radiators in warehouse order, as radiator_state_t%accumulate
+      ! does. Each wavelength reads and updates contiguous layers. The same
+      ! pass counts optical properties outside the range the blocked
+      ! arithmetic reproduces: finite, tau >= 0, 0 <= omega <= 1, |g| < 1.
+      ! A NaN fails every comparison, so it is counted as well. (The scalar
+      ! reference these states fall back to compares the same values.)
+      scatter_sum(:,:n_lanes) = rZERO
+      absorb_sum(:,:n_lanes) = rZERO
+      asymmetry_sum(:,:n_lanes) = rZERO
+      n_invalid = 0
+      do i_radiator = 1, size(radiator_warehouse%radiators_)
+        associate( layer_od  => radiator_warehouse%radiators_(i_radiator)%val_%state_%layer_OD_,  &
+                   layer_ssa => radiator_warehouse%radiators_(i_radiator)%val_%state_%layer_SSA_, &
+                   layer_g   => radiator_warehouse%radiators_(i_radiator)%val_%state_%layer_G_ )
+          do lane = 1, n_lanes
+            lambdaNdx = first_wavelength + lane - 1
+            do i = 1, n_layers
+              optical_depth = layer_od(i,lambdaNdx)
+              single_scattering = layer_ssa(i,lambdaNdx)
+              asymmetry = layer_g(i,lambdaNdx,1)
+              if( .not. ( optical_depth >= rZERO .and. optical_depth <= huge(rONE) .and. &
+                          single_scattering >= rZERO .and. single_scattering <= rONE .and. &
+                          abs(asymmetry) < rONE ) ) n_invalid = n_invalid + 1
               scattered = optical_depth*single_scattering
-              scatter = scatter+scattered
-              absorb = absorb+optical_depth*(1.0_dk-single_scattering)
-              asymmetry = asymmetry+state%layer_G_(n_layers+1-i,lambdaNdx,1)*scattered
-            end associate
+              scatter_sum(i,lane) = scatter_sum(i,lane)+scattered
+              absorb_sum(i,lane) = absorb_sum(i,lane)+optical_depth*(rONE-single_scattering)
+              asymmetry_sum(i,lane) = asymmetry_sum(i,lane)+asymmetry*scattered
+            end do
           end do
-          scatter = max(scatter,1.0_dk/largest)
-          absorb = max(absorb,1.0_dk/largest)
+        end associate
+      end do
+      if( n_invalid > 0 ) then
+        ! Unsupported optical states use the scalar reference for every
+        ! wavelength, including any block already solved.
+        deallocate( radiation_field )
+        deallocate( zGrid )
+        deallocate( lambdaGrid )
+        deallocate( surfaceAlbedo )
+        radiation_field => this%update_radiation_field_reference(solar_zenith_angle,n_layers, &
+                            spherical_geometry,grid_warehouse,profile_warehouse,radiator_warehouse)
+        call radiation_field%apply_scale_factor(scale)
+        return
+      end if
+      ! The solver works top-down.
+      do i = 1, n_layers
+        source_layer = n_layers + 1 - i
+        do lane = 1, n_lanes
+          scatter = max(scatter_sum(source_layer,lane),kfloor)
+          absorb = max(absorb_sum(source_layer,lane),kfloor)
           optical_depth = scatter+absorb
-          om = 1.0_dk/largest
-          if( scatter /= 1.0_dk/largest ) om = scatter/optical_depth
-          g = asymmetry/scatter
+          ! The single scattering albedo is the floor where scattering is
+          ! the floor, as in radiator_state_t%accumulate. Both operands of
+          ! the quotient are positive, so it is always defined and at most
+          ! one; selecting by an exact 0/1 weight keeps the loop free of
+          ! branches without changing either value.
+          above_floor = merge(rONE,rZERO,scatter /= kfloor)
+          om = above_floor*(scatter/optical_depth)+(rONE-above_floor)*kfloor
+          g = asymmetry_sum(source_layer,lane)/scatter
           f = g*g
           gi(lane,i) = (g-f)/(rONE-f)
           omi(lane,i) = (rONE-f)*om/(rONE-om*f)
@@ -335,7 +356,6 @@ contains
           gam2(lane) = - ( rONE - om * ( 4._dk - 3._dk * g ) ) / 4._dk
           gam3(lane) =   ( rTWO - 3._dk * g * mu ) / 4._dk
           gam4(lane) =   rONE - gam3(lane)
-          mu1(lane,i) = 0.5_dk
 
           lam(lane,i) = sqrt( gam1(lane) * gam1(lane) - gam2(lane) * gam2(lane) )
 
@@ -440,52 +460,43 @@ contains
       !*** unfold solution of matrix, compute output fluxes:
       ! the following equations are from pg 16,291  equations 31 & 32
 
+      ! The fields are stored bottom-up. Each level reads contiguous lanes;
+      ! the Earth-Sun scaling is applied as the values are stored.
+      associate( edr => radiation_field%edr_, eup => radiation_field%eup_,     &
+                 edn => radiation_field%edn_, fdr => radiation_field%fdr_,     &
+                 fup => radiation_field%fup_, fdn => radiation_field%fdn_ )
       do lane = 1, n_lanes
-      lambdaNdx = first_wavelength + lane - 1
-      associate( edr => radiation_field%edr_( :, lambdaNdx ),                 &
-                 eup => radiation_field%eup_( :, lambdaNdx ),                 &
-                 edn => radiation_field%edn_( :, lambdaNdx ),                 &
-                 fdr => radiation_field%fdr_( :, lambdaNdx ),                 &
-                 fup => radiation_field%fup_( :, lambdaNdx ),                 &
-                 fdn => radiation_field%fdn_( :, lambdaNdx ) )
-      fdr(n_layers+1) = pifs * direct(lane,0)
-      edr(n_layers+1) = mu * fdr(n_layers+1)
-      edn(n_layers+1) = fdn0
-      eup(n_layers+1) =  y(lane,1) * e3(lane,1) - y(lane,2) * e4(lane,1) + cup(lane,1)
-      fdn(n_layers+1) = edn(n_layers+1) / mu1(lane,1)
-      fup(n_layers+1) = eup(n_layers+1) / mu1(lane,1)
-
-      fdr(n_layers+1) = fdr(n_layers+1)*scale
-      fup(n_layers+1) = fup(n_layers+1)*scale
-      fdn(n_layers+1) = fdn(n_layers+1)*scale
-      edr(n_layers+1) = edr(n_layers+1)*scale
-      eup(n_layers+1) = eup(n_layers+1)*scale
-      edn(n_layers+1) = edn(n_layers+1)*scale
-
-      j   = 1
-      row = 1
-      do lev = 2, n_layers + 1
-         level_index = n_layers+2-lev
-         fdr( level_index ) = pifs * direct(lane,lev-1)
-         edr( level_index ) = mu * fdr( level_index )
-         edn( level_index ) = y(lane,row) * e3(lane,j) + y(lane,row + 1) * e4(lane,j) + cdntn(lane,j)
-         eup( level_index ) = y(lane,row) * e1(lane,j) + y(lane,row + 1) * e2(lane,j) + cuptn(lane,j)
-         fdn( level_index ) = edn( level_index ) / mu1(lane,j)
-         fup( level_index ) = eup( level_index ) / mu1(lane,j)
-
-         fdr(level_index) = fdr(level_index)*scale
-         fup(level_index) = fup(level_index)*scale
-         fdn(level_index) = fdn(level_index)*scale
-         edr(level_index) = edr(level_index)*scale
-         eup(level_index) = eup(level_index)*scale
-         edn(level_index) = edn(level_index)*scale
-
-         row = row + 2
-         j = j + 1
-      enddo
-
-      end associate
+        lambdaNdx = first_wavelength + lane - 1
+        flux_direct = pifs * direct(lane,0)
+        irradiance_direct = mu * flux_direct
+        irradiance_down = fdn0
+        irradiance_up = y(lane,1) * e3(lane,1) - y(lane,2) * e4(lane,1) + cup(lane,1)
+        fdr(n_layers+1,lambdaNdx) = flux_direct * scale
+        fup(n_layers+1,lambdaNdx) = ( irradiance_up / mu1 ) * scale
+        fdn(n_layers+1,lambdaNdx) = ( irradiance_down / mu1 ) * scale
+        edr(n_layers+1,lambdaNdx) = irradiance_direct * scale
+        eup(n_layers+1,lambdaNdx) = irradiance_up * scale
+        edn(n_layers+1,lambdaNdx) = irradiance_down * scale
       end do
+      do lev = 2, n_layers + 1
+        level_index = n_layers + 2 - lev
+        j = lev - 1
+        row = 2 * j - 1
+        do lane = 1, n_lanes
+          lambdaNdx = first_wavelength + lane - 1
+          flux_direct = pifs * direct(lane,j)
+          irradiance_direct = mu * flux_direct
+          irradiance_down = y(lane,row) * e3(lane,j) + y(lane,row + 1) * e4(lane,j) + cdntn(lane,j)
+          irradiance_up = y(lane,row) * e1(lane,j) + y(lane,row + 1) * e2(lane,j) + cuptn(lane,j)
+          fdr(level_index,lambdaNdx) = flux_direct * scale
+          fup(level_index,lambdaNdx) = ( irradiance_up / mu1 ) * scale
+          fdn(level_index,lambdaNdx) = ( irradiance_down / mu1 ) * scale
+          edr(level_index,lambdaNdx) = irradiance_direct * scale
+          eup(level_index,lambdaNdx) = irradiance_up * scale
+          edn(level_index,lambdaNdx) = irradiance_down * scale
+        end do
+      end do
+      end associate
 
     enddo wavelength_loop
 
